@@ -1,0 +1,370 @@
+{
+    "speedProfile": {
+        "acc": [
+            2000,
+            2000,
+            2000,
+            2000
+        ],
+        "fullStepSpeed": [
+            15625,
+            15625,
+            15625,
+            15625
+        ],
+        "dec": [
+            2000,
+            2000,
+            2000,
+            2000
+        ],
+        "maxSpeed": [
+            620,
+            620,
+            620,
+            620
+        ]
+    },
+    "alarmAndReport": {
+        "reportSwEvn": [
+            false,
+            false,
+            false,
+            false
+        ],
+        "reportMotorStatus": [
+            false,
+            false,
+            false,
+            false
+        ],
+        "reportHiZ": [
+            false,
+            false,
+            false,
+            false
+        ],
+        "reportUVLO": [
+            true,
+            true,
+            true,
+            true
+        ],
+        "reportThermalStatus": [
+            true,
+            true,
+            true,
+            true
+        ],
+        "reportBUSY": [
+            false,
+            false,
+            false,
+            false
+        ],
+        "reportStall": [
+            false,
+            false,
+            false,
+            false
+        ],
+        "OCThreshold": [
+            15,
+            15,
+            15,
+            15
+        ],
+        "reportHomeSwStatus": [
+            false,
+            false,
+            false,
+            false
+        ],
+        "reportDir": [
+            false,
+            false,
+            false,
+            false
+        ],
+        "reportOCD": [
+            true,
+            true,
+            true,
+            true
+        ],
+        "reportLimitSwStatus": [
+            false,
+            false,
+            false,
+            false
+        ]
+    },
+    "driverSettings": {
+        "brakeTransitionDuration": [
+            100,
+            100,
+            100,
+            100
+        ],
+        "limitSwMode": [
+            true,
+            true,
+            true,
+            true
+        ],
+        "releaseSwTimeout": [
+            10000,
+            10000,
+            10000,
+            10000
+        ],
+        "homeSwMode": [
+            true,
+            true,
+            true,
+            true
+        ],
+        "stepMode": [
+            7,
+            7,
+            7,
+            7
+        ],
+        "prohibitMotionOnLimitSw": [
+            false,
+            false,
+            false,
+            false
+        ],
+        "prohibitMotionOnHomeSw": [
+            false,
+            false,
+            false,
+            false
+        ],
+        "homingDirection": [
+            0,
+            0,
+            0,
+            0
+        ],
+        "goUnitlTimeout": [
+            10000,
+            10000,
+            10000,
+            10000
+        ],
+        "electromagnetBrakeEnable": [
+            false,
+            false,
+            false,
+            false
+        ],
+        "isCurrentMode": [
+            false,
+            false,
+            false,
+            false
+        ],
+        "homingSpeed": [
+            50,
+            50,
+            50,
+            50
+        ],
+        "slewRate": [
+            5,
+            5,
+            5,
+            5
+        ],
+        "homingAtStartup": [
+            false,
+            false,
+            false,
+            false
+        ]
+    },
+    "information": {
+        "configName": "17HS4023_72V",
+        "configVersion": [
+            1,
+            0
+        ],
+        "targetProduct": "STEP400"
+    },
+    "servoMode": {
+        "kP": [
+            0.06,
+            0.06,
+            0.06,
+            0.06
+        ],
+        "kD": [
+            0,
+            0,
+            0,
+            0
+        ],
+        "kI": [
+            0,
+            0,
+            0,
+            0
+        ]
+    },
+    "voltageMode": {
+        "KVAL_RUN": [
+            10,
+            10,
+            10,
+            10
+        ],
+        "FN_SLP_DEC": [
+            5,
+            5,
+            5,
+            5
+        ],
+        "FN_SLP_ACC": [
+            5,
+            5,
+            5,
+            5
+        ],
+        "ST_SLP": [
+            2,
+            2,
+            2,
+            2
+        ],
+        "INT_SPEED": [
+            13352,
+            13352,
+            13352,
+            13352
+        ],
+        "STALL_TH": [
+            31,
+            31,
+            31,
+            31
+        ],
+        "KVAL_HOLD": [
+            5,
+            5,
+            5,
+            5
+        ],
+        "lowSpeedOptimize": [
+            20,
+            20,
+            20,
+            20
+        ],
+        "KVAL_ACC": [
+            10,
+            10,
+            10,
+            10
+        ],
+        "KVAL_DEC": [
+            10,
+            10,
+            10,
+            10
+        ]
+    },
+    "network": {
+        "myIp": [
+            10,
+            0,
+            0,
+            100
+        ],
+        "destIp": [
+            10,
+            0,
+            0,
+            10
+        ],
+        "subnet": [
+            255,
+            255,
+            255,
+            0
+        ],
+        "canSendMsgBeforeDestIp": false,
+        "isOutPortAddId": true,
+        "inPort": 50000,
+        "isMyIpAddId": true,
+        "dns": [
+            10,
+            0,
+            0,
+            1
+        ],
+        "bootedMsgEnable": true,
+        "reportError": true,
+        "outPort": 50100,
+        "mac": [
+            96,
+            149,
+            206,
+            16,
+            2,
+            0
+        ],
+        "isMacAddId": true,
+        "gateway": [
+            10,
+            0,
+            0,
+            1
+        ]
+    },
+    "currentMode": {
+        "TVAL_DEC": [
+            10,
+            10,
+            10,
+            10
+        ],
+        "T_FAST": [
+            25,
+            25,
+            25,
+            25
+        ],
+        "TON_MIN": [
+            41,
+            41,
+            41,
+            41
+        ],
+        "TOFF_MIN": [
+            41,
+            41,
+            41,
+            41
+        ],
+        "TVAL_RUN": [
+            10,
+            10,
+            10,
+            10
+        ],
+        "TVAL_HOLD": [
+            5,
+            5,
+            5,
+            5
+        ],
+        "TVAL_ACC": [
+            10,
+            10,
+            10,
+            10
+        ]
+    }
+}
