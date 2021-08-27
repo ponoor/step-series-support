@@ -1,11 +1,14 @@
 ## Sensor/switch connections
+Each axis of STEP400/STEP800 has HOME connector which can connect sensors or switches. STEP400 has LIMIT sensor inputs in addition to HOME inputs.
 
-There are two connectors, HOME and LIMIT for each motor which you can connect sensors and switches. The roles of each connectors are the following:
+The roles of each connectors are the following:
 
 ### HOME
 Input connector terminal for home position detection. Since the stepper motor cannot detect its own position, a dedicated sensor is required to return to the home position on boot. It is directly connected to the motor driver IC and can be used for position management for the driver. The input pin is pulled up to 3.3 V inside the driver IC.
 
 ### LIMIT
+Only available in STEP400.
+
 Other than the HOME connector, there is a LIMIT connector that can be used to limit mechanical operating range for each motor. You can configure these pins to halt the corresponding motor, but it can be used for another purpose as well. The input terminal is pulled up to 3.3V.
 
 ### Connection Terminals

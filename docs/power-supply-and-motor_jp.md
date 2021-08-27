@@ -85,6 +85,7 @@ https://ponoor.com/docs/step-series/settings/example-parameter-values-for-exampl
 STEP400についてはDC12Vでも動作しますが、DC-DCコンバータの動作電圧の下限に当たるため、モータを回した瞬間の突入電流によって電源装置からの配線で電圧降下が発生し、STEP400がリセットされてしまうことがあります。小型のモータを低トルクで回すような場合以外はおすすめしません。
 
 <img src="https://ponoor.com/cms/wp-content/uploads/2020/10/update-48V-configuration-800x533.jpg" alt="STEP400 working with the 48 V configuration, series of two 24V power supplies." width="600" class="size-medium wp-image-949" /> 
+
 この写真ではSTEP400に24Vの電源を2台直列に接続し、48Vで駆動しています。
 
 ### 電流容量

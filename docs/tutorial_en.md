@@ -74,7 +74,7 @@ Set the static IP address for the Ethernet port that this device is connected to
 | IP address| 10.0.0.10 |
 | Subnet mask | 255.255.255.0 |
 
-Setting the static IP address varies dending on your OS.
+Setting the static IP address varies depending on your OS.
 - [Windows10](https://support.microsoft.com/en-us/windows/change-tcp-ip-settings-bd0a07af-15f5-cd6a-363f-ca2b6f391ace)
 - [Mac](https://support.apple.com/en-us/HT202480)
 
