@@ -57,7 +57,7 @@ Gets the mode of microstepping. See [`/setMicrostepMode`](https://ponoor.com/en/
 When the motor is stopped.
 
 #### Description
-Set the threshold for phase current distortion compensation at very low speed. For details, refer to "8.3 Low speed optimization" in the datasheet.
+Set the threshold for phase current distortion compensation at very low speed. For details, refer to "Low speed optimization" section in the corresponding datasheet.
 
 The response is same as the following [`getLowSpeedOptimizeThreshold`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#getlowspeedoptimizethreshold_intmotorid).
 
@@ -219,7 +219,7 @@ Acquires ADC_OUT register values from the PowerSTEP01 chip. This register stores
 ```
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 | Motor ID |
+| motorID | 1-4, 255 | Motor ID |
 | ADC_OUT | 0-31 | 5bit reading of ADC_OUT register |
 
 ### `/getStatus (int)motorID`
@@ -243,21 +243,21 @@ Gets the STATUS of the motor driver (PowerSTEP01 for STEP400/L6470 for STEP800).
 | motorID | 1-4/1-8, 255 |  motor ID |
 | status | 0-65535(0xFFFF) | 16-bit STATUS register |
 
-Refer to "11.1.28 STATUS" in the data sheet for the information contained in the registers. Of these, the values of UVLO, UVLO_ADC, OCD, STEP_LOSS_A, STEP_LOSS_B, CMD_ERROR, SW_EVN, and TH_STATUS are latched and reset when STATUS registers are read out. Because the STEP400 firmware constantly obtains the STATUS values, these values are immediately reset. It is possible to set up these events to be reported separately, so please use those commands.
+Refer to "STATUS" in the data sheet for the information contained in the registers. Some of bits are latched and reset when STATUS registers are read out. Because the device firmware constantly obtains the STATUS values, these values are immediately reset. It is possible to set up these events to be reported separately, so please use those commands.
 
-| Name of bits in STATUS | The corresponding configuration commands |
-| --- | --- |
-| UVLO | [`/enableUvloReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#enableuvloreport_intmotorid_boolenable) |
-| UVLO_ADC | This feature is not available in STEP 400 and is always disabled. |
-| OCD | [`/enableOverCurrentReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#enableovercurrentreport_intmotorid_boolenable) |
-| STEP_LOSS_A, STEP_LOSS_B | [`/enableStallReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#enablestallreport_intmotorid_boolenable)  |
-| CMD_ERROR | [`/enableCommandErrorReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/system-settings/#reporterror_boolenable) |
-| TH_STATUS | [`/enableThermalStatusReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#enablethermalstatusreport_intmotorid_boolenable) |
-| SW_EVN | [`/enableHomeSwReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#enablesweventreport_intmotorid_boolenable) |
-| MOT_STATUS | [`/enableMotorStatusReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#enablemotorstatusreport_intmotorid_boolenable) |
-| SW_F | [`/enableHomeSwReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#enablehomeswreport_intmotorid_boolenable) |
-| BUSY | [`/enableBusyReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#enablebusyreport_intmotorid_boolenable) |
-| HiZ | [`/enableHizReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#enablehizreport_intmotorid_boolenable) |
+| Name of bits in STATUS (STEP400) | Name of bits in STATUS (STEP800) | The corresponding configuration commands |
+| --- | --- | --- |
+| UVLO | UVLO | [`/enableUvloReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enableuvloreport_intmotorid_boolenable) |
+| UVLO_ADC | - | This feature is not available in STEP 400 and is always disabled. |
+| OCD | OCD | [`/enableOverCurrentReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enableovercurrentreport_intmotorid_boolenable) |
+| STALL_A, STALL_B | STEP_LOSS_A, STEP_LOSS_B | [`/enableStallReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enablestallreport_intmotorid_boolenable)  |
+| CMD_ERROR | WRONG_CMD, NOTPREF_CMD | [`/enableCommandErrorReport`](https://ponoor.com/docs/step-series/osc-command-reference/system-settings/#reporterror_boolenable) |
+| TH_STATUS | TH_WRN, TH_SD | [`/enableThermalStatusReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enablethermalstatusreport_intmotorid_boolenable) |
+| SW_EVN | SW_EVN | [`/enableHomeSwReport`](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#enablesweventreport_intmotorid_boolenable) |
+| MOT_STATUS | MOT_STATUS | [`/enableMotorStatusReport`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#enablemotorstatusreport_intmotorid_boolenable) |
+| SW_F | SW_F | [`/enableHomeSwReport`](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#enablehomeswreport_intmotorid_boolenable) |
+| BUSY | BUSY | [`/enableBusyReport`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#enablebusyreport_intmotorid_boolenable) |
+| HiZ | HiZ | [`/enableHizReport`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#enablehizreport_intmotorid_boolenable) |
 
 ### `/getConfigRegister (int)motorID`
 #### Argument

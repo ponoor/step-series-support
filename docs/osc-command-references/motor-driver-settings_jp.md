@@ -59,7 +59,7 @@ HiZ状態
 モータ停止時 
 
 #### 説明
-低速回転時の相電流ひずみ補正を行う閾値を設定します。詳しくはデータシートの "8.3 Low speed optimization"を参照してください。
+低速回転時の相電流ひずみ補正を行う閾値を設定します。詳しくは対応するデータシートの "Low speed optimization"を参照してください。
 
 下記の[`/getLowSpeedOptimizeThreshold`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#getlowspeedoptimizethreshold_intmotorid)と同じ返答があります。
 
@@ -224,7 +224,7 @@ PowerSTEP01チップのADC_OUTレジスタの値を取得します。このレ�
 ```
 | アーギュメント | 範囲 | 説明 |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 | モータのID |
+| motorID | 1-4, 255 | モータのID |
 | ADC_OUT | 0-31 | 5bitのADC_OUTレジスタ |
 
 ### `/getStatus (int)motorID`
@@ -249,21 +249,21 @@ PowerSTEP01チップのADC_OUTレジスタの値を取得します。このレ�
 | motorID | 1-4/1-8, 255 | モータのID |
 | status | 0-65535(0xFFFF) | 16bitのSTATUSレジスタ |
 
-レジスタに含まれる情報は、データシートの "11.1.28 STATUS" を参照してください。このうち、UVLO, UVLO_ADC, OCD, STEP_LOSS_A, STEP_LOSS_B, CMD_ERROR, SW_EVN, TH_STATUS の値はラッチされていて、ステータスレジスタを読み出すとリセットされます。STEP400ではファームウェアによって常時ステータスレジスタを繰り返し取得しているため、これらの値はすぐにリセットされてしまいます。これらの事象を個別に報告する設定が可能ですので、そちらを利用してください。
+レジスタに含まれる情報は、データシートを参照してください。このうち、一部の値はラッチされていて、ステータスレジスタを読み出すとリセットされます。本デバイスではファームウェアによって常時ステータスレジスタを繰り返し取得しているため、これらの値はすぐにリセットされてしまいます。これらの事象を個別に報告する設定が可能ですので、そちらを利用してください。
 
-| ステータスbit名 | 対応する設定コマンド |
-| --- | --- |
-| UVLO | [`/enableUvloReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enableuvloreport_intmotorid_boolenable) |
-| UVLO_ADC | この機能はSTEP400では使えませんので常時無効になっています。 |
-| OCD | [`/enableOverCurrentReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enableovercurrentreport_intmotorid_boolenable) |
-| STEP_LOSS_A, STEP_LOSS_B | [`/enableStallReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enablestallreport_intmotorid_boolenable)  |
-| CMD_ERROR | [`/enableCommandErrorReport`](https://ponoor.com/docs/step-series/osc-command-reference/system-settings/#reporterror_boolenable) |
-| TH_STATUS | [`/enableThermalStatusReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enablethermalstatusreport_intmotorid_boolenable) |
-| SW_EVN | [`/enableHomeSwReport`](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#enablesweventreport_intmotorid_boolenable) |
-| MOT_STATUS | [`/enableMotorStatusReport`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#enablemotorstatusreport_intmotorid_boolenable) |
-| SW_F | [`/enableHomeSwReport`](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#enablehomeswreport_intmotorid_boolenable) |
-| BUSY | [`/enableBusyReport`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#enablebusyreport_intmotorid_boolenable) |
-| HiZ | [`/enableHizReport`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#enablehizreport_intmotorid_boolenable) |
+| ステータスbit名 (STEP400) | ステータスbit名 (STEP800) | 対応する設定コマンド |
+| --- | --- | --- |
+| UVLO | UVLO | [`/enableUvloReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enableuvloreport_intmotorid_boolenable) |
+| UVLO_ADC | - | この機能はSTEP400では使えませんので常時無効になっています。 |
+| OCD | OCD | [`/enableOverCurrentReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enableovercurrentreport_intmotorid_boolenable) |
+| STALL_A, STALL_B | STEP_LOSS_A, STEP_LOSS_B | [`/enableStallReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enablestallreport_intmotorid_boolenable)  |
+| CMD_ERROR | WRONG_CMD, NOTPREF_CMD | [`/enableCommandErrorReport`](https://ponoor.com/docs/step-series/osc-command-reference/system-settings/#reporterror_boolenable) |
+| TH_STATUS | TH_WRN, TH_SD | [`/enableThermalStatusReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enablethermalstatusreport_intmotorid_boolenable) |
+| SW_EVN | SW_EVN | [`/enableHomeSwReport`](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#enablesweventreport_intmotorid_boolenable) |
+| MOT_STATUS | MOT_STATUS | [`/enableMotorStatusReport`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#enablemotorstatusreport_intmotorid_boolenable) |
+| SW_F | SW_F | [`/enableHomeSwReport`](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#enablehomeswreport_intmotorid_boolenable) |
+| BUSY | BUSY | [`/enableBusyReport`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#enablebusyreport_intmotorid_boolenable) |
+| HiZ | HiZ | [`/enableHizReport`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#enablehizreport_intmotorid_boolenable) |
 
 ### `/getConfigRegister (int)motorID`
 #### アーギュメント

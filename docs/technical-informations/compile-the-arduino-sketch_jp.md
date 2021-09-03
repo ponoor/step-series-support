@@ -1,12 +1,12 @@
 ## Arduinoスケッチのコンパイル
-ファームウェアのアップデートやカスタマイズを行うためには、お手元の環境でSTEP400用のArduinoスケッチをコンパイルして書き込めるようにする必要があります。大きく分けて
+ファームウェアのアップデートやカスタマイズを行うためには、お手元の環境でSTEPシリーズ用のArduinoスケッチをコンパイルして書き込めるようにする必要があります。大きく分けて
 - PlatformIOでコンパイルする
 - 純正Arduino環境でコンパイルする
 
 という二つの方法があります。
 
 ### PlatformIOでコンパイルする
-STEP400のファームウェアはVisual Studio Codeの機能拡張 [PlatformIO](https://platformio.org/) を使って開発しています。[STEP400リポジトリ](https://github.com/ponoor/STEP400)の [`STEP400/firmware-platformio/STEP400_firmware/`](https://github.com/ponoor/STEP400/tree/master/firmware-platformio/STEP400_firmware) フォルダをPlatformIOから開けば、初回コンパイル時に必要なファイルはすべて自動インストールされます。
+STEPシリーズのファームウェアはVisual Studio Codeの機能拡張 [PlatformIO](https://platformio.org/) を使って開発しています。STEP400/800各リポジトリにPlatformIOのデータが置いてあるフォルダがあり、このフォルダをPlatformIOから開けば、初回コンパイル時に必要なファイルはすべて自動でインストールされます。
 
 ### 純正Arduino環境でコンパイルする
 [Arduino.cc](https://www.arduino.cc/) からダウンロードできる純正のIDEを用いてコンパイルする場合は、事前に以下の作業が必要です。
@@ -28,7 +28,8 @@ STEP400は[Arduino Zero](https://www.arduino.cc/en/Main/ArduinoBoardZero&)互換
 - [OSC Library](https://github.com/CNMAT/OSC)
 - [ArduinoJSON](https://arduinojson.org/)
 - [Adafruit SleepyDog Arduino Library](https://github.com/adafruit/Adafruit_SleepyDog)
-- [Ponoor PowerSTEP01 Library](https://github.com/ponoor/Ponoor_PowerSTEP01_Library)
+- STEP400のみ : [Ponoor PowerSTEP01 Library](https://github.com/ponoor/Ponoor_PowerSTEP01_Library)
+- STEP800のみ : [Ponoor L6470 Library](https://github.com/ponoor/Ponoor_L6470_Library)
 
 ### OSC libraryの注意点
 OSCのためのライブラリはいくつか種類がありますが、CNMATの[OSC Library](https://github.com/CNMAT/OSC)をインストールします。Arduino IDEの「ライブラリを管理」から "OSC" という名称のライブラリをインストールしてください。製作者が組織名のCNMATではなく、Adrian Freed, Yotam Mann という個人名で表示されていますのでご注意ください。
@@ -36,13 +37,22 @@ OSCのためのライブラリはいくつか種類がありますが、CNMATの
 ![](http://ponoor.com/manage/wp-content/uploads/2020/09/OSC_library_manager.png)
 
 ## スケッチのコンパイル
-[STEP400のGithubリポジトリ](https://github.com/ponoor/STEP400)からファイルをクローンします。gitのシステムに詳しくない場合は右上の`Code`から`Download ZIP`を選択すればZIP形式でダウンロードできます。
+
+
+対応する機種のリポジトリからファイルをクローンします。
+
+| 機種 | Arduino Sketch Directory | PlatformIO Directory |
+| --- | --- | ---|
+| [STEP400](https://github.com/ponoor/STEP400) | [/STEP400_firmware](https://github.com/ponoor/STEP400/tree/master/STEP400_firmware) | [/firmware-platformio/STEP400_firmware](https://github.com/ponoor/STEP400/tree/master/firmware-platformio/STEP400_firmware) |
+| [STEP800](https://github.com/ponoor/STEP800) | [/STEP800_firmware](https://github.com/ponoor/STEP800/tree/main/STEP800_firmware) | [/firmware-platformIO/STEP800_firmware](https://github.com/ponoor/STEP800/tree/main/firmware-platformIO/STEP800_firmware) |
+
+gitのシステムに詳しくない場合は右上の`Code`から`Download ZIP`を選択すればZIP形式でダウンロードできます。
 
 ![file](https://ponoor.com/cms/wp-content/uploads/2020/08/image-1617454087280.png)
 
-`/STEP400_firmware` フォルダの`STEP400_firmware.ino`をArduino IDEで開いてください。Tools -> Boards から "Arduino Zero (Native USB port)" を選択し、コンパイルしてください。
+Arduinoスケッチフォルダの`.ino`ファイルをArduino IDEで開いてください。Tools -> Boards から "Arduino Zero (Native USB port)" を選択し、コンパイルしてください。
 
 ## 書き込み時の留意点
-- 電磁ブレーキ基板を接続している場合は、スケッチ書き込み時は取り外してください。書き込み時にch.4の電磁ブレーキが解放されるため、負荷の落下が起こる可能性があります。これはArduino Zeroのブートローダの設定によるものです。
+- STEP400で電磁ブレーキ基板を接続している場合は、スケッチ書き込み時は取り外してください。書き込み時にch.4の電磁ブレーキが解放されるため、負荷の落下が起こる可能性があります。これはArduino Zeroのブートローダの設定によるものです。STEP800の場合は電磁ブレーキの制御方法が異なるため、接続したままでも問題ありません。
 - 基板にUSBのみを接続した場合、スケッチの書き込みはできますが、モータドライバのチップが起動しないので、ドライバとメッセージのやり取りが発生する操作はできません。
 - Arduino Zero の癖なのか、書き込みに失敗することがあるようです。その場合はRESETスイッチをダブルクリックして、bootloaderモードにして再試行してみてください。bootloaderモードではスケッチは起動せず、Lがゆっくりフェードする状態になります。また普通に起動した時とは別のシリアルポートになりますので、Arduino IDEのToolsメニューから選択しなおしてください。

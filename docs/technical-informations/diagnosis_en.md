@@ -1,14 +1,14 @@
 ## Diagnosis tool
 ### Overview
-You can connect your PC and STEP400 with USB and monitor status or check the setting. It is practical for trouble shooting, like when you cannot reach the controller over Ethernet network. 
+You can connect your PC and the deice with USB and monitor status or check the setting. It is practical for trouble shooting, like when you cannot reach the controller over Ethernet network. 
 
 ### Connection
-Connect the STEP400 and your PC with USB Type-C cable. Only the microcontroller and its peripheral will be powered from USB. In this state, the motor drivers are not powered up, so you cannot communicate with them. Therefore make sure to supply motor power source as well.
+Connect the device and your PC with USB Type-C cable. Only the microcontroller and its peripheral will be powered from USB. In this state, the motor drivers are not powered up, so you cannot communicate with them. Therefore make sure to supply motor power source as well.
 
 Also, be aware that if you fist connect USB cable and then connect motor power, the controller may exhibit unexpected behavior, since the motor drivers will be in uninitialized state. So power the motor power supply first and then connect the USB, or reset the controller by pushing RESET button after powering up motor power.
 
 ### Serial monitor
-STEP400 report itself as simulated serial port to PC and is recognized as Arduino Zero. If you would like to use Arduino IDE serial monitor, the process looks as follows. You can use any serial port terminal client that can send and receive text strings.
+The device report itself as virtual serial port to PC and is recognized as Arduino Zero. If you would like to use Arduino IDE serial monitor, the process looks as follows. You can use any serial port terminal client that can send and receive text strings.
 
 #### Selecting Port
 From Tools -> Port. Find "Arduino Zero (Native USB Port)" and select it.
@@ -90,27 +90,47 @@ SD config JSON parse succeeded : Yes
 - `SD config file open succeeded`: Shows if the `config.txt` on the SD card is succesfully opened.
 - `SD config JSON parse succeeded`: Shows if the content of `config.txt` (JSON) was read correctly.
 
-### PowerSTEP01
+### Motor Driver
+#### STEP400
 ```
--------------- PowerSTEP01 --------------
+-------------- Motor Driver --------------
 PowerSTEP01 SPI connection established : Yes
-PowerSTEO01 ID#1
-    STATUS: 0xE603
-    High impedance state : Yes
-    BUSY : No
-    Motor direction : Reverse
-    Motor status : Stopped
-    UVLO (Undervoltage lock out) : No
-    Thermal status : Normal
-    OCD (Overcurent detection) : No
-    Stalled : No
-    SW_F: 0 -HOME sensor input open.
-    ADC_OUT: 31 -LIMIT sensor input open.
+PowerSTEP01 ID#1
+	STATUS: 0xE603
+	High impedance state : Yes
+	BUSY : No
+	Motor direction : Reverse
+	Motor status : Stopped
+	UVLO (Undervoltage lock out) : No
+	Thermal status : Normal
+	OCD (Overcurent detection) : No
+	Stalled : No
+	SW_F: 0 -HOME senser input open.
+	ADC_OUT: 31 -LIMIT senser input open.
 ```
 
 - `PowerSTEP01 SPI connection established`: Shows if the communication with the PowerSTEP01 was established. If `No`, the motor power might be switched off.
+- Following message will be displayed only if the communication was successful. For messages, #1-#4 will be listed.
 
-Following message will be displayed only if the communication was successful. For messages, #1-#4 will be listed.
+#### STEP800
+```
+-------------- Motor Driver --------------
+L6470 SPI connection established : Yes
+L6470 ID#1
+        STATUS: 0x7E03
+        High impedance state : Yes
+        BUSY : No
+        Motor direction : Reverse
+        Motor status : Stopped
+        UVLO (Undervoltage lock out) : No
+        Thermal status : Stopped
+        OCD (Overcurent detection) : No
+        Stalled : No
+        SW_F: 0 -HOME senser input open.
+```
+
+- `L6470 SPI connection established`: Shows if the communication with the L6470 was established. If `No`, the motor power might be switched off.
+- Following message will be displayed only if the communication was successful. For messages, #1-#8 will be listed.
 
 ### Modes
 ```
@@ -140,11 +160,11 @@ Homing status : 0, 0, 0, 0
 | 0 | HOMING_UNDEFINED | Not homing yet |
 | 1 | HOMING_GOUNTIL | Moving towards sensor |
 | 2 | HOMING_RELEASESW | Leaving from sensor active area |
-| 3 | HOMIMG_COMPLETED | Homing completed |
+| 3 | HOMING_COMPLETED | Homing completed |
 | 4 | HOMING_TIMEOUT | Time out was detected while homing |
 
 ## Config
-You can retrieve current settings if you send `c`. Be aware that this is not the content of the configTool file, but the current setting that reflected actual ID switch setting and other settings over OSC messages. For example if you boot the controller without microSD inserted, following message will show up.
+You can retrieve current settings if you send `c`. Be aware that this is not the content of the configTool file, but the current setting that reflected actual ID switch setting and other settings over OSC messages. For example if you boot the STEP400 without microSD inserted, following message will show up.
 
 ```
 ============== Configurations ==============

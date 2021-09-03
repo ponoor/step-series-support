@@ -72,7 +72,7 @@ Returns the name of the configuration file read from the micro SD card on system
 #### Argument
 | Argument | Range | Description |
 | --- | --- | --- |
-| enable | 0-1 | 1for enabled, 0 for disabled |
+| enable | 0-1 | 1 for enabled, 0 for disabled |
 
 #### Executable timing
 Always

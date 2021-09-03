@@ -1,6 +1,6 @@
 ## 診断ツール
 ### 概要
-STEP400のUSBコネクタとPCを接続し、PCから動作状況や設定を確認することができます。ネットワークからうまく接続できないときなどに問題を調べることができます。
+本デバイスのUSBコネクタとPCを接続し、PCから動作状況や設定を確認することができます。ネットワークからうまく接続できないときなどに問題を調べることができます。
 
 ### 接続
 USB Type-CケーブルでPCと接続してください。USB端子からはマイコンと周辺回路の制御電源のみ供給されます。この状態ではモータドライバが起動していないため、モータドライバと通信ができません。必ずモータ電源を供給してください。
@@ -8,7 +8,7 @@ USB Type-CケーブルでPCと接続してください。USB端子からはマ�
 またUSBで給電をした後にモータ電源を接続した場合、モータドライバの初期設定が行われていない状態になるため、予想外の動作になる可能性があります。モータ電源を通電した後にUSBを差し込むか、あるいはモータ電源を通電した後に基板上のRESETスイッチを押して全体をリセットしてください。
 
 ### シリアルモニタ
-STEP400はPCからはArduino Zeroとして認識され、仮想シリアルポートになっています。例えばArduino IDEのシリアルモニタを使う場合は、以下の手順で接続してください。
+本デバイスはPCからはArduino Zeroとして認識され、仮想シリアルポートになっています。例えばArduino IDEのシリアルモニタを使う場合は、以下の手順で接続してください。
 Arduino IDEでなくても、シリアルポートと通信して文字列を入出力できるソフトウェアであればどのようなもので使えます。
 #### Portの選択
 Tools->Portから、Arduino Zero (Native USB Port)が見えると思いますので、そちらを選択してください。
@@ -16,10 +16,12 @@ Tools->Portから、Arduino Zero (Native USB Port)が見えると思いますの
 
 #### シリアルモニタを開く
 右上の虫眼鏡マークをクリックすると、シリアルモニタのウィンドウが開きます。
+
 [![](https://ponoor.com/cms/wp-content/uploads/2021/03/openserialmonitor-486x525.png)](https://ponoor.com/cms/wp-content/uploads/2021/03/openserialmonitor.png)
 
 #### メニューを表示させてみる
-問題なく接続できていれば、上の送信フォームに`m`と入力してSendを押せば（あるいばりターンキーを押せば）、診断ツールのメニューが表示されるはずです。
+問題なく接続できていれば、上の送信フォームに`m`と入力してSendを押せば（あるいはリターンキーを押せば）、診断ツールのメニューが表示されるはずです。
+
 ![file](https://ponoor.com/cms/wp-content/uploads/2021/03/image-1616474112646.png)
 
 これら3つの項目について説明していきます。
@@ -35,7 +37,7 @@ Compile date : Mar 19 2021, 10:27:55
 Applicable config version : 1.0
 Loaded config version : 1.0 [CONFIG_VERSION_APPLICABLE]
 ```
-このセクションは主に書き込まれているファームウェアについての情報です。
+このセクションは主に書き込まれているファームウェアについての情報です。`Firmware name`の部分は機種によって異なります。
 
 `Loaded config version`: microSDから読み込まれているconfig.txtファイルのバージョン番号が表示されます。configとファームウェアの新旧に応じて以下のうちどれかが表示されます。
 
@@ -88,11 +90,12 @@ SD config JSON parse succeeded : Yes
 - `SD config file open succeeded`: SDカードの`config.txt`ファイルが開けたかどうかを示しています。
 - `SD config JSON parse succeeded`: `config.txt`の内容(JSON)が読み込めたかどうかを示しています。
 
-### PowerSTEP01
+### Motor Driver
+#### STEP400
 ```
--------------- PowerSTEP01 --------------
+-------------- Motor Driver --------------
 PowerSTEP01 SPI connection established : Yes
-PowerSTEO01 ID#1
+PowerSTEP01 ID#1
 	STATUS: 0xE603
 	High impedance state : Yes
 	BUSY : No
@@ -108,8 +111,29 @@ PowerSTEO01 ID#1
 
 - `PowerSTEP01 SPI connection established`: PowerSTEP01と通信ができたかどうか。
 `No`になる場合はモータ電源が給電されていない可能性があります。
+- 以降の項目は通信ができた場合のみ表示されます。#1-#4まで4個分表示されます。
 
-以降の項目は通信ができた場合のみ表示されます。#1-#4まで4個分表示されます。
+#### STEP800
+```
+-------------- Motor Driver --------------
+L6470 SPI connection established : Yes
+L6470 ID#1
+        STATUS: 0x7E03
+        High impedance state : Yes
+        BUSY : No
+        Motor direction : Reverse
+        Motor status : Stopped
+        UVLO (Undervoltage lock out) : No
+        Thermal status : Stopped
+        OCD (Overcurent detection) : No
+        Stalled : No
+        SW_F: 0 -HOME senser input open.
+```
+
+- `L6470 SPI connection established`: L6470と通信ができたかどうか。
+`No`になる場合はモータ電源が給電されていない可能性があります。
+- 以降の項目は通信ができた場合のみ表示されます。#1-#8まで8個分表示されます。
+
 
 ### Modes
 ```
@@ -138,11 +162,11 @@ Homing status : 0, 0, 0, 0
 |0|HOMING_UNDEFINED|原点復帰を行っていない状態|
 |1|HOMING_GOUNTIL|センサへ向かって移動中|
 |2|HOMING_RELEASESW|センサ反応範囲から脱出中|
-|3|HOMIMG_COMPLETED|原点復帰完了済み|
+|3|HOMING_COMPLETED|原点復帰完了済み|
 |4|HOMING_TIMEOUT|原点復帰中にタイムアウトした|
 
 ## Config
-`c`を送信すると、現在の設定値を読み出します。これはconfigToolのファイル内の値ではなく、IDスイッチの設定や、その後のOSCメッセージでの設定を反映した値になっていることに注意してください。例えばmicroSDカードを差し込まずに起動した場合の反応は以下のようになります。
+`c`を送信すると、現在の設定値を読み出します。これはconfigToolのファイル内の値ではなく、IDスイッチの設定や、その後のOSCメッセージでの設定を反映した値になっていることに注意してください。例えばSTEP400でmicroSDカードを差し込まずに起動した場合の反応は以下のようになります。
 
 ```
 ============== Configurations ==============

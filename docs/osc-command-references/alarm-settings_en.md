@@ -12,7 +12,9 @@ Always
 
 #### Description
 Set the notification message when UVLO (Undervoltage Lockout) occurs in the specified motor driver.
-UVLO occurs when the supplied voltage to the motor driver falls below 9.2 V, with or without notification. In this state, the motor cannot be operated. It will be reset when the supply voltage is above 10.4V.
+UVLO occurs when the supplied voltage to the motor driver falls below the UVLO turn-off threshold voltage, with or without notification. In this state, the motor cannot be operated. It will be reset when the supply voltage is above the UVLO turn-on threshold.
+
+These thresholds are different between STEP400(PowerSTEP01) and STEP800(L6470). For details, please refer to the corresponding datasheets.
 
 #### Response
 When ULVO occurs same message as [`/getUlvo`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#getuvlo_intmotorid) will be sent.
@@ -71,7 +73,7 @@ When the the thermalStatus changes, the same notification as [`/getThermalStatus
 Always
 
 #### Description
-Gets the current condition of the ThermalStatus.
+Gets the current condition of the ThermalStatus. Thermal status thresholds are different between STEP400(PowerSTEP01) and STEP800(L6470).
 
 #### Response
 ```
@@ -83,13 +85,20 @@ Gets the current condition of the ThermalStatus.
 |motorID|1-4/1-8, 255|motor ID|
 |thermalStatus|0-3|Thermal status|
 
-##### Thermal status
+##### Thermal status - STEP400
 | TH_STATUS | Thermal status | Set condition | Release condition |
 | --- | --- | --- | --- |
 | 0 | Normal | - | - |
 | 1 | Warning | 135℃ | 125℃ |
 | 2 | Bridge shutdown | 155℃ | 145℃ |
 | 3 | Device shutdown | 170℃ | 130℃ |
+
+##### Thermal status - STEP800
+| thermalStatus | Thermal status | Set condition | Release condition |
+| --- | --- | --- | --- |
+| 0 | Normal | - | - |
+| 1 | Warning | 130℃ | 130℃ |
+| 2 | Bridge shutdown | 160℃ | 130℃ |
 
 In the Bridge shutdown and Device shutdown states, the motor goes into the High Z state with or without notification.
 
@@ -128,9 +137,9 @@ On the OCD state, following message will be sent.
 |Argument|Range|Description|
 |---|---|---|
 |motorID|1-4/1-8, 255|motor ID|
-|OCH_TH|0-31| OCD_TH | Overcurrent detection threshold |
+|OCD_TH| 0-31/0-15 |Overcurrent detection threshold|
 
-##### Overcurrent detection threshold
+##### Overcurrent detection threshold - STEP400
 | OCD_TH | Overcurrent detection threshold |
 | --- | --- |
 | 0 | 312.5mA |
@@ -139,17 +148,29 @@ On the OCD state, following message will be sent.
 | 30 | 9.6875A |
 | 31 | 10A |
 
+##### Overcurrent detection threshold - STEP800
+| OCD_TH | Overcurrent detection threshold |
+| --- | --- |
+| 0 | 375mA |
+| 1 | 750mA |
+| ... | ... |
+| 14 | 5.625A |
+| 15 | 6A |
+
 #### Executable timing
 Always
 
 #### Description
-Sets the overcurrent threshold. The thresholds are as follows: 312.5 mA to 10 A in increments of 312.5 mA.
+Sets the overcurrent threshold. The setting value range and corresponding currents are different between STEP400(PowerSTEP01) and STEP800(L6470).
 
 #### Response
 You will get the same response as the following [`/getOverCurrentThreshold`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#getovercurrentthreshold_intmotorid) to see the actual value.
 
 #### Initial value
-15 (5A)
+| Model | Initial value |
+| --- | ---|
+| STEP400 | 15 (5A) |
+| STEP800 | 7 (3A) |
 
 ### `/getOverCurrentThreshold (int)motorID`
 #### Argument
@@ -171,10 +192,13 @@ Get the threshold of overcurrent.
 |Argument|Range|Description|
 |---|---|---|
 |motorID|1-4/1-8, 255|motor ID|
-|overCurrentThreshold|0-15|thresholds in mA.
+|overCurrentThreshold|312.5-10000.0/375.0-6000.0|thresholds in [mA].
 
 #### Initial value
-15 (5A)
+| Model | Initial value |
+| --- | ---|
+| STEP400 | 5000.0 (15) |
+| STEP800 | 3000.0 (7) |
 
 ### `/enableStallReport (int)motorID (bool)enable`
 #### Argument
@@ -207,9 +231,9 @@ When the stall is detected by the specified motor driver, the following message 
 |Argument|Range|Description|
 |---|---|---|
 |motorID|1-4/1-8, 255|motor ID|
-|STALL_TH|0-31|Stall detection threshold|
+|STALL_TH| 0-31/0-127 | Stall detection threshold |
 
-##### Stall detection threshold
+##### Stall detection threshold - STEP400
 | STALL_TH | Stall detection threshold |
 | --- | --- |
 | 0 | 312.5mA |
@@ -218,17 +242,29 @@ When the stall is detected by the specified motor driver, the following message 
 | 30| 9.6875A |
 | 31 | 10A |
 
+##### Stall detection threshold - STEP800
+| STALL_TH | Stall detection threshold |
+| --- | --- |
+| 0 | 31.25mA |
+| 1 | 62.5mA |
+| ... | ... |
+| 126| 3.969A |
+| 127 | 4A |
+
 #### Executable timing
 Always
 
 #### Description
-Sets the threshold for stall detection. The thresholds are as follows: 312.5mA to 10A in increments of 312.5mA.
+Sets the threshold for stall detection. The setting value range and corresponding currents are different between STEP400(PowerSTEP01) and STEP800(L6470).
 
 #### Response
 You will get the same response as the following [`/getStallThreshold`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#getstallthreshold_intmotorid) to see the actual value.
 
 #### Initial value
-31 (10A)
+| Model | Initial value |
+| --- | ---|
+| STEP400 | 31 (10A) |
+| STEP800 | 127 (4A) |
 
 ### `/getStallThreshold (int)motorID`
 #### Argument
@@ -250,10 +286,13 @@ Gets the stall detection threshold.
 |Argument|Range|Description|
 |---|---|---|
 |motorID|1-4/1-8, 255|motor ID|
-|stallThreshold|0-31|thresholds in mA
+|stallThreshold|312.5-10000.0/31.25-4000.0|thresholds in [mA]
 
 #### Initial value
-31 (10A)
+| Model | Initial value |
+| --- | ---|
+| STEP400 | 10000.0 (31) |
+| STEP800 | 4000.0 (127) |
 
 ## Sensor
 ### `/setProhibitMotionOnHomeSw (int)motorID (bool)enable`
