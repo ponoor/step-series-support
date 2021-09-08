@@ -10,13 +10,14 @@ microSDカードを差し込まずに起動した場合は、ファームウェ�
 文字数の制限についての詳細は [SDライブラリのリファレンス](https://www.arduino.cc/en/Reference/SD)を参照してください。
 
 ## 設定ツール (Config Tool)
-設定ファイルはHTMLとJavaScriptによって構成されています。このURLからアクセスできます。
-http://ponoor.com/tools/step400-config/
+設定ファイルはHTMLとJavaScriptによって構成されています。オンラインでもオフラインでも動作します。
 
-ファイルはこちらから入手できます。
-https://github.com/ponoor/STEP400/tree/master/configTool
+| 機種 | URL | ソース (Github) |
+| --- | --- | --- |
+| STEP400 | http://ponoor.com/tools/step400-config/ | [/configTool](https://github.com/ponoor/STEP400/tree/master/configTool) |
+| STEP800 | http://ponoor.com/tools/step800-config/ | [/configTool](https://github.com/ponoor/STEP800/tree/master/configTool) |
 
-ページの一番上で、過去に書きだした設定ファイルを読み込むことができます。
+ページの一番上で、過去に書き出した設定ファイルを読み込むことができます。
 設定はページ末尾の "Export" ボタンを押してダウンロードしてください。ファイル名は `config.txt`です。ファイル形式はJSONですが、拡張子が3文字までしか使えないため`.json`ではなく`.txt`になっています。
 
 このファイルをmicroSDカードの一番上の階層へコピーしたうえで本デバイスに差し込みます。この状態で起動、あるいはリセットしてください。設定は起動時にのみ読み込まれます。
@@ -36,7 +37,7 @@ https://github.com/ponoor/STEP400/tree/master/configTool
 #### Configuration version 
 Config Toolsのバージョン番号で、変更できません。
 #### Target product
-設定ファイルの対象製品名で、変更できません。
+設定ファイルの対象機種名で、変更できません。
 
 ### `Network`
 
@@ -51,7 +52,7 @@ Config Toolsのバージョン番号で、変更できません。
 | Incoming port |-| 50000 |
 | Outgoing port |-| 50100 |
 | ID adds to Outgoing port |-| TRUE |
-| MAC address |-| 0x60, 0x95, 0xCE, 0x10, 0x02, 0x00 |
+| MAC address |-| STEP400 : 0x60, 0x95, 0xCE, 0x10, 0x02, 0x00<br />STEP800 : 0x60, 0x95, 0xCE, 0x10, 0x03, 0x00 |
 | ID adds to MAC address |-| TRUE |
 | Booted message enable |-| TRUE |
 | Allow OSC reply before /setDestIp |-| FALSE |
@@ -61,10 +62,10 @@ Config Toolsのバージョン番号で、変更できません。
 IPアドレスを設定します。`ID adds to my IP`にチェックが入っている場合は、この数値にIDが加算されたものが実際のIPアドレスになります。例えば`10.0.0.100`に設定してIDスイッチが1になっている場合は、`10.0.0.101`が実際のアドレスになります。加算した数値が254を超えないようにしてください。
 
 #### Incoming port
-STEP400がOSCを受信するポート番号です。
+本デバイスがOSCを受信するポート番号です。
 
 #### Outgoing port
-STEP400がOSCを送信するポート番号です。`ID adds to Outgoing port`にチェックが入っていると、この数値にIDが加算されます。
+本デバイスがOSCを送信するポート番号です。`ID adds to Outgoing port`にチェックが入っていると、この数値にIDが加算されます。
 #### MAC address
 `Hex`チェックボックスで、16進数表示と10進数表示を切替できます。
 
@@ -89,7 +90,7 @@ STEP400がOSCを送信するポート番号です。`ID adds to Outgoing port`�
 | Report undervoltage lockout | [/enableUvloReport](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enableuvloreport_intmotorid_boolenable) | TRUE |
 | Report thermal status of driver chip | [/enableThermalStatusReport](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enablethermalstatusreport_intmotorid_boolenable) | TRUE |
 | Report motor stall detection | [/enableStallReport](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enablestallreport_intmotorid_boolenable) | FALSE |
-| Report LIMIT switch status | [/enableLimitSwReport](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#enablelimitswreport_intmotorid_boolenable) | FALSE |
+| Report LIMIT switch status *STEP400 ONLY | [/enableLimitSwReport](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#enablelimitswreport_intmotorid_boolenable) | FALSE |
 | Overcurrent threshold | [/setOverCurrentThreshold](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#setovercurrentthreshold_intmotorid_intocd_th) | 15 |
 
 ### `Driver Settings`
@@ -100,12 +101,12 @@ STEP400がOSCを送信するポート番号です。`ID adds to Outgoing port`�
 | Homing Speed | [/setHomingSpeed](https://ponoor.com/docs/step-series/osc-command-reference/homing/#sethomingspeed_intmotorid_floatspeed) | 50 |
 | Home switch won't cause HardStop | [/setHomeSwMode](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#sethomeswmode_intmotorid_boolsw_mode) | SW_USER |
 | Prohibit motions on HomeSw | [/setProhibitMotionOnHomeSw](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#setprohibitmotiononhomesw_intmotorid_boolenable) | FALSE |
-| Limit switch won't cause HardStop | [/setLimitSwMode](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#setlimitswmode_intmotorid_boolsw_mode) | SW_USER |
-| Prohibit motions on LimitSw | [/setProhibitMotionOnLimitSw](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#setprohibitmotiononlimitsw_intmotorid_boolenable) | FALSE |
+| Limit switch won't cause HardStop *STEP400 ONLY | [/setLimitSwMode](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#setlimitswmode_intmotorid_boolsw_mode) | SW_USER |
+| Prohibit motions on LimitSw *STEP400 ONLY | [/setProhibitMotionOnLimitSw](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#setprohibitmotiononlimitsw_intmotorid_boolenable) | FALSE |
 | goUntil timeout duration | [/setGoUntilTimeout](https://ponoor.com/docs/step-series/osc-command-reference/homing/#setgountiltimeout_intmotorid_inttimeout) | 10000 |
 | releaseSw timeout duration | [/setReleaseSwTimeout](https://ponoor.com/docs/step-series/osc-command-reference/homing/#setreleaseswtimeout_intmotorid_inttimeout) | 10000 |
 | Microstepping mode | [/setMicrostepMode](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#setmicrostepmode_intmotorid_intstep_sel) | STEP_FS_128 |
-| Current mode | [/setVoltageMode](https://ponoor.com/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#setvoltagemode_intmotorid), [/setCurrentMode](https://ponoor.com/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#setcurrentmode_intmotorid) | FALSE |
+| Current mode *STEP400 ONLY| [/setVoltageMode](https://ponoor.com/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#setvoltagemode_intmotorid), [/setCurrentMode](https://ponoor.com/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#setcurrentmode_intmotorid) | FALSE |
 | Slew rate | - | SR_980V_us |
 | Electromagnetic brake enable | [/enableElectromagnetBrake](https://ponoor.com/docs/step-series/osc-command-reference/brake/#enableelectromagnetbrake_intmotorid_boolenable) | FALSE |
 | Brake transition duration | [/setBrakeTransitionDuration](https://ponoor.com/docs/step-series/osc-command-reference/brake/#setbraketransitionduration_intmotorid_intduration) | 100 |
@@ -114,7 +115,16 @@ STEP400がOSCを送信するポート番号です。`ID adds to Outgoing port`�
 このチェックボックスが入っていると、起動すると直ちに原点復帰動作を行います。
 
 #### Slew rate
-PowerSTEP01から出力されるモータ制御電流のスリューレート（立ち上がりの鋭さ）を114V/usから980V/usまで6段階で指定します。
+モータドライバから出力されるモータ制御電流のスリューレート（立ち上がりの鋭さ）をSTEP400では6段階、STEP800では3段階で指定します。
+
+| Slew rate number | STEP400 | STEP800 |
+| --- | --- | --- |
+| 0 | 114V/us | 180V/us |
+| 1 | 220V/us | 290V/us |
+| 2 | 400V/us | 530V/us |
+| 3 | 520V/us | - |
+| 4 | 790V/us | - |
+| 5 | 980V/us | - |
 
 ### `Speed Profile`
 | Parameter | OSC command | Default |
@@ -138,7 +148,7 @@ PowerSTEP01から出力されるモータ制御電流のスリューレート（
 | STALL_TH | [/setStallThreshold](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#setstallthreshold_intmotorid_intstall_th) | 31 |
 | lowSpeedOptimize | [/setLowSpeedOptimizeThreshold](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#setlowspeedoptimizethreshold_intmotorid_floatlowspeedoptimizationthreshold) | 20 |
 
-### `Current Mode`
+### `Current Mode *STEP400 ONLY`
 | Parameter | OSC command | Default |
 |-----------|-------------|---------|
 | TVAL_HOLD | [/setTval](https://ponoor.com/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#settval_intmotorid_intholdtval_intruntval_intacctval_intsetdectval) | 16 |

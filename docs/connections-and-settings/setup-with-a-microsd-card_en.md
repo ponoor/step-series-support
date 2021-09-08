@@ -10,7 +10,15 @@ Only microSD or microSDHC cards can be used, and they must be formatted with FAT
 Refer the [Arduino SD Library reference](https://www.arduino.cc/en/Reference/SD) for the detail of the limitation of file name length.
 
 ## Configuration tool (Config Tool)
-The configuration tool is written by HTML and JavaScript. You can use it via following URL:
+The configuration tool is written by HTML and JavaScript and available from here. It works both online and offline.
+
+| MOdel | URL | Source (Github) |
+| --- | --- | --- |
+| STEP400 | http://ponoor.com/tools/step400-config/ | [/configTool](https://github.com/ponoor/STEP400/tree/master/configTool) |
+| STEP800 | http://ponoor.com/tools/step800-config/ | [/configTool](https://github.com/ponoor/STEP800/tree/master/configTool) |
+
+
+ You can use it via following URL:
 http://ponoor.com/tools/step400-config/
 
 Or, you can download it from here:
@@ -89,7 +97,7 @@ In initial state, the controller does not send OSC response until receiving `/se
 | Report undervoltage lockout | [/enableUvloReport](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#enableuvloreport_intmotorid_boolenable) | TRUE |
 | Report thermal status of driver chip | [/enableThermalStatusReport](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#enablethermalstatusreport_intmotorid_boolenable) | TRUE |
 | Report motor stall detection | [/enableStallReport](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#enablestallreport_intmotorid_boolenable) | FALSE |
-| Report LIMIT switch status | [/enableLimitSwReport](https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#enablelimitswreport_intmotorid_boolenable) | FALSE |
+| Report LIMIT switch status *STEP400 ONLY | [/enableLimitSwReport](https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#enablelimitswreport_intmotorid_boolenable) | FALSE |
 | Overcurrent threshold | [/setOverCurrentThreshold](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#setovercurrentthreshold_intmotorid_intocd_th) | 15 |
 
 ### `Driver Settings`
@@ -100,12 +108,12 @@ In initial state, the controller does not send OSC response until receiving `/se
 | Homing Speed | [/setHomingSpeed](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#sethomingspeed_intmotorid_floatspeed) | 50 |
 | Home switch won't cause HardStop | [/setHomeSwMode](https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#sethomeswmode_intmotorid_boolsw_mode) | SW_USER |
 | Prohibit motions on HomeSw | [/setProhibitMotionOnHomeSw](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#setprohibitmotiononhomesw_intmotorid_boolenable) | FALSE |
-| Limit switch won't cause HardStop | [/setLimitSwMode](https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#setlimitswmode_intmotorid_boolsw_mode) | SW_USER |
-| Prohibit motions on LimitSw | [/setProhibitMotionOnLimitSw](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#setprohibitmotiononlimitsw_intmotorid_boolenable) | FALSE |
+| Limit switch won't cause HardStop *STEP400 ONLY | [/setLimitSwMode](https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#setlimitswmode_intmotorid_boolsw_mode) | SW_USER |
+| Prohibit motions on LimitSw *STEP400 ONLY | [/setProhibitMotionOnLimitSw](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#setprohibitmotiononlimitsw_intmotorid_boolenable) | FALSE |
 | goUntil timeout duration | [/setGoUntilTimeout](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#setgountiltimeout_intmotorid_inttimeout) | 10000 |
 | releaseSw timeout duration | [/setReleaseSwTimeout](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#setreleaseswtimeout_intmotorid_inttimeout) | 10000 |
 | Microstepping mode | [/setMicrostepMode](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#setmicrostepmode_intmotorid_intstep_sel) | STEP_FS_128 |
-| Current mode | [/setVoltageMode](https://ponoor.com/en/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#setvoltagemode_intmotorid), [/setCurrentMode](https://ponoor.com/en/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#setcurrentmode_intmotorid) | FALSE |
+| Current mode *STEP400 ONLY | [/setVoltageMode](https://ponoor.com/en/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#setvoltagemode_intmotorid), [/setCurrentMode](https://ponoor.com/en/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#setcurrentmode_intmotorid) | FALSE |
 | Slew rate | - | SR_980V_us |
 | Electromagnetic brake enable | [/enableElectromagnetBrake](https://ponoor.com/en/docs/step-series/osc-command-reference/brake/#enableelectromagnetbrake_intmotorid_boolenable) | FALSE |
 | Brake transition duration | [/setBrakeTransitionDuration](https://ponoor.com/en/docs/step-series/osc-command-reference/brake/#setbraketransitionduration_intmotorid_intduration) | 100 |
@@ -114,7 +122,16 @@ In initial state, the controller does not send OSC response until receiving `/se
 Proceed to homing movement soon after boot when this check box is checked.
 
 #### Slew rate
-Set the slew rate (steepness of rising) of motor control current from PowerSTEP01 from 114V/us to 980V/us, in 6 steps.
+Set the slew rate (steepness of rising) of motor control current from a motor driver in 6 steps for STEP400, 3 steps for STEP800.
+
+| Slew rate number | STEP400 | STEP800 |
+| --- | --- | --- |
+| 0 | 114V/us | 180V/us |
+| 1 | 220V/us | 290V/us |
+| 2 | 400V/us | 530V/us |
+| 3 | 520V/us | - |
+| 4 | 790V/us | - |
+| 5 | 980V/us | - |
 
 ### `Speed Profile`
 | Parameter | OSC command | Default |
@@ -138,7 +155,7 @@ Set the slew rate (steepness of rising) of motor control current from PowerSTEP0
 | STALL_TH | [/setStallThreshold](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#setstallthreshold_intmotorid_intstall_th) | 31 |
 | lowSpeedOptimize | [/setLowSpeedOptimizeThreshold](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#setlowspeedoptimizethreshold_intmotorid_floatlowspeedoptimizationthreshold) | 20 |
 
-### `Current Mode`
+### `Current Mode *STEP400 ONLY`
 | Parameter | OSC command | Default |
 |-----------|-------------|---------|
 | TVAL_HOLD | [/setTval](https://ponoor.com/en/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#settval_intmotorid_intholdtval_intruntval_intacctval_intsetdectval) | 16 |
