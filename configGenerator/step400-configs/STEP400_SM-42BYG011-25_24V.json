@@ -304,10 +304,30 @@
         ]
     },
     "currentMode": {
-        "TVAL_HOLD": 2,
-        "TVAL_RUN": 5,
-        "TVAL_ACC": 5,
-        "TVAL_DEC": 5,
+        "TVAL_HOLD": [
+            2,
+            2,
+            2,
+            2
+        ],
+        "TVAL_RUN": [
+            5,
+            5,
+            5,
+            5
+        ],
+        "TVAL_ACC": [
+            5,
+            5,
+            5,
+            5
+        ],
+        "TVAL_DEC": [
+            5,
+            5,
+            5,
+            5
+        ],
         "T_FAST": [
             25,
             25,

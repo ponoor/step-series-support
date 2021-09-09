@@ -92,10 +92,10 @@ for i in motor:
             voltageMode['ST_SLP'][j] = st_slp
             voltageMode['FN_SLP_ACC'][j] = fn_slp
             voltageMode['FN_SLP_DEC'][j] = fn_slp
-            currentMode['TVAL_HOLD'] = tval_hold
-            currentMode['TVAL_RUN'] = tval
-            currentMode['TVAL_ACC'] = tval
-            currentMode['TVAL_DEC'] = tval
+            currentMode['TVAL_HOLD'][j] = tval_hold
+            currentMode['TVAL_RUN'][j] = tval
+            currentMode['TVAL_ACC'][j] = tval
+            currentMode['TVAL_DEC'][j] = tval
         filename = '/step400-configs/STEP400_' + information['configName'] + '.json'
         with open(path + filename, "w") as f:
             json.dump(templateConfig_400, f, indent=4)
