@@ -1,5 +1,5 @@
 # step-series-forum
-The forum place for STEP400/STEP800. 
+The forum place for [STEP400](https://github.com/ponoor/STEP400/) / [STEP800](https://github.com/ponoor/STEP800). 
 
 https://github.com/ponoor/step-series-support/discussions
 
