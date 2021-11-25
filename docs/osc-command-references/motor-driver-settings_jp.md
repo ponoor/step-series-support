@@ -47,6 +47,21 @@ HiZ状態
 ```
 /microstepMode (int)motorID (int)STEP_SEL
 ```
+### `/enableLowSpeedOptimize (int)motorID (bool)enable`
+#### アーギュメント
+| アーギュメント | 範囲 | 説明 |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 | モータのID |
+| enable | 0-1 | 1で有効, 0で無効 |
+
+#### 実行可能タイミング
+モータ停止時
+
+#### 説明
+低速回転時の相電流ひずみ補正 (Low speed optimization) の有効無効を切り替えます。この設定が有効になっていると、`Min Speed` は自動的に0になります。この補正は電圧モードでのみ利用可能です。詳しくは対応するデータシートの "Low speed optimization"を参照してください。
+
+#### 初期値
+0 (無効)
 
 ### `/setLowSpeedOptimizeThreshold (int)motorID (float)lowSpeedOptimizationThreshold`
 #### アーギュメント
@@ -59,7 +74,7 @@ HiZ状態
 モータ停止時 
 
 #### 説明
-低速回転時の相電流ひずみ補正を行う閾値を設定します。詳しくは対応するデータシートの "Low speed optimization"を参照してください。
+低速回転時の相電流ひずみ補正を行う閾値を設定します。
 
 下記の[`/getLowSpeedOptimizeThreshold`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#getlowspeedoptimizethreshold_intmotorid)と同じ返答があります。
 

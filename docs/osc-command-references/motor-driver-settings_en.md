@@ -46,6 +46,22 @@ Gets the mode of microstepping. See [`/setMicrostepMode`](https://ponoor.com/en/
 /microstepMode (int)motorID (int)STEP_SEL
 ```
 
+### `/enableLowSpeedOptimize (int)motorID (bool)enable`
+#### Argument
+| Argument | Range | Description |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 |  motor ID |
+| enable | 0-1 | 1:Enable, 0:Disable |
+
+#### Executable timing
+When the motor is stopped.
+
+#### Description
+Enable/disable low speed optimization feature which compensate phase current distortion at a very low speed using a small driving voltage. When this optimization is enabled, speed profile minimum speed (`Min speed`) is force to zero. Only work with voltage mode. See data sheets for details. 
+
+#### Initial value
+0 (Disabled)
+
 ### `/setLowSpeedOptimizeThreshold (int)motorID (float)lowSpeedOptimizationThreshold`
 #### Argument
 | Argument | Range | Description |

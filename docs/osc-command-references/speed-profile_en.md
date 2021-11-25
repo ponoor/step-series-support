@@ -131,6 +131,45 @@ Sets the deceleration of the speed profile.
 #### Initial value
 2000[step/s/s]
 
+### `/setMinSpeed (int)motorID (float)minSpeed`
+#### Argument
+|Argument|Range|Description|
+|---|---|---|
+|motorID|1-4/1-8, 255|motor ID|
+|minSpeed|0.0 - 976.3 [step/s]|Minimum speed|
+
+#### Executable timing
+When the motor is stopped
+
+#### Description
+Set the speed profile minimum speed. This value is also used for the motor speed of [`/releaseSw`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#releasesw_intmotorid_boolact_booldir). When
+[Low speed optimization](https://ponoor.com/en/docs/step-series/osc-command-reference/motor-driver-settings/#enablelowspeedoptimize_intmotorid_boolenable) is enabled, the minimum speed of the speed profile is set to zero.
+
+#### Initial value
+0[step/s]
+
+### `/getMinSpeed (int)motorID`
+#### Argument
+|Argument|Range|Description|
+|---|---|---|
+|motorID|1-4/1-8, 255|motor ID|
+
+#### Executable timing
+Always
+
+#### Description
+Return the speed profile minimum speed.
+
+#### Response
+```
+/minSpeed (int)motorID (float)minSpeed
+```
+
+|Argument|Range|Description|
+|---|---|---|
+|motorID|1-4/1-8|motor ID|
+|minSpeed|0.0 - 976.3 [step/s]|Minimum speed|
+
 ### `/getSpeed (int)motorID`
 #### Argument
 

@@ -133,6 +133,45 @@
 #### 初期値
 2000[step/s/s]
 
+### `/setMinSpeed (int)motorID (float)minSpeed`
+#### アーギュメント
+|アーギュメント|範囲|説明|
+|---|---|---|
+|motorID|1-4/1-8, 255|モータのID|
+|minSpeed|0.0 - 976.3 [step/s]|最小速さ|
+
+#### 実行可能タイミング
+モータ停止時
+
+#### 説明
+スピードプロファイルの最小速さを設定します。この値は[`/releaseSw`](https://ponoor.com/docs/step-series/osc-command-reference/homing/#releasesw_intmotorid_boolact_booldir)時のモータ回転速さにも使用されます。[Low speed optimization](https://ponoor.com/docs/step-series/osc-command-reference/motor-driver-settings/#enablelowspeedoptimize_intmotorid_boolenable)が有効になっている場合、 minSpeedは強制的に0になります。
+
+#### 初期値
+0[step/s]
+
+### `/getMinSpeed (int)motorID`
+#### アーギュメント
+
+| アーギュメント|範囲|説明|
+|---|---|---|
+|motorID|1-4/1-8, 255|モータのID|
+
+#### 実行可能タイミング
+常時
+
+#### 説明
+スピードプロファイルの最小速さを返します。
+
+#### 返答
+```
+/minSpeed (int)motorID (float)minSpeed
+```
+
+| アーギュメント|範囲|説明|
+|---|---|---|
+|motorID|1-4/1-8|モータのID|
+|minSpeed|0.0 - 976.3 [step/s]|最小速さ|
+
 ### `/getSpeed (int)motorID`
 #### アーギュメント
 
