@@ -1,6 +1,6 @@
 {
 	"information": {
-		"configName": "SM-42BYG011_24V",
+		"configName": "",
 		"configVersion": [
 			1,
 			0
@@ -43,12 +43,12 @@
 		"outPort": 50100,
 		"isOutPortAddId": true,
 		"mac": [
-			96,
-			149,
-			206,
-			16,
-			2,
-			0
+            96,
+            149,
+            206,
+            16,
+            2,
+            0
 		],
 		"isMacAddId": true,
 		"bootedMsgEnable": true,
@@ -69,6 +69,12 @@
 			false
 		],
 		"reportHomeSwStatus": [
+			false,
+			false,
+			false,
+			false
+		],
+		"reportLimitSwStatus": [
 			false,
 			false,
 			false,
@@ -111,12 +117,6 @@
 			true
 		],
 		"reportStall": [
-			false,
-			false,
-			false,
-			false
-		],
-		"reportLimitSwStatus": [
 			false,
 			false,
 			false,
@@ -239,62 +239,74 @@
 			15625,
 			15625,
 			15625
+		],
+		"minSpeed": [
+			0,
+			0,
+			0,
+			0
 		]
 	},
 	"voltageMode": {
 		"KVAL_HOLD": [
-			54,
-			54,
-			54,
-			54
+			0,
+			0,
+			0,
+			0
 		],
 		"KVAL_RUN": [
-			169,
-			169,
-			169,
-			169
+			16,
+			16,
+			16,
+			16
 		],
 		"KVAL_ACC": [
-			169,
-			169,
-			169,
-			169
+			16,
+			16,
+			16,
+			16
 		],
 		"KVAL_DEC": [
-			169,
-			169,
-			169,
-			169
+			16,
+			16,
+			16,
+			16
 		],
 		"INT_SPEED": [
-			8070,
-			8070,
-			8070,
-			8070
+			1032,
+			1032,
+			1032,
+			1032
 		],
 		"ST_SLP": [
-			52,
-			52,
-			52,
-			52
+			25,
+			25,
+			25,
+			25
 		],
 		"FN_SLP_ACC": [
-			142,
-			142,
-			142,
-			142
+			41,
+			41,
+			41,
+			41
 		],
 		"FN_SLP_DEC": [
-			142,
-			142,
-			142,
-			142
+			41,
+			41,
+			41,
+			41
 		],
 		"STALL_TH": [
 			31,
 			31,
 			31,
 			31
+		],
+		"lowSpeedOptimizeEnable": [
+			false,
+			false,
+			false,
+			false
 		],
 		"lowSpeedOptimize": [
 			20,
@@ -305,28 +317,28 @@
 	},
 	"currentMode": {
 		"TVAL_HOLD": [
-			2,
-			2,
-			2,
-			2
+			0,
+			0,
+			0,
+			0
 		],
 		"TVAL_RUN": [
-			4,
-			4,
-			4,
-			4
+			16,
+			16,
+			16,
+			16
 		],
 		"TVAL_ACC": [
-			4,
-			4,
-			4,
-			4
+			16,
+			16,
+			16,
+			16
 		],
 		"TVAL_DEC": [
-			4,
-			4,
-			4,
-			4
+			16,
+			16,
+			16,
+			16
 		],
 		"T_FAST": [
 			25,

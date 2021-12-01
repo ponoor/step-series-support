@@ -74,6 +74,12 @@
             false,
             false
         ],
+        "reportLimitSwStatus": [
+            false,
+            false,
+            false,
+            false
+        ],
         "reportDir": [
             false,
             false,
@@ -111,12 +117,6 @@
             true
         ],
         "reportStall": [
-            false,
-            false,
-            false,
-            false
-        ],
-        "reportLimitSwStatus": [
             false,
             false,
             false,
@@ -239,6 +239,12 @@
             15625,
             15625,
             15625
+        ],
+        "minSpeed": [
+            0,
+            0,
+            0,
+            0
         ]
     },
     "voltageMode": {
@@ -295,6 +301,12 @@
             31,
             31,
             31
+        ],
+        "lowSpeedOptimizeEnable": [
+            false,
+            false,
+            false,
+            false
         ],
         "lowSpeedOptimize": [
             20,

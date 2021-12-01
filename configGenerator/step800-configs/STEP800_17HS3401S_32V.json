@@ -43,12 +43,12 @@
         "outPort": 50100,
         "isOutPortAddId": true,
         "mac": [
-            "96",
-            "149",
-            "206",
-            "16",
-            "3",
-            "0"
+            96,
+            149,
+            206,
+            16,
+            3,
+            0
         ],
         "isMacAddId": true,
         "bootedMsgEnable": true,
