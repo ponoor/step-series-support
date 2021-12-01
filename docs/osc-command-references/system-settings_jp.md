@@ -59,13 +59,14 @@ Config Toolの設定を用いて、`destIp`が設定されていなくてもOSC�
 #### 返答
 
 ```
-/configName (Symbol)configName (bool)sdInitializeSucceeded (bool)configFileOpenSucceeded
+/configName (Symbol)configName (bool)sdInitializeSucceeded (bool)configFileOpenSucceeded (bool)configFileParseSucceeded
 ```
 | アーギュメント | 説明 |
 | --- | --- |
 | configName | コンフィギュレーションの名称。 |
 | sdInitializeSucceeded | microSDカードとの通信に成功したかどうか |
 | configFileOpenSucceeded | コンフィギュレーションファイルを開くことができたかどうか |
+| configFileParseSucceeded | コンフィギュレーションファイルのJsonをパースできたかどうか |
 
 ### `/reportError (bool)enable`
 #### アーギュメント

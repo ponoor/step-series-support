@@ -60,13 +60,14 @@ Returns the name of the configuration file read from the micro SD card on system
 #### Response
 
 ```
-/configName (Symbol)configName (bool)sdInitializeSucceeded (bool)configFileOpenSucceeded
+/configName (Symbol)configName (bool)sdInitializeSucceeded (bool)configFileOpenSucceeded (bool)configFileParseSucceeded
 ```
 | Argument | Description |
 | --- | --- |
 | configName | The name of the configuration |
 | sdInitializeSucceeded | If the reading from microSD card was successful. |
 | configFileOpenSucceeded | If the device could open the configuration file successfully. |
+| configFileParseSucceeded | If the config Json data could be parsed successfully. |
 
 ### `/reportError (bool)enable`
 #### Argument
