@@ -162,7 +162,7 @@ None
 Always
 
 #### Description
-Sets the time-out duration when executing [`/goUntil`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#gountil_intmotorid_boolact_floatspeed) command. If the sensor did not detect during this time frame, the controller will regard time-out and halts the movement. It can also be configured from the configTool.
+Sets the time-out duration when executing [`/goUntil`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#gountil_intmotorid_boolact_floatspeed) command. If the sensor did not detect during this time frame, the controller will regard time-out and halts the movement. Specify 0 to disable the timeout. It can also be configured from the configTool.
 
 #### Description
 10000[ms]
@@ -229,7 +229,7 @@ None
 Always
 
 #### Description
-Sets the time-out duration when executing [`/releaseSw`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#releasesw_intmotorid_boolact_booldir) command. If the sensor cannot be released during this time frame, halt the movement as time-out. It can be configured from the configTool.
+Sets the time-out duration when executing [`/releaseSw`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#releasesw_intmotorid_boolact_booldir) command. If the sensor cannot be released during this time frame, halt the movement as time-out. Specify 0 to disable the timeout. It can be configured from the configTool.
 
 #### Initial value
 5000[ms]

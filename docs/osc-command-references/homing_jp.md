@@ -162,7 +162,7 @@
 常時
 
 #### 説明
-[`/goUnitl`](https://ponoor.com/docs/step-series/osc-command-reference/homing/#gountil_intmotorid_boolact_floatspeed)実行時のタイムアウト時間を指定します。この時間内にセンサに反応がなかった場合にはtimeoutとして動作を中止します。configToolからも指定できます。
+[`/goUnitl`](https://ponoor.com/docs/step-series/osc-command-reference/homing/#gountil_intmotorid_boolact_floatspeed)実行時のタイムアウト時間を指定します。この時間内にセンサに反応がなかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。configToolからも指定できます。
 
 #### 初期値
 10000[ms]
@@ -227,7 +227,7 @@
 常時
 
 #### 説明
-[`/releaseSw`](https://ponoor.com/docs/step-series/osc-command-reference/homing/#releasesw_intmotorid_boolact_booldir)実行時のタイムアウト時間を指定します。この時間内にセンサ反応範囲から脱出できかった場合にはtimeoutとして動作を中止します。configToolからも指定できます。
+[`/releaseSw`](https://ponoor.com/docs/step-series/osc-command-reference/homing/#releasesw_intmotorid_boolact_booldir)実行時のタイムアウト時間を指定します。この時間内にセンサ反応範囲から脱出できかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。configToolからも指定できます。
 
 #### 初期値
 5000[ms]

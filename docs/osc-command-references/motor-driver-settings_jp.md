@@ -174,6 +174,43 @@ Low speed optimization threshold の現在の設定値を取得します。
 | motorID | 1-4/1-8 | モータのID |
 | state | 0-1 | 1:HiZ状態の場合, 0:HiZ状態でない場合 |
 
+### `/enableDirReport (int)motorID (bool)enable`
+#### アーギュメント
+| アーギュメント | 範囲 | 説明 |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 | モータのID |
+| enable | 0-1 | 1で有効, 0で無効 |
+
+#### 実行可能タイミング
+常時
+
+#### 説明
+指定したモータの回転方向に変化があったら自動でメッセージを送信する設定を行います。送信されるメッセージは[`/getDir`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#getdir_intmotorid)の返答と同じです。
+
+#### 初期値
+0 (無効)
+
+### `/getDir (int)motorID`
+#### アーギュメント
+| アーギュメント | 範囲 | 説明 |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 | モータのID |
+
+#### 実行可能タイミング
+常時
+
+#### 説明
+指定したモータの回転方向を取得します。
+
+#### 返答
+```
+/dir (int)motorID (bool)direction
+```
+| アーギュメント | 範囲 | 説明 |
+| --- | --- | --- |
+| motorID | 1-4/1-8 | モータのID |
+| direction | 0-1 | 1:正転方向, 0:逆転方向 |
+
 ### `/enableMotorStatusReport (int)motorID (bool)enable`
 #### アーギュメント
 | アーギュメント | 範囲 | 説明 |
@@ -315,3 +352,13 @@ CONFIGレジスタにはモータドライバの各種設定が収められて�
 
 #### 説明
 モータドライバ (PowerSTEP01/L6470) をリセットし、初期設定値を再度書き込みます。
+
+### `/resetDevice`
+#### アーギュメント
+なし
+
+#### 実行可能タイミング
+常時
+
+#### 説明
+基板全体をリセットします。基板上のリセットスイッチを押した場合と同じ動作です。

@@ -46,6 +46,42 @@ ABS_POSレジスタの内容（現在位置）を取得します。
 #### 説明
 ABS_POSレジスタを0にリセットします。
 
+### `/setElPos (int)motorID (int)newFullstep (int)newMicrostep`
+#### アーギュメント
+|アーギュメント|範囲|説明|
+|---|---|---|
+|motorID|1-4/1-8, 255|モータのID|
+|newFullstep|0-3|フルステップでの位置|
+|newMicrostep|0-127|マイクロステップでの位置|
+
+#### 実行可能タイミング
+モータ停止時
+
+#### 説明
+モータの電気的位置(electrical postion)を設定します。マイクロステップは0-127の128段階で表現されていますので、設定時は現在のマイクロステップと齟齬のない値を設定する必要があります。
+
+### `/getElPos (int)motorID`
+#### アーギュメント
+|アーギュメント|範囲|説明|
+|---|---|---|
+|motorID|1-4/1-8, 255|モータのID|
+
+#### 実行可能タイミング
+常時
+
+#### 説明
+モータの電気的位置 (electrical postion)を取得します。
+
+#### 返答
+```
+/elPos (int)motorID (int)fullstep (int)microstep
+```
+
+|アーギュメント|範囲|説明|
+|---|---|---|
+|motorID|1-4/1-8|モータのID|
+|fullstep|0-3|フルステップでの位置|
+|microstep|0-127|マイクロステップでの位置|
 
 ## HOME/MARK
 ### `/setMark (int)motorID (int)mark`

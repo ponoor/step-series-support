@@ -169,6 +169,43 @@ Requests the High Z (high impedance) state of the specified motor.
 | motorID | 1-4/1-8, 255 |  motor ID |
 | state | 0-1 | 1 if High Z state, 0 if not High Z state. |
 
+### `/enableDirReport (int)motorID (bool)enable`
+#### Argument
+| Argument | Range | Description |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 |  motor ID |
+| enable | 0-1 | 1:Enable, 0:Disable |
+
+#### Executable timing
+Always
+
+#### Description
+Following message is sent automatically when there is a change in the direction of the specified motor.
+
+#### Initial value
+0 (Disabled)
+
+### `/getDir (int)motorID`
+#### Argument
+| Argument | Range | Description |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 |  motor ID |
+
+#### Executable timing
+Always
+
+#### Description
+Requests the direction of the specified motor.
+
+#### Response
+```
+/dir (int)motorID (bool)direction
+```
+| Argument | Range | Description |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 |  motor ID |
+| direction | 0-1 | 1: Forward, 0:Reverse |
+
 ### `/enableMotorStatusReport (int)motorID (bool)enable`
 #### Argument
 | Argument | Range | Description |
@@ -310,3 +347,13 @@ Always
 
 #### Description
 Resets the motor driver (PowerSTEP01/L6470) and rewrites the setting.
+
+### `/resetDevice`
+#### Argument
+None
+
+#### Executable timing
+Always
+
+#### Description
+Resets the entire device. A programmatic version of physically pressing the RESET button.
