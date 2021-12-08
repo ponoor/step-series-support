@@ -251,6 +251,47 @@ Gets the operating status (MOT_STATUS) of the specified motor.
 | 2 | Deceleration |
 | 3 | Constant speed |
 
+### `/setPositionReportInterval (int)motorID (int)interval`
+#### Argument
+| Argument | Range | Description |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 |  Motor ID |
+| interval | 0-2147483647  | transmit interval [ms] |
+
+#### Executable timing
+Always
+
+#### Description
+Send the current position (`ABS_POS`) of the specified motor with the specified interval. Disabled with the interval 0.
+
+When this function enabled, `/setPositionListReportInterval` will be automatically disabled and stop the transmitting.
+
+#### Response
+The same as [`/getPosition`](https://ponoor.com/en/docs/step-series/osc-command-reference/absolute-position-management/#getposition_intmotorid).
+
+#### Initial value
+0 (Disabled)
+
+### `/setPositionListReportInterval (int)interval`
+#### Argument
+| Argument | Range | Description |
+| --- | --- | --- |
+| interval | 0-2147483647  | transmit interval [ms] |
+
+#### Executable timing
+Always
+
+#### Description
+Send a single message with a list of the current position (`ABS_POS`) of all motors with the specified interval. Disabled with the interval 0.
+
+When this function enabled, `/setPositionInterval` will be disabled automatically for all motors and stop the transmitting.
+
+#### Response
+The same as [`/getPositionList`](https://ponoor.com/en/docs/step-series/osc-command-reference/absolute-position-management/#getpositionlist)
+
+#### Initial value
+0 (Disabled)
+
 ## Debug
 
 ### `/getAdcVal (int)motorID`

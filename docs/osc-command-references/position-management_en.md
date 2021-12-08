@@ -25,6 +25,7 @@ Always
 #### Description
 Returns the contents of the ABS_POS register (current position).
 
+[`/setPositionReportInterval`](https://ponoor.com/en/docs/step-series/osc-command-reference/motor-driver-settings/#setpositionreportinterval_intmotorid_intinterval) can make the controller to send this message with a specified interval.
 #### Response
 ```
 /position (int)motorID (int)ABS_POS
@@ -32,8 +33,31 @@ Returns the contents of the ABS_POS register (current position).
 
 |Argument|Range|Description|
 |---|---|---|
-|motorID|1-4/1-8, 255|motor ID|
+|motorID|1-4/1-8|motor ID|
 |ABS_POS|-2,097,152 - 2,097,151|current position|
+
+### `/getPositionList`
+#### Argument
+None
+
+#### Executable timing
+Always
+
+#### Description
+Returns the current position of all motors at once. `/getPosition 255` returns individual messages for each motors but this command returns single message with a position list.
+
+[`/setPositionListReportInterval`](https://ponoor.com/en/docs/step-series/osc-command-reference/motor-driver-settings/#setpositionlistreportinterval_intinterval) can make the controller to send this list with a specified interval.
+
+#### Response
+```
+/positionList (int)position#1 ... (int)position#n ... (int)position#4
+```
+
+|Argument|Range|Description|
+|---|---|---|
+|position#n|-2,097,152 - 2,097,151|current position of the motor #n|
+
+The number of the arguments are 4 in STEP400, 8 in STEP800.
 
 ### `/resetPos (int)motorID`
 #### Argument

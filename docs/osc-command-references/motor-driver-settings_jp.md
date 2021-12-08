@@ -256,6 +256,47 @@ Low speed optimization threshold の現在の設定値を取得します。
 | 2 | 減速中 |
 | 3 | 一定速運転中 |
 
+### `/setPositionReportInterval (int)motorID (int)interval`
+#### アーギュメント
+| アーギュメント | 範囲 | 説明 |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 | モータのID |
+| interval | 0-2147483647  | 送信間隔 [ms] |
+
+#### 実行可能タイミング
+常時
+
+#### 説明
+指定したモータの現在位置 (`ABS_POS`) を指定間隔で自動送信します。0を指定すると無効化され、送信を停止します。
+
+いずれかのモータで有効化された場合、`/setPositionListReportInterval`は無効になり自動停止します。
+
+#### 返答
+[`/getPosition`](https://ponoor.com/docs/step-series/osc-command-reference/absolute-position-management/#getposition_intmotorid) と同じ返答があります。
+
+#### 初期値
+0 (無効)
+
+### `/setPositionListReportInterval (int)interval`
+#### アーギュメント
+| アーギュメント | 範囲 | 説明 |
+| --- | --- | --- |
+| interval | 0-2147483647  | 送信間隔 [ms] |
+
+#### 実行可能タイミング
+常時
+
+#### 説明
+全モータの現在位置 (`ABS_POS`) をひとつのリストにまとめたメッセージを指定間隔で自動送信します。0を指定すると無効化され、送信を停止します。
+
+このコマンドが有効化される際には `/setPositionInterval`はすべての軸で無効になり自動停止します。
+
+#### 返答
+[`/getPositionList`](https://ponoor.com/docs/step-series/osc-command-reference/absolute-position-management/#getpositionlist) と同じ返答があります。
+
+#### 初期値
+0 (無効)
+
 ## デバッグ
 ### `/getAdcVal (int)motorID`
 **STEP400のみ**
