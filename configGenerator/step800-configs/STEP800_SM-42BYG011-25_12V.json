@@ -3,7 +3,7 @@
         "configName": "SM-42BYG011-25_12V",
         "configVersion": [
             1,
-            0
+            2
         ],
         "targetProduct": "STEP800"
     },
@@ -156,6 +156,17 @@
             false,
             false
         ],
+        "reportPositionInterval": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        ],
+        "reportPositionListInterval": 0,
         "OCThreshold": [
             15,
             15,
@@ -309,6 +320,16 @@
             15625,
             15625,
             15625
+        ],
+        "minSpeed": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
         ]
     },
     "voltageMode": {
@@ -401,6 +422,16 @@
             127,
             127,
             127
+        ],
+        "lowSpeedOptimizeEnable": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
         ],
         "lowSpeedOptimize": [
             20,

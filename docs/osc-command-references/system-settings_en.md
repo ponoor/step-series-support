@@ -10,7 +10,7 @@ Always
 Sets the destination IP address (`destIp`) to where the device should send messages to, when it replies to a query or report internal state changes, etc.
 The board sets the `destIp` to the sender of this message .
 
-Also, until `destIp` is set, no OSC messages will be sent from the device, so send this command first. One single exception is the `/booted` message.
+Also, until `destIp` is set, no OSC messages will be sent from the device, so send this command first. One single exception is the [`/booted`](https://ponoor.com/en/docs/step-series/osc-command-reference/automatically-sent-messages-from-step-400/#booted) message.
 
 From the Config Tool, you can set the board to start sending out the OSC message without waiting the `destIp` to be set.
 
@@ -83,3 +83,13 @@ Enables or disables the automatic message notification for [`/error/command`](ht
 
 #### Initial value
 1 (Enabled)
+
+### `/resetDevice`
+#### Argument
+None
+
+#### Executable timing
+Always
+
+#### Description
+Resets the entire device. A programmatic version of physically pressing the RESET button.

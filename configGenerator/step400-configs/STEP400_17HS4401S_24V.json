@@ -3,7 +3,7 @@
         "configName": "17HS4401S_24V",
         "configVersion": [
             1,
-            0
+            2
         ],
         "targetProduct": "STEP400"
     },
@@ -122,6 +122,13 @@
             false,
             false
         ],
+        "reportPositionInterval": [
+            0,
+            0,
+            0,
+            0
+        ],
+        "reportPositionListInterval": 0,
         "OCThreshold": [
             15,
             15,

@@ -231,11 +231,37 @@ Get the four TVAL types together.
 
 |Argument|Range|Description|
 |---|---|---|
-|motorID|1-4/1-8, 255|motor ID|
+|motorID|1-4/1-8|motor ID|
 |holdTVAL|0-127|TVAL when stopped|
 |runTVAL|0-127|TVAL in constant speed operation|
 |accTVAL|0-127|TVAL during acceleration|
 |setDecTVAL|0-127|TVAL during deceleration|
+
+### `/getTval_mA (int)motorID`
+**STEP400 only**
+#### Argument
+|Argument|Range|Description|
+|---|---|---|
+|motorID|1-4, 255|motor ID|
+
+#### Executable timing
+Always
+
+#### Description
+Get the four TVAL types together. Not in register values but in the actual current values in [mA].
+
+#### Response
+```
+/tval_mA (int)motorID (float)holdTVAL_mA (float)runTVAL_mA (float)accTVAL_mA (float)decTVAL_mA
+```
+
+|Argument|Range|Description|
+|---|---|---|
+|motorID|1-4/1-8|motor ID|
+|holdTVAL_mA| 78.125 - 5000.0 |TVAL when stopped[mA]|
+|runTVAL_mA| 78.125 - 5000.0 |TVAL in constant speed operation[mA]|
+|accTVAL_mA| 78.125 - 5000.0 |TVAL during acceleration[mA]|
+|DecTVAL_mA| 78.125 - 5000.0 |TVAL during deceleration[mA]|
 
 ### `/setDecayModeParam (int)motorID (int)T_FAST (int)TON_MIN (int)TOFF_MIN`
 **STEP400 only**

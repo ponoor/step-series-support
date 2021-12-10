@@ -388,13 +388,3 @@ Always
 
 #### Description
 Resets the motor driver (PowerSTEP01/L6470) and rewrites the setting.
-
-### `/resetDevice`
-#### Argument
-None
-
-#### Executable timing
-Always
-
-#### Description
-Resets the entire device. A programmatic version of physically pressing the RESET button.

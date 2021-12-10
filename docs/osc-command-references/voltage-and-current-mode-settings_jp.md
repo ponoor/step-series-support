@@ -238,7 +238,7 @@ TVAL4種をまとめて取得します。
 
 |アーギュメント|範囲|説明|
 |---|---|---|
-|motorID|1-4, 255|モータのID|
+|motorID|1-4|モータのID|
 |holdTVAL|0-127|停止時のTVAL|
 |runTVAL|0-127|一定速運転時のTVAL|
 |accTVAL|0-127|加速時のTVAL|
@@ -259,7 +259,7 @@ TVAL4種をまとめて取得します。レジスタの値ではなく単位[mA
 
 #### 返答
 ```
-/tval (int)motorID (float)holdTVAL_mA (float)runTVAL_mA (float)accTVAL_mA (float)decTVAL_mA
+/tval_mA (int)motorID (float)holdTVAL_mA (float)runTVAL_mA (float)accTVAL_mA (float)decTVAL_mA
 ```
 
 |アーギュメント|範囲|説明|
