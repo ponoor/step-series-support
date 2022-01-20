@@ -2,7 +2,7 @@
 #### Argument
 |Argument|Range|Description|
 |---|---|---|
-|motorID|1-4/1-8, 255|Motor ID|
+| motorID | 1-4/1-8, 255 | Motor ID |
 | enable | 0-1 | 1:Enable, 0:Disable |
 
 #### Executable timing
@@ -10,7 +10,7 @@ Always
 
 #### Description
 Enables / disables electromagnetic brake mode.
-When the mode is enabled, the controller replies error if motor movement command is sent without releasing the electromagnetic brake.
+While in the mode, the controller replies the [`ERROR_BRAKE_ENGAGED`](https://ponoor.com/en/docs/step-series/osc-command-reference/automatically-sent-messages-from-step-400/#errorcommand) if motor movement command is sent without releasing the electromagnetic brake.
 
 #### Response
 0 (Disabled)
@@ -26,17 +26,17 @@ When the mode is enabled, the controller replies error if motor movement command
 | state | Description |
 | --- | --- |
 | 1 | Motor excited, EM brake released |
-| 0 | Motor not excited, EM brake activated |
+| 0 | Motor not excited, EM brake engaged |
 
 #### Executable timing
 Always
 
 #### Description
-Switches motor excitation / release when electromagnetic brake mode is enabled. The EM is also activated together. you You cannot send motor movement command when the motor is not excited by this command.
+Switches motor excitation / release when electromagnetic brake mode is enabled. The electromagnetic brake (EM) also works conjunction with the motor. You cannot send motor movement command when the motor is not excited by this command.
 
 If the EM mode is disabled, this command is ignored.
 
-### `/free (int)motorID (bool)state`
+### `/free (int)motorID`
 #### Argument
 |Argument|Range|Description|
 |---|---|---|
