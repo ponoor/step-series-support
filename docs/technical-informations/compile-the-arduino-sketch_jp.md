@@ -6,7 +6,7 @@
 という二つの方法があります。
 
 ### PlatformIOでコンパイルする
-STEPシリーズのファームウェアはVisual Studio Codeの機能拡張 [PlatformIO](https://platformio.org/) を使って開発しています。STEP400/800各リポジトリにPlatformIOのデータが置いてあるフォルダがあり、このフォルダをPlatformIOから開けば、初回コンパイル時に必要なファイルはすべて自動でインストールされます。
+STEPシリーズのファームウェアは [PlatformIO](https://platformio.org/) を使って開発しています。STEP400/800各リポジトリにPlatformIOのデータが置いてあるフォルダがあり、このフォルダをPlatformIOから開けば、初回コンパイル時に必要なファイルはすべて自動でインストールされます。
 
 ### 純正Arduino環境でコンパイルする
 [Arduino.cc](https://www.arduino.cc/) からダウンロードできる純正のIDEを用いてコンパイルする場合は、事前に以下の作業が必要です。
@@ -40,15 +40,19 @@ OSCのためのライブラリはいくつか種類がありますが、CNMATの
 
 
 対応する機種のリポジトリからファイルをクローンします。
-
+<!--
 | 機種 | Arduino Sketch Directory | PlatformIO Directory |
 | --- | --- | ---|
 | [STEP400](https://github.com/ponoor/STEP400) | [/STEP400_firmware](https://github.com/ponoor/STEP400/tree/master/STEP400_firmware) | [/firmware-platformio/STEP400_firmware](https://github.com/ponoor/STEP400/tree/master/firmware-platformio/STEP400_firmware) |
 | [STEP800](https://github.com/ponoor/STEP800) | [/STEP800_firmware](https://github.com/ponoor/STEP800/tree/main/STEP800_firmware) | [/firmware-platformIO/STEP800_firmware](https://github.com/ponoor/STEP800/tree/main/firmware-platformIO/STEP800_firmware) |
+-->
 
-gitのシステムに詳しくない場合は右上の`Code`から`Download ZIP`を選択すればZIP形式でダウンロードできます。
+| 機種 | リポジトリ | Releases | 
+| --- | --- | --- |
+| STEP400 | https://github.com/ponoor/STEP400 | https://github.com/ponoor/STEP400/releases |
+| STEP800 | https://github.com/ponoor/STEP800 | https://github.com/ponoor/STEP800/releases |
 
-![file](https://ponoor.com/cms/wp-content/uploads/2020/08/image-1617454087280.png)
+あるいは、上記リポジトリのReleasesからzipファイルを入手できます。最新版のReleaseのAssetsから、`STEP400_firmware.zip`または`STEP800_firmware.zip`をダウンロードしてください。このzipファイルは、Arduino IDEでのコンパイルに必要なファイルのみが圧縮されています。
 
 Arduinoスケッチフォルダの`.ino`ファイルをArduino IDEで開いてください。Tools -> Boards から "Arduino Zero (Native USB port)" を選択し、コンパイルしてください。
 

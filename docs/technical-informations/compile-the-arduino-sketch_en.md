@@ -4,7 +4,7 @@ To update or customize the firmware, you need to compile and upload the STEP-ser
 - Compiling from Arduino IDE
 
 ### Compiling from PlatformIO
-The step-series firmware is developed with [PlatformIO](https://platformio.org/), an extension for Visual Studio Code. Each repository of STEP400/800 has a dedicated directory for a platformIO. You can open this folder from "Open Project" menu of PlatformIO. All dependencies are installed automatically when you compile the project first time.
+The step-series firmware is developed with [PlatformIO](https://platformio.org/). Each repository of STEP400/800 has a dedicated directory for a platformIO. You can open this folder from "Open Project" menu of PlatformIO. All dependencies are installed automatically when you compile the project first time.
 
 ### Compiling from ArduinoIDE
 If you want to compile the project with the original Arduino IDE from [Arduino.cc](https://www.arduino.cc/), following setups are necessary.
@@ -38,16 +38,21 @@ From the Arduino IDE, goto "Manage Libraries" and install the library named "OSC
 ## Compiling the sketch
 Clone files from the repository of the corresponding model.
 
+<!-- 
 | Model | Arduino Sketch Directory | PlatformIO Directory |
 | --- | --- | ---|
 | [STEP400](https://github.com/ponoor/STEP400) | [/STEP400_firmware](https://github.com/ponoor/STEP400/tree/master/STEP400_firmware) | [/firmware-platformio/STEP400_firmware](https://github.com/ponoor/STEP400/tree/master/firmware-platformio/STEP400_firmware) |
 | [STEP800](https://github.com/ponoor/STEP800) | [/STEP800_firmware](https://github.com/ponoor/STEP800/tree/main/STEP800_firmware) | [/firmware-platformIO/STEP800_firmware](https://github.com/ponoor/STEP800/tree/main/firmware-platformIO/STEP800_firmware) |
+-->
 
- If you are not familiar with git system, you can also download ZIP files from upper right `Code` -> `Download ZIP`.
+| Model | Repository | Releases | 
+| --- | --- | --- |
+| STEP400 | https://github.com/ponoor/STEP400 | https://github.com/ponoor/STEP400/releases |
+| STEP800 | https://github.com/ponoor/STEP800 | https://github.com/ponoor/STEP800/releases |
 
-![file](https://ponoor.com/cms/wp-content/uploads/2020/08/image-1617454087280.png)
+Or you can get the ZIP file from these repositories. See the "Assets" of the latest Release and download `STEP400_firmware.zip` or `STEP800_firmware.zip`. These zip files only contain required files to compile with Arduino IDE.
 
-Browse the Arduino sketch folder and open the `.ino` file from Arduino IDE. From "Tools" -> "Boards" select "Arduino Zero (Native USB port)" and compile the sketch.
+Open the `.ino` file from Arduino IDE. From "Tools" -> "Boards" select "Arduino Zero (Native USB port)" and compile the sketch.
 
 ## Notes for uploading the Arduino sketch
 - If the electromagnet brake board is connected with STEP400, remove it before uploading the sketch. The EM brake on ch.4 is released on uploading the firmware. It may cause the load to drop. This is due to teh setting of the Arduino Zero's bootloader. In STEP800, this problem won't happen so you can leave it connected.
