@@ -6,8 +6,12 @@ import math
 import os
 path = os.path.dirname(__file__)
 
+num_of_motor_axis_step100 = 1
+num_of_motor_axis_step200 = 2
 num_of_motor_axis_step400 = 4
 num_of_motor_axis_step800 = 8
+targetVoltage_step100 = [24.0, 36.0, 48.0]
+targetVoltage_step200 = [12.0, 24.0, 36.0]
 targetVoltage_step400 = [24.0, 48.0, 72.0]
 targetVoltage_step800 = [12.0, 24.0, 32.0]
 currentOverdrive = 1.0
@@ -36,7 +40,7 @@ def get_kval(target_current, voltage, resistance):
     return t
 
 def get_int_spd(resistance, inductance):
-    t = 4.0 * resistance / (3.14159265 * 2.0 * inductance)
+    t = 4.0 * resistance / (math.pi * 2.0 * inductance)
     t /= 0.0596
     t = round(t)
     return t

@@ -20,7 +20,7 @@ Rotates the motor at specified speed. The acceleration is controlled with the pr
 |step||Moving step counts|
 
 #### Executable timing
-when the motor is stopped
+When the motor is stopped
 
 #### Description
 Moves specified number of steps according to the pre-set speed profile. It remains in the BUSY state until reaches to the specified step counts.
@@ -33,7 +33,7 @@ Moves specified number of steps according to the pre-set speed profile. It remai
 |position|-2,097,152 - 2,097,151|Destination|
 
 #### Executable timing
-Always
+Not in BUSY state
 
 #### Description
 Moves to the specified position in the shortest route according to the pre-set speed profile. Remains in the BUSY state until it finishes moving to the specified position.
@@ -49,7 +49,7 @@ Inside the driver, -2,097,152 and 2,097,151 are located next to each other in a 
 |position|-2,097,152 - 2,097,151|Destination|
 
 #### Executable timing
-Always
+Not in BUSY state
 
 #### Description
 Moves to the specified position in the specified direction according to the pre-set speed profile. Remains in the BUSY state until it finishes moving to the specified position.

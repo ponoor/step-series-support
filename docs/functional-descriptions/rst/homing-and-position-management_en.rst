@@ -62,14 +62,13 @@ Collision prevention setting
 
 You can limit the motor rotate direction when HOME or LIMIT sensors are
 active. With the
-command\ ```/setProhibitMotionOnHomeSw`` <https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#setprohibitmotiononhomesw_intmotorid_boolenable>`__\ and\ ```/setProhibitMotionOnLimitSw`` <https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#setprohibitmotiononlimitsw_intmotorid_boolenable>`__\ you
+command\ ```/setProhibitMotionOnHomeSw```_\ and\ ```/setProhibitMotionOnLimitSw```_\ you
 can prohibit the actuator to move towards\ ``homingDirection``\ when the
 HOME sensor is active, or the reverse direction
 towards\ ``homingDirection``\ when the LIMIT sensor is active. With
 this, you can prevent mechanism from collision.
 
-``homingDirection``\ can be set
-from\ ```/setHomingDirection`` <https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#sethomingdirection_intmotorid_booldirection>`__\ or
+``homingDirection``\ can be set from\ ```/setHomingDirection```_\ or
 from the configTool. This setting is also used for following ``/homing``
 command.
 
@@ -81,19 +80,17 @@ command.
 Homing commands
 ---------------
 
-The homing command in the STEP400 system
-is\ ```/homing`` <https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#homing_intmotorid>`__.
-This command consists from two commands,
-``/goUntil``\ and\ ``/releaseSw`` which are inherited from the Motor
-Driver Chip PowerSTEP01. Let’s look closer to those commands.
+The homing command in the STEP400 system is\ ```/homing```_. This
+command consists from two commands, ``/goUntil``\ and\ ``/releaseSw``
+which are inherited from the Motor Driver Chip PowerSTEP01. Let’s look
+closer to those commands.
 
 ``/goUnitl``
 ~~~~~~~~~~~~
 
 First, use this command to move towards the home sensor. The motor will
 decelerate and then stop when the home sensor reacts (if it has been set
-up as such). ->
-```/goUntil`` <https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#gountil_intmotorid_boolact_floatspeed>`__
+up as such). -> ```/goUntil```_
 
 ``/releaseSw``
 ~~~~~~~~~~~~~~
@@ -104,12 +101,10 @@ immediately, but stop after deceleration, so it’s current position has
 negative offset from the point where the sensor have actually responded.
 This command slowly moves in the opposite direction from the current
 position and stops immediately when the sensor reading is no longer
-positive. ->
-```/releaseSw`` <https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#releasesw_intmotorid_boolact_booldir>`__
+positive. -> ```/releaseSw```_
 
 Both commands can be set to reset the current position to zero on the
-moment when the sensor responds. ->
-```/setHomeSwMode`` <https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#sethomeswmode_intmotorid_boolsw_mode>`__
+moment when the sensor responds. -> ```/setHomeSwMode```_
 
 See this video for these commands in operation.
 
@@ -127,9 +122,8 @@ See this video for these commands in operation.
 ~~~~~~~~~~~
 
 It is possible to send above two commands over OSC one after another,
-the\ ```/homing`` <https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#homing_intmotorid>`__
-command executes this sequence in single operation. It will
-automatically complete the home sequence according to the homing
+the\ ```/homing```_ command executes this sequence in single operation.
+It will automatically complete the home sequence according to the homing
 direction and homing speed which are pre-configured from the configTool
 or over OSC commands.
 
@@ -166,9 +160,8 @@ switch is pressed, it is connected to the GND pin and the voltage drops
 from 3.3V to 0V. When the voltage changes from HIGH level to LOW level
 (a.k.a. **Falling Edge**), the sensor is considered to have responded.
 
-Let’s take an photo interrupter
-`EE-SX671A <http://www.ia.omron.com/product/item/2219/>`__ as an
-example, where the connection is as follows:
+Let’s take an photo interrupter `EE-SX671A`_ as an example, where the
+connection is as follows:
 
 .. figure:: http://ponoor.com/manage/wp-content/uploads/2020/10/ee-sx67.jpeg
    :alt: EE-SX671A Diagram
@@ -214,5 +207,14 @@ depending on the size of the hole. The STEP400 can notify both HIGH to
 LOW and LOW to HIGH changes of the home sensor by OSC messages. The
 message also includes the rotation direction, so you can align the home
 position if you write a conditional sequence for each rotation
-direction. ->
-```/enableHomeSwReport`` <https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#enablehomeswreport_intmotorid_boolenable>`__
+direction. -> ```/enableHomeSwReport```_
+
+.. _``/setProhibitMotionOnHomeSw``: https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#setprohibitmotiononhomesw_intmotorid_boolenable
+.. _``/setProhibitMotionOnLimitSw``: https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#setprohibitmotiononlimitsw_intmotorid_boolenable
+.. _``/setHomingDirection``: https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#sethomingdirection_intmotorid_booldirection
+.. _``/homing``: https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#homing_intmotorid
+.. _``/goUntil``: https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#gountil_intmotorid_boolact_floatspeed
+.. _``/releaseSw``: https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#releasesw_intmotorid_boolact_booldir
+.. _``/setHomeSwMode``: https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#sethomeswmode_intmotorid_boolsw_mode
+.. _EE-SX671A: http://www.ia.omron.com/product/item/2219/
+.. _``/enableHomeSwReport``: https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#enablehomeswreport_intmotorid_boolenable
