@@ -1,5 +1,6 @@
+========================
 Stepper motor and homing
-------------------------
+========================
 
 When the system powers up, it doesn’t know where the motor is currently
 positioned. It could be pointing to various directions depending on the
@@ -14,8 +15,9 @@ Therefore, applications that have position or orientation must use
 sensors to detect a reference position on startup or periodically. This
 action is called **homing**.
 
+=================
 Sensor and switch
------------------
+=================
 
 .. figure:: http://ponoor.com/manage/wp-content/uploads/2020/10/two-homing-sensors.png
    :alt: Two configuration of homing sensor
@@ -30,22 +32,25 @@ rotary table, where the photo interrupter responds to the black screw.
 Other devices such as microswitches, or photoelectric sensors are also
 used for the sensing.
 
+============================
 HOME sensor and LIMIT sensor
-----------------------------
+============================
 
 Each axis of STEP400/STEP800 has HOME connector which can connect
 sensors or switches. STEP400 has LIMIT sensor inputs in addition to HOME
 inputs. 5V is supplied to each connector for the sensing power source.
 
+----
 HOME
-~~~~
+----
 
 This input is connected directly to the motor driver chip and can be
 used in conjunction with the driver’s homing function. Usually, this
 connector is used for the home sensor.
 
+-----------------------
 LIMIT (Only in STEP400)
-~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------
 
 Some applications may require two sensors. For example, a slider has a
 limited operating range, and if it stalls during the operation, it may
@@ -57,8 +62,9 @@ can also be used as simple switch inputs separated from the motor
 operation. For example, you can connect a push button to one of them and
 press to send an OSC message.
 
+----------------------------
 Collision prevention setting
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
 You can limit the motor rotate direction when HOME or LIMIT sensors are
 active. With the
@@ -77,23 +83,26 @@ command.
 
    Homing Direction
 
+===============
 Homing commands
----------------
+===============
 
 The homing command in the STEP400 system is\ ```/homing```_. This
 command consists from two commands, ``/goUntil``\ and\ ``/releaseSw``
 which are inherited from the Motor Driver Chip PowerSTEP01. Let’s look
 closer to those commands.
 
+------------
 ``/goUnitl``
-~~~~~~~~~~~~
+------------
 
 First, use this command to move towards the home sensor. The motor will
 decelerate and then stop when the home sensor reacts (if it has been set
 up as such). -> ```/goUntil```_
 
+--------------
 ``/releaseSw``
-~~~~~~~~~~~~~~
+--------------
 
 The position where the motor stops is the origin / home position!
 However, strictly speaking, the ``/goUnitl`` command does not stop
@@ -118,8 +127,9 @@ See this video for these commands in operation.
 
       </iframe>
 
+-----------
 ``/homing``
-~~~~~~~~~~~
+-----------
 
 It is possible to send above two commands over OSC one after another,
 the\ ```/homing```_ command executes this sequence in single operation.
@@ -127,8 +137,9 @@ It will automatically complete the home sequence according to the homing
 direction and homing speed which are pre-configured from the configTool
 or over OSC commands.
 
+--------
 Time-out
-~~~~~~~~
+--------
 
 The time-out duration can be set for each of
 ``/goUntil``\ and\ ``/releaseSw`` commands. The controller will halts
@@ -137,11 +148,13 @@ reading is detected within this time frame. This is to prevent the
 moving part to be pushed against other mechanical object endlessly, by
 giving up the homing sequence and stops at the specified timing.
 
+============================
 Normal open and Normal close
-----------------------------
+============================
 
+---------------------
 Electrical connection
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 
 Let’s determine the “sensor reaction” a little more in detail. The pin
 assignments of HOME and LIMIT connectors are as follows.
@@ -176,8 +189,9 @@ Pin number Function            Sensor pin
 3          5V Power Output     +
 ========== =================== ==========
 
+==================================================================
 Whether light should enter or be blocked upon the sensor detection
-------------------------------------------------------------------
+==================================================================
 
 This is the part you need to consider carefully before ordering a
 sensor.
@@ -198,8 +212,9 @@ Omron sensor, the action is toggled by connecting “L” and “+” terminals.
 The mechanism and sensor must be combined in such a way that the sensor
 pin goes from HIGH to LOW at the home position.
 
+=================
 For rotary tables
------------------
+=================
 
 In the example on the picture above left, the response position of the
 home sensor will differ between clockwise and counterclockwise,

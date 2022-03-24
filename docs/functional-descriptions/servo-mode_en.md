@@ -45,5 +45,5 @@ Set all kP, kI, kD, to 0.0 and gradually raise the kP. When the target position 
 #### 2. kI
 In case when the target position only changing once every couple of seconds, you set the movement to quick and responsive by raising the kI value. Yet for example, when the target position is sent at 60fps, the acceleration towards the each new target position would cause the vibration and loose smooth transition. Depending on the priority of the quickly response to the target position or smooth movement for the whole operation, the preferable values may change.
 
-##### 3. kD
+#### 3. kD
 We gradually raise the kD if oscillation or overshoot is observed when approaching to the target.

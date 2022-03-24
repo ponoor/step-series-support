@@ -1,5 +1,6 @@
+==========================================================
 The difference between voltage control and current control
-----------------------------------------------------------
+==========================================================
 
 There are two types of stepping motor control methods: constant voltage
 control (**voltage mode**) and constant current control (**current
@@ -13,8 +14,9 @@ The differences for the users can be described as follows;
 -  Voltage mode is quiet and smooth, but can only drive at low speed.
 -  Current mode is noisy, but can drive to higher speed.
 
+=====================
 Test with the STEP400
----------------------
+=====================
 
 Here is a video about: - The difference between constant voltage control
 and constant current control - The difference between full-step and
@@ -42,8 +44,9 @@ referred to as “**current mode**”). It is noisy, but it can drive to
 higher speed. In this setting, we were able to achieve more than 11,000
 steps/sec.
 
+=============
 KVAL and TVAL
--------------
+=============
 
 **KVAL** register values are applied to control the drive voltage in the
 voltage mode, and **TVAL** registers are used to control the drive
@@ -51,8 +54,9 @@ current in the current mode. Although they are actually same registers
 in the driver, our firmware keeps them separated, rewrites them when
 mode changes to avoid unintended values to be set.
 
+====================
 Voltage mode setting
---------------------
+====================
 
 In the voltage mode of the STEP400 or STEP800, registers called KVAL is
 used to set what percentage of the power supply voltage should be
@@ -70,8 +74,9 @@ actual measurements and have made them available as `configuration
 files`_. We have only a small numbers of configuration files at the
 moment, but we are planning to add more in the future.
 
+====================
 Current mode setting
---------------------
+====================
 
 In the current mode which available in STEP400, the TVAL registers are
 used to set the target current value. The current can be set up to 5A in
@@ -84,8 +89,9 @@ torque is considerably strong, and the tiniest mistake may lead to great
 physical danger. In such situations we recommend to use use an
 industrial grade motor drivers.
 
+===============
 Switching modes
----------------
+===============
 
 These commands are available for switching between modes; -
 ```/setVoltageMode```_ - switch to the voltage mode. -
@@ -94,7 +100,7 @@ These commands are available for switching between modes; -
 The motor must be in the high impedance (High Z) state before switching
 the mode. For example, if you are going to switch the Motor 1 to current
 mode, the command sequence is in the following order; 1. ``/hardHiZ 1``
-2. ``/setCurrentMode 1``
+1. ``/setCurrentMode 1``
 
 The microstepping is limited to minimum 1/16 in current mode. Any lower
 value than 1/16 will be regarded as 1/16. When you change the
