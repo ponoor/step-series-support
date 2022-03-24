@@ -141,6 +141,6 @@ We gradually raise the kD if oscillation or overshoot is observed when
 approaching to the target.
 
 .. _/enableServoMode: https://ponoor.com/docs/step-series/osc-command-reference/servo-mode/#enableservomode_intmotorid_boolenable
-.. _setTargetPosition: https://ponoor.com/docs/step-series/osc-command-reference/servo-mode/#settargetposition_intmotorid_intposition
+.. _/setTargetPosition: https://ponoor.com/docs/step-series/osc-command-reference/servo-mode/#settargetposition_intmotorid_intposition
 .. _/setTargetPositionList: https://ponoor.com/docs/step-series/osc-command-reference/servo-mode/#settargetpositionlist_intposition1_intposition2_intposition3_intposition4
 .. _/setServoParam: https://ponoor.com/docs/step-series/osc-command-reference/servo-mode/#setservoparam_intmotorid_floatkp_floatki_floatkd
