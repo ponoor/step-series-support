@@ -93,9 +93,10 @@ industrial grade motor drivers.
 Switching modes
 ***************
 
-These commands are available for switching between modes; -
-`/setVoltageMode`_ - switch to the voltage mode. -
-`/setCurrentMode`_ - switch to the current mode.
+These commands are available for switching between modes;
+
+- `/setVoltageMode`_ - switch to the voltage mode. 
+- `/setCurrentMode`_ - switch to the current mode.
 
 The motor must be in the high impedance (High Z) state before switching
 the mode. For example, if you are going to switch the Motor 1 to current
