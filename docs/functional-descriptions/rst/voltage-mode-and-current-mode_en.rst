@@ -99,8 +99,10 @@ These commands are available for switching between modes; -
 
 The motor must be in the high impedance (High Z) state before switching
 the mode. For example, if you are going to switch the Motor 1 to current
-mode, the command sequence is in the following order; 1. ``/hardHiZ 1``
-1. ``/setCurrentMode 1``
+mode, the command sequence is in the following order; 
+
+1. ``/hardHiZ 1``
+2. ``/setCurrentMode 1``
 
 The microstepping is limited to minimum 1/16 in current mode. Any lower
 value than 1/16 will be regarded as 1/16. When you change the
