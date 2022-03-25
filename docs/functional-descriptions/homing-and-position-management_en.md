@@ -34,12 +34,12 @@ With the command[`/setProhibitMotionOnHomeSw`](https://ponoor.com/en/docs/step-s
 ## Homing commands
 The homing command in the STEP400 system is[`/homing`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#homing_intmotorid). This command consists from two commands, `/goUntil`and`/releaseSw` which are inherited from the Motor Driver Chip PowerSTEP01. Let's look closer to those commands.
 
-### `/goUnitl`
+### `/goUntil`
 First, use this command to move towards the home sensor. The motor will decelerate and then stop when the home sensor reacts (if it has been set up as such).
 -> [`/goUntil`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#gountil_intmotorid_boolact_floatspeed)
 
 ### `/releaseSw`
-The position where the motor stops is the origin / home position! However, strictly speaking, the `/goUnitl` command does not stop immediately, but stop after deceleration, so it's current position has negative offset from the point where the sensor have actually responded. This command slowly moves in the opposite direction from the current position and stops immediately when the sensor reading is no longer positive.
+The position where the motor stops is the origin / home position! However, strictly speaking, the `/goUntil` command does not stop immediately, but stop after deceleration, so it's current position has negative offset from the point where the sensor have actually responded. This command slowly moves in the opposite direction from the current position and stops immediately when the sensor reading is no longer positive.
 -> [`/releaseSw`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#releasesw_intmotorid_boolact_booldir)
 
 Both commands can be set to reset the current position to zero on the moment when the sensor responds. -> [`/setHomeSwMode`](https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#sethomeswmode_intmotorid_boolsw_mode)
