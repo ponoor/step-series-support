@@ -7,9 +7,13 @@ M3用取付穴が基板の各隅+中央付近の5か所にあります。
 ![](https://ponoor.com/cms/wp-content/uploads/2020/08/step400-dimension-800x661.png)
 この画像の上下の細長い部分は捨て基板で、製造終了後に切り離されています。
 
-原寸PDF : [step400_r1_dimenstion.pdf](https://ponoor.com/cms/wp-content/uploads/2020/08/step400_r1_dimenstion.pdf "step400_r1_dimenstion")
+原寸PDF : [step400_r1_dimension.pdf](https://github.com/ponoor/STEP400/blob/master/hardware/step400_r1_dimension.pdf) "step400_r1_dimension")
 
 ### 構成
+
+![file](https://ponoor.com/cms/wp-content/uploads/2020/08/image-1648386258465.png)
+
+回路図: [step400_r1_schematics.pdf](https://github.com/ponoor/STEP400/blob/master/hardware/step400_r1_schematics.pdf)
 
 主な構成要素は以下のとおりです。
 

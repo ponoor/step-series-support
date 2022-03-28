@@ -7,9 +7,14 @@ There are five M3 mounting holes on each four corners and in the middle.
 ![](https://ponoor.com/cms/wp-content/uploads/2020/08/step400-dimension-800x661.png)
 Long parts of the top and bottom in this picture are waste boards, and are removed after the production.
 
-Actual size PDF : [step400_r1_dimenstion.pdf](https://ponoor.com/cms/wp-content/uploads/2020/08/step400_r1_dimenstion.pdf "step400_r1_dimenstion")
+Actual size PDF : [step400_r1_dimension.pdf](https://github.com/ponoor/STEP400/blob/master/hardware/step400_r1_dimension.pdf "step400_r1_dimension")
 
 ### System
+
+![diagram](https://ponoor.com/cms/wp-content/uploads/2020/08/image-1648386258465.png)
+
+Schematics: [step400_r1_schematics.pdf](https://github.com/ponoor/STEP400/blob/master/hardware/step400_r1_schematics.pdf)
+
 The main components are as follows;
 
 | Components | Manufacturer | Model number |
@@ -42,8 +47,8 @@ The main components are as follows;
 | D22/MISO | W5500_MISO | |
 | D23/MOSI | W5500_MOSI | |
 | D24/SCK | W5500_SCK | |
-| D30 | DIPSW2 ||
-| D31 | DIPSW4 ||
+| D30 | DIPSW2 | |
+| D31 | DIPSW4 | |
 | D38 | NC | Pad on PCB |
 | A0 | PowerSTEP01_CS | |
 | A1 | Brake1 | |

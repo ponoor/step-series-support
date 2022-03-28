@@ -7,9 +7,13 @@ There are five M3 mounting holes on each four corners and in the middle.
 ![](https://ponoor.com/cms/wp-content/uploads/2021/09/step800_r1_0_0_dimension-1.png)
 Long parts of the top and bottom in this picture are waste boards, and are removed after the production.
 
-Actual size PDF : [step800_r1_0_0_dimension.pdf](https://ponoor.com/cms/wp-content/uploads/2021/09/step800_r1_0_0_dimension.pdf)
+Actual size PDF: [step800_r1_0_0_dimension.pdf](https://github.com/ponoor/STEP800/blob/main/hardware/step800_r1_0_0_dimension.pdf)
 
 ### System
+![file](https://ponoor.com/cms/wp-content/uploads/2021/09/image-1648468983329.png)
+
+Schematics: [step800_r1_0_0_schematics.pdf](https://github.com/ponoor/STEP800/blob/main/hardware/step800_r1_0_0_schematics.pdf)
+
 The main components are as follows;
 
 | Components | Manufacturer | Model number |

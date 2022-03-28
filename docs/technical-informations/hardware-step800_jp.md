@@ -7,9 +7,12 @@ M3用取付穴が基板の各隅+中央付近の5か所にあります。
 ![](https://ponoor.com/cms/wp-content/uploads/2021/09/step800_r1_0_0_dimension-1.png)
 この画像の上下の細長い部分は捨て基板で、製造終了後に切り離されています。
 
-原寸PDF : [step800_r1_0_0_dimension.pdf](https://ponoor.com/cms/wp-content/uploads/2021/09/step800_r1_0_0_dimension.pdf)
+原寸PDF: [step800_r1_0_0_dimension.pdf](https://ponoor.com/cms/wp-content/uploads/2021/09/step800_r1_0_0_dimension.pdf)
 
 ### 構成
+![file](https://ponoor.com/cms/wp-content/uploads/2021/09/image-1648468983329.png)
+
+回路図: [step800_r1_0_0_schematics.pdf](https://github.com/ponoor/STEP800/blob/main/hardware/step800_r1_0_0_schematics.pdf)
 
 主な構成要素は以下のとおりです。
 
