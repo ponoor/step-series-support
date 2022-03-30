@@ -7,7 +7,7 @@
 |speed|-15625 - 15625 [step/s]|Rotation speed|
 
 #### Executable timing
-Always
+In motion start condition
 
 #### Description
 Rotates the motor at specified speed. The acceleration is controlled with the pre-set speed profile. The speed is limited by maxSpeed. It remains in the BUSY state until the motor reached to the specified speed.
@@ -20,10 +20,10 @@ Rotates the motor at specified speed. The acceleration is controlled with the pr
 |step||Moving step counts|
 
 #### Executable timing
-When the motor is stopped
+When the motor is stopped, and In motion start condition.
 
 #### Description
-Moves specified number of steps according to the pre-set speed profile. It remains in the BUSY state until reaches to the specified step counts.
+Moves specified number of steps according to the pre-set speed profile. It remains in the BUSY state until reaches to the specified step counts. This command can only execute when the motor is stopped.
 
 ### `/goTo (int)motorID (int)position`
 #### Argument
@@ -33,7 +33,7 @@ Moves specified number of steps according to the pre-set speed profile. It remai
 |position|-2,097,152 - 2,097,151|Destination|
 
 #### Executable timing
-Not in BUSY state
+In motion start condition
 
 #### Description
 Moves to the specified position in the shortest route according to the pre-set speed profile. Remains in the BUSY state until it finishes moving to the specified position.
@@ -49,7 +49,7 @@ Inside the driver, -2,097,152 and 2,097,151 are located next to each other in a 
 |position|-2,097,152 - 2,097,151|Destination|
 
 #### Executable timing
-Not in BUSY state
+In motion start condition
 
 #### Description
 Moves to the specified position in the specified direction according to the pre-set speed profile. Remains in the BUSY state until it finishes moving to the specified position.
