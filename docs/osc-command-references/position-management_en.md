@@ -152,7 +152,7 @@ Get the MARK position.
 |motorID|1-4/1-8, 255|motor ID|
 
 #### Executable timing
-When the motor is not in BUSY state.
+In motion start condition
 
 #### Description
 Move the motor to the HOME position (zero position) according to the speed profile.
@@ -167,7 +167,7 @@ None
 |motorID|1-4/1-8, 255|motor ID|
 
 #### Executable timing
-When the motor is not in BUSY state
+In motion start condition
 
 #### Description
 Move the motor to the MARK position according to the speed profile.
