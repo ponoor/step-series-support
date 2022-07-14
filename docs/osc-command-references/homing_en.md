@@ -156,7 +156,7 @@ None
 | Argument | Range | Description |
 | --- | --- | --- |
 | motorID | 1-4/1-8, 255 | Motor ID |
-| timeOut | 0-65535[ms] | Time-out duration |
+| timeOut | 0-4294967295[ms] | Time-out duration |
 
 #### Executable timing
 Always
@@ -223,7 +223,7 @@ None
 | Argument | Range | Description |
 | --- | --- | --- |
 | motorID | 1-4/1-8, 255 | Motor ID |
-| timeOut | 0-65535[ms] | Time-out duration |
+| timeOut | 0-4294967295[ms] | Time-out duration |
 
 #### Executable timing
 Always
