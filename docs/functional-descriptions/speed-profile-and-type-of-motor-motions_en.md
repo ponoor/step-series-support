@@ -1,41 +1,46 @@
 ## Speed profile
 ### Overview
-The speed profile sets the acceleration, deceleration, and maximum speed values of the motion prior to the motor operation in advance. This depends on the following:
+Speed profile sets the acceleration (acc), deceleration (dec), and maximum speed (maxSpeed) values of the motor prior to the motor moving.
+These values depend on the following:
 
 - Motor Specifications
 - Power supply voltage
 - Load
-- Voltage control or current control
+- Voltage mode or current mode
 
-You need to set these values according to your actual environment.
+While we provide some example defaults, you need to set these values according to your actual environment. This requires some trial and error on your part.
 
-### Values to be set
-The three values, Acceleration(acc),deceleration(dec), and maxSpeed need to be set. You can also set the minimum speed (minSpeed) as a function of the motor driver, but it is fixed at 0 on the firmware because it is unlikely to be used for the actual application.
+### Setting the Profile
+Use [`/setSpeedProfile`](https://ponoor.com/en/docs/step400/osc-command-reference/speed-profile/#setspeedprofile_intmotorid_floatacc_floatdec_floatmaxspeed) to set the above three values. Acc and dec
+cannot be set unless the motor is stopped; however, maxSpeed can be set at any time.
 
-### Setting command
-With [`/setSpeedProfile`](https://ponoor.com/en/docs/step400/osc-command-reference/speed-profile/#setspeedprofile_intmotorid_floatacc_floatdec_floatmaxspeed) command you can set above three values. The acc and dec cannot be set unless the motor is stopped, the maxSpeed parameter can be set at anytime.
+You can also set the minimum speed (minSpeed) with `/setMinSpeed`. It is unlikely to be used for any actual application, but this speed will be used for `/releaseSw` speed as a part of the homing procedure.
 
 ## Type of motor operation
 ### Constant speed
-This is the command to drive the the motor with the acceleration/deceleration rate set by the speed profile, then maintains constant speed. It continues to rotate until speed 0 is set, or stop command is sent. The range of speed that can be set is limited to the maximum speed of the speed profile. It will keep BUSY state during the acceleration and deceleration.
-A representative command for the constant spped drive is [`/run`](https://ponoor.com/en/docs/step400/osc-command-reference/motor-control/#run_intmotorid_floatspeed). There are also [`/goUntil`](https://ponoor.com/en/docs/step400/osc-command-reference/homing/#gountil_intmotorid_boolact_floatspeed) and [`/releaseSw`](https://ponoor.com/en/docs/step400/osc-command-reference/homing/#releasesw_intmotorid_boolact_booldir) commands are available.
+The [`/run`](https://ponoor.com/en/docs/step400/osc-command-reference/motor-control/#run_intmotorid_floatspeed) command is used to drive the motor at a constant speed. The acceleration, deceleration, and maximum speed curves set by [`/setSpeedProfile`](https://ponoor.com/en/docs/step400/osc-command-reference/speed-profile/#setspeedprofile_intmotorid_floatacc_floatdec_floatmaxspeed) are adhered to by this command. The motor runs perpetually until speed 0 (`/run 0`) or a stop command is sent. The motor will not run faster than the maximum speed set in the speed profile. Sending a speed to run faster than this profile setting will cause the motor's speed to be truncated to that setting. The motor will be kept in the BUSY state during the acceleration and deceleration.
+
+[`/goUntil`](https://ponoor.com/en/docs/step400/osc-command-reference/homing/#gountil_intmotorid_boolact_floatspeed) and [`/releaseSw`](https://ponoor.com/en/docs/step400/osc-command-reference/homing/#releasesw_intmotorid_boolact_booldir) are also considered constant speed commands.
 
 ### Positioning
-The trapezoidal drive towards the specified position is performed according to the speed profile. In other words, it accelerates according to the acceleration rate of the speed profile, then drives at constant speed when it reaches the maximum speed, and then decelerates at specified deceleration rate at the timing calculated backwards to stop at the specified position. It may start decelrating before it reaches the maximum speed, especially when you want to accelerate / decelerate relatively slow rate.
-It remains in the BUSY state until the motor stops. It's not possbile to interrupt the current positioning motion with another positioning motion.
+The trapezoidal drive towards the specified position is performed according to the speed profile. In other words, it accelerates according to the acceleration rate of the speed profile, then drives at constant speed when it reaches the maximum speed, and then decelerates at specified deceleration rate at the timing calculated backwards to stop at the specified position. It may start decelerating before it reaches the maximum speed, especially when you want to accelerate / decelerate at a relatively slow rate. It remains in the BUSY state until the motor stops. It's not possible to interrupt the current positioning motion with another positioning motion.
+
+Typical commands for positioning operation are `/goTo` and `/move`. Other commands include `/goHome`, `/goMark`, and `/goToDir`.
+
+NOTE: With [STEP-series Universal Firmware](https://github.com/ponoor/step-series-universal-firmware), positioning motions (except /move) can interrupt another positioning motions.
 
 ### Servo mode
-This is not a function of the motor driver, but a mode of driving implemented in the firmware. It constantly updates the constant speed operation to follow a given target position. This mode is similar to tje radio controlled servo motor. No other motor motion commands can be sent while the motor is operating in this mode.
+This is not a function of the motor driver, but a mode of driving implemented in the firmware. It constantly updates the constant speed operation to follow a given target position. This mode is similar to a radio controlled servo motor. No other motor motion commands can be sent while the motor is operating in this mode.
 
 ### Types of stops
-There are two options with a total of four different commands, as follows;
+There are two options with a total of four different commands, as follows:
 
-- Decelerate according to the speed profile or stop instantly.
-- Keep magnetized / excited or goes to the high impedance(High Z) state after stop.
+-  Decelerating according to the speed profile or stop instantly
+-  Keeping magnetized/excited or entering a high impedance (High Z) state after stopping
 
 | State after stop | Deceleration stop | Immediate stop |
 | --- | --- | --- |
-| Excitation | SoftStop | HardStop |
+| Excited | SoftStop | HardStop |
 | HiZ | SoftHiZ | HardHiZ |
 
-The excited state is the state in which the torque is applied to hold the motor position according to `KVAL_HOLD`voltage,  or current set by the `TVAL_HOLD` value. The high impedance state is the state where the current is cut off and there is no holding torque.
+The excited state is the state in which voltage or current (torque) is maintained to hold the motor's position according to `KVAL_HOLD` or `TVAL_HOLD`, respectively. The high impedance (HiZ) state is when the current is cut off and no holding torque is maintained. **Any loads the motor is moving may fall or lose their positioning during HiZ.**
