@@ -4,21 +4,23 @@ The firmware may be updated for bugfixes and adding features.
 Please check the current firmware version on the controller first, then if it's older than [the version published on Github](hhttps://github.com/ponoor/step-series-universal-firmware/releases), please update the firmware.
 
 ## Checking firmware version burned on to the controller
-One method is to check the over the OSC through ethernet. Another method is to check from serial monitor over USB.
+Two methods exist to check the current version of the firmware:
 
-### Check over OSC
+* Using the OSC command `/getVersion`
+* Connecting a USB cable to the board and typing `s` in the Serial Monitor
 
-With `/getVersion` message you can check the current firmware version. For detail, please command reference for [`/getVersion`](https://ponoor.com/en/docs/step-series/osc-command-reference/system-settings/#getversion).
+### Method 1: OSC Command
+This method only requires you to send the [`/getVersion`](https://ponoor.com/en/docs/step-series/osc-command-reference/system-settings/#getversion) command to the board. The resulting response will tell you the current version of the firmware.
 
-#### Response example
+For example:
 ```
 /version "STEP800_R1_UNIVERSAL 1.0.1 Mar 24 2022 11:17:29"
 ```
 
-### Check from USB
-Connect STEP400 and your PC with USB cable, send `s` from serial monitor. From the response message, you can obtain the firmware version. See more detail for [Diagnosis via USB serial port](https://ponoor.com/en/docs/step-series/technical-information/diagnosis/) under [Firmware](https://ponoor.com/en/docs/step-series/technical-information/diagnosis/#firmware) section.
+### Method 2: Over USB
+Connect the USB-C cable to the board and to your PC. Then open Serial Monitor in the IDE you're using. Send the command `s` and you should receive a response containing the version.
 
-#### Response example
+For example:
 ```
 -------------- Firmware --------------
 Firmware name : STEP800_R1_UNIVERSAL
@@ -37,4 +39,4 @@ Previously, STEP400 and STEP800 firmware was managed in separate repositories, b
 
 
 ## Updating firmware
-If the firmware on the controller is old, please update the firmware. The update can be done by compiling and uploading latest firmware sketch from Arduino IDE. Refer [Compiling Arduino sketch](https://ponoor.com/docs/step-series/technical-information/compile-the-arduino-sketch/) for more detail.
+If the firmware on the controller is old, please update the firmware. The update can be done by compiling and uploading latest firmware sketch from Arduino IDE. Refer [Compiling Arduino sketch](https://ponoor.com/en/docs/step-series/technical-information/compile-the-arduino-sketch/) for more detail.
