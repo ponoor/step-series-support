@@ -13,7 +13,7 @@
 
 ### 設定する値
 
-加速度acc, 減速度dec, 最大速さmaxSpeedの3種類の値です。モータドライバの機能としては最小速さminSpeedも設定できますが、実際の現場で使うことはほぼ無いと思われるため、ファームウェア側で0に固定しています。
+加速度acc, 減速度dec, 最大速さmaxSpeedの3種類の値です。[`/setMinSpeed`](https://ponoor.com/docs/step-series/osc-command-reference/speed-profile/#setminspeed_intmotorid_floatminspeed) によって最低の速さを設定することも可能です。これは実際の使用時に使うことはほぼありませんが、この速さは原点復帰時の [`/releaseSw`](https://ponoor.com/docs/step-series/osc-command-reference/homing/#releasesw_intmotorid_boolact_booldir) の速さに適用されます。
 
 ### 設定コマンド
 
@@ -34,6 +34,8 @@
 モータが停止するまでBUSY状態になります。位置決め運転の途中で割り込んで次の位置決め運転をすることはできません。
 
 位置決め運転をする代表的なコマンドが [`/goTo`](https://ponoor.com/docs/step400/osc-command-reference/motor-control/#goto_intmotorid_intposition) や [`/move`](https://ponoor.com/docs/step400/osc-command-reference/motor-control/#move_intmotorid_intstep) です。その他にも [`/goHome`](https://ponoor.com/docs/step400/osc-command-reference/absolute-position-management/#gohome_intmotorid), [`/goMark`](https://ponoor.com/docs/step400/osc-command-reference/absolute-position-management/#gomark_intmotorid), [`/goToDir`](https://ponoor.com/docs/step400/osc-command-reference/motor-control/#gotodir_intmotorid_booldir_intposition) などが含まれます。
+
+備考: [STEP-series Universal Firmware](https://github.com/ponoor/step-series-universal-firmware) では、 `/move` 以外の位置決めコマンドは、実行中のモーションコマンドに割り込むことができます。
 
 ### サーボモード
 
