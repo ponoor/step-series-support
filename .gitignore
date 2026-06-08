@@ -1,6 +1,9 @@
 CLAUDE.md
+CLAUDE_*.md
+/.claude
 browser-config-tool-plan.md
 tmpclaude-*
 *.tmp
 *.tmp.*
 claude_temp_*
+.DS_Store
