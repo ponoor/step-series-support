@@ -1,3 +1,17 @@
+---
+title: Automatically sent messages from the device
+wp_id: 1108
+slug: automatically-sent-messages-from-step-400
+lang: en
+link: "https://ponoor.com/en/docs/step-series/osc-command-reference/automatically-sent-messages-from-step-400/"
+date: "2020-11-07T21:57:16"
+modified: "2021-12-09T11:18:22"
+parent: 886
+menu_order: 22
+---
+
+# Automatically sent messages from the device
+
 ## Summary
 
 Most of messages sent from the device are responses regarding enquiry messages. For example, when sending the message `/getPosition` to the device in order to acquire one's current position, the response message sent from the device will be `/position`. However, some messages are, as opposed to the responses to the specific messages, automatic messages which correspond to the state changes of the board. This chapter explains this sort of automatic messages.
@@ -7,7 +21,8 @@ Most of messages sent from the device are responses regarding enquiry messages. 
 ### `/booted`
 
 #### Explanation
- This message is automatically sent out when the device has (re)started. By watching the message, you can detect reset event of the device triggered by some reason.
+
+This message is automatically sent out when the device has (re)started. By watching the message, you can detect reset event of the device triggered by some reason.
 
 The message will be sent out one second after the firmware is started up and the ethernet link is established. The message will be sent to `255.255.255.255`, means broadcasting to all nodes within the subnet.
 
@@ -20,7 +35,7 @@ This message can be disabled from the Config Tool.
 ```
 
 | Argument | Range | Description |
-|----------|-------|-------------|
+| --- | --- | --- |
 | deviceID | 0-255 | The device ID set by the DIP Switch |
 
 ## Error
@@ -38,13 +53,13 @@ Sent if any error is detected in the received OSC message.
 ```
 
 | Argument | Description |
-|----------|-------------|
+| --- | --- |
 | errorText | A character string that indicates the details of an error. |
 
 ##### Error Text
 
 | errorText | Description |
-|-----------|-------------|
+| --- | --- |
 | `messageNotMatch` | There is no corresponding command |
 | `oscSyntaxError` | The OSC format is out of standard |
 | `WrongDataType` | Wrong datatype of in argument(s) |
@@ -64,12 +79,13 @@ The message can be enabled or disabled with [`/reportError`](https://ponoor.com/
 ```
 
 | Argument | Range | Description |
-|----------|-------|-------------|
-| ErrorText | | A character string that indicates the details of an error. |
+| --- | --- | --- |
+| ErrorText |  | A character string that indicates the details of an error. |
 | motorID | 1-4/1-8 | The motor's ID |
 
 ##### Error Text
-| ErrorText  | Explanation |
+
+| ErrorText | Explanation |
 | --- | --- |
 | `CommandIgnored` | The command is currently not executable. Also refer [Timing](https://ponoor.com/en/docs/step-series/osc-command-reference/#i-4) section. |
 | `MotorIdNotMatch` | Motor ID is not appropriate. |
@@ -88,22 +104,26 @@ Please see [`/enableBusyReport`](https://ponoor.com/en/docs/step-series/osc-comm
 
 ### `/HiZ`
 
- Please see [`/enableHizReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/system-settings/#enablehizreport_intmotorid_boolenable)
+Please see [`/enableHizReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/system-settings/#enablehizreport_intmotorid_boolenable)
 
 ### `/dir`
+
 Please see [`/enableDirReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#enabledirreport_intmotorid_boolenable)
 
 ### `/motorStatus`
 
- Please see [`/enableMotorStatusReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/system-settings/#enablemotorstatusreport_intmotorid_boolenable)
+Please see [`/enableMotorStatusReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/system-settings/#enablemotorstatusreport_intmotorid_boolenable)
 
 ### `/homingStatus`
+
 Please see [`/homing`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#homing_intmotorid)
 
 ### `/position`
+
 Please see [`/setPositionReportInterval`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#setpositionreportinterval_intmotorid_intinterval)
 
 ### `/positionList`
+
 Please see [`/setPositionListReportInterval`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#setpositionlistreportinterval_intinterval)
 
 ## Alarm Notifications

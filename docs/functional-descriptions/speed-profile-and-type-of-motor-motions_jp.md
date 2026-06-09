@@ -1,3 +1,17 @@
+---
+title: スピードプロファイルとモータ動作の種類
+wp_id: 386
+slug: speed-profile-and-type-of-motor-motions
+lang: ja
+link: "https://ponoor.com/docs/step-series/functional-description/speed-profile-and-type-of-motor-motions/"
+date: "2020-08-21T14:14:19"
+modified: "2022-08-15T21:36:36"
+parent: 32
+menu_order: 31
+---
+
+# スピードプロファイルとモータ動作の種類
+
 ## スピードプロファイル
 
 ### 概要
@@ -51,7 +65,7 @@
 - 停止後も励磁状態を保つか、ハイ・インピーダンス状態 (HiZ) にするか
 
 | 停止後の状態 | 減速停止 | 瞬間停止 |
-|--------------------|--------------|--------------|
+| --- | --- | --- |
 | **励磁** | [SoftStop](https://ponoor.com/docs/step400/osc-command-reference/motor-control/#softstop_intmotorid) | [HardStop](https://ponoor.com/docs/step400/osc-command-reference/motor-control/#hardstop_intmotorid) |
 | **HiZ** | [SoftHiZ](https://ponoor.com/docs/step400/osc-command-reference/motor-control/#softhiz_intmotorid) | [HardHiZ](https://ponoor.com/docs/step400/osc-command-reference/motor-control/#hardhiz_intmotorid) |
 

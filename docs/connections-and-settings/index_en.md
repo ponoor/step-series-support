@@ -1,3 +1,17 @@
+---
+title: Connections and settings
+wp_id: 867
+slug: settings
+lang: en
+link: "https://ponoor.com/en/docs/step-series/settings/"
+date: "2020-08-05T20:33:32"
+modified: "2021-08-26T17:07:14"
+parent: 415
+menu_order: 84
+---
+
+# Connections and settings
+
 ## Overview
 
 This section goes through initial configurations including hardware, power supplies, motors, sensors, and switches.

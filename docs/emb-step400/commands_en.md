@@ -1,4 +1,19 @@
+---
+title: Sending command
+wp_id: 1644
+slug: commands
+lang: en
+link: "https://ponoor.com/en/docs/emb-step400/commands/"
+date: "2021-03-22T16:22:16"
+modified: "2022-07-07T15:49:22"
+parent: 1626
+menu_order: 28
+---
+
+# Sending command
+
 ## Electromagnet brake mode
+
 To use the electromagnetic brake, brake mode must first be activated. To do this, send the command [`/enableElectromagnetBrake`](https://ponoor.com/en/docs/step400/osc-command-reference/brake/#enableelectromagnetbrake_intmotorid_boolenable) or from the config tool under `Electromagnetic brake enable`.
 
 If the mode is enabled, the brake will be controlled according to the motors' excitation state.
@@ -18,7 +33,6 @@ WARNING: Be very careful when sending this command. It is dangerous while any lo
 ## Command Behaviors
 
 While the EM brake is engaged, the motion commands [`/run`](https://ponoor.com/en/docs/step400/osc-command-reference/motor-control/#run_intmotorid_floatspeed), [`/goTo`](https://ponoor.com/en/docs/step400/osc-command-reference/motor-control/#goto_intmotorid_intposition), and [`/move`](https://ponoor.com/en/docs/step400/osc-command-reference/motor-control/#move_intmotorid_intstep) are not executed. Instead, the error [`ERROR_BRAKE_ENGAGED`](https://ponoor.com/en/docs/step400/osc-command-reference/automatically-sent-messages-from-step-400/#errorcommand) message will be raised.
-
 
 Commands that put the motor into a non-excited state (torque hold released) will behave as follows:
 

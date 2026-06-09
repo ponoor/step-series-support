@@ -1,3 +1,17 @@
+---
+title: Specifications
+wp_id: 1649
+slug: specifications
+lang: en
+link: "https://ponoor.com/en/docs/emb-step400/specifications/"
+date: "2021-03-21T14:59:04"
+modified: "2022-07-07T15:53:01"
+parent: 1626
+menu_order: 63
+---
+
+# Specifications
+
 ## Basic Specification
 
 - Acceptable input voltage : 5 - 48V
@@ -23,5 +37,6 @@ According the [datasheet](https://datasheet.lcsc.com/szlcsc/Winsok-Semicon-WSF28
 [step400-brakeBoard-schematic.pdf](https://ponoor.com/cms/wp-content/uploads/2021/03/step400-brakeBoard-schematic.pdf)
 
 ## Accessories
+
 - 3.81mm pitch 2pin Euro-style terminal block x 5
 - 6 pin ribbon cable

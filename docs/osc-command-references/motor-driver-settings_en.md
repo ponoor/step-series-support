@@ -1,18 +1,37 @@
+---
+title: Motor driver settings
+wp_id: 1282
+slug: motor-driver-settings
+lang: en
+link: "https://ponoor.com/en/docs/step-series/osc-command-reference/motor-driver-settings/"
+date: "2021-03-09T13:13:10"
+modified: "2021-12-08T22:56:50"
+parent: 886
+menu_order: 39
+---
+
+# Motor driver settings
+
 ## Motor Driver Settings
+
 ### `/setMicrostepMode (int)motorID (int)STEP_SEL`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
-| STEP_SEL| 0-7 | Microstepping mode |
+| motorID | 1-4/1-8, 255 | motor ID |
+| STEP\_SEL | 0-7 | Microstepping mode |
 
 #### Executable timing
+
 High Z state
 
 #### Description
+
 Switches the micro stepping mode.
 
-| STEP_SEL | Micro stepping mode |
+| STEP\_SEL | Micro stepping mode |
 | --- | --- |
 | 0 | Full-step |
 | 1 | Half-step |
@@ -23,228 +42,294 @@ Switches the micro stepping mode.
 | 6 | 1/64 microstep |
 | 7 | 1/128 microstep |
 
-Initially, the microstep mode is set to 1/128.
+Initially, the microstep mode is set to 1/128.  
 In the constant-current control mode (current mode), only full-step to 1/16 microstep is available.
 
 #### Initial value
+
 7 (1/128 microstep)
 
 ### `/getMicrostepMode (int)motorID`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
+| motorID | 1-4/1-8, 255 | motor ID |
 
 #### Executable timing
+
 Always
 
 #### Description
-Gets the mode of microstepping. See [`/setMicrostepMode`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#setmicrostepmode_intmotorid_intstep_sel) for STEP_SEL.
+
+Gets the mode of microstepping. See [`/setMicrostepMode`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#setmicrostepmode_intmotorid_intstep_sel) for STEP\_SEL.
 
 #### Response
+
 ```
 /microstepMode (int)motorID (int)STEP_SEL
 ```
 
 ### `/enableLowSpeedOptimize (int)motorID (bool)enable`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
+| motorID | 1-4/1-8, 255 | motor ID |
 | enable | 0-1 | 1:Enable, 0:Disable |
 
 #### Executable timing
+
 When the motor is stopped.
 
 #### Description
-Enable/disable low speed optimization feature which compensate phase current distortion at a very low speed using a small driving voltage. When this optimization is enabled, speed profile minimum speed (`Min speed`) is force to zero. Only work with voltage mode. See data sheets for details. 
+
+Enable/disable low speed optimization feature which compensate phase current distortion at a very low speed using a small driving voltage. When this optimization is enabled, speed profile minimum speed (`Min speed`) is force to zero. Only work with voltage mode. See data sheets for details.
 
 #### Initial value
+
 0 (Disabled)
 
 ### `/setLowSpeedOptimizeThreshold (int)motorID (float)lowSpeedOptimizationThreshold`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
-| lowSpeedOptimizationThreshold| 0.0 - 976.3 [step/s] | Low speed optimization threshold |
+| motorID | 1-4/1-8, 255 | motor ID |
+| lowSpeedOptimizationThreshold | 0.0 - 976.3 [step/s] | Low speed optimization threshold |
 
 #### Executable timing
+
 When the motor is stopped.
 
 #### Description
+
 Set the threshold for phase current distortion compensation at very low speed. For details, refer to "Low speed optimization" section in the corresponding datasheet.
 
 The response is same as the following [`getLowSpeedOptimizeThreshold`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#getlowspeedoptimizethreshold_intmotorid).
 
 ### `/getLowSpeedOptimizeThreshold (int)motorID`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
+| motorID | 1-4/1-8, 255 | motor ID |
 
 #### Executable timing
+
 Always
 
 #### Description
+
 Gets the current value of the low speed optimization threshold.
 
 #### Response
+
 ```
 /lowSpeedOptimizeThreshold (int)motorID (float)lowSpeedOptimizeThreshold
 ```
 
 ## Getting the status
+
 ### `/enableBusyReport (int)motorID (bool)enable`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
+| motorID | 1-4/1-8, 255 | motor ID |
 | enable | 0-1 | 1:Enable, 0:Disable |
 
 #### Executable timing
+
 Always
 
 #### Description
+
 Automatically sends out notification if the BUSY status of the specified motor has changed. The notification message is same as the response from [`/getBusy`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#getbusy_intmotorid) command.
 
 #### Initial value
+
 0 (Disabled)
 
 ### `/getBusy (int)motorID`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
+| motorID | 1-4/1-8, 255 | motor ID |
 
 #### Executable timing
+
 Always
 
 #### Description
+
 Returns the BUSY state of the specified motor.
 
 #### Response
+
 ```
 /busy (int)motorID
 ```
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
-| state | 0-1 |  1: BUSY, 0: Not BUSY |
+| motorID | 1-4/1-8, 255 | motor ID |
+| state | 0-1 | 1: BUSY, 0: Not BUSY |
 
 ### `/enableHizReport (int)motorID (bool)enable`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
+| motorID | 1-4/1-8, 255 | motor ID |
 | enable | 0-1 | 1:Enable, 0:Disable |
 
 #### Executable timing
+
 Always
 
 #### Description
+
 Following message is sent automatically when there is a change in the High Z (high impedance) state of the specified motor.
 
 #### Initial value
+
 0 (Disabled)
 
 ### `/getHiZ (int)motorID`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
+| motorID | 1-4/1-8, 255 | motor ID |
 
 #### Executable timing
+
 Always
 
 #### Description
+
 Requests the High Z (high impedance) state of the specified motor.
 
 #### Response
+
 ```
 /HiZ (int)motorID (bool)state
 ```
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
+| motorID | 1-4/1-8, 255 | motor ID |
 | state | 0-1 | 1 if High Z state, 0 if not High Z state. |
 
 ### `/enableDirReport (int)motorID (bool)enable`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
+| motorID | 1-4/1-8, 255 | motor ID |
 | enable | 0-1 | 1:Enable, 0:Disable |
 
 #### Executable timing
+
 Always
 
 #### Description
+
 Following message is sent automatically when there is a change in the direction of the specified motor.
 
 #### Initial value
+
 0 (Disabled)
 
 ### `/getDir (int)motorID`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
+| motorID | 1-4/1-8, 255 | motor ID |
 
 #### Executable timing
+
 Always
 
 #### Description
+
 Requests the direction of the specified motor.
 
 #### Response
+
 ```
 /dir (int)motorID (bool)direction
 ```
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
+| motorID | 1-4/1-8, 255 | motor ID |
 | direction | 0-1 | 1: Forward, 0:Reverse |
 
 ### `/enableMotorStatusReport (int)motorID (bool)enable`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
+| motorID | 1-4/1-8, 255 | motor ID |
 | enable | 0-1 | 1:Enable, 0:Disable |
 
 #### Executable timing
+
 Always
 
 #### Description
-Following message will be sent automatically when there is conditional change in the operating status (MOT_STATUS) of the specified motor. The response message is same as the reply from the [`/getMotorStatus`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#getmotorstatus_intmotorid) command.
+
+Following message will be sent automatically when there is conditional change in the operating status (MOT\_STATUS) of the specified motor. The response message is same as the reply from the [`/getMotorStatus`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#getmotorstatus_intmotorid) command.
 
 #### Initial value
+
 0 (Disabled)
 
 ### `/getMotorStatus (int)motorID`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
+| motorID | 1-4/1-8, 255 | motor ID |
 
 #### Executable timing
+
 Always
 
 #### Description
-Gets the operating status (MOT_STATUS) of the specified motor.
+
+Gets the operating status (MOT\_STATUS) of the specified motor.
 
 #### Response
+
 ```
 /motorStatus (int)motorID (int)MOT_STATUS
 ```
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  Motor ID |
-| MOT_STATUS | 0-3 | Motor status |
+| motorID | 1-4/1-8, 255 | Motor ID |
+| MOT\_STATUS | 0-3 | Motor status |
 
 ##### Motor status
-| MOT_STATUS | Motor status |
+
+| MOT\_STATUS | Motor status |
 | --- | --- |
 | 0 | Stopped |
 | 1 | Acceleration |
@@ -252,89 +337,114 @@ Gets the operating status (MOT_STATUS) of the specified motor.
 | 3 | Constant speed |
 
 ### `/setPositionReportInterval (int)motorID (int)interval`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  Motor ID |
-| interval | 0-2147483647  | transmit interval [ms] |
+| motorID | 1-4/1-8, 255 | Motor ID |
+| interval | 0-2147483647 | transmit interval [ms] |
 
 #### Executable timing
+
 Always
 
 #### Description
+
 Send the current position (`ABS_POS`) of the specified motor with the specified interval. Disabled with the interval 0.
 
 When this function enabled, `/setPositionListReportInterval` will be automatically disabled and stop the transmitting.
 
 #### Response
+
 The same as [`/getPosition`](https://ponoor.com/en/docs/step-series/osc-command-reference/absolute-position-management/#getposition_intmotorid).
 
 #### Initial value
+
 0 (Disabled)
 
 ### `/setPositionListReportInterval (int)interval`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| interval | 0-2147483647  | transmit interval [ms] |
+| interval | 0-2147483647 | transmit interval [ms] |
 
 #### Executable timing
+
 Always
 
 #### Description
+
 Send a single message with a list of the current position (`ABS_POS`) of all motors with the specified interval. Disabled with the interval 0.
 
 When this function enabled, `/setPositionInterval` will be disabled automatically for all motors and stop the transmitting.
 
 #### Response
+
 The same as [`/getPositionList`](https://ponoor.com/en/docs/step-series/osc-command-reference/absolute-position-management/#getpositionlist)
 
 #### Initial value
+
 0 (Disabled)
 
 ## Debug
 
 ### `/getAdcVal (int)motorID`
+
 **STEP400 only**
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
 | motorID | 1-4/1-8, 255 | Motor ID |
 
 #### Executable timing
+
 Always
 
 #### Description
-Acquires ADC_OUT register values from the PowerSTEP01 chip. This register stores 5-bit AD-converted voltage reading from ADC pin. This pin is pull-upped with 10kOhm resistor and wired to LIMITSW connector.
+
+Acquires ADC\_OUT register values from the PowerSTEP01 chip. This register stores 5-bit AD-converted voltage reading from ADC pin. This pin is pull-upped with 10kOhm resistor and wired to LIMITSW connector.
 
 #### Response
+
 ```
 /adcVal (int)motorID (int)ADC_OUT
 ```
+
 | Argument | Range | Description |
 | --- | --- | --- |
 | motorID | 1-4, 255 | Motor ID |
-| ADC_OUT | 0-31 | 5bit reading of ADC_OUT register |
+| ADC\_OUT | 0-31 | 5bit reading of ADC\_OUT register |
 
 ### `/getStatus (int)motorID`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
+| motorID | 1-4/1-8, 255 | motor ID |
 
 #### Executable timing
+
 Always
 
 #### Description
+
 Gets the STATUS of the motor driver (PowerSTEP01 for STEP400/L6470 for STEP800). The STATUS includes the status of the motor, alarms and switches.
 
 #### Response
+
 ```
 /status (int)motorID (int)status
 ```
+
 | Argument | Range | Description |
 | --- | --- | --- |
-| motorID | 1-4/1-8, 255 |  motor ID |
+| motorID | 1-4/1-8, 255 | motor ID |
 | status | 0-65535(0xFFFF) | 16-bit STATUS register |
 
 Refer to "STATUS" in the data sheet for the information contained in the registers. Some of bits are latched and reset when STATUS registers are read out. Because the device firmware constantly obtains the STATUS values, these values are immediately reset. It is possible to set up these events to be reported separately, so please use those commands.
@@ -342,27 +452,31 @@ Refer to "STATUS" in the data sheet for the information contained in the registe
 | Name of bits in STATUS (STEP400) | Name of bits in STATUS (STEP800) | The corresponding configuration commands |
 | --- | --- | --- |
 | UVLO | UVLO | [`/enableUvloReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enableuvloreport_intmotorid_boolenable) |
-| UVLO_ADC | - | This feature is not available in STEP 400 and is always disabled. |
+| UVLO\_ADC | - | This feature is not available in STEP 400 and is always disabled. |
 | OCD | OCD | [`/enableOverCurrentReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enableovercurrentreport_intmotorid_boolenable) |
-| STALL_A, STALL_B | STEP_LOSS_A, STEP_LOSS_B | [`/enableStallReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enablestallreport_intmotorid_boolenable)  |
-| CMD_ERROR | WRONG_CMD, NOTPREF_CMD | [`/enableCommandErrorReport`](https://ponoor.com/docs/step-series/osc-command-reference/system-settings/#reporterror_boolenable) |
-| TH_STATUS | TH_WRN, TH_SD | [`/enableThermalStatusReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enablethermalstatusreport_intmotorid_boolenable) |
-| SW_EVN | SW_EVN | [`/enableHomeSwReport`](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#enablesweventreport_intmotorid_boolenable) |
-| MOT_STATUS | MOT_STATUS | [`/enableMotorStatusReport`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#enablemotorstatusreport_intmotorid_boolenable) |
-| SW_F | SW_F | [`/enableHomeSwReport`](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#enablehomeswreport_intmotorid_boolenable) |
+| STALL\_A, STALL\_B | STEP\_LOSS\_A, STEP\_LOSS\_B | [`/enableStallReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enablestallreport_intmotorid_boolenable) |
+| CMD\_ERROR | WRONG\_CMD, NOTPREF\_CMD | [`/enableCommandErrorReport`](https://ponoor.com/docs/step-series/osc-command-reference/system-settings/#reporterror_boolenable) |
+| TH\_STATUS | TH\_WRN, TH\_SD | [`/enableThermalStatusReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enablethermalstatusreport_intmotorid_boolenable) |
+| SW\_EVN | SW\_EVN | [`/enableHomeSwReport`](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#enablesweventreport_intmotorid_boolenable) |
+| MOT\_STATUS | MOT\_STATUS | [`/enableMotorStatusReport`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#enablemotorstatusreport_intmotorid_boolenable) |
+| SW\_F | SW\_F | [`/enableHomeSwReport`](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#enablehomeswreport_intmotorid_boolenable) |
 | BUSY | BUSY | [`/enableBusyReport`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#enablebusyreport_intmotorid_boolenable) |
 | HiZ | HiZ | [`/enableHizReport`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#enablehizreport_intmotorid_boolenable) |
 
 ### `/getConfigRegister (int)motorID`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
 | motorID | 1-4/1-8, 255 | Motor ID |
 
 #### Executable timing
+
 Always
 
 #### Description
+
 Acquires the CONFIG register value from the motor driver (PowerSTEP01 or L6470). The information stored in CONFIG register includes motor, alarm and switch status.
 
 #### Responses
@@ -370,6 +484,7 @@ Acquires the CONFIG register value from the motor driver (PowerSTEP01 or L6470).
 ```
 /configRegister (int)motorID (int)CONFIG
 ```
+
 | Argument | Range | Description |
 | --- | --- | --- |
 | motorID | 1-4/1-8 | Motor ID |
@@ -378,13 +493,17 @@ Acquires the CONFIG register value from the motor driver (PowerSTEP01 or L6470).
 The CONFIG register stores various settings for the motor driver. Please refer the datasheet of the PowerSTEP01/L6470 for detail.
 
 ### `/resetMotorDriver (int)motorID`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
 | motorID | 1-4/1-8, 255 | Motor ID |
 
 #### Executable timing
+
 Always
 
 #### Description
+
 Resets the motor driver (PowerSTEP01/L6470) and rewrites the setting.
