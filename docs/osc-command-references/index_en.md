@@ -1,3 +1,17 @@
+---
+title: OSC command reference
+wp_id: 886
+slug: osc-command-reference
+lang: en
+link: "https://ponoor.com/en/docs/step-series/osc-command-reference/"
+date: "2020-08-05T20:33:32"
+modified: "2022-03-30T12:09:54"
+parent: 415
+menu_order: 90
+---
+
+# OSC command reference
+
 ## Overview
 
 This is a reference for Open Sound Control commands. Commands are common between STEP400 and STEP800 but some commands are only available in STEP400 (Noted as `STEP400 Only`). And there are some other commands which have different setting values. Please check "[Differences between STEP400 and STEP800](https://ponoor.com/en/docs/step-series/osc-command-reference/differences-between-step400-and-step800/)" for details.
@@ -20,10 +34,10 @@ Because of this, the ID numbers that can be used for a command are any of the fo
 ### Argument Types
 
 | Item | Description |
-|--------|--------|
-| (int) | Value of an integer. <br />Depending on the command, the acceptable range of the value may vary. |
-| (float) | Value of floating-point numbers. <br />Range of the value may also vary depending on the command. |
-| (bool) | Logical value. Either 1 or 0 as integer.|
+| --- | --- |
+| (int) | Value of an integer.  Depending on the command, the acceptable range of the value may vary. |
+| (float) | Value of floating-point numbers.  Range of the value may also vary depending on the command. |
+| (bool) | Logical value. Either 1 or 0 as integer. |
 | (Symbol) | String (OSC-string). |
 
 #### Messages from the controller
@@ -33,6 +47,7 @@ The [OSC specification](https://opensoundcontrol.stanford.edu/spec-1_0.html) def
 No OSC message will be sent before the controller receives `/setDestIp` message.
 
 #### Messages to the controller
+
 All arguments are converted if necessary when they are received. For example, a logical value can be sent as integer or float. A string will cause an error.
 
 | Type | Judged as 1 | Judged as 0 |
@@ -48,24 +63,25 @@ In the same way, integers and floating point numbers are converted to each other
 
 Some commands have limited executable timing. It is described in "Timing" in each command reference information.
 
-
 | Item | Description |
-|--------|--------|
+| --- | --- |
 | Always | Always executable |
-| Not in Busy State | Executable when the controller is not in a busy state.
-| Motor stopped | Executable when the motor is stopped  |
+| Not in Busy State | Executable when the controller is not in a busy state. |
+| Motor stopped | Executable when the motor is stopped |
 | HiZ State | Executable when the driver output is in HiZ (high-impedance) state |
 | In motion start condition | Executable when all conditions for motions are cleared |
 
 #### Motion start condition
+
 Following conditions should be cleared:
+
 - The electromagnetic brake is released.
 - Not in a servo mode.
 
 In addition, the set value of the command you are trying to send must meet the following conditions:
+
 - Not trying to move toward `homingDirection` when `/setProhibitMotionOnHomeSw` set and the HOME switch activated.
 - Not trying to move toward counter `homingDirection` when `/setProhibitMotionOnLimitSw` set and the LIMIT switch activated.
-
 
 ## Points to Keep in Mind
 
