@@ -7,3 +7,4 @@ tmpclaude-*
 *.tmp.*
 claude_temp_*
 .DS_Store
+/wp_export
