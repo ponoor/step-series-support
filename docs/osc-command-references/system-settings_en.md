@@ -1,13 +1,32 @@
+---
+title: System settings
+wp_id: 990
+slug: system-settings
+lang: en
+link: "https://ponoor.com/en/docs/step-series/osc-command-reference/system-settings/"
+date: "2020-11-05T12:29:38"
+modified: "2021-12-08T22:55:16"
+parent: 886
+menu_order: 32
+---
+
+# System settings
+
 ## System settings
+
 ### `/setDestIp`
+
 #### Argument
+
 None
 
 #### Executable timing
+
 Always
 
 #### Description
-Sets the destination IP address (`destIp`) to where the device should send messages to, when it replies to a query or report internal state changes, etc.
+
+Sets the destination IP address (`destIp`) to where the device should send messages to, when it replies to a query or report internal state changes, etc.  
 The board sets the `destIp` to the sender of this message .
 
 Also, until `destIp` is set, no OSC messages will be sent from the device, so send this command first. One single exception is the [`/booted`](https://ponoor.com/en/docs/step-series/osc-command-reference/automatically-sent-messages-from-step-400/#booted) message.
@@ -15,25 +34,32 @@ Also, until `destIp` is set, no OSC messages will be sent from the device, so se
 From the Config Tool, you can set the board to start sending out the OSC message without waiting the `destIp` to be set.
 
 #### Response
+
 ```
 /destIp (int)destIp[0] (int)destIp[1] (int)destIp[2] (int)destIp[3] (bool)isNewDestIp
 ```
+
 | Argument | Range | Description |
 | --- | --- | --- |
 | destIp[0-3] | 0-255 | Each byte of destIp |
 | isNewDestIp | 0-1 | Indicates if destIp has been changed. 1 if it has been changed, or 0 if the same address has already been set. |
 
 #### Initial value
+
 10.0.0.10
 
 ### `/getVersion`
+
 #### Argument
+
 None
 
 #### Executable timing
+
 Always
 
 #### Description
+
 Returns the firmware version burnt on the chip.
 
 #### Response
@@ -41,6 +67,7 @@ Returns the firmware version burnt on the chip.
 ```
 /version (Symbol)firmwareName (Symbol)firmwareVersion (Symbol)compileDate
 ```
+
 | Argument | Description |
 | --- | --- |
 | firmwareName | Name of the firmware |
@@ -48,13 +75,17 @@ Returns the firmware version burnt on the chip.
 | compileDate | Compile date of the firmware |
 
 ### `/getConfigName`
+
 #### Argument
+
 None
 
 #### Executable timing
+
 Always
 
 #### Description
+
 Returns the name of the configuration file read from the micro SD card on system boot.
 
 #### Response
@@ -62,6 +93,7 @@ Returns the name of the configuration file read from the micro SD card on system
 ```
 /configName (Symbol)configName (bool)sdInitializeSucceeded (bool)configFileOpenSucceeded (bool)configFileParseSucceeded
 ```
+
 | Argument | Description |
 | --- | --- |
 | configName | The name of the configuration |
@@ -70,26 +102,35 @@ Returns the name of the configuration file read from the micro SD card on system
 | configFileParseSucceeded | If the config Json data could be parsed successfully. |
 
 ### `/reportError (bool)enable`
+
 #### Argument
+
 | Argument | Range | Description |
 | --- | --- | --- |
 | enable | 0-1 | 1 for enabled, 0 for disabled |
 
 #### Executable timing
+
 Always
 
 #### Description
+
 Enables or disables the automatic message notification for [`/error/command`](https://ponoor.com/en/docs/step-series/https://ponoor.com/en/docs/step-series/osc-command-reference/automatically-sent-messages-from-step-400/#errorcommand) and [`/error/osc`](https://ponoor.com/en/docs/step-series/osc-command-reference/automatically-sent-messages-from-step-400/#errorosc).
 
 #### Initial value
+
 1 (Enabled)
 
 ### `/resetDevice`
+
 #### Argument
+
 None
 
 #### Executable timing
+
 Always
 
 #### Description
+
 Resets the entire device. A programmatic version of physically pressing the RESET button.

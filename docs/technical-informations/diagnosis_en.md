@@ -1,31 +1,54 @@
+---
+title: Diagnosis via USB serial port
+wp_id: 1622
+slug: diagnosis
+lang: en
+link: "https://ponoor.com/en/docs/step-series/technical-information/diagnosis/"
+date: "2021-03-23T14:22:57"
+modified: "2021-09-03T13:49:48"
+parent: 888
+menu_order: 65
+---
+
+# Diagnosis via USB serial port
+
 ## Diagnosis tool
+
 ### Overview
-You can connect your PC and the deice with USB and monitor status or check the setting. It is practical for trouble shooting, like when you cannot reach the controller over Ethernet network. 
+
+You can connect your PC and the deice with USB and monitor status or check the setting. It is practical for trouble shooting, like when you cannot reach the controller over Ethernet network.
 
 ### Connection
+
 Connect the device and your PC with USB Type-C cable. Only the microcontroller and its peripheral will be powered from USB. In this state, the motor drivers are not powered up, so you cannot communicate with them. Therefore make sure to supply motor power source as well.
 
 Also, be aware that if you fist connect USB cable and then connect motor power, the controller may exhibit unexpected behavior, since the motor drivers will be in uninitialized state. So power the motor power supply first and then connect the USB, or reset the controller by pushing RESET button after powering up motor power.
 
 ### Serial monitor
+
 The device report itself as virtual serial port to PC and is recognized as Arduino Zero. If you would like to use Arduino IDE serial monitor, the process looks as follows. You can use any serial port terminal client that can send and receive text strings.
 
 #### Selecting Port
-From Tools -> Port. Find "Arduino Zero (Native USB Port)" and select it.
- ![file](https://ponoor.com/cms/wp-content/uploads/2021/03/image-1616473811329.png)
 
-#### Open Serial Monitor 
+From Tools -> Port. Find "Arduino Zero (Native USB Port)" and select it.  
+![file](https://ponoor.com/cms/wp-content/uploads/2021/03/image-1616473811329.png)
+
+#### Open Serial Monitor
+
 By clicking the magnifying glass icon, the serial monitor window will pop up. [![](https://ponoor.com/cms/wp-content/uploads/2021/03/openserialmonitor-486x525.png)](https://ponoor.com/cms/wp-content/uploads/2021/03/openserialmonitor.png)
 
 #### List the menu
+
 From the textbox on the top, enter `m` and press Send button (or press Return key) you will receive diagnosis menu if the connection is established without issue. ![file](https://ponoor.com/cms/wp-content/uploads/2021/03/image-1616474112646.png)
 
 We are going to look through these three items.
 
 ## Status
+
 By sending `s`, you can retrieve its hardware status.
 
 ### Firmware
+
 ```
 ============== Current Status ==============
 -------------- Firmware --------------
@@ -35,31 +58,34 @@ Compile date : Mar 19 2021, 10:27:55
 Applicable config version : 1.0
 Loaded config version : 1.0 [CONFIG_VERSION_APPLICABLE]
 ```
+
 This section includes, mainly the firmware information on the chip.
 
 `Loaded config version`: Shows the config.txt version number read from microSD. Depending on the version of config and firmware, you will get one of the following message.
 
 | Message | Description |
-|--------|--------|
-| CONFIG_VERSION_UNDEFINED | Undefined config version |
-| CONFIG_VERSION_NOTLOADED | The config could not read from microSD |
-| CONFIG_VERSION_OLD | The config version is old |
-| CONFIG_VERSION_APPLICABLE | The version of config and firmware matched |
-| CONFIG_VERSION_NEW | The config file's version is newer than firmware (Firmware old) |
+| --- | --- |
+| CONFIG\_VERSION\_UNDEFINED | Undefined config version |
+| CONFIG\_VERSION\_NOTLOADED | The config could not read from microSD |
+| CONFIG\_VERSION\_OLD | The config version is old |
+| CONFIG\_VERSION\_APPLICABLE | The version of config and firmware matched |
+| CONFIG\_VERSION\_NEW | The config file's version is newer than firmware (Firmware old) |
 
 ### DIP Switch
+
 ```
 -------------- DIP Switch --------------
 BIN : 0000 0001
 DEC : 1
 ```
-Shows the status of ID switches on the PCB.
 
+Shows the status of ID switches on the PCB.
 
 - `BIN`: Shows the switch position as 0/1. Please be aware that the smallest bit comes to the left on the PCB, while it comes to right in the diagnosis tool.
 - `DEC`: ID number in decimal.
 
 ### Ethernet
+
 ```
 -------------- Ethernet --------------
 Ethernet hardware status: 3 -EthernetW5500
@@ -71,14 +97,15 @@ isDestIpSet : No
 - `Ethernet link status`: Shows Ethernet link status.
 
 | Link Status | Description |
-|-------------|-------------|
+| --- | --- |
 | LinkON | Linked |
 | LinkOff | Unlinked |
 | Unknown | Unable to retrieve the status |
 
-- `isDestIpSet `: Shows if the `destIp` is set. `Yes`if the command `/setDestIp` was sent already and the controller is able to respond over OSC, in other cases `No`.
+- `isDestIpSet` : Shows if the `destIp` is set. `Yes`if the command `/setDestIp` was sent already and the controller is able to respond over OSC, in other cases `No`.
 
 ### microSD
+
 ```
 -------------- microSD --------------
 SD library initialize succeeded : Yes
@@ -91,28 +118,31 @@ SD config JSON parse succeeded : Yes
 - `SD config JSON parse succeeded`: Shows if the content of `config.txt` (JSON) was read correctly.
 
 ### Motor Driver
+
 #### STEP400
+
 ```
 -------------- Motor Driver --------------
 PowerSTEP01 SPI connection established : Yes
 PowerSTEP01 ID#1
-	STATUS: 0xE603
-	High impedance state : Yes
-	BUSY : No
-	Motor direction : Reverse
-	Motor status : Stopped
-	UVLO (Undervoltage lock out) : No
-	Thermal status : Normal
-	OCD (Overcurent detection) : No
-	Stalled : No
-	SW_F: 0 -HOME senser input open.
-	ADC_OUT: 31 -LIMIT senser input open.
+    STATUS: 0xE603
+    High impedance state : Yes
+    BUSY : No
+    Motor direction : Reverse
+    Motor status : Stopped
+    UVLO (Undervoltage lock out) : No
+    Thermal status : Normal
+    OCD (Overcurent detection) : No
+    Stalled : No
+    SW_F: 0 -HOME senser input open.
+    ADC_OUT: 31 -LIMIT senser input open.
 ```
 
 - `PowerSTEP01 SPI connection established`: Shows if the communication with the PowerSTEP01 was established. If `No`, the motor power might be switched off.
 - Following message will be displayed only if the communication was successful. For messages, #1-#4 will be listed.
 
 #### STEP800
+
 ```
 -------------- Motor Driver --------------
 L6470 SPI connection established : Yes
@@ -133,6 +163,7 @@ L6470 ID#1
 - Following message will be displayed only if the communication was successful. For messages, #1-#8 will be listed.
 
 ### Modes
+
 ```
 -------------- Modes --------------
 Servo Mode :  No, No, No, No
@@ -147,23 +178,26 @@ Homing status : 0, 0, 0, 0
 ```
 
 #### Brake status
+
 | Brake status | Description |
-|--------------|-------------|
-| BRAKE_ENGAGED | Brake engaged status |
-| BRAKE_DISENGAGE_WAITING | In transition to brake release |
-| BRAKE_DISENGAGED | Brake released |
-| BRAKE_MOTORHIZ_WAITING | In transition to brake engage |
+| --- | --- |
+| BRAKE\_ENGAGED | Brake engaged status |
+| BRAKE\_DISENGAGE\_WAITING | In transition to brake release |
+| BRAKE\_DISENGAGED | Brake released |
+| BRAKE\_MOTORHIZ\_WAITING | In transition to brake engage |
 
 #### Homing status
+
 | Number | Homing status | Description |
-|--------|---------------|-------------|
-| 0 | HOMING_UNDEFINED | Not homing yet |
-| 1 | HOMING_GOUNTIL | Moving towards sensor |
-| 2 | HOMING_RELEASESW | Leaving from sensor active area |
-| 3 | HOMING_COMPLETED | Homing completed |
-| 4 | HOMING_TIMEOUT | Time out was detected while homing |
+| --- | --- | --- |
+| 0 | HOMING\_UNDEFINED | Not homing yet |
+| 1 | HOMING\_GOUNTIL | Moving towards sensor |
+| 2 | HOMING\_RELEASESW | Leaving from sensor active area |
+| 3 | HOMING\_COMPLETED | Homing completed |
+| 4 | HOMING\_TIMEOUT | Time out was detected while homing |
 
 ## Config
+
 You can retrieve current settings if you send `c`. Be aware that this is not the content of the configTool file, but the current setting that reflected actual ID switch setting and other settings over OSC messages. For example if you boot the STEP400 without microSD inserted, following message will show up.
 
 ```
@@ -250,4 +284,5 @@ kD : 0.00, 0.00, 0.00, 0.00
 ```
 
 ## Test Motion
+
 All motors will rotate 25600 steps forward by sending `t`. This is equivalent to one rotation for the 200 steps stepping motor controlled with 1/128 microsteps.
