@@ -14,7 +14,7 @@ menu_order: 36
 
 ## Usage
 
-Basically STEP100/200 can be controlled in the same way as STEP400/800. Please reffer to the STEP400/800 [tutorial](https://ponoor.com/en/docs/step-series/tutorial/) and [the command reference](https://ponoor.com/docs/step-series/osc-command-reference/).
+Basically STEP100/200 can be controlled in the same way as STEP400/800. Please refer to the STEP400/800 [tutorial](https://ponoor.com/en/docs/step-series/tutorial/) and [the command reference](https://ponoor.com/en/docs/step-series/osc-command-reference/).
 
 STEP100 can use the commands of STEP400, and STEP200 can use the commands of STEP800, but since the number of motor axes is different, the range of MotorID changes as follows.
 
@@ -46,7 +46,7 @@ In the STEP400/800, both the Arduino and the Ethernet will reliably start if mot
 
 ## SD card
 
-Many Ethernet shields have an SD card slot, which can be used for initial configuration using the configTool. However, since we do not have a configuration export tool for STEP100/200 at this time, please use the STEP400 config file for STEP100 and the STEP800 config file for STEP200.  
+Many Ethernet shields have an SD card slot, which can be used for initial configuration using the configuration tool. However, since we do not have a configuration export tool for STEP100/200 at this time, please use the STEP400 config file for STEP100 and the STEP800 config file for STEP200.  
 Setting data that exceeds the number of motors, or LIMIT switch-related settings, etc. will be ignored.
 
 ## DIP switch

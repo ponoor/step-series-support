@@ -26,7 +26,7 @@ This message is automatically sent out when the device has (re)started. By watch
 
 The message will be sent out one second after the firmware is started up and the ethernet link is established. The message will be sent to `255.255.255.255`, means broadcasting to all nodes within the subnet.
 
-This message can be disabled from the Config Tool.
+This message can be disabled from the configuration tool.
 
 #### Sent Message
 
@@ -44,7 +44,7 @@ This message can be disabled from the Config Tool.
 
 #### Explanation
 
-Sent if any error is detected in the received OSC message.
+Sent if any error is detected in the received OSC (Open Sound Control) message.
 
 #### Sent Message
 
@@ -89,7 +89,7 @@ The message can be enabled or disabled with [`/reportError`](https://ponoor.com/
 | --- | --- |
 | `CommandIgnored` | The command is currently not executable. Also refer [Timing](https://ponoor.com/en/docs/step-series/osc-command-reference/#i-4) section. |
 | `MotorIdNotMatch` | Motor ID is not appropriate. |
-| `BrakeEngaging` | A motion command was sent while the electromagnet brake was active. |
+| `BrakeEngaging` | A motion command was sent while the electromagnetic brake was active. |
 | `HomeSwActivating` | Movement from home sensor position towards the origin point. |
 | `LimitSwActivating` | Movement from limit sensor position towards the opposite direction from origin. |
 | `GoUntilTimeout` | Timeout while executing `/goUntil` command. |

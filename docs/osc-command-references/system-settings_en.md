@@ -29,9 +29,9 @@ Always
 Sets the destination IP address (`destIp`) to where the device should send messages to, when it replies to a query or report internal state changes, etc.  
 The board sets the `destIp` to the sender of this message .
 
-Also, until `destIp` is set, no OSC messages will be sent from the device, so send this command first. One single exception is the [`/booted`](https://ponoor.com/en/docs/step-series/osc-command-reference/automatically-sent-messages-from-step-400/#booted) message.
+Also, until `destIp` is set, no OSC (Open Sound Control) messages will be sent from the device, so send this command first. One single exception is the [`/booted`](https://ponoor.com/en/docs/step-series/osc-command-reference/automatically-sent-messages-from-step-400/#booted) message.
 
-From the Config Tool, you can set the board to start sending out the OSC message without waiting the `destIp` to be set.
+From the configuration tool, you can set the board to start sending out the OSC message without waiting the `destIp` to be set.
 
 #### Response
 
@@ -86,12 +86,12 @@ Always
 
 #### Description
 
-Returns the name of the configuration file read from the micro SD card on system boot.
+Returns the name of the configuration file read from the microSD card on system boot.
 
 #### Response
 
 ```
-/configName (Symbol)configName (bool)sdInitializeSucceeded (bool)configFileOpenSucceeded (bool)configFileParseSucceeded
+/configName (Symbol)configName (bool)sdInitializeSucceeded (bool)configFileOpenSucceeded (bool)configFileParseSucceeded (Symbol)configFilename
 ```
 
 | Argument | Description |
@@ -100,6 +100,9 @@ Returns the name of the configuration file read from the micro SD card on system
 | sdInitializeSucceeded | If the reading from microSD card was successful. |
 | configFileOpenSucceeded | If the device could open the configuration file successfully. |
 | configFileParseSucceeded | If the config Json data could be parsed successfully. |
+| configFilename | The filename of the configuration file on the microSD card (e.g., `config.txt` or `STEP400_venue-A.json`). This is the on-disk filename, distinct from `configName` which is the user-editable label. |
+
+> **Changed in firmware v2.1.0:** Added `configFilename` as 5th argument.
 
 ### `/reportError (bool)enable`
 
@@ -120,6 +123,38 @@ Enables or disables the automatic message notification for [`/error/command`](ht
 #### Initial value
 
 1 (Enabled)
+
+### `/setConfigName (Symbol)configName`
+
+#### Argument
+
+| Argument | Range | Description |
+| --- | --- | --- |
+| configName | | Configuration name string |
+
+#### Executable timing
+
+Always
+
+#### Description
+
+Sets the configuration name stored in the device. This is a user-editable label for identifying configurations and is distinct from the on-disk filename.
+
+### `/saveConfig`
+
+#### Argument
+
+None
+
+#### Executable timing
+
+Always
+
+#### Description
+
+Saves the current running configuration to the microSD card as a JSON file. The filename used is the one previously set, or the filename from which the configuration was originally loaded.
+
+> **Added in firmware v2.1.0**
 
 ### `/resetDevice`
 

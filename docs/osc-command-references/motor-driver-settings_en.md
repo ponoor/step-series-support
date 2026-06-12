@@ -29,7 +29,7 @@ High Z state
 
 #### Description
 
-Switches the micro stepping mode.
+Sets the microstepping mode.
 
 | STEP\_SEL | Micro stepping mode |
 | --- | --- |
@@ -451,17 +451,17 @@ Refer to "STATUS" in the data sheet for the information contained in the registe
 
 | Name of bits in STATUS (STEP400) | Name of bits in STATUS (STEP800) | The corresponding configuration commands |
 | --- | --- | --- |
-| UVLO | UVLO | [`/enableUvloReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enableuvloreport_intmotorid_boolenable) |
-| UVLO\_ADC | - | This feature is not available in STEP 400 and is always disabled. |
-| OCD | OCD | [`/enableOverCurrentReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enableovercurrentreport_intmotorid_boolenable) |
-| STALL\_A, STALL\_B | STEP\_LOSS\_A, STEP\_LOSS\_B | [`/enableStallReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enablestallreport_intmotorid_boolenable) |
-| CMD\_ERROR | WRONG\_CMD, NOTPREF\_CMD | [`/enableCommandErrorReport`](https://ponoor.com/docs/step-series/osc-command-reference/system-settings/#reporterror_boolenable) |
-| TH\_STATUS | TH\_WRN, TH\_SD | [`/enableThermalStatusReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enablethermalstatusreport_intmotorid_boolenable) |
-| SW\_EVN | SW\_EVN | [`/enableHomeSwReport`](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#enablesweventreport_intmotorid_boolenable) |
-| MOT\_STATUS | MOT\_STATUS | [`/enableMotorStatusReport`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#enablemotorstatusreport_intmotorid_boolenable) |
-| SW\_F | SW\_F | [`/enableHomeSwReport`](https://ponoor.com/docs/step-series/osc-command-reference/home-limit-sensors/#enablehomeswreport_intmotorid_boolenable) |
-| BUSY | BUSY | [`/enableBusyReport`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#enablebusyreport_intmotorid_boolenable) |
-| HiZ | HiZ | [`/enableHizReport`](https://ponoor.com/docs/step-series/osc-command-reference/motordriver-settings/#enablehizreport_intmotorid_boolenable) |
+| UVLO | UVLO | [`/enableUvloReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#enableuvloreport_intmotorid_boolenable) |
+| UVLO\_ADC | - | This feature is not available in STEP400 and is always disabled. |
+| OCD | OCD | [`/enableOverCurrentReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#enableovercurrentreport_intmotorid_boolenable) |
+| STALL\_A, STALL\_B | STEP\_LOSS\_A, STEP\_LOSS\_B | [`/enableStallReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#enablestallreport_intmotorid_boolenable) |
+| CMD\_ERROR | WRONG\_CMD, NOTPREF\_CMD | [`/enableCommandErrorReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/system-settings/#reporterror_boolenable) |
+| TH\_STATUS | TH\_WRN, TH\_SD | [`/enableThermalStatusReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#enablethermalstatusreport_intmotorid_boolenable) |
+| SW\_EVN | SW\_EVN | [`/enableHomeSwReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#enablesweventreport_intmotorid_boolenable) |
+| MOT\_STATUS | MOT\_STATUS | [`/enableMotorStatusReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#enablemotorstatusreport_intmotorid_boolenable) |
+| SW\_F | SW\_F | [`/enableHomeSwReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#enablehomeswreport_intmotorid_boolenable) |
+| BUSY | BUSY | [`/enableBusyReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#enablebusyreport_intmotorid_boolenable) |
+| HiZ | HiZ | [`/enableHizReport`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#enablehizreport_intmotorid_boolenable) |
 
 ### `/getConfigRegister (int)motorID`
 

@@ -1,0 +1,84 @@
+## Batch 1 — Complete
+- Date: 2026-06-12
+- Files modified:
+  - docs/osc-command-references/alarm-settings_en.md
+  - docs/osc-command-references/motor-control_en.md
+  - docs/osc-command-references/position-management_en.md
+  - docs/osc-command-references/homing_en.md
+  - docs/osc-command-references/brake_en.md
+  - docs/osc-command-references/home-and-limit-sensors_en.md (renamed from home-and-limit-sensers_en.md)
+  - docs/osc-command-references/automatically-sent-messages-from-step-400_en.md
+  - docs/osc-command-references/motor-driver-settings_en.md
+  - docs/osc-command-references/voltage-and-current-mode-settings_en.md
+  - docs/osc-command-references/system-settings_en.md
+  - docs/functional-descriptions/voltage-mode-and-current-mode_en.md
+  - docs/functional-descriptions/homing-and-position-management_en.md
+  - docs/connections-and-settings/network-and-dip-switch_en.md
+  - docs/connections-and-settings/setup-with-a-microsd-card_en.md
+  - docs/tutorial_en.md
+  - docs/technical-informations/firmware-update_en.md
+  - docs/technical-informations/diagnosis_en.md
+  - docs/technical-informations/compile-the-arduino-sketch_en.md
+  - docs/emb-step400/commands_en.md
+  - docs/step100-200/usage_en.md
+- Notes:
+  - Filename renamed from home-and-limit-sensers_en.md → home-and-limit-sensors_en.md; slug corrected from home-and-limit-sensers → home-limit-sensors (aligning with JP slug and all existing cross-doc links, which already pointed to home-limit-sensors); WordPress will need a redirect from the old URL
+  - `/configTool` link text in setup-with-a-microsd-card_en.md table left as-is (GitHub repo folder path, not a prose tool reference)
+  - `Powerstep01` in voltage-mode-and-current-mode_en.md URL left as-is (STMicroelectronics PDF filename)
+  - `In motion start condition` timing-table entries left as-is (defined term in the index, context-dependent clarification deferred)
+  - OSC first-mention expansion added to all body-text pages; pages where OSC only appears in code, URLs, or library names were left unchanged
+
+## Batch 2 — Complete
+- Date: 2026-06-12
+- Files modified:
+  - docs/osc-command-references/system-settings_en.md — added /saveConfig, /setConfigName, updated /getConfigName with 5th argument
+  - docs/osc-command-references/voltage-and-current-mode-settings_en.md — uncommented individual KVAL commands (/setHoldKval, /setRunKval, /setAccKval, /setDecKval), uncommented and corrected individual TVAL commands (/setHoldTval, /setRunTval, /setAccTval, /setDecTval) with STEP400-only markers
+  - docs/osc-command-references/speed-profile_en.md — added raw register value commands section (/setSpeedProfileRaw, /getSpeedProfileRaw, /setMaxSpeedRaw, /setMinSpeedRaw, /setFullstepSpeedRaw, /setAccRaw, /setDecRaw)
+  - docs/osc-command-references/motor-control_en.md — added combined commands section, added raw register value commands (/runRaw, /goUntilRaw, /combinedRunRaw)
+  - docs/osc-command-references/homing_en.md — added v2.1.0 admonition about goUnitlTimeout typo fix
+  - docs/osc-command-references/alarm-settings_en.md — grammar fixes (thermal status description, bridge/device shutdown capitalization)
+  - docs/osc-command-references/motor-driver-settings_en.md — grammar fix (microstepping mode description)
+  - docs/osc-command-references/diff_400_800_command_en.md — added individual TVAL setter commands to STEP400-only list
+  - docs/osc-command-references/index_en.md — added link to Command list page
+  - docs/osc-command-references/command-list_en.md — NEW: complete command quick reference table organized by category
+- Notes:
+  - Individual KVAL/TVAL commands were already present in the source file as HTML comments; they were uncommented, reformatted for consistency, and corrected (argument names, STEP400-only markers for TVAL, proper ranges 0-127 for TVAL)
+  - Combined motor commands (combinedRun, combinedMove, etc.) were previously undocumented; added to motor-control page
+  - /getStatusList referenced in command list but has no dedicated doc section yet (exists in firmware audit)
+  - Command list uses relative .md file links for portability
+
+## Batch 3 — Complete
+- Date: 2026-06-12
+- Files modified:
+  - docs/connections-and-settings/setup-with-a-microsd-card_en.md — renamed title, removed 3-char extension limitation, added v2.1.0 long filename support, file discovery priority, browser tool reference, /saveConfig cross-reference, updated config tool section
+  - docs/connections-and-settings/example-parameter-values-for-example-steppers_en.md — updated filename section with v2.1.0 long filename support note and backward compatibility
+  - docs/connections-and-settings/network-and-dip-switch_en.md — updated configTool references to use relative links
+  - docs/connections-and-settings/browser-config-tool_en.md — NEW: complete browser config tool documentation page
+- Notes:
+  - Browser config tool URL set to https://ponoor.com/tools/step-config/ (TBD — update if actual URL differs)
+  - wp_id left blank for browser-config-tool_en.md (new page, not yet published to WordPress)
+  - setup-with-a-microsd-card_en.md slug kept as-is to preserve existing WordPress URL; only the page title heading changed
+
+## Batch 4 — Complete
+- Date: 2026-06-12
+- Files modified:
+  - docs/technical-informations/compile-the-arduino-sketch_en.md — renamed title to "Compiling the Firmware", added v2.1.0 admonitions for Arduino IDE folder removal and SdFat v2 dependency, emphasized PlatformIO, flattened heading hierarchy under Arduino IDE section
+  - docs/technical-informations/diagnosis_en.md — renamed title to "USB Serial Diagnosis", added v2.1.0 serial commands table (G, T, {, R, F), grammar and clarity pass throughout
+  - docs/technical-informations/firmware-changelog_en.md — NEW: firmware changelog page with v2.1.0, v2.0.0, and earlier versions sections
+  - docs/technical-informations/firmware-update_en.md — renamed title to "Firmware Update", fixed double-h typo in GitHub URL, added v2.1.0 note and changelog link, grammar fixes
+  - docs/technical-informations/hardware-step400_en.md — fixed typos (picth→pitch, featue→feature, SDL→SCL, i2c→I2C)
+  - docs/technical-informations/hardware-step800_en.md — fixed typos (picth→pitch, SDL→SCL, i2c→I2C, "can not use"→"cannot be used")
+  - docs/functional-descriptions/voltage-mode-and-current-mode_en.md — updated config tool link, grammar fixes
+  - docs/functional-descriptions/speed-profile-and-type-of-motor-motions_en.md — fixed step400→step-series in URLs, grammar/clarity improvements
+  - docs/functional-descriptions/homing-and-position-management_en.md — updated config tool reference to browser tool link, minor grammar fix
+  - docs/functional-descriptions/servo-mode_en.md — replaced "Arduino Sketch" with "firmware", removed duplicate paragraph, fixed missing /en/ in ponoor.com links, grammar improvements
+  - docs/tutorial_en.md — renamed title to "Getting Started", replaced old STEP400 config tool reference with browser config tool, grammar fixes
+  - docs/osc-command-references/diff_400_800_command_en.md — changed parent from 886 (OSC ref) to 888 (Technical Information) per structure plan
+  - docs/osc-command-references/motor-driver-settings_en.md — fixed missing /en/ in ponoor.com links (10 occurrences)
+  - docs/step100-200/usage_en.md — fixed "reffer" typo, fixed missing /en/ in command reference link
+- Notes:
+  - Link audit completed: fixed all EN pages linking to ponoor.com/docs/ (missing /en/ prefix) in servo-mode, motor-driver-settings, and usage pages
+  - All relative links to new pages (browser-config-tool, firmware-changelog, system-settings) verified to point to existing files
+  - diff_400_800_command_en.md moved to Technical Information section via parent metadata change; physical file location unchanged (WordPress uses parent field for hierarchy)
+  - wp_id left blank for firmware-changelog_en.md (new page, not yet published to WordPress)
+  - Slugs kept as-is for all renamed pages to preserve existing WordPress URLs

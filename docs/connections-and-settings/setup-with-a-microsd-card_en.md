@@ -1,5 +1,5 @@
 ---
-title: Setup with a microSD card
+title: Configuration with microSD Card
 wp_id: 869
 slug: setup-with-a-microsd-card
 lang: en
@@ -10,36 +10,57 @@ parent: 867
 menu_order: 46
 ---
 
-# Setup with a microSD card
+# Configuration with microSD Card
 
 ## Overview
 
-If you insert the microSD card with a configuration file written into the device, you can initialize the controller with the settings written in the file.  
-The configuration files can be exported using the Config Tool.
+If you insert the microSD card with a configuration file into the device, you can initialize the controller with the settings written in the file.  
+The configuration files can be exported using the configuration tool.
 
 If you boot without a microSD card inserted, the default values written in the firmware will be used.
 
 ## Preparing the microSD card
 
-Only microSD or microSDHC cards can be used, and they must be formatted with FAT16 or FAT32. The file name is limited to 8 characters and the extension is limited to 3 characters.
+Only microSD or microSDHC cards can be used, and they must be formatted with FAT16 or FAT32.
 
-Refer the [Arduino SD Library reference](https://www.arduino.cc/en/Reference/SD) for the detail of the limitation of file name length.
+> **Changed in firmware v2.1.0**  
+> Long filenames are now supported. You can use descriptive names such as `STEP400_venue-A.json`. The SD library was updated from the Arduino SD library to SdFat v2.
 
-## Configuration tool (Config Tool)
+### File discovery priority
 
-The configuration tool is written by HTML and JavaScript and available from here. It works both online and offline.
+The firmware searches for the configuration file in the following order:
 
-| MOdel | URL | Source (Github) |
+1. `config.txt` — loaded first if present (backward compatibility)
+2. The alphabetically first `.json` file found in the root directory of the card
+
+This means older `config.txt` files continue to work without any changes, while new installations can use any `.json` filename.
+
+## Configuration tools
+
+### Browser configuration tool (firmware v2.1.0+)
+
+The [browser configuration tool](browser-config-tool_en.md) lets you read, edit, and save configuration directly over USB without removing the microSD card. It runs in Chrome or Edge and requires firmware v2.1.0 or later.
+
+### Legacy per-product configuration tools
+
+For devices running firmware earlier than v2.1.0, use the original HTML-based configuration tools:
+
+| Model | URL | Source (GitHub) |
 | --- | --- | --- |
 | STEP400 | <http://ponoor.com/tools/step400-config/> | [/configTool](https://github.com/ponoor/STEP400/tree/master/configTool) |
 | STEP800 | <http://ponoor.com/tools/step800-config/> | [/configTool](https://github.com/ponoor/STEP800/tree/master/configTool) |
 
 At the top of the page, you can load previous configuration files.  
-Click the "Export" button at the bottom of the page to download the configuration. The file name is `config.txt`. Although the file format is JSON, the file extension is changed to `.txt` instead of `.json` because it can only contain three characters for the extension.
+Click the "Export" button at the bottom of the page to download the configuration. The file is saved as `config.txt`.
 
-Copy this file to the top level of the microSD card and insert it into the device. Then boot or reset the device. The settings are only loaded at startup.
+Copy this file to the root directory of the microSD card and insert it into the device. Then boot or reset the device. The settings are only loaded at startup.
 
-Most of the items can be set from OSC message. The corresponding messages are listed below. [This spreadsheet](https://docs.google.com/spreadsheets/d/1EAUpzARE69ip6_LolZAv3crpmXGsESjCOz6EqVY1lUo/edit?usp=sharing) contains the list of corresponding JSON file items and parameters in the Arduino sketch.
+### Saving configuration via OSC
+
+> **Added in firmware v2.1.0**  
+> The [`/saveConfig`](../osc-command-references/system-settings_en.md#saveconfig) command saves the current running configuration to the microSD card without removing it from the device.
+
+Most of the items can be set from OSC (Open Sound Control) message. The corresponding messages are listed below. [This spreadsheet](https://docs.google.com/spreadsheets/d/1EAUpzARE69ip6_LolZAv3crpmXGsESjCOz6EqVY1lUo/edit?usp=sharing) contains the list of corresponding JSON file items and parameters in the firmware.
 
 ## Example config files
 

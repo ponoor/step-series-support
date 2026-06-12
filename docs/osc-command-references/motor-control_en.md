@@ -29,7 +29,7 @@ In motion start condition
 
 #### Description
 
-Rotates the motor at specified speed. The acceleration is controlled with the pre-set speed profile. The speed is limited by maxSpeed. It remains in the BUSY state until the motor reached to the specified speed.
+Rotates the motor at specified speed. The acceleration is controlled with the pre-set speed profile. The speed is limited by maxSpeed. It remains in the BUSY state until the motor reaches the specified speed.
 
 ### `/move (int)motorID (int)step`
 
@@ -46,7 +46,7 @@ When the motor is stopped, and In motion start condition.
 
 #### Description
 
-Moves specified number of steps according to the pre-set speed profile. It remains in the BUSY state until reaches to the specified step counts. This command can only execute when the motor is stopped.
+Moves specified number of steps according to the pre-set speed profile. It remains in the BUSY state until it reaches the specified step count. This command can only execute when the motor is stopped.
 
 ### `/goTo (int)motorID (int)position`
 
@@ -158,3 +158,181 @@ Always
 Immediately stops the motor and releases the stepper excitation. When the motor excitation is released, it goes into the High Z state. Remains in the BUSY state until the motor is stopped.  
 If it was in the servo mode, it will be released.  
 if electromagnetic brake mode is enabled, the controller puts the brake into hold state, and then transits to High Z state.
+
+## Combined commands
+
+### `/combinedRun (float)speed1 ... (float)speedN`
+
+#### Argument
+
+| Argument | Range | Description |
+| --- | --- | --- |
+| speed1 ... speedN | -15625 - 15625 [step/s] | Rotation speed for each motor |
+
+#### Executable timing
+
+In motion start condition
+
+#### Description
+
+Runs all motors at the specified speeds. The number of arguments matches the number of motors (4 for STEP400, 8 for STEP800).
+
+### `/combinedMove (int)step1 ... (int)stepN`
+
+#### Argument
+
+| Argument | Range | Description |
+| --- | --- | --- |
+| step1 ... stepN | | Moving step counts for each motor |
+
+#### Executable timing
+
+When the motor is stopped, and In motion start condition.
+
+#### Description
+
+Moves all motors the specified number of steps. The number of arguments matches the number of motors (4 for STEP400, 8 for STEP800).
+
+### `/combinedGoTo (int)position1 ... (int)positionN`
+
+#### Argument
+
+| Argument | Range | Description |
+| --- | --- | --- |
+| position1 ... positionN | -2,097,152 - 2,097,151 | Destination for each motor |
+
+#### Executable timing
+
+In motion start condition
+
+#### Description
+
+Moves all motors to the specified positions in the shortest route.
+
+### `/combinedGoToDir (bool)DIR1 (int)position1 ... (bool)DIRN (int)positionN`
+
+#### Argument
+
+| Argument | Range | Description |
+| --- | --- | --- |
+| DIR | 0-1 | Direction for each motor |
+| position | -2,097,152 - 2,097,151 | Destination for each motor |
+
+#### Executable timing
+
+In motion start condition
+
+#### Description
+
+Moves all motors to the specified positions in the specified directions.
+
+### `/combinedSoftStop`
+
+#### Argument
+
+None
+
+#### Executable timing
+
+Always
+
+#### Description
+
+Decelerates and stops all motors while keeping them excited.
+
+### `/combinedHardStop`
+
+#### Argument
+
+None
+
+#### Executable timing
+
+Always
+
+#### Description
+
+Immediately stops all motors while keeping them excited.
+
+### `/combinedSoftHiZ`
+
+#### Argument
+
+None
+
+#### Executable timing
+
+Always
+
+#### Description
+
+Decelerates and stops all motors, then releases excitation (High Z state).
+
+### `/combinedHardHiZ`
+
+#### Argument
+
+None
+
+#### Executable timing
+
+Always
+
+#### Description
+
+Immediately stops all motors and releases excitation (High Z state).
+
+## Raw register value commands
+
+The following commands use raw driver IC register values for speed without unit conversion.
+
+### `/runRaw (int)motorID (int)speed`
+
+#### Argument
+
+| Argument | Range | Description |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 | motor ID |
+| speed | | Rotation speed (raw register value, signed) |
+
+#### Executable timing
+
+In motion start condition
+
+#### Description
+
+Rotates the motor at the specified speed using a raw register value. The sign of the speed value determines the direction.
+
+### `/goUntilRaw (int)motorID (bool)ACT (int)speed`
+
+#### Argument
+
+| Argument | Range | Description |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 | motor ID |
+| ACT | 0-1 | Same as `/goUntil` |
+| speed | | Speed (raw register value, signed) |
+
+#### Executable timing
+
+Always
+
+#### Description
+
+Same as `/goUntil` but uses a raw register value for speed. The sign of the speed value determines the direction.
+
+### `/combinedRunRaw (int)speed1 ... (int)speedN`
+
+#### Argument
+
+| Argument | Range | Description |
+| --- | --- | --- |
+| speed1 ... speedN | | Rotation speed for each motor (raw register value, signed) |
+
+#### Executable timing
+
+In motion start condition
+
+#### Description
+
+Runs all motors at the specified speeds using raw register values. The number of arguments matches the number of motors (4 for STEP400, 8 for STEP800).

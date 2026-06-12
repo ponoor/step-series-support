@@ -109,8 +109,6 @@ Get register values for the BEMF parameter.
 | FN_SLP_ACC | 0-255(0xFF) | FN_SLP_ACC register value |
 | FN_SLP_DEC | 0-255(0xFF) | FN_SLP_DEC register value |
 
-<!--
-
 ### `/setHoldKval (int)motorID (int)holdKVAL`
 #### Argument
 |Argument|Range|Description|
@@ -122,7 +120,9 @@ Get register values for the BEMF parameter.
 Always
 
 #### Description
-Sets only KVAL when stopped.
+Sets only the hold KVAL value.
+
+See also: `/setKval` to set all four KVAL values at once.
 
 #### Initial value
 16
@@ -132,24 +132,36 @@ Sets only KVAL when stopped.
 |Argument|Range|Description|
 |---|---|---|
 |motorID|1-4/1-8, 255|motor ID|
-|setRunKVAL|0-255|KVAL in constant speed operation|
+|runKVAL|0-255|KVAL in constant speed operation|
 
 #### Executable timing
 Always
 
 #### Description
-Sets only KVAL in constant speed operation.
+Sets only the run KVAL value.
+
+See also: `/setKval` to set all four KVAL values at once.
 
 #### Initial value
 16
 
 ### `/setAccKval (int)motorID (int)accKVAL`
-- `motorID` : 1-4/1-8, 255
-- `accKVAL` : 0-255
+#### Argument
+|Argument|Range|Description|
+|---|---|---|
+|motorID|1-4/1-8, 255|motor ID|
+|accKVAL|0-255|KVAL during acceleration|
 
-Timing: Always
+#### Executable timing
+Always
 
-Sets only KVAL during acceleration.
+#### Description
+Sets only the acceleration KVAL value.
+
+See also: `/setKval` to set all four KVAL values at once.
+
+#### Initial value
+16
 
 ### `/setDecKval (int)motorID (int)decKVAL`
 #### Argument
@@ -162,12 +174,12 @@ Sets only KVAL during acceleration.
 Always
 
 #### Description
-Sets only KVAL during deceleration.
+Sets only the deceleration KVAL value.
+
+See also: `/setKval` to set all four KVAL values at once.
 
 #### Initial value
 16
-
--->
 
 ## Current mode
 ### `/setCurrentMode (int)motorID`
@@ -199,7 +211,7 @@ Always
 
 #### Description
 Sets the four TVALs together.
-In STEP 400, the TVAL is as follows.
+In STEP400, the TVAL is as follows.
 
 | TVAL | Setting value[mA] |
 | --- | --- |
@@ -312,70 +324,78 @@ Retrieves the register values for the current control algorithm parameters.
 | TON_MIN | 0-255(0xFF) | TON_MIN register value |
 | TOFF_MIN | 0-255(0xFF) | TOFF_MIN register value |
 
-<!--
-
 ### `/setHoldTval (int)motorID (int)holdTVAL`
+**STEP400 only**
 #### Argument
 |Argument|Range|Description|
 |---|---|---|
-|motorID|1-4/1-8, 255|motor ID|
-|holdTVAL|0-255|TVAL when stopped|
+|motorID|1-4, 255|motor ID|
+|holdTVAL|0-127|TVAL when stopped|
 
 #### Executable timing
 Always
 
 #### Description
-Sets only TVAL when stopped.
+Sets only the hold TVAL value.
+
+See also: `/setTval` to set all four TVAL values at once.
 
 #### Initial value
 16 (1328.125mA)
 
 ### `/setRunTval (int)motorID (int)runTVAL`
+**STEP400 only**
 #### Argument
 |Argument|Range|Description|
 |---|---|---|
-|motorID|1-4/1-8, 255|motor ID|
-|setRunTVAL|0-255|TVAL in constant speed operation|
+|motorID|1-4, 255|motor ID|
+|runTVAL|0-127|TVAL in constant speed operation|
 
 #### Executable timing
 Always
 
 #### Description
-Sets only TVAL in constant speed operation.
+Sets only the run TVAL value.
+
+See also: `/setTval` to set all four TVAL values at once.
 
 #### Initial value
 16 (1328.125mA)
 
 ### `/setAccTval (int)motorID (int)accTVAL`
+**STEP400 only**
 #### Argument
 |Argument|Range|Description|
 |---|---|---|
-|motorID|1-4/1-8, 255|motor ID|
-|accTVAL|0-255|TVAL during acceleration|
+|motorID|1-4, 255|motor ID|
+|accTVAL|0-127|TVAL during acceleration|
 
 #### Executable timing
 Always
 
 #### Description
-Sets only TVAL during acceleration.
+Sets only the acceleration TVAL value.
+
+See also: `/setTval` to set all four TVAL values at once.
 
 #### Initial value
 16 (1328.125mA)
 
 ### `/setDecTval (int)motorID (int)decTVAL`
+**STEP400 only**
 #### Argument
 |Argument|Range|Description|
 |---|---|---|
-|motorID|1-4/1-8, 255|motor ID|
-|decTVAL|0-255|TVAL during deceleration|
+|motorID|1-4, 255|motor ID|
+|decTVAL|0-127|TVAL during deceleration|
 
 #### Executable timing
 Always
 
 #### Description
-Sets only TVAL during deceleration.
+Sets only the deceleration TVAL value.
+
+See also: `/setTval` to set all four TVAL values at once.
 
 #### Initial value
 16 (1328.125mA)
-
--->

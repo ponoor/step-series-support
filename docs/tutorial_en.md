@@ -1,5 +1,5 @@
 ---
-title: Tutorial
+title: Getting Started
 wp_id: 828
 slug: tutorial
 lang: en
@@ -10,7 +10,7 @@ parent: 415
 menu_order: 80
 ---
 
-# Tutorial
+# Getting Started
 
 ## Example Files
 
@@ -33,7 +33,7 @@ Both devices communicate via Ethernet, meaning your computer must have an ethern
 
 Please plug the ethernet cable in now.
 
-WARNING: Ensure your switch is actually a switch. Do not plug these devices into a router as router ports behave differently than switch ports do.
+WARNING: Ensure your switch is actually a switch. Do not plug these devices into a router, as router ports behave differently than switch ports do.
 
 NOTE: Please do not power the device until directed to do so later in the tutorial. You will be asked to connect the power supply in the upcoming sections, but make sure it is **not** on.
 
@@ -69,11 +69,9 @@ Supplying from the DC barrel jack is sufficient for this size of motor, but if y
 
 ### Configuration Tool
 
-Both devices do have a microSD card slot included on the board. Using this slot, you can just about  
-completely configure the device using our convenient [Configuration Tool](http://ponoor.com/tools/step400-config/) This tool is a webpage, that can be accessed through your browser--so no third party software is required.
+Both devices have a microSD card slot on the board. Using this slot, you can configure the device using the [browser configuration tool](connections-and-settings/browser-config-tool_en.md), which connects to the board via USB. Alternatively, you can edit the configuration file on the microSD card directly. See [Configuration with microSD Card](connections-and-settings/setup-with-a-microsd-card_en.md) for details.
 
-This tutorial uses default settings, so we will not be using the microSD card. Just leave the slot  
-empty.
+This tutorial uses default settings, so we will not be using the microSD card. Just leave the slot empty.
 
 ### Dip Switches
 
@@ -159,7 +157,7 @@ to 0 using the `/run` command or send:
 
 WARNING: Do **not** disconnect the motor while it is active and running. This will damage your board.
 
-If everything succeeded, then congratulations! You've successfully ran your first motor. But, you  
+If everything succeeded, then congratulations! You've successfully run your first motor. But, you  
 may have noticed the motor ran a little rough--lots of vibration and possibly noisy. This is where  
 `KVAL` (and `TVAL`) come in.
 
