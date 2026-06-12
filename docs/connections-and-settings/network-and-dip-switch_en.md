@@ -45,8 +45,8 @@ A unique MAC address is assigned to the device; however, its initial value is se
 
 ![](https://ponoor.com/cms/wp-content/uploads/2020/10/step400-solderside-mac-800x533.jpg)
 
-To use the assigned MAC address, please generate the settings file from the [configuration tool](https://ponoor.com/docs/en/step-series/settings/setup-with-a-microsd-card/) and load it onto the microSD card.
+To use the assigned MAC address, please generate the settings file from the [configuration tool](setup-with-a-microsd-card_en.md) and load it onto the microSD card.
 
 ### Initializing with microSD card
 
-You can export the network settings and other initial values from the configuration tool, store them in a microSD card, and load them into STEP400. For details, see [Setup with a microSD card](https://ponoor.com/en/docs/step-series/settings/setup-with-a-microsd-card/).
+You can export the network settings and other initial values from the configuration tool, store them in a microSD card, and load them into STEP400. For details, see [Configuration with microSD Card](setup-with-a-microsd-card_en.md).

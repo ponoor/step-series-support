@@ -46,3 +46,15 @@
   - Combined motor commands (combinedRun, combinedMove, etc.) were previously undocumented; added to motor-control page
   - /getStatusList referenced in command list but has no dedicated doc section yet (exists in firmware audit)
   - Command list uses relative .md file links for portability
+
+## Batch 3 — Complete
+- Date: 2026-06-12
+- Files modified:
+  - docs/connections-and-settings/setup-with-a-microsd-card_en.md — renamed title, removed 3-char extension limitation, added v2.1.0 long filename support, file discovery priority, browser tool reference, /saveConfig cross-reference, updated config tool section
+  - docs/connections-and-settings/example-parameter-values-for-example-steppers_en.md — updated filename section with v2.1.0 long filename support note and backward compatibility
+  - docs/connections-and-settings/network-and-dip-switch_en.md — updated configTool references to use relative links
+  - docs/connections-and-settings/browser-config-tool_en.md — NEW: complete browser config tool documentation page
+- Notes:
+  - Browser config tool URL set to https://ponoor.com/tools/step-config/ (TBD — update if actual URL differs)
+  - wp_id left blank for browser-config-tool_en.md (new page, not yet published to WordPress)
+  - setup-with-a-microsd-card_en.md slug kept as-is to preserve existing WordPress URL; only the page title heading changed

@@ -38,4 +38,10 @@ The maximum motor speed and acceleration, deceleration vary greatly depending on
 
 ### File name
 
-To differentiate the files on the link, their names are formatted to`Type_Voltage.json`. However the name must be changed to `config.txt` when copying to microSD. For the detail please refer [Set up with a miroSD card](https://ponoor.com/en/docs/step-series/settings/setup-with-a-microsd-card/).
+The example files are named `Type_Voltage.json` to differentiate them on the repository.
+
+> **Changed in firmware v2.1.0**  
+> Any `.json` filename is now supported directly — you no longer need to rename the file to `config.txt`. Simply copy the file as-is to the root directory of the microSD card.  
+> For devices running firmware earlier than v2.1.0, the file must still be renamed to `config.txt`.
+
+For details on how the firmware discovers configuration files, see [Configuration with microSD Card](setup-with-a-microsd-card_en.md).
