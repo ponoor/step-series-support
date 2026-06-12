@@ -1,5 +1,5 @@
 ---
-title: Electromagnet brake
+title: Electromagnetic brake
 wp_id: 1006
 slug: brake
 lang: en
@@ -10,7 +10,7 @@ parent: 886
 menu_order: 82
 ---
 
-# Electromagnet brake
+# Electromagnetic brake
 
 ### `/enableElectromagnetBrake (int)motorID (bool)enable`
 

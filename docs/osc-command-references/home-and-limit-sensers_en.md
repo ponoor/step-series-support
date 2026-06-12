@@ -1,5 +1,5 @@
 ---
-title: HOME and LIMIT sensers
+title: HOME and LIMIT sensors
 wp_id: 1290
 slug: home-and-limit-sensers
 lang: en
@@ -10,7 +10,7 @@ parent: 886
 menu_order: 68
 ---
 
-# HOME and LIMIT sensers
+# HOME and LIMIT sensors
 
 ## Status Report
 

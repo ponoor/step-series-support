@@ -102,7 +102,7 @@ isDestIpSet : No
 | LinkOff | Unlinked |
 | Unknown | Unable to retrieve the status |
 
-- `isDestIpSet` : Shows if the `destIp` is set. `Yes`if the command `/setDestIp` was sent already and the controller is able to respond over OSC, in other cases `No`.
+- `isDestIpSet` : Shows if the `destIp` is set. `Yes`if the command `/setDestIp` was sent already and the controller is able to respond over OSC (Open Sound Control), in other cases `No`.
 
 ### microSD
 
@@ -198,7 +198,7 @@ Homing status : 0, 0, 0, 0
 
 ## Config
 
-You can retrieve current settings if you send `c`. Be aware that this is not the content of the configTool file, but the current setting that reflected actual ID switch setting and other settings over OSC messages. For example if you boot the STEP400 without microSD inserted, following message will show up.
+You can retrieve current settings if you send `c`. Be aware that this is not the content of the configuration file, but the current setting that reflected actual ID switch setting and other settings over OSC messages. For example if you boot the STEP400 without microSD inserted, following message will show up.
 
 ```
 ============== Configurations ==============

@@ -29,7 +29,7 @@ In motion start condition
 
 #### Description
 
-Rotates the motor at specified speed. The acceleration is controlled with the pre-set speed profile. The speed is limited by maxSpeed. It remains in the BUSY state until the motor reached to the specified speed.
+Rotates the motor at specified speed. The acceleration is controlled with the pre-set speed profile. The speed is limited by maxSpeed. It remains in the BUSY state until the motor reaches the specified speed.
 
 ### `/move (int)motorID (int)step`
 
@@ -46,7 +46,7 @@ When the motor is stopped, and In motion start condition.
 
 #### Description
 
-Moves specified number of steps according to the pre-set speed profile. It remains in the BUSY state until reaches to the specified step counts. This command can only execute when the motor is stopped.
+Moves specified number of steps according to the pre-set speed profile. It remains in the BUSY state until it reaches the specified step count. This command can only execute when the motor is stopped.
 
 ### `/goTo (int)motorID (int)position`
 

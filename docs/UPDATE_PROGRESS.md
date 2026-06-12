@@ -1,0 +1,29 @@
+## Batch 1 — Complete
+- Date: 2026-06-12
+- Files modified:
+  - docs/osc-command-references/alarm-settings_en.md
+  - docs/osc-command-references/motor-control_en.md
+  - docs/osc-command-references/position-management_en.md
+  - docs/osc-command-references/homing_en.md
+  - docs/osc-command-references/brake_en.md
+  - docs/osc-command-references/home-and-limit-sensers_en.md
+  - docs/osc-command-references/automatically-sent-messages-from-step-400_en.md
+  - docs/osc-command-references/motor-driver-settings_en.md
+  - docs/osc-command-references/voltage-and-current-mode-settings_en.md
+  - docs/osc-command-references/system-settings_en.md
+  - docs/functional-descriptions/voltage-mode-and-current-mode_en.md
+  - docs/functional-descriptions/homing-and-position-management_en.md
+  - docs/connections-and-settings/network-and-dip-switch_en.md
+  - docs/connections-and-settings/setup-with-a-microsd-card_en.md
+  - docs/tutorial_en.md
+  - docs/technical-informations/firmware-update_en.md
+  - docs/technical-informations/diagnosis_en.md
+  - docs/technical-informations/compile-the-arduino-sketch_en.md
+  - docs/emb-step400/commands_en.md
+  - docs/step100-200/usage_en.md
+- Notes:
+  - "sensers" appears in filename (home-and-limit-sensers_en.md) and WordPress slug/URL — filename and slug left as-is to avoid breaking links; title and heading text corrected to "sensors"
+  - `/configTool` link text in setup-with-a-microsd-card_en.md table left as-is (GitHub repo folder path, not a prose tool reference)
+  - `Powerstep01` in voltage-mode-and-current-mode_en.md URL left as-is (STMicroelectronics PDF filename)
+  - `In motion start condition` timing-table entries left as-is (defined term in the index, context-dependent clarification deferred)
+  - OSC first-mention expansion added to all body-text pages; pages where OSC only appears in code, URLs, or library names were left unchanged

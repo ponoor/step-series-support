@@ -16,7 +16,7 @@ menu_order: 42
 
 ![](https://ponoor.com/cms/wp-content/uploads/2020/10/step400-dipSw.jpg)
 
-The DIP switch specifies the ID that is used to reply to OSC messages and is also reflected in the local IP address and expected server port number.  
+The DIP switch specifies the ID that is used to reply to OSC (Open Sound Control) messages and is also reflected in the local IP address and expected server port number.  
 The ID is set in binary digits. For more information on setting the DIP switches in binary digits, click here.  
 [Channel setting with DIP switches](https://www.soundhouse.co.jp/howto/light/dmx-dip/)
 
@@ -45,8 +45,8 @@ A unique MAC address is assigned to the device; however, its initial value is se
 
 ![](https://ponoor.com/cms/wp-content/uploads/2020/10/step400-solderside-mac-800x533.jpg)
 
-To use the assigned MAC address, please generate the settings file from the [configTool](https://ponoor.com/docs/en/step-series/settings/setup-with-a-microsd-card/) and load it onto the microSD card.
+To use the assigned MAC address, please generate the settings file from the [configuration tool](https://ponoor.com/docs/en/step-series/settings/setup-with-a-microsd-card/) and load it onto the microSD card.
 
 ### Initializing with microSD card
 
-You can export the network settings and other initial values from the Configuration Tool, store them in a microSD card, and load them into STEP400. For details, see [Setup with a microSD card](https://ponoor.com/en/docs/step-series/settings/setup-with-a-microsd-card/).
+You can export the network settings and other initial values from the configuration tool, store them in a microSD card, and load them into STEP400. For details, see [Setup with a microSD card](https://ponoor.com/en/docs/step-series/settings/setup-with-a-microsd-card/).

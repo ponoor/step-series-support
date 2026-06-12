@@ -36,7 +36,7 @@ These thresholds are different between STEP400(PowerSTEP01) and STEP800(L6470). 
 
 #### Response
 
-When ULVO occurs same message as [`/getUlvo`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#getuvlo_intmotorid) will be sent.
+When UVLO occurs same message as [`/getUlvo`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#getuvlo_intmotorid) will be sent.
 
 #### Initial value
 
@@ -84,7 +84,7 @@ Always
 
 #### Description
 
-Set to send the notification message on change in the temperature status (thermalStatus) of the specified motor driver is detected. On the Bridge shutdown or Device shutdown, the motor state will automatically enters High Z state with of without notification.
+Set to send the notification message on change in the temperature status (thermalStatus) of the specified motor driver is detected. On the Bridge shutdown or Device shutdown, the motor state will automatically enter High Z state with or without notification.
 
 #### Response
 
@@ -391,7 +391,7 @@ Always
 
 #### Description
 
-Prohibits any motion commands towards the origin point when Home sensor is detected. The direction to the origin point can be configured through the Config Tool or by the `/setHomingDirection` command.
+Prohibits any motion commands towards the origin point when Home sensor is detected. The direction to the origin point can be configured through the configuration tool or by the `/setHomingDirection` command.
 
 #### Initial value
 
@@ -441,7 +441,7 @@ Always
 
 #### Description
 
-Prohibits any motion commands towards the leaving direction from origin point, when the Limit sensor is detected. The direction to the origin point can be configured through the Config Tool or by the `/setHomingDirection` command.
+Prohibits any motion commands towards the leaving direction from origin point, when the Limit sensor is detected. The direction to the origin point can be configured through the configuration tool or by the `/setHomingDirection` command.
 
 #### Initial value
 

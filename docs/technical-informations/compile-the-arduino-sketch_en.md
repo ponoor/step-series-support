@@ -50,7 +50,7 @@ There many OSC libraries that may be listed in the Library Manager. This project
 
 #### Get the firmware
 
-The Arduino sketch is available from here;  
+The firmware is available from here;  
 <https://github.com/ponoor/step-series-universal-firmware/releases>
 
 See the "Assets" of the latest Release and download `step-series-universal-firmware.zip`. These zip files only contain required files to compile with Arduino IDE.

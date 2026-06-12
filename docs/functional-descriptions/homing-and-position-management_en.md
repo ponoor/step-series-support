@@ -40,19 +40,19 @@ This input is connected directly to the motor driver chip and can be used in con
 
 Some applications may require two sensors. For example, a slider has a limited operating range and if it stalls during operation, it may collide with one of either end. In such cases, installing sensors on both ends of the slider will prevent collisions.
 
-The motor can be set to force-stop when these sensors respond, but these can also be used as simple switch inputs separated from the motor operation. For example, you can connect a push button to one of them and press to send an OSC message.
+The motor can be set to force-stop when these sensors respond, but these can also be used as simple switch inputs separated from the motor operation. For example, you can connect a push button to one of them and press to send an OSC (Open Sound Control) message.
 
 ### Collision prevention settings
 
 You can limit the motor's rotate direction when the HOME or LIMIT sensors are activated. With the commands [`/setProhibitMotionOnHomeSw`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#setprohibitmotiononhomesw_intmotorid_boolenable) [`/setProhibitMotionOnLimitSw`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#setprohibitmotiononlimitsw_intmotorid_boolenable), you can prohibit the actuator from moving towards `homingDirection` when the HOME sensor is active, or the reverse direction towards `homingDirection` when the LIMIT sensor is active. With this, you can prevent the mechanism from colliding with its bounds.
 
-`homingDirection` can be set with [`/setHomingDirection`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#sethomingdirection_intmotorid_booldirection) or with the Config Tool. This setting is also used for the `/homing` command.
+`homingDirection` can be set with [`/setHomingDirection`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#sethomingdirection_intmotorid_booldirection) or with the configuration tool. This setting is also used for the `/homing` command.
 
 ![Homing Direction](https://ponoor.com/cms/wp-content/uploads/2020/08/homingDirection-800x533.jpg)
 
 ## Homing commands
 
-The homing command is [`/homing`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#homing_intmotorid). This command consists of two commands, `/goUntil` and `/releaseSw`, which are inherited from the powerSTEP01/L6470 motor driver chip . Let's look closer at those commands.
+The homing command is [`/homing`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#homing_intmotorid). This command consists of two commands, `/goUntil` and `/releaseSw`, which are inherited from the PowerSTEP01/L6470 motor driver chip . Let's look closer at those commands.
 
 ### `/goUntil`
 

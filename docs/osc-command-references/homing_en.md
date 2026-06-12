@@ -30,9 +30,9 @@ Start the homing movement. Move towards origin direction, stop when the HOME swi
 
 This is equivalent to the following actions of executing [`/goUntil`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#gountil_intmotorid_boolact_floatspeed) command, and after the motor stops on HOME sensor activation, execute [`/releaseSW`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#releasesw_intmotorid_boolact_booldir) command.
 
-The `homingDirection` and the `homingSpeed` can be set by [`/setHomingDirection`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#sethomingdirection_intmotorid_booldirection)and [`/setHomingSpeed`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#sethomingspeed_intmotorid_floatspeed) commands, as well as configuring from the configTool.
+The `homingDirection` and the `homingSpeed` can be set by [`/setHomingDirection`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#sethomingdirection_intmotorid_booldirection) and [`/setHomingSpeed`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#sethomingspeed_intmotorid_floatspeed) commands, as well as configuring from the configuration tool.
 
-Time-out can be set for each of the `/goUntil` and `/releaseSw` commands. The controller halts the motor movement if the sensor state have not changed during this time frame. The time-out values can be set from [`/setGoUntilTimeout`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#setgountiltimeout_intmotorid_inttimeout) and from [`setReleaseSwTimeout`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#setreleaseswtimeout_intmotorid_inttimeout) command.
+Time-out can be set for each of the `/goUntil` and `/releaseSw` commands. The controller halts the motor movement if the sensor state has not changed during this time frame. The time-out values can be set from [`/setGoUntilTimeout`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#setgountiltimeout_intmotorid_inttimeout) and from the [`/setReleaseSwTimeout`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#setreleaseswtimeout_intmotorid_inttimeout) command.
 
 Depending on the state change on the homing movement, following response will be sent.
 
@@ -92,7 +92,7 @@ Always
 
 #### Description
 
-Sets the `homingDirection` for the [`/homing`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#homing_intmotorid) command. It can be also configured from the configTool.
+Sets the `homingDirection` for the [`/homing`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#homing_intmotorid) command. It can be also configured from the configuration tool.
 
 #### Description
 
@@ -140,7 +140,7 @@ Always
 
 #### Description
 
-Sets the `homingSpeed` when executing the command [`/homing`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#homing_intmotorid). It can be configured from the configTool.
+Sets the `homingSpeed` when executing the command [`/homing`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#homing_intmotorid). It can be configured from the configuration tool.
 
 #### Initial value
 
@@ -216,7 +216,7 @@ Always
 
 #### Description
 
-Sets the time-out duration when executing [`/goUntil`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#gountil_intmotorid_boolact_floatspeed) command. If the sensor did not detect during this time frame, the controller will regard time-out and halts the movement. Specify 0 to disable the timeout. It can also be configured from the configTool.
+Sets the time-out duration when executing [`/goUntil`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#gountil_intmotorid_boolact_floatspeed) command. If the sensor did not detect during this time frame, the controller will regard time-out and halts the movement. Specify 0 to disable the timeout. It can also be configured from the configuration tool.
 
 #### Description
 
@@ -298,7 +298,7 @@ Always
 
 #### Description
 
-Sets the time-out duration when executing [`/releaseSw`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#releasesw_intmotorid_boolact_booldir) command. If the sensor cannot be released during this time frame, halt the movement as time-out. Specify 0 to disable the timeout. It can be configured from the configTool.
+Sets the time-out duration when executing [`/releaseSw`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#releasesw_intmotorid_boolact_booldir) command. If the sensor cannot be released during this time frame, halt the movement as time-out. Specify 0 to disable the timeout. It can be configured from the configuration tool.
 
 #### Initial value
 

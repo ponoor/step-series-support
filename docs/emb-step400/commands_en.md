@@ -12,7 +12,7 @@ menu_order: 28
 
 # Sending command
 
-## Electromagnet brake mode
+## Electromagnetic brake mode
 
 To use the electromagnetic brake, brake mode must first be activated. To do this, send the command [`/enableElectromagnetBrake`](https://ponoor.com/en/docs/step400/osc-command-reference/brake/#enableelectromagnetbrake_intmotorid_boolenable) or from the config tool under `Electromagnetic brake enable`.
 

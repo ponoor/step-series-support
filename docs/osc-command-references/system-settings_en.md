@@ -29,9 +29,9 @@ Always
 Sets the destination IP address (`destIp`) to where the device should send messages to, when it replies to a query or report internal state changes, etc.  
 The board sets the `destIp` to the sender of this message .
 
-Also, until `destIp` is set, no OSC messages will be sent from the device, so send this command first. One single exception is the [`/booted`](https://ponoor.com/en/docs/step-series/osc-command-reference/automatically-sent-messages-from-step-400/#booted) message.
+Also, until `destIp` is set, no OSC (Open Sound Control) messages will be sent from the device, so send this command first. One single exception is the [`/booted`](https://ponoor.com/en/docs/step-series/osc-command-reference/automatically-sent-messages-from-step-400/#booted) message.
 
-From the Config Tool, you can set the board to start sending out the OSC message without waiting the `destIp` to be set.
+From the configuration tool, you can set the board to start sending out the OSC message without waiting the `destIp` to be set.
 
 #### Response
 
@@ -86,7 +86,7 @@ Always
 
 #### Description
 
-Returns the name of the configuration file read from the micro SD card on system boot.
+Returns the name of the configuration file read from the microSD card on system boot.
 
 #### Response
 

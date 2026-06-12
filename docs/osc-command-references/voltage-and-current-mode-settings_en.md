@@ -199,7 +199,7 @@ Always
 
 #### Description
 Sets the four TVALs together.
-In STEP 400, the TVAL is as follows.
+In STEP400, the TVAL is as follows.
 
 | TVAL | Setting value[mA] |
 | --- | --- |

@@ -70,7 +70,7 @@ Supplying from the DC barrel jack is sufficient for this size of motor, but if y
 ### Configuration Tool
 
 Both devices do have a microSD card slot included on the board. Using this slot, you can just about  
-completely configure the device using our convenient [Configuration Tool](http://ponoor.com/tools/step400-config/) This tool is a webpage, that can be accessed through your browser--so no third party software is required.
+completely configure the device using our convenient [STEP400 configuration tool](http://ponoor.com/tools/step400-config/). This tool is a webpage that can be accessed through your browser — no third-party software is required.
 
 This tutorial uses default settings, so we will not be using the microSD card. Just leave the slot  
 empty.

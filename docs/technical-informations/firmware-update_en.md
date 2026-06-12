@@ -22,7 +22,7 @@ Please check the current firmware version on the controller first, then if it's 
 
 Two methods exist to check the current version of the firmware:
 
-- Using the OSC command `/getVersion`
+- Using the OSC (Open Sound Control) command `/getVersion`
 - Connecting a USB cable to the board and typing `s` in the Serial Monitor
 
 ### Method 1: OSC Command
@@ -60,4 +60,4 @@ Previously, STEP400 and STEP800 firmware was managed in separate repositories, b
 
 ## Updating firmware
 
-If the firmware on the controller is old, please update the firmware. The update can be done by compiling and uploading latest firmware sketch from Arduino IDE. Refer [Compiling Arduino sketch](https://ponoor.com/en/docs/step-series/technical-information/compile-the-arduino-sketch/) for more detail.
+If the firmware on the controller is old, please update the firmware. The update can be done by compiling and uploading the latest firmware from Arduino IDE. Refer [Compiling Arduino sketch](https://ponoor.com/en/docs/step-series/technical-information/compile-the-arduino-sketch/) for more detail.

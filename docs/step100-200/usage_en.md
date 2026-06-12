@@ -46,7 +46,7 @@ In the STEP400/800, both the Arduino and the Ethernet will reliably start if mot
 
 ## SD card
 
-Many Ethernet shields have an SD card slot, which can be used for initial configuration using the configTool. However, since we do not have a configuration export tool for STEP100/200 at this time, please use the STEP400 config file for STEP100 and the STEP800 config file for STEP200.  
+Many Ethernet shields have an SD card slot, which can be used for initial configuration using the configuration tool. However, since we do not have a configuration export tool for STEP100/200 at this time, please use the STEP400 config file for STEP100 and the STEP800 config file for STEP200.  
 Setting data that exceeds the number of motors, or LIMIT switch-related settings, etc. will be ignored.
 
 ## DIP switch

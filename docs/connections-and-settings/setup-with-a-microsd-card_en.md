@@ -15,7 +15,7 @@ menu_order: 46
 ## Overview
 
 If you insert the microSD card with a configuration file written into the device, you can initialize the controller with the settings written in the file.  
-The configuration files can be exported using the Config Tool.
+The configuration files can be exported using the configuration tool.
 
 If you boot without a microSD card inserted, the default values written in the firmware will be used.
 
@@ -39,7 +39,7 @@ Click the "Export" button at the bottom of the page to download the configuratio
 
 Copy this file to the top level of the microSD card and insert it into the device. Then boot or reset the device. The settings are only loaded at startup.
 
-Most of the items can be set from OSC message. The corresponding messages are listed below. [This spreadsheet](https://docs.google.com/spreadsheets/d/1EAUpzARE69ip6_LolZAv3crpmXGsESjCOz6EqVY1lUo/edit?usp=sharing) contains the list of corresponding JSON file items and parameters in the Arduino sketch.
+Most of the items can be set from OSC (Open Sound Control) message. The corresponding messages are listed below. [This spreadsheet](https://docs.google.com/spreadsheets/d/1EAUpzARE69ip6_LolZAv3crpmXGsESjCOz6EqVY1lUo/edit?usp=sharing) contains the list of corresponding JSON file items and parameters in the firmware.
 
 ## Example config files
 

@@ -452,7 +452,7 @@ Refer to "STATUS" in the data sheet for the information contained in the registe
 | Name of bits in STATUS (STEP400) | Name of bits in STATUS (STEP800) | The corresponding configuration commands |
 | --- | --- | --- |
 | UVLO | UVLO | [`/enableUvloReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enableuvloreport_intmotorid_boolenable) |
-| UVLO\_ADC | - | This feature is not available in STEP 400 and is always disabled. |
+| UVLO\_ADC | - | This feature is not available in STEP400 and is always disabled. |
 | OCD | OCD | [`/enableOverCurrentReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enableovercurrentreport_intmotorid_boolenable) |
 | STALL\_A, STALL\_B | STEP\_LOSS\_A, STEP\_LOSS\_B | [`/enableStallReport`](https://ponoor.com/docs/step-series/osc-command-reference/alarm-settings/#enablestallreport_intmotorid_boolenable) |
 | CMD\_ERROR | WRONG\_CMD, NOTPREF\_CMD | [`/enableCommandErrorReport`](https://ponoor.com/docs/step-series/osc-command-reference/system-settings/#reporterror_boolenable) |

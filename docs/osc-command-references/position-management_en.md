@@ -72,7 +72,7 @@ Always
 
 #### Description
 
-Returns the current position of all motors at once. `/getPosition 255` returns individual messages for each motors but this command returns single message with a position list.
+Returns the current position of all motors at once. `/getPosition 255` returns individual messages for each motor but this command returns single message with a position list.
 
 [`/setPositionListReportInterval`](https://ponoor.com/en/docs/step-series/osc-command-reference/motor-driver-settings/#setpositionlistreportinterval_intinterval) can make the controller to send this list with a specified interval.
 
