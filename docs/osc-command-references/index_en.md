@@ -14,6 +14,8 @@ menu_order: 90
 
 ## Overview
 
+For a quick reference table of all commands, see the [Command list](command-list.md).
+
 This is a reference for Open Sound Control commands. Commands are common between STEP400 and STEP800 but some commands are only available in STEP400 (Noted as `STEP400 Only`). And there are some other commands which have different setting values. Please check "[Differences between STEP400 and STEP800](https://ponoor.com/en/docs/step-series/osc-command-reference/differences-between-step400-and-step800/)" for details.
 
 You must send a single OSC message, not as an OSC bundle, which is combined multiple OSC messages.

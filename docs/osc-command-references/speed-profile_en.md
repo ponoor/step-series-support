@@ -252,3 +252,140 @@ Returns the current motor speed.
 | --- | --- | --- |
 | motorID | 1-4/1-8 | Motor ID |
 | speed | -15625 - 15625 [step/s] | Current speed |
+
+## Raw register value commands
+
+The following commands set or get speed profile parameters using raw driver IC register values without unit conversion. For most users, the standard commands (in steps/s and steps/s²) are recommended. These are for advanced use cases where direct register control is needed.
+
+### `/setSpeedProfileRaw (int)motorID (int)acc (int)dec (int)maxSpeed`
+
+#### Argument
+
+| Argument | Range | Description |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 | motor ID |
+| acc | 0-4095 | acceleration (raw register value) |
+| dec | 0-4095 | deceleration (raw register value) |
+| maxSpeed | 0-1023 | maximum speed (raw register value) |
+
+#### Executable timing
+
+When the motor is stopped
+
+#### Description
+
+Sets the acc, dec, and maxSpeed of the speed profile using raw driver IC register values.
+
+### `/getSpeedProfileRaw (int)motorID`
+
+#### Argument
+
+| Argument | Range | Description |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 | motor ID |
+
+#### Executable timing
+
+Always
+
+#### Description
+
+Gets the acc, dec, and maxSpeed of the speed profile as raw driver IC register values.
+
+#### Response
+
+```
+/speedProfileRaw (int)motorID (int)acc (int)dec (int)maxSpeed
+```
+
+| Argument | Range | Description |
+| --- | --- | --- |
+| motorID | 1-4/1-8 | motor ID |
+| acc | 0-4095 | acceleration (raw register value) |
+| dec | 0-4095 | deceleration (raw register value) |
+| maxSpeed | 0-1023 | maximum speed (raw register value) |
+
+### `/setMaxSpeedRaw (int)motorID (int)maxSpeed`
+
+#### Argument
+
+| Argument | Range | Description |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 | motor ID |
+| maxSpeed | 0-1023 | maximum speed (raw register value) |
+
+#### Executable timing
+
+Always
+
+#### Description
+
+Sets the maximum speed of the speed profile using a raw register value.
+
+### `/setMinSpeedRaw (int)motorID (int)minSpeed`
+
+#### Argument
+
+| Argument | Range | Description |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 | motor ID |
+| minSpeed | 0-4095 | minimum speed (raw register value) |
+
+#### Executable timing
+
+When the motor is stopped
+
+#### Description
+
+Sets the minimum speed of the speed profile using a raw register value.
+
+### `/setFullstepSpeedRaw (int)motorID (int)fullstepSpeed`
+
+#### Argument
+
+| Argument | Range | Description |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 | motor ID |
+| fullstepSpeed | 0-1023 | full-step speed threshold (raw register value) |
+
+#### Executable timing
+
+Always
+
+#### Description
+
+Sets the full-step speed threshold using a raw register value.
+
+### `/setAccRaw (int)motorID (int)acc`
+
+#### Argument
+
+| Argument | Range | Description |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 | motor ID |
+| acc | 0-4095 | acceleration (raw register value) |
+
+#### Executable timing
+
+When the motor is stopped
+
+#### Description
+
+Sets the acceleration of the speed profile using a raw register value.
+
+### `/setDecRaw (int)motorID (int)dec`
+
+#### Argument
+
+| Argument | Range | Description |
+| --- | --- | --- |
+| motorID | 1-4/1-8, 255 | motor ID |
+| dec | 0-4095 | deceleration (raw register value) |
+
+#### Executable timing
+
+When the motor is stopped
+
+#### Description
+
+Sets the deceleration of the speed profile using a raw register value.

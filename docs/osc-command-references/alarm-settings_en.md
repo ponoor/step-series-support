@@ -84,7 +84,7 @@ Always
 
 #### Description
 
-Set to send the notification message on change in the temperature status (thermalStatus) of the specified motor driver is detected. On the Bridge shutdown or Device shutdown, the motor state will automatically enter High Z state with or without notification.
+Sends a notification message when a change in the temperature status (thermalStatus) of the specified motor driver is detected. On bridge shutdown or device shutdown, the motor state will automatically enter High Z state with or without notification.
 
 #### Response
 
@@ -138,7 +138,7 @@ Gets the current condition of the ThermalStatus. Thermal status thresholds are d
 | 1 | Warning | 130℃ | 130℃ |
 | 2 | Bridge shutdown | 160℃ | 130℃ |
 
-In the Bridge shutdown and Device shutdown states, the motor goes into the High Z state with or without notification.
+In the bridge shutdown and device shutdown states, the motor goes into the High Z state with or without notification.
 
 #### Initial value
 

@@ -29,7 +29,7 @@ High Z state
 
 #### Description
 
-Switches the micro stepping mode.
+Sets the microstepping mode.
 
 | STEP\_SEL | Micro stepping mode |
 | --- | --- |

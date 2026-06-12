@@ -27,3 +27,22 @@
   - `Powerstep01` in voltage-mode-and-current-mode_en.md URL left as-is (STMicroelectronics PDF filename)
   - `In motion start condition` timing-table entries left as-is (defined term in the index, context-dependent clarification deferred)
   - OSC first-mention expansion added to all body-text pages; pages where OSC only appears in code, URLs, or library names were left unchanged
+
+## Batch 2 — Complete
+- Date: 2026-06-12
+- Files modified:
+  - docs/osc-command-references/system-settings_en.md — added /saveConfig, /setConfigName, updated /getConfigName with 5th argument
+  - docs/osc-command-references/voltage-and-current-mode-settings_en.md — uncommented individual KVAL commands (/setHoldKval, /setRunKval, /setAccKval, /setDecKval), uncommented and corrected individual TVAL commands (/setHoldTval, /setRunTval, /setAccTval, /setDecTval) with STEP400-only markers
+  - docs/osc-command-references/speed-profile_en.md — added raw register value commands section (/setSpeedProfileRaw, /getSpeedProfileRaw, /setMaxSpeedRaw, /setMinSpeedRaw, /setFullstepSpeedRaw, /setAccRaw, /setDecRaw)
+  - docs/osc-command-references/motor-control_en.md — added combined commands section, added raw register value commands (/runRaw, /goUntilRaw, /combinedRunRaw)
+  - docs/osc-command-references/homing_en.md — added v2.1.0 admonition about goUnitlTimeout typo fix
+  - docs/osc-command-references/alarm-settings_en.md — grammar fixes (thermal status description, bridge/device shutdown capitalization)
+  - docs/osc-command-references/motor-driver-settings_en.md — grammar fix (microstepping mode description)
+  - docs/osc-command-references/diff_400_800_command_en.md — added individual TVAL setter commands to STEP400-only list
+  - docs/osc-command-references/index_en.md — added link to Command list page
+  - docs/osc-command-references/command-list_en.md — NEW: complete command quick reference table organized by category
+- Notes:
+  - Individual KVAL/TVAL commands were already present in the source file as HTML comments; they were uncommented, reformatted for consistency, and corrected (argument names, STEP400-only markers for TVAL, proper ranges 0-127 for TVAL)
+  - Combined motor commands (combinedRun, combinedMove, etc.) were previously undocumented; added to motor-control page
+  - /getStatusList referenced in command list but has no dedicated doc section yet (exists in firmware audit)
+  - Command list uses relative .md file links for portability

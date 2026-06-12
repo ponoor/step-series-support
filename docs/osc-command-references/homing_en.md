@@ -330,3 +330,5 @@ Returns the time-out duration when executing [`/releaseSw`](https://ponoor.com/e
 | --- | --- | --- |
 | motorID | 1-4/1-8, 255 | Motor ID |
 | timeout | 0-10000[ms] | Time-out duration |
+
+> **Fixed in firmware v2.1.0:** The STEP400 configuration template previously contained a typo `goUnitlTimeout` (note the swapped letters). The firmware always read the correctly spelled `goUntilTimeout`, so this value was silently ignored on STEP400 configs, always falling back to the default (10000 ms). This has been corrected in v2.1.0.
