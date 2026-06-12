@@ -70,11 +70,11 @@ To better illustrate this interaction, here is a demo video.
 
 ### `/homing`
 
-It is possible to send above two commands over OSC one after another, however, the [`/homing`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#homing_intmotorid) command executes this sequence in single operation. It will automatically complete the home sequence according to the homing direction and homing speed which are pre-configured with the Config Tool or with the commands `/setHomingDirection` and `/setHomingSpeed`, respectively.
+It is possible to send above two commands over OSC one after another, however, the [`/homing`](https://ponoor.com/en/docs/step-series/osc-command-reference/homing/#homing_intmotorid) command executes this sequence in single operation. It will automatically complete the home sequence according to the homing direction and homing speed which are pre-configured with the [configuration tool](../connections-and-settings/browser-config-tool_en.md) or with the commands `/setHomingDirection` and `/setHomingSpeed`, respectively.
 
 ### Homing Timeouts
 
-Both `/goUntil` and `/releaseSw` have pre-configured timeouts. When either command times out--that is, the HOME sensor's state has not changed after a period of time--the controller will halt the movement of the motor. This is to prevent the moving part from being pushed against other mechanical objects endlessly and for safety.
+Both `/goUntil` and `/releaseSw` have pre-configured timeouts. When either command times out — that is, the HOME sensor's state has not changed after a period of time — the controller will halt the movement of the motor. This prevents the moving part from being pushed against other mechanical objects endlessly.
 
 ## Normally Open and Normally Closed
 

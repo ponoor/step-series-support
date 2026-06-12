@@ -1,5 +1,5 @@
 ---
-title: Diagnosis via USB serial port
+title: USB Serial Diagnosis
 wp_id: 1622
 slug: diagnosis
 lang: en
@@ -10,38 +10,36 @@ parent: 888
 menu_order: 65
 ---
 
-# Diagnosis via USB serial port
+# USB Serial Diagnosis
 
-## Diagnosis tool
+## Overview
 
-### Overview
+You can connect your PC and the device with USB to monitor status or check settings. This is practical for troubleshooting, such as when you cannot reach the controller over the Ethernet network.
 
-You can connect your PC and the deice with USB and monitor status or check the setting. It is practical for trouble shooting, like when you cannot reach the controller over Ethernet network.
+## Connection
 
-### Connection
+Connect the device and your PC with a USB Type-C cable. Only the microcontroller and its peripherals will be powered from USB. In this state, the motor drivers are not powered up, so you cannot communicate with them. Therefore, make sure to supply the motor power source as well.
 
-Connect the device and your PC with USB Type-C cable. Only the microcontroller and its peripheral will be powered from USB. In this state, the motor drivers are not powered up, so you cannot communicate with them. Therefore make sure to supply motor power source as well.
+Be aware that if you first connect the USB cable and then connect motor power, the controller may exhibit unexpected behavior, since the motor drivers will be in an uninitialized state. Power the motor power supply first and then connect the USB, or reset the controller by pushing the RESET button after powering up motor power.
 
-Also, be aware that if you fist connect USB cable and then connect motor power, the controller may exhibit unexpected behavior, since the motor drivers will be in uninitialized state. So power the motor power supply first and then connect the USB, or reset the controller by pushing RESET button after powering up motor power.
+## Serial monitor
 
-### Serial monitor
+The device reports itself as a virtual serial port to the PC and is recognized as Arduino Zero. If you would like to use the Arduino IDE serial monitor, the process looks as follows. You can use any serial port terminal client that can send and receive text strings.
 
-The device report itself as virtual serial port to PC and is recognized as Arduino Zero. If you would like to use Arduino IDE serial monitor, the process looks as follows. You can use any serial port terminal client that can send and receive text strings.
-
-#### Selecting Port
+### Selecting Port
 
 From Tools -> Port. Find "Arduino Zero (Native USB Port)" and select it.  
 ![file](https://ponoor.com/cms/wp-content/uploads/2021/03/image-1616473811329.png)
 
-#### Open Serial Monitor
+### Open Serial Monitor
 
 By clicking the magnifying glass icon, the serial monitor window will pop up. [![](https://ponoor.com/cms/wp-content/uploads/2021/03/openserialmonitor-486x525.png)](https://ponoor.com/cms/wp-content/uploads/2021/03/openserialmonitor.png)
 
-#### List the menu
+### List the menu
 
-From the textbox on the top, enter `m` and press Send button (or press Return key) you will receive diagnosis menu if the connection is established without issue. ![file](https://ponoor.com/cms/wp-content/uploads/2021/03/image-1616474112646.png)
+From the text box at the top, enter `m` and press the Send button (or press the Return key). You will receive the diagnosis menu if the connection is established without issue. ![file](https://ponoor.com/cms/wp-content/uploads/2021/03/image-1616474112646.png)
 
-We are going to look through these three items.
+The following sections describe the available serial commands.
 
 ## Status
 
@@ -59,9 +57,9 @@ Applicable config version : 1.0
 Loaded config version : 1.0 [CONFIG_VERSION_APPLICABLE]
 ```
 
-This section includes, mainly the firmware information on the chip.
+This section shows the firmware information on the chip.
 
-`Loaded config version`: Shows the config.txt version number read from microSD. Depending on the version of config and firmware, you will get one of the following message.
+`Loaded config version`: Shows the configuration file version number read from the microSD card. Depending on the version of the configuration and firmware, you will get one of the following messages.
 
 | Message | Description |
 | --- | --- |
@@ -114,8 +112,8 @@ SD config JSON parse succeeded : Yes
 ```
 
 - `SD library initialize succeeded`: `No` if microSD card is not inserted.
-- `SD config file open succeeded`: Shows if the `config.txt` on the SD card is succesfully opened.
-- `SD config JSON parse succeeded`: Shows if the content of `config.txt` (JSON) was read correctly.
+- `SD config file open succeeded`: Shows if the configuration file on the SD card was successfully opened.
+- `SD config JSON parse succeeded`: Shows if the content of the configuration file (JSON) was parsed correctly.
 
 ### Motor Driver
 
@@ -139,7 +137,7 @@ PowerSTEP01 ID#1
 ```
 
 - `PowerSTEP01 SPI connection established`: Shows if the communication with the PowerSTEP01 was established. If `No`, the motor power might be switched off.
-- Following message will be displayed only if the communication was successful. For messages, #1-#4 will be listed.
+- The following messages will be displayed only if the communication was successful. Messages for #1–#4 will be listed.
 
 #### STEP800
 
@@ -160,7 +158,7 @@ L6470 ID#1
 ```
 
 - `L6470 SPI connection established`: Shows if the communication with the L6470 was established. If `No`, the motor power might be switched off.
-- Following message will be displayed only if the communication was successful. For messages, #1-#8 will be listed.
+- The following messages will be displayed only if the communication was successful. Messages for #1–#8 will be listed.
 
 ### Modes
 
@@ -198,7 +196,7 @@ Homing status : 0, 0, 0, 0
 
 ## Config
 
-You can retrieve current settings if you send `c`. Be aware that this is not the content of the configuration file, but the current setting that reflected actual ID switch setting and other settings over OSC messages. For example if you boot the STEP400 without microSD inserted, following message will show up.
+You can retrieve the current settings by sending `c`. Be aware that this is not the content of the configuration file, but the current running settings that reflect the actual DIP switch setting and any changes made via OSC (Open Sound Control) messages. For example, if you boot the STEP400 without a microSD card inserted, the following message will appear.
 
 ```
 ============== Configurations ==============
@@ -285,4 +283,20 @@ kD : 0.00, 0.00, 0.00, 0.00
 
 ## Test Motion
 
-All motors will rotate 25600 steps forward by sending `t`. This is equivalent to one rotation for the 200 steps stepping motor controlled with 1/128 microsteps.
+All motors will rotate 25600 steps forward by sending `t`. This is equivalent to one rotation for a 200-step stepper motor controlled with 1/128 microsteps.
+
+## Configuration commands via serial
+
+> **Added in firmware v2.1.0**
+
+The following serial commands were added in firmware v2.1.0. They are used by the [browser configuration tool](../connections-and-settings/browser-config-tool_en.md) but can also be used directly from any serial terminal.
+
+| Command | Description |
+| --- | --- |
+| `G` | Get the current configuration as JSON |
+| `T` | Get real-time motor and board status as JSON |
+| `{...}` | Write a configuration JSON object to the SD card |
+| `R` | Reboot the board |
+| `F<filename>` | Set the configuration filename for the next save (e.g., `Fconfig.json`) |
+
+The `G` command returns the full running configuration in JSON format. The `T` command returns a snapshot of motor positions, statuses, and other real-time data. Sending a JSON object starting with `{` writes the configuration to the microSD card. The `R` command performs a software reset of the board. The `F` command sets the filename that will be used when saving the configuration.

@@ -77,7 +77,7 @@ Since the PowerSTEP01\_RESET and W5500\_RESET are connected to the reset pins of
 
 ### Pads on PCB rear side
 
-There are unassigned pins and power pads on the rear side of PCB. They are 2.54mm picth, so you can attach surface-mount pin-headers and IC sockets. R35 and R36 on the rear side can be used for the pull-up for the i2c pins(SDA, SDL). The chip size is 1608(0603).
+There are unassigned pins and power pads on the rear side of PCB. They are 2.54mm pitch, so you can attach surface-mount pin-headers and IC sockets. R35 and R36 on the rear side can be used for pull-up resistors for the I2C pins (SDA, SCL). The chip size is 1608(0603).
 
 Since these pins are not controlled from firmware, customizing firmware for your own purpose is necessary.
 
@@ -120,4 +120,4 @@ Since it is not wired, Step Clock operation is not possible.
 
 ### ADCIN
 
-This is used for the limit sensor inputs, therefore not used for the original supply voltage compensation featue. Be sure to disable UVLO\_ADC, which will raise the alarm based on the value of the ADC input.
+This is used for the limit sensor inputs, therefore not used for the original supply voltage compensation feature. Be sure to disable UVLO\_ADC, which will raise the alarm based on the value of the ADC input.

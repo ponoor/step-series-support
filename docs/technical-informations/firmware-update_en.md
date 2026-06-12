@@ -1,5 +1,5 @@
 ---
-title: The firmware update
+title: Firmware Update
 wp_id: 1624
 slug: firmware-update
 lang: en
@@ -10,13 +10,15 @@ parent: 888
 menu_order: 50
 ---
 
-# The firmware update
+# Firmware Update
 
 ## Updating the firmware
 
 The firmware may be updated for bugfixes and adding features.
 
-Please check the current firmware version on the controller first, then if it's older than [the version published on Github](hhttps://github.com/ponoor/step-series-universal-firmware/releases), please update the firmware.
+Please check the current firmware version on the controller first, then if it is older than [the version published on GitHub](https://github.com/ponoor/step-series-universal-firmware/releases), please update the firmware.
+
+> **Note:** The latest firmware version is v2.1.0. See the [Firmware Changelog](firmware-changelog_en.md) for details on what has changed.
 
 ## Checking firmware version burned on to the controller
 
@@ -55,9 +57,9 @@ Check the latest firmware version from the "[Releases](https://github.com/ponoor
 Previously, STEP400 and STEP800 firmware was managed in separate repositories, but as of March 2022, we have moved to a unified "STEP-series Universal Firmware". The version numbers have been reset accordingly, so please follow the procedure below to make sure you have the latest version.
 
 1. Check if `UNIVERSAL` is in the name of the firmware obtained from the controller.
-2. If no, the firmware in the controller is old and need to update
+2. If no, the firmware in the controller is old and needs to be updated
 3. If yes, compare with the version number of "[Releases](https://github.com/ponoor/step-series-universal-firmware/releases)".
 
 ## Updating firmware
 
-If the firmware on the controller is old, please update the firmware. The update can be done by compiling and uploading the latest firmware from Arduino IDE. Refer [Compiling Arduino sketch](https://ponoor.com/en/docs/step-series/technical-information/compile-the-arduino-sketch/) for more detail.
+If the firmware on the controller is old, please update it. The update can be done by compiling and uploading the latest firmware. Refer to [Compiling the Firmware](compile-the-arduino-sketch_en.md) for details.

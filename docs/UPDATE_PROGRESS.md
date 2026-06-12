@@ -58,3 +58,27 @@
   - Browser config tool URL set to https://ponoor.com/tools/step-config/ (TBD — update if actual URL differs)
   - wp_id left blank for browser-config-tool_en.md (new page, not yet published to WordPress)
   - setup-with-a-microsd-card_en.md slug kept as-is to preserve existing WordPress URL; only the page title heading changed
+
+## Batch 4 — Complete
+- Date: 2026-06-12
+- Files modified:
+  - docs/technical-informations/compile-the-arduino-sketch_en.md — renamed title to "Compiling the Firmware", added v2.1.0 admonitions for Arduino IDE folder removal and SdFat v2 dependency, emphasized PlatformIO, flattened heading hierarchy under Arduino IDE section
+  - docs/technical-informations/diagnosis_en.md — renamed title to "USB Serial Diagnosis", added v2.1.0 serial commands table (G, T, {, R, F), grammar and clarity pass throughout
+  - docs/technical-informations/firmware-changelog_en.md — NEW: firmware changelog page with v2.1.0, v2.0.0, and earlier versions sections
+  - docs/technical-informations/firmware-update_en.md — renamed title to "Firmware Update", fixed double-h typo in GitHub URL, added v2.1.0 note and changelog link, grammar fixes
+  - docs/technical-informations/hardware-step400_en.md — fixed typos (picth→pitch, featue→feature, SDL→SCL, i2c→I2C)
+  - docs/technical-informations/hardware-step800_en.md — fixed typos (picth→pitch, SDL→SCL, i2c→I2C, "can not use"→"cannot be used")
+  - docs/functional-descriptions/voltage-mode-and-current-mode_en.md — updated config tool link, grammar fixes
+  - docs/functional-descriptions/speed-profile-and-type-of-motor-motions_en.md — fixed step400→step-series in URLs, grammar/clarity improvements
+  - docs/functional-descriptions/homing-and-position-management_en.md — updated config tool reference to browser tool link, minor grammar fix
+  - docs/functional-descriptions/servo-mode_en.md — replaced "Arduino Sketch" with "firmware", removed duplicate paragraph, fixed missing /en/ in ponoor.com links, grammar improvements
+  - docs/tutorial_en.md — renamed title to "Getting Started", replaced old STEP400 config tool reference with browser config tool, grammar fixes
+  - docs/osc-command-references/diff_400_800_command_en.md — changed parent from 886 (OSC ref) to 888 (Technical Information) per structure plan
+  - docs/osc-command-references/motor-driver-settings_en.md — fixed missing /en/ in ponoor.com links (10 occurrences)
+  - docs/step100-200/usage_en.md — fixed "reffer" typo, fixed missing /en/ in command reference link
+- Notes:
+  - Link audit completed: fixed all EN pages linking to ponoor.com/docs/ (missing /en/ prefix) in servo-mode, motor-driver-settings, and usage pages
+  - All relative links to new pages (browser-config-tool, firmware-changelog, system-settings) verified to point to existing files
+  - diff_400_800_command_en.md moved to Technical Information section via parent metadata change; physical file location unchanged (WordPress uses parent field for hierarchy)
+  - wp_id left blank for firmware-changelog_en.md (new page, not yet published to WordPress)
+  - Slugs kept as-is for all renamed pages to preserve existing WordPress URLs

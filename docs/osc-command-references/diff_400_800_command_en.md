@@ -6,7 +6,7 @@ lang: en
 link: "https://ponoor.com/en/docs/step-series/osc-command-reference/differences-between-step400-and-step800/"
 date: "2021-12-03T13:03:39"
 modified: "2021-12-03T13:19:13"
-parent: 886
+parent: 888
 menu_order: 96
 ---
 

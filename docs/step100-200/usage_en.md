@@ -14,7 +14,7 @@ menu_order: 36
 
 ## Usage
 
-Basically STEP100/200 can be controlled in the same way as STEP400/800. Please reffer to the STEP400/800 [tutorial](https://ponoor.com/en/docs/step-series/tutorial/) and [the command reference](https://ponoor.com/docs/step-series/osc-command-reference/).
+Basically STEP100/200 can be controlled in the same way as STEP400/800. Please refer to the STEP400/800 [tutorial](https://ponoor.com/en/docs/step-series/tutorial/) and [the command reference](https://ponoor.com/en/docs/step-series/osc-command-reference/).
 
 STEP100 can use the commands of STEP400, and STEP200 can use the commands of STEP800, but since the number of motor axes is different, the range of MotorID changes as follows.
 

@@ -77,7 +77,7 @@ Since the L6470\_RESET and W5500\_RESET are connected to the reset pins of L6470
 
 ### Pads on PCB rear side
 
-There are unassigned pins and power pads on the rear side of PCB. They are 2.54mm picth, so you can attach surface-mount pin-headers and IC sockets. R6 and R7 on the rear side can be used for the pull-up for the i2c pins(SDA, SDL). The chip size is 1608(0603).
+There are unassigned pins and power pads on the rear side of PCB. They are 2.54mm pitch, so you can attach surface-mount pin-headers and IC sockets. R6 and R7 on the rear side can be used for pull-up resistors for the I2C pins (SDA, SCL). The chip size is 1608(0603).
 
 Since these pins are not controlled from firmware, customizing firmware for your own purpose is necessary.
 
@@ -128,4 +128,4 @@ Since it is not wired, Step Clock operation is not possible.
 
 ### ADCIN
 
-This is directly wired with GND and can not use.
+This is directly wired to GND and cannot be used.
