@@ -1,9 +1,9 @@
 ---
 title: HOME and LIMIT sensors
 wp_id: 1290
-slug: home-and-limit-sensers
+slug: home-limit-sensors
 lang: en
-link: "https://ponoor.com/en/docs/step-series/osc-command-reference/home-and-limit-sensers/"
+link: "https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/"
 date: "2021-03-09T13:47:44"
 modified: "2021-08-28T15:37:49"
 parent: 886

@@ -6,7 +6,7 @@
   - docs/osc-command-references/position-management_en.md
   - docs/osc-command-references/homing_en.md
   - docs/osc-command-references/brake_en.md
-  - docs/osc-command-references/home-and-limit-sensers_en.md
+  - docs/osc-command-references/home-and-limit-sensors_en.md (renamed from home-and-limit-sensers_en.md)
   - docs/osc-command-references/automatically-sent-messages-from-step-400_en.md
   - docs/osc-command-references/motor-driver-settings_en.md
   - docs/osc-command-references/voltage-and-current-mode-settings_en.md
@@ -22,7 +22,7 @@
   - docs/emb-step400/commands_en.md
   - docs/step100-200/usage_en.md
 - Notes:
-  - "sensers" appears in filename (home-and-limit-sensers_en.md) and WordPress slug/URL — filename and slug left as-is to avoid breaking links; title and heading text corrected to "sensors"
+  - Filename renamed from home-and-limit-sensers_en.md → home-and-limit-sensors_en.md; slug corrected from home-and-limit-sensers → home-limit-sensors (aligning with JP slug and all existing cross-doc links, which already pointed to home-limit-sensors); WordPress will need a redirect from the old URL
   - `/configTool` link text in setup-with-a-microsd-card_en.md table left as-is (GitHub repo folder path, not a prose tool reference)
   - `Powerstep01` in voltage-mode-and-current-mode_en.md URL left as-is (STMicroelectronics PDF filename)
   - `In motion start condition` timing-table entries left as-is (defined term in the index, context-dependent clarification deferred)
