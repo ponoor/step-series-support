@@ -1,0 +1,278 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ponoor.com/schemas/step-series/osc-commands.schema.json",
+  "title": "STEP series OSC command specification",
+  "description": "Format of spec/osc-commands.yaml (PLAN_osc_yaml_schema.md, chapters 2-6). Board names used as keys of board-specific values are checked against `boards` by tools/validate_spec.py, because JSON Schema cannot refer to them.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "firmware", "boards", "timings", "groups", "params", "settings", "commands", "messages"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "firmware": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "boards": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"$ref": "#/$defs/boardName"},
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["driver", "motors"],
+        "properties": {
+          "driver": {"type": "string"},
+          "motors": {"type": "integer", "minimum": 1}
+        }
+      }
+    },
+    "timings": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/key"},
+      "additionalProperties": {"$ref": "#/$defs/localized"}
+    },
+    "groups": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/key"},
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["page", "en", "ja"],
+        "properties": {
+          "page": {"type": "string"},
+          "en": {"type": "string"},
+          "ja": {"type": "string"}
+        }
+      }
+    },
+    "params": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/key"},
+      "additionalProperties": {"$ref": "#/$defs/param"}
+    },
+    "settings": {"type": "array", "items": {"$ref": "#/$defs/setting"}},
+    "commands": {"type": "array", "items": {"$ref": "#/$defs/command"}},
+    "messages": {"type": "array", "items": {"$ref": "#/$defs/message"}}
+  },
+  "$defs": {
+    "key": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"},
+    "boardName": {"type": "string", "pattern": "^STEP[0-9]+$"},
+    "boardList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/boardName"}
+    },
+    "address": {"type": "string", "pattern": "^/[A-Za-z0-9_/]+$"},
+    "version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "localized": {
+      "description": "A text in English and Japanese. Markdown. `[[/address]]` links to a command or message. An empty string means the text does not exist yet.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["en", "ja"],
+      "properties": {
+        "en": {"type": "string"},
+        "ja": {"type": "string"}
+      }
+    },
+    "text": {
+      "description": "A localized text, or a language-neutral short string.",
+      "oneOf": [
+        {"type": "string"},
+        {"$ref": "#/$defs/localized"}
+      ]
+    },
+    "boardMap": {
+      "description": "Board-specific values: {STEP400: ..., STEP800: ...}.",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"$ref": "#/$defs/boardName"}
+    },
+    "scalar": {"type": ["string", "number", "boolean"]},
+    "plainValue": {
+      "oneOf": [
+        {"$ref": "#/$defs/scalar"},
+        {"type": "array", "items": {"$ref": "#/$defs/scalar"}}
+      ]
+    },
+    "anyValue": {
+      "description": "A value, or board-specific values.",
+      "oneOf": [
+        {"$ref": "#/$defs/plainValue"},
+        {"allOf": [{"$ref": "#/$defs/boardMap"}, {"additionalProperties": {"$ref": "#/$defs/plainValue"}}]}
+      ]
+    },
+    "range": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {"type": "number"}
+    },
+    "rangeValue": {
+      "oneOf": [
+        {"$ref": "#/$defs/range"},
+        {"allOf": [{"$ref": "#/$defs/boardMap"}, {"additionalProperties": {"$ref": "#/$defs/range"}}]}
+      ]
+    },
+    "valueItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value"],
+      "properties": {
+        "value": {"$ref": "#/$defs/scalar"},
+        "en": {"type": "string"},
+        "ja": {"type": "string"},
+        "boards": {"$ref": "#/$defs/boardList"}
+      }
+    },
+    "valueList": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/valueItem"}},
+    "values": {
+      "oneOf": [
+        {"$ref": "#/$defs/valueList"},
+        {"allOf": [{"$ref": "#/$defs/boardMap"}, {"additionalProperties": {"$ref": "#/$defs/valueList"}}]}
+      ]
+    },
+    "type": {"enum": ["int", "float", "bool", "string"]},
+    "argFields": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"},
+        "type": {"$ref": "#/$defs/type"},
+        "range": {"$ref": "#/$defs/rangeValue"},
+        "unit": {"type": "string"},
+        "values": {"$ref": "#/$defs/values"},
+        "default": {"$ref": "#/$defs/anyValue"},
+        "repeat": {"const": "motors"},
+        "value": {"$ref": "#/$defs/scalar"},
+        "since": {"$ref": "#/$defs/version"},
+        "all": {"oneOf": [{"type": "integer"}, {"const": false}]},
+        "description": {"$ref": "#/$defs/localized"}
+      }
+    },
+    "param": {
+      "description": "A shared argument definition used with `use:`.",
+      "allOf": [{"$ref": "#/$defs/argFields"}],
+      "required": ["type"],
+      "unevaluatedProperties": false
+    },
+    "arg": {
+      "description": "An argument. `use` takes a shared definition from `params`; other fields override it. `setting` gives the initial value from `settings`, so `default` is not written with it.",
+      "allOf": [{"$ref": "#/$defs/argFields"}],
+      "properties": {
+        "use": {"$ref": "#/$defs/key"},
+        "setting": {"type": "string"}
+      },
+      "anyOf": [{"required": ["use"]}, {"required": ["name", "type"]}],
+      "not": {"required": ["setting", "default"]},
+      "unevaluatedProperties": false
+    },
+    "args": {"type": "array", "items": {"$ref": "#/$defs/arg"}},
+    "change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "en", "ja"],
+      "properties": {
+        "version": {"$ref": "#/$defs/version"},
+        "en": {"type": "string"},
+        "ja": {"type": "string"}
+      }
+    },
+    "table": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["columns", "rows"],
+      "properties": {
+        "title": {"$ref": "#/$defs/text"},
+        "columns": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/text"}},
+        "rows": {
+          "oneOf": [
+            {"$ref": "#/$defs/tableRows"},
+            {"allOf": [{"$ref": "#/$defs/boardMap"}, {"additionalProperties": {"$ref": "#/$defs/tableRows"}}]}
+          ]
+        }
+      }
+    },
+    "tableRows": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {"oneOf": [{"$ref": "#/$defs/scalar"}, {"$ref": "#/$defs/localized"}]}
+      }
+    },
+    "response": {
+      "oneOf": [
+        {"$ref": "#/$defs/address"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["message"],
+          "properties": {
+            "message": {"$ref": "#/$defs/address"},
+            "when": {"$ref": "#/$defs/localized"}
+          }
+        }
+      ]
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["address", "group", "timing", "description"],
+      "properties": {
+        "address": {"$ref": "#/$defs/address"},
+        "group": {"$ref": "#/$defs/key"},
+        "args": {"$ref": "#/$defs/args"},
+        "timing": {
+          "oneOf": [
+            {"$ref": "#/$defs/key"},
+            {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/key"}}
+          ]
+        },
+        "description": {"$ref": "#/$defs/localized"},
+        "response": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/response"}},
+        "notifies": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/address"}},
+        "errors": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+        "boards": {"$ref": "#/$defs/boardList"},
+        "routed_on": {"$ref": "#/$defs/boardList"},
+        "since": {"$ref": "#/$defs/version"},
+        "changes": {"type": "array", "items": {"$ref": "#/$defs/change"}},
+        "see_also": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/address"}},
+        "tables": {"type": "array", "items": {"$ref": "#/$defs/table"}}
+      }
+    },
+    "message": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["address"],
+      "properties": {
+        "address": {"$ref": "#/$defs/address"},
+        "args": {"$ref": "#/$defs/args"},
+        "description": {"$ref": "#/$defs/localized"},
+        "tables": {"type": "array", "items": {"$ref": "#/$defs/table"}},
+        "boards": {"$ref": "#/$defs/boardList"},
+        "since": {"$ref": "#/$defs/version"},
+        "changes": {"type": "array", "items": {"$ref": "#/$defs/change"}}
+      }
+    },
+    "setting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "section", "label", "type", "default"],
+      "properties": {
+        "key": {"type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)+$"},
+        "section": {"$ref": "#/$defs/key"},
+        "label": {"$ref": "#/$defs/localized"},
+        "type": {"enum": ["int", "float", "bool", "string", "ip", "mac", "version"]},
+        "per_motor": {"type": "boolean"},
+        "default": {"$ref": "#/$defs/anyValue"},
+        "template": {
+          "description": "The value in configGenerator/configTemplate_*.json, written only when it differs from `default`. A board missing from a board-specific value means the template has the same value as `default` on that board.",
+          "$ref": "#/$defs/anyValue"
+        },
+        "range": {"$ref": "#/$defs/rangeValue"},
+        "unit": {"type": "string"},
+        "values": {"$ref": "#/$defs/values"},
+        "commands": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/address"}},
+        "aliases": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "boards": {"$ref": "#/$defs/boardList"},
+        "description": {"$ref": "#/$defs/localized"}
+      }
+    }
+  }
+}
