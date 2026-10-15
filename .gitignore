@@ -8,3 +8,7 @@ tmpclaude-*
 claude_temp_*
 .DS_Store
 /wp_export
+TASK_*.md
+PLAN_*.md
+REPORT_*.md
+.venv/
