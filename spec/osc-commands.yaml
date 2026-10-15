@@ -1,0 +1,685 @@
+# OSC command specification of the STEP series (STEP400 / STEP800)
+#
+# Format: spec/osc-commands.schema.json
+# Check:  python tools/validate_spec.py
+#         python tools/check_firmware.py --firmware <step-series-unified-firmware> --ref v2.1.0
+#
+# The contents follow the firmware source of the version below. Addresses are the
+# strings in the firmware's routes. Message argument types are the OSC type tags the
+# firmware actually sends (bool = T/F, int = i).
+
+schema_version: 1
+firmware: "2.1.0"
+
+boards:
+  STEP400: {driver: PowerSTEP01, motors: 4}
+  STEP800: {driver: L6470, motors: 8}
+
+timings:
+  always: {en: Always, ja: 常時}
+  stopped: {en: When the motor is stopped, ja: モータ停止時}
+  hiz: {en: High Z state, ja: HiZ状態}
+  motion_start: {en: In motion start condition, ja: 動作開始条件時}
+
+groups:
+  system: {page: system-settings, en: System settings, ja: 基板全体の設定}
+  driver: {page: motor-driver-settings, en: Motor driver settings, ja: モータドライバの設定}
+  alarm: {page: alarm-settings, en: Alarm settings, ja: アラーム}
+  drive_mode: {page: voltage-and-current-mode-settings, en: Voltage and current mode settings, ja: 電圧モードと電流モード}
+  speed_profile: {page: speed-profile, en: Speed profile, ja: スピードプロファイル}
+  homing: {page: homing, en: Homing, ja: 原点復帰}
+  sensors: {page: home-and-limit-sensors, en: HOME and LIMIT sensors, ja: HOME/LIMITセンサ}
+  position: {page: position-management, en: Position management, ja: 座標}
+  motion: {page: motor-control, en: Motor control, ja: モータの回転・停止}
+  brake: {page: brake, en: Electromagnetic brake, ja: 電磁ブレーキ}
+  servo: {page: servo-mode_reference, en: Servo mode, ja: サーボモード}
+
+params:
+  motorID:
+    type: int
+    range: {STEP400: [1, 4], STEP800: [1, 8]}
+    all: 255
+    description: {en: Motor ID, ja: モータのID}
+  enable:
+    type: bool
+    values:
+      - {value: 1, en: Enable, ja: 有効}
+      - {value: 0, en: Disable, ja: 無効}
+
+# =============================================================================
+# Settings (the JSON configuration file on the microSD card)
+# key: JSON path read by loadConfig.cpp. default: built-in value of the firmware
+# (used when the file or the key is missing). template: value in
+# configGenerator/configTemplate_*.json, only when it differs from default.
+# =============================================================================
+
+settings:
+  # --- information ---
+  - key: information.configName
+    section: information
+    label: {en: Configuration name, ja: Configuration name}
+    type: string
+    default: Default
+    template: ""
+    commands: [/setConfigName]
+    description:
+      en: Configuration file name. Can be set freely.
+      ja: 設定ファイルの名称で、自由に設定できます。
+
+  - key: information.configVersion
+    section: information
+    label: {en: Configuration version, ja: Configuration version}
+    type: version
+    default: [0, 0]
+    template: [1, 2]
+    description:
+      en: Version number of the Config Tool. Unable to modify.
+      ja: Config Toolsのバージョン番号で、変更できません。
+
+  - key: information.targetProduct
+    section: information
+    label: {en: Target product, ja: Target product}
+    type: string
+    default: "---"
+    template: {STEP400: STEP400, STEP800: STEP800}
+    description:
+      en: Name of the target product for the config file. Unable to modify.
+      ja: 設定ファイルの対象機種名で、変更できません。
+
+  # --- network ---
+  - key: network.myIp
+    section: network
+    label: {en: My IP address, ja: My IP address}
+    type: ip
+    default: [10, 0, 0, 100]
+    description:
+      en: Set the IP address. if `ID adds to my IP` is checked, ID value added to this address becomes the actual IP address. For example if the IP address is set to `10.0.0.100` and ID switch is set to 1, `10.0.0.101` will be the actual address. Be cautious not the added value to exceed 254.
+      ja: IPアドレスを設定します。`ID adds to my IP`にチェックが入っている場合は、この数値にIDが加算されたものが実際のIPアドレスになります。例えば`10.0.0.100`に設定してIDスイッチが1になっている場合は、`10.0.0.101`が実際のアドレスになります。加算した数値が254を超えないようにしてください。
+
+  - key: network.isMyIpAddId
+    section: network
+    label: {en: ID adds to my IP, ja: ID adds to my IP}
+    type: bool
+    default: true
+
+  - key: network.destIp
+    section: network
+    label: {en: Destination IP, ja: Destination IP}
+    type: ip
+    default: [10, 0, 0, 10]
+    commands: [/setDestIp]
+
+  - key: network.dns
+    section: network
+    label: {en: DNS, ja: DNS}
+    type: ip
+    default: [10, 0, 0, 1]
+
+  - key: network.gateway
+    section: network
+    label: {en: Gateway, ja: Gateway}
+    type: ip
+    default: [10, 0, 0, 1]
+
+  - key: network.subnet
+    section: network
+    label: {en: Subnet mask, ja: Subnet mask}
+    type: ip
+    default: [255, 255, 255, 0]
+
+  - key: network.inPort
+    section: network
+    label: {en: Incoming port, ja: Incoming port}
+    type: int
+    default: 50000
+    description:
+      en: The port number that the device receives OSC messages.
+      ja: 本デバイスがOSCを受信するポート番号です。
+
+  - key: network.outPort
+    section: network
+    label: {en: Outgoing port, ja: Outgoing port}
+    type: int
+    default: 50100
+    description:
+      en: The port number that the device send out OSC message. If `ID adds to Outgoing port` check box is checked, the ID value will be added to the port number.
+      ja: 本デバイスがOSCを送信するポート番号です。`ID adds to Outgoing port`にチェックが入っていると、この数値にIDが加算されます。
+
+  - key: network.isOutPortAddId
+    section: network
+    label: {en: ID adds to Outgoing port, ja: ID adds to Outgoing port}
+    type: bool
+    default: true
+
+  - key: network.mac
+    section: network
+    label: {en: MAC address, ja: MAC address}
+    type: mac
+    default: [96, 149, 206, 16, 6, 0]
+    template: {STEP400: [96, 149, 206, 16, 2, 0], STEP800: [96, 149, 206, 16, 3, 0]}
+    description:
+      en: You can switch decimal and hexadecimal display by clicking the check box `Hex`.
+      ja: "`Hex`チェックボックスで、16進数表示と10進数表示を切替できます。"
+
+  - key: network.isMacAddId
+    section: network
+    label: {en: ID adds to MAC address, ja: ID adds to MAC address}
+    type: bool
+    default: true
+    description:
+      en: When this check box is checked, the ID value will be added to the lowest byte of the MAC address.
+      ja: このチェックボックスが入っていると、MACアドレスの最終バイトにIDが加算されます。
+
+  - key: network.bootedMsgEnable
+    section: network
+    label: {en: Booted message enable, ja: Booted message enable}
+    type: bool
+    default: true
+    description:
+      en: Enables or disables the auto message [[/booted]] on ethernet link establishment on start.
+      ja: 起動時にイーサネットがリンクすると自動で送られる[[/booted]]メッセージの有効無効を切り替えます。
+
+  - key: network.canSendMsgBeforeDestIp
+    section: network
+    label: {en: Allow OSC reply before /setDestIp, ja: Allow OSC reply before /setDestIp}
+    type: bool
+    default: false
+    description:
+      en: In initial state, the controller does not send OSC response until receiving `/setDestIp`. However if this check box is checked, the controller will sends out OSC message immediately after boot up.
+      ja: 初期状態では`/setDestIp`を受信するまではOSCの返送を行わないようになっていますが、このチェックボックスが入っていると、起動してすぐからOSC返送するようにします。
+
+  - key: network.reportError
+    section: network
+    label: {en: Report errors, ja: Report errors}
+    type: bool
+    default: true
+    commands: [/reportError]
+
+  # --- alarmAndReport ---
+  - key: alarmAndReport.reportBUSY
+    section: alarmAndReport
+    label: {en: Report BUSY, ja: Report BUSY}
+    type: bool
+    per_motor: true
+    default: false
+    commands: [/enableBusyReport]
+
+  - key: alarmAndReport.reportHiZ
+    section: alarmAndReport
+    label: {en: Report HiZ, ja: Report HiZ}
+    type: bool
+    per_motor: true
+    default: false
+    commands: [/enableHizReport]
+
+  - key: alarmAndReport.reportHomeSwStatus
+    section: alarmAndReport
+    label: {en: Report HOME switch status, ja: Report HOME switch status}
+    type: bool
+    per_motor: true
+    default: false
+    commands: [/enableHomeSwReport]
+
+  - key: alarmAndReport.reportLimitSwStatus
+    section: alarmAndReport
+    label: {en: Report LIMIT switch status, ja: Report LIMIT switch status}
+    type: bool
+    per_motor: true
+    boards: [STEP400]
+    default: false
+    commands: [/enableLimitSwReport]
+
+  - key: alarmAndReport.reportDir
+    section: alarmAndReport
+    label: {en: Report motor direction, ja: Report motor direction}
+    type: bool
+    per_motor: true
+    default: false
+    commands: [/enableDirReport]
+
+  - key: alarmAndReport.reportMotorStatus
+    section: alarmAndReport
+    label: {en: Report Motor Status, ja: Report Motor Status}
+    type: bool
+    per_motor: true
+    default: false
+    commands: [/enableMotorStatusReport]
+
+  - key: alarmAndReport.reportSwEvn
+    section: alarmAndReport
+    label: {en: Report HOME switch event, ja: Report HOME switch event}
+    type: bool
+    per_motor: true
+    default: false
+    commands: [/enableSwEventReport]
+
+  - key: alarmAndReport.reportUVLO
+    section: alarmAndReport
+    label: {en: Report undervoltage lockout, ja: Report undervoltage lockout}
+    type: bool
+    per_motor: true
+    default: true
+    commands: [/enableUvloReport]
+
+  - key: alarmAndReport.reportThermalStatus
+    section: alarmAndReport
+    label: {en: Report thermal status of driver chip, ja: Report thermal status of driver chip}
+    type: bool
+    per_motor: true
+    default: true
+    commands: [/enableThermalStatusReport]
+
+  - key: alarmAndReport.reportOCD
+    section: alarmAndReport
+    label: {en: "", ja: ""}
+    type: bool
+    per_motor: true
+    default: true
+    commands: [/enableOverCurrentReport]
+
+  - key: alarmAndReport.reportStall
+    section: alarmAndReport
+    label: {en: Report motor stall detection, ja: Report motor stall detection}
+    type: bool
+    per_motor: true
+    default: false
+    commands: [/enableStallReport]
+
+  - key: alarmAndReport.reportPositionInterval
+    section: alarmAndReport
+    label: {en: "", ja: ""}
+    type: int
+    unit: ms
+    per_motor: true
+    default: 0
+    commands: [/setPositionReportInterval]
+
+  - key: alarmAndReport.reportPositionListInterval
+    section: alarmAndReport
+    label: {en: "", ja: ""}
+    type: int
+    unit: ms
+    default: 0
+    commands: [/setPositionListReportInterval]
+
+  - key: alarmAndReport.OCThreshold
+    section: alarmAndReport
+    label: {en: Overcurrent threshold, ja: Overcurrent threshold}
+    type: int
+    per_motor: true
+    default: {STEP400: 15, STEP800: 7}
+    template: {STEP800: 15}
+    commands: [/setOverCurrentThreshold]
+
+  # --- driverSettings ---
+  - key: driverSettings.homingAtStartup
+    section: driverSettings
+    label: {en: Homing when the system starts, ja: Homing when the system starts}
+    type: bool
+    per_motor: true
+    default: false
+    description:
+      en: Proceed to homing movement soon after boot when this check box is checked.
+      ja: このチェックボックスが入っていると、起動すると直ちに原点復帰動作を行います。
+
+  - key: driverSettings.homingDirection
+    section: driverSettings
+    label: {en: Homing Direction, ja: Homing Direction}
+    type: int
+    per_motor: true
+    default: 0
+    values:
+      - {value: 1, en: Forward, ja: 正転方向}
+      - {value: 0, en: Reverse, ja: 逆転方向}
+    commands: [/setHomingDirection]
+
+  - key: driverSettings.homingSpeed
+    section: driverSettings
+    label: {en: Homing Speed, ja: Homing Speed}
+    type: float
+    unit: step/s
+    per_motor: true
+    default: 50
+    commands: [/setHomingSpeed]
+
+  - key: driverSettings.homeSwMode
+    section: driverSettings
+    label: {en: Home switch won't cause HardStop, ja: Home switch won't cause HardStop}
+    type: bool
+    per_motor: true
+    default: true
+    commands: [/setHomeSwMode]
+
+  - key: driverSettings.prohibitMotionOnHomeSw
+    section: driverSettings
+    label: {en: Prohibit motions on HomeSw, ja: Prohibit motions on HomeSw}
+    type: bool
+    per_motor: true
+    default: false
+    commands: [/setProhibitMotionOnHomeSw]
+
+  - key: driverSettings.limitSwMode
+    section: driverSettings
+    label: {en: Limit switch won't cause HardStop, ja: Limit switch won't cause HardStop}
+    type: bool
+    per_motor: true
+    boards: [STEP400]
+    default: true
+    commands: [/setLimitSwMode]
+
+  - key: driverSettings.prohibitMotionOnLimitSw
+    section: driverSettings
+    label: {en: Prohibit motions on LimitSw, ja: Prohibit motions on LimitSw}
+    type: bool
+    per_motor: true
+    boards: [STEP400]
+    default: false
+    commands: [/setProhibitMotionOnLimitSw]
+
+  - key: driverSettings.goUntilTimeout
+    section: driverSettings
+    label: {en: goUntil timeout duration, ja: goUntil timeout duration}
+    type: int
+    unit: ms
+    per_motor: true
+    default: 10000
+    aliases: [driverSettings.goUnitlTimeout]
+    commands: [/setGoUntilTimeout]
+
+  - key: driverSettings.releaseSwTimeout
+    section: driverSettings
+    label: {en: releaseSw timeout duration, ja: releaseSw timeout duration}
+    type: int
+    unit: ms
+    per_motor: true
+    default: 10000
+    commands: [/setReleaseSwTimeout]
+
+  - key: driverSettings.stepMode
+    section: driverSettings
+    label: {en: Microstepping mode, ja: Microstepping mode}
+    type: int
+    per_motor: true
+    default: 7
+    commands: [/setMicrostepMode]
+
+  - key: driverSettings.isCurrentMode
+    section: driverSettings
+    label: {en: Current mode, ja: Current mode}
+    type: bool
+    per_motor: true
+    boards: [STEP400]
+    default: false
+    commands: [/setVoltageMode, /setCurrentMode]
+
+  - key: driverSettings.slewRate
+    section: driverSettings
+    label: {en: Slew rate, ja: Slew rate}
+    type: int
+    per_motor: true
+    default: {STEP400: 5, STEP800: 2}
+    range: {STEP400: [0, 5], STEP800: [0, 2]}
+    values:
+      STEP400:
+        - {value: 0, en: 114V/us, ja: 114V/us}
+        - {value: 1, en: 220V/us, ja: 220V/us}
+        - {value: 2, en: 400V/us, ja: 400V/us}
+        - {value: 3, en: 520V/us, ja: 520V/us}
+        - {value: 4, en: 790V/us, ja: 790V/us}
+        - {value: 5, en: 980V/us, ja: 980V/us}
+      STEP800:
+        - {value: 0, en: 180V/us, ja: 180V/us}
+        - {value: 1, en: 290V/us, ja: 290V/us}
+        - {value: 2, en: 530V/us, ja: 530V/us}
+    description:
+      en: Set the slew rate (steepness of rising) of motor control current from a motor driver in 6 steps for STEP400, 3 steps for STEP800.
+      ja: モータドライバから出力されるモータ制御電流のスリューレート（立ち上がりの鋭さ）をSTEP400では6段階、STEP800では3段階で指定します。
+
+  - key: driverSettings.electromagnetBrakeEnable
+    section: driverSettings
+    label: {en: Electromagnetic brake enable, ja: Electromagnetic brake enable}
+    type: bool
+    per_motor: true
+    default: false
+    commands: [/enableElectromagnetBrake]
+
+  - key: driverSettings.brakeTransitionDuration
+    section: driverSettings
+    label: {en: Brake transition duration, ja: Brake transition duration}
+    type: int
+    unit: ms
+    per_motor: true
+    default: 100
+    commands: [/setBrakeTransitionDuration]
+
+  # --- speedProfile ---
+  - key: speedProfile.acc
+    section: speedProfile
+    label: {en: Acceleration, ja: Acceleration}
+    type: float
+    unit: step/s/s
+    per_motor: true
+    default: 1000
+    template: 2000
+    commands: [/setAcc, /setSpeedProfile]
+
+  - key: speedProfile.dec
+    section: speedProfile
+    label: {en: Deceleration, ja: Deceleration}
+    type: float
+    unit: step/s/s
+    per_motor: true
+    default: 1000
+    template: 2000
+    commands: [/setDec, /setSpeedProfile]
+
+  - key: speedProfile.maxSpeed
+    section: speedProfile
+    label: {en: Max speed, ja: Max speed}
+    type: float
+    unit: step/s
+    per_motor: true
+    default: 650
+    template: 620
+    commands: [/setMaxSpeed, /setSpeedProfile]
+
+  - key: speedProfile.fullStepSpeed
+    section: speedProfile
+    label: {en: Transit to fullstep threshold speed, ja: Transit to fullstep threshold speed}
+    type: float
+    unit: step/s
+    per_motor: true
+    default: 15610
+    template: 15625
+    commands: [/setFullstepSpeed]
+
+  - key: speedProfile.minSpeed
+    section: speedProfile
+    label: {en: "", ja: ""}
+    type: float
+    unit: step/s
+    per_motor: true
+    default: 0
+    commands: [/setMinSpeed]
+
+  # --- voltageMode ---
+  - key: voltageMode.KVAL_HOLD
+    section: voltageMode
+    label: {en: KVAL_HOLD, ja: KVAL_HOLD}
+    type: int
+    per_motor: true
+    default: 0
+    commands: [/setKval, /setHoldKval]
+
+  - key: voltageMode.KVAL_RUN
+    section: voltageMode
+    label: {en: KVAL_RUN, ja: KVAL_RUN}
+    type: int
+    per_motor: true
+    default: 16
+    commands: [/setKval, /setRunKval]
+
+  - key: voltageMode.KVAL_ACC
+    section: voltageMode
+    label: {en: KVAL_ACC, ja: KVAL_ACC}
+    type: int
+    per_motor: true
+    default: 16
+    commands: [/setKval, /setAccKval]
+
+  - key: voltageMode.KVAL_DEC
+    section: voltageMode
+    label: {en: KVAL_DEC, ja: KVAL_DEC}
+    type: int
+    per_motor: true
+    default: 16
+    commands: [/setKval, /setDecKval]
+
+  - key: voltageMode.INT_SPEED
+    section: voltageMode
+    label: {en: INT_SPEED, ja: INT_SPEED}
+    type: int
+    per_motor: true
+    default: 1032
+    commands: [/setBemfParam]
+
+  - key: voltageMode.ST_SLP
+    section: voltageMode
+    label: {en: ST_SLP, ja: ST_SLP}
+    type: int
+    per_motor: true
+    default: 25
+    commands: [/setBemfParam]
+
+  - key: voltageMode.FN_SLP_ACC
+    section: voltageMode
+    label: {en: FN_SLP_ACC, ja: FN_SLP_ACC}
+    type: int
+    per_motor: true
+    default: 41
+    commands: [/setBemfParam]
+
+  - key: voltageMode.FN_SLP_DEC
+    section: voltageMode
+    label: {en: FN_SLP_DEC, ja: FN_SLP_DEC}
+    type: int
+    per_motor: true
+    default: 41
+    commands: [/setBemfParam]
+
+  - key: voltageMode.STALL_TH
+    section: voltageMode
+    label: {en: STALL_TH, ja: STALL_TH}
+    type: int
+    per_motor: true
+    default: {STEP400: 31, STEP800: 127}
+    commands: [/setStallThreshold]
+
+  - key: voltageMode.lowSpeedOptimizeEnable
+    section: voltageMode
+    label: {en: "", ja: ""}
+    type: bool
+    per_motor: true
+    default: false
+    commands: [/enableLowSpeedOptimize]
+
+  - key: voltageMode.lowSpeedOptimize
+    section: voltageMode
+    label: {en: lowSpeedOptimize, ja: lowSpeedOptimize}
+    type: float
+    unit: step/s
+    per_motor: true
+    default: 20
+    commands: [/setLowSpeedOptimizeThreshold]
+
+  # --- currentMode (STEP400) ---
+  - key: currentMode.TVAL_HOLD
+    section: currentMode
+    label: {en: TVAL_HOLD, ja: TVAL_HOLD}
+    type: int
+    per_motor: true
+    boards: [STEP400]
+    default: 0
+    commands: [/setTval, /setHoldTval]
+
+  - key: currentMode.TVAL_RUN
+    section: currentMode
+    label: {en: TVAL_RUN, ja: TVAL_RUN}
+    type: int
+    per_motor: true
+    boards: [STEP400]
+    default: 16
+    commands: [/setTval, /setRunTval]
+
+  - key: currentMode.TVAL_ACC
+    section: currentMode
+    label: {en: TVAL_ACC, ja: TVAL_ACC}
+    type: int
+    per_motor: true
+    boards: [STEP400]
+    default: 16
+    commands: [/setTval, /setAccTval]
+
+  - key: currentMode.TVAL_DEC
+    section: currentMode
+    label: {en: TVAL_DEC, ja: TVAL_DEC}
+    type: int
+    per_motor: true
+    boards: [STEP400]
+    default: 16
+    commands: [/setTval, /setDecTval]
+
+  - key: currentMode.T_FAST
+    section: currentMode
+    label: {en: T_FAST, ja: T_FAST}
+    type: int
+    per_motor: true
+    boards: [STEP400]
+    default: 25
+    commands: [/setDecayModeParam]
+
+  - key: currentMode.TON_MIN
+    section: currentMode
+    label: {en: TON_MIN, ja: TON_MIN}
+    type: int
+    per_motor: true
+    boards: [STEP400]
+    default: 41
+    commands: [/setDecayModeParam]
+
+  - key: currentMode.TOFF_MIN
+    section: currentMode
+    label: {en: TOFF_MIN, ja: TOFF_MIN}
+    type: int
+    per_motor: true
+    boards: [STEP400]
+    default: 41
+    commands: [/setDecayModeParam]
+
+  # --- servoMode ---
+  - key: servoMode.kP
+    section: servoMode
+    label: {en: kP, ja: kP}
+    type: float
+    per_motor: true
+    default: 0.06
+    commands: [/setServoParam]
+
+  - key: servoMode.kI
+    section: servoMode
+    label: {en: kI, ja: kI}
+    type: float
+    per_motor: true
+    default: 0
+    commands: [/setServoParam]
+
+  - key: servoMode.kD
+    section: servoMode
+    label: {en: kD, ja: kD}
+    type: float
+    per_motor: true
+    default: 0
+    commands: [/setServoParam]
+
+commands: []
+messages: []
