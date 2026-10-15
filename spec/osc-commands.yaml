@@ -681,5 +681,2706 @@ settings:
     default: 0
     commands: [/setServoParam]
 
-commands: []
-messages: []
+# =============================================================================
+# Commands (PC -> board)
+# Grouped by `group`, in the order of the current reference pages.
+# =============================================================================
+
+commands:
+  # ---------------------------------------------------------------------------
+  # system
+  # ---------------------------------------------------------------------------
+  - address: /setDestIp
+    group: system
+    timing: always
+    description:
+      en: |
+        Sets the destination IP address (`destIp`) to where the device should send messages to, when it replies to a query or report internal state changes, etc.
+        The board sets the `destIp` to the sender of this message.
+
+        Also, until `destIp` is set, no OSC (Open Sound Control) messages will be sent from the device, so send this command first. One single exception is the [[/booted]] message.
+
+        From the configuration tool, you can set the board to start sending out the OSC message without waiting the `destIp` to be set.
+      ja: |
+        モータの状態に変化があったときに通知するメッセージや、問い合わせへ返答するメッセージなどの送り先IPアドレス(`destIp`)を指定します。このメッセージを送信したIPアドレスを`destIp`に設定します。
+
+        また、`destIp`が設定されるまでは、本デバイスからOSCメッセージの送信は行いませんので、一番最初にこのコマンドを送信してください。唯一の例外は [[/booted]] メッセージです。
+
+        Config Toolの設定を用いて、`destIp`が設定されていなくてもOSCメッセージを送信できるように設定できます。
+    response: [/destIp]
+
+  - address: /getVersion
+    group: system
+    timing: always
+    description:
+      en: Returns the firmware version burnt on the chip.
+      ja: 本体に書き込まれているファームウェアのバージョン情報を返します。
+    response: [/version]
+
+  - address: /getConfigName
+    group: system
+    timing: always
+    description:
+      en: Returns the name of the configuration file read from the microSD card on system boot.
+      ja: 起動時にmicroSDカードから読み込まれたコンフィギュレーションファイルの名称を返します。
+    response: [/configName]
+    see_also: [/setConfigName]
+
+  - address: /reportError
+    group: system
+    args:
+      - {use: enable, setting: network.reportError}
+    timing: always
+    description:
+      en: Enables or disables the automatic message notification for [[/error/command]] and [[/error/osc]].
+      ja: "[[/error/command]] および [[/error/osc]] メッセージの自動送信の有効/無効を切り替えます。"
+    notifies: [/error/command, /error/osc]
+
+  - address: /setConfigName
+    group: system
+    since: "2.1.0"
+    args:
+      - name: configName
+        type: string
+        setting: information.configName
+        description: {en: Configuration name string, ja: ""}
+    timing: always
+    description:
+      en: Sets the configuration name stored in the device. This is a user-editable label for identifying configurations and is distinct from the on-disk filename.
+      ja: ""
+    see_also: [/getConfigName, /saveConfig]
+
+  - address: /saveConfig
+    group: system
+    since: "2.1.0"
+    timing: always
+    description:
+      en: Saves the current running configuration to the microSD card as a JSON file. The filename used is the one previously set, or the filename from which the configuration was originally loaded.
+      ja: ""
+    response:
+      - message: /saveConfig
+        when: {en: Saved, ja: 保存できたとき}
+      - message: /error/saveConfig
+        when: {en: Failed, ja: 保存できなかったとき}
+
+  - address: /resetDevice
+    group: system
+    timing: always
+    description:
+      en: Resets the entire device. A programmatic version of physically pressing the RESET button.
+      ja: 基板全体をリセットします。基板上のリセットスイッチを押した場合と同じ動作です。
+
+  # ---------------------------------------------------------------------------
+  # driver
+  # ---------------------------------------------------------------------------
+  - address: /setMicrostepMode
+    group: driver
+    args:
+      - use: motorID
+      - name: STEP_SEL
+        type: int
+        range: [0, 7]
+        setting: driverSettings.stepMode
+        values:
+          - {value: 0, en: Full-step, ja: Full-step}
+          - {value: 1, en: Half-step, ja: Half-step}
+          - {value: 2, en: 1/4 microstep, ja: 1/4 microstep}
+          - {value: 3, en: 1/8 microstep, ja: 1/8 microstep}
+          - {value: 4, en: 1/16 microstep, ja: 1/16 microstep}
+          - {value: 5, en: 1/32 microstep, ja: 1/32 microstep}
+          - {value: 6, en: 1/64 microstep, ja: 1/64 microstep}
+          - {value: 7, en: 1/128 microstep, ja: 1/128 microstep}
+        description: {en: Microstepping mode, ja: Micro stepping mode}
+    timing: hiz
+    description:
+      en: |
+        Sets the microstepping mode.
+        In the constant-current control mode (current mode), only full-step to 1/16 microstep is available.
+      ja: |
+        マイクロステッピングのモードを切り替えます。
+
+        定電流制御モード (current mode) では、Full-stepから1/16 microstepまでしか使えません。
+    see_also: [/getMicrostepMode, /setCurrentMode]
+
+  - address: /getMicrostepMode
+    group: driver
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Gets the mode of microstepping. See [[/setMicrostepMode]] for STEP_SEL.
+      ja: マイクロステッピングのモードを取得します。STEP_SELについては[[/setMicrostepMode]]の項目を参照してください。
+    response: [/microstepMode]
+
+  - address: /enableLowSpeedOptimize
+    group: driver
+    args:
+      - use: motorID
+      - {use: enable, setting: voltageMode.lowSpeedOptimizeEnable}
+    timing: stopped
+    description:
+      en: Enable/disable low speed optimization feature which compensate phase current distortion at a very low speed using a small driving voltage. When this optimization is enabled, speed profile minimum speed (`Min speed`) is force to zero. Only work with voltage mode. See data sheets for details.
+      ja: 低速回転時の相電流ひずみ補正 (Low speed optimization) の有効無効を切り替えます。この設定が有効になっていると、`Min Speed` は自動的に0になります。この補正は電圧モードでのみ利用可能です。詳しくは対応するデータシートの "Low speed optimization"を参照してください。
+    see_also: [/setLowSpeedOptimizeThreshold, /setMinSpeed]
+
+  - address: /setLowSpeedOptimizeThreshold
+    group: driver
+    args:
+      - use: motorID
+      - name: lowSpeedOptimizationThreshold
+        type: float
+        range: [0.0, 976.3]
+        unit: step/s
+        setting: voltageMode.lowSpeedOptimize
+        description: {en: Low speed optimization threshold, ja: Low speed optimization threshold}
+    timing: stopped
+    description:
+      en: Set the threshold for phase current distortion compensation at very low speed. For details, refer to "Low speed optimization" section in the corresponding datasheet.
+      ja: 低速回転時の相電流ひずみ補正を行う閾値を設定します。
+    see_also: [/getLowSpeedOptimizeThreshold, /enableLowSpeedOptimize]
+
+  - address: /getLowSpeedOptimizeThreshold
+    group: driver
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Gets the current value of the low speed optimization threshold.
+      ja: Low speed optimization threshold の現在の設定値を取得します。
+    response: [/lowSpeedOptimizeThreshold]
+
+  - address: /enableBusyReport
+    group: driver
+    args:
+      - use: motorID
+      - {use: enable, setting: alarmAndReport.reportBUSY}
+    timing: always
+    description:
+      en: Automatically sends out notification if the BUSY status of the specified motor has changed. The notification message is same as the response from [[/getBusy]] command.
+      ja: 指定したモータのBUSY状態に変化があったら自動でメッセージを送信する設定を行います。メッセージは[[/getBusy]]の返答と同じです。
+    notifies: [/busy]
+
+  - address: /getBusy
+    group: driver
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Returns the BUSY state of the specified motor.
+      ja: 指定したモータのBUSY状態を取得します。
+    response: [/busy]
+
+  - address: /enableHizReport
+    group: driver
+    args:
+      - use: motorID
+      - {use: enable, setting: alarmAndReport.reportHiZ}
+    timing: always
+    description:
+      en: Following message is sent automatically when there is a change in the High Z (high impedance) state of the specified motor.
+      ja: 指定したモータのHiZ（ハイインピーダンス）状態に変化があったら自動でメッセージを送信する設定を行います。送信されるメッセージは[[/getHiZ]]の返答と同じです。
+    notifies: [/HiZ]
+
+  - address: /getHiZ
+    group: driver
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Requests the High Z (high impedance) state of the specified motor.
+      ja: 指定したモータのHiZ状態を取得します。
+    response: [/HiZ]
+
+  - address: /enableDirReport
+    group: driver
+    args:
+      - use: motorID
+      - {use: enable, setting: alarmAndReport.reportDir}
+    timing: always
+    description:
+      en: Following message is sent automatically when there is a change in the direction of the specified motor.
+      ja: 指定したモータの回転方向に変化があったら自動でメッセージを送信する設定を行います。送信されるメッセージは[[/getDir]]の返答と同じです。
+    notifies: [/dir]
+
+  - address: /getDir
+    group: driver
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Requests the direction of the specified motor.
+      ja: 指定したモータの回転方向を取得します。
+    response: [/dir]
+
+  - address: /enableMotorStatusReport
+    group: driver
+    args:
+      - use: motorID
+      - {use: enable, setting: alarmAndReport.reportMotorStatus}
+    timing: always
+    description:
+      en: Following message will be sent automatically when there is conditional change in the operating status (MOT_STATUS) of the specified motor. The response message is same as the reply from the [[/getMotorStatus]] command.
+      ja: 指定したモータの動作状態(MOT_STATUS)に変化があったら自動でメッセージを送信する設定を行います。メッセージは[[/getMotorStatus]]の返答と同じです。
+    notifies: [/motorStatus]
+
+  - address: /getMotorStatus
+    group: driver
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Gets the operating status (MOT_STATUS) of the specified motor.
+      ja: 指定したモータの動作状態(MOT_STATUS)を取得します。
+    response: [/motorStatus]
+
+  - address: /setPositionReportInterval
+    group: driver
+    args:
+      - use: motorID
+      - name: interval
+        type: int
+        range: [0, 32767]
+        unit: ms
+        setting: alarmAndReport.reportPositionInterval
+        description: {en: transmit interval, ja: 送信間隔}
+    timing: always
+    description:
+      en: |
+        Send the current position (`ABS_POS`) of the specified motor with the specified interval. Disabled with the interval 0.
+
+        When this function enabled, `/setPositionListReportInterval` will be automatically disabled and stop the transmitting.
+      ja: |
+        指定したモータの現在位置 (`ABS_POS`) を指定間隔で自動送信します。0を指定すると無効化され、送信を停止します。
+        いずれかのモータで有効化された場合、`/setPositionListReportInterval`は無効になり自動停止します。
+    notifies: [/position]
+    see_also: [/getPosition, /setPositionListReportInterval]
+
+  - address: /setPositionListReportInterval
+    group: driver
+    args:
+      - name: interval
+        type: int
+        range: [0, 32767]
+        unit: ms
+        setting: alarmAndReport.reportPositionListInterval
+        description: {en: transmit interval, ja: 送信間隔}
+    timing: always
+    description:
+      en: |
+        Send a single message with a list of the current position (`ABS_POS`) of all motors with the specified interval. Disabled with the interval 0.
+
+        When this function enabled, `/setPositionReportInterval` will be disabled automatically for all motors and stop the transmitting.
+      ja: |
+        全モータの現在位置 (`ABS_POS`) をひとつのリストにまとめたメッセージを指定間隔で自動送信します。0を指定すると無効化され、送信を停止します。
+        このコマンドが有効化される際には `/setPositionReportInterval`はすべての軸で無効になり自動停止します。
+    notifies: [/positionList]
+    see_also: [/getPositionList, /setPositionReportInterval]
+
+  - address: /getAdcVal
+    group: driver
+    args: [{use: motorID}]
+    boards: [STEP400]
+    routed_on: [STEP400, STEP800]
+    timing: always
+    description:
+      en: Acquires ADC_OUT register values from the PowerSTEP01 chip. This register stores 5-bit AD-converted voltage reading from ADC pin. This pin is pull-upped with 10kOhm resistor and wired to LIMITSW connector.
+      ja: PowerSTEP01チップのADC_OUTレジスタの値を取得します。このレジスタはADCピンの電圧を5ビットでAD変換した値が収められています。このピンは10kΩでプルアップされていて、LIMITSWコネクタに接続されています。
+    response: [/adcVal]
+
+  - address: /getStatus
+    group: driver
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: |
+        Gets the STATUS of the motor driver (PowerSTEP01 for STEP400/L6470 for STEP800). The STATUS includes the status of the motor, alarms and switches.
+
+        Refer to "STATUS" in the data sheet for the information contained in the registers. Some of bits are latched and reset when STATUS registers are read out. Because the device firmware constantly obtains the STATUS values, these values are immediately reset. It is possible to set up these events to be reported separately, so please use those commands.
+      ja: |
+        モータドライバ(PowerSTEP01/L6470)のステータスレジスタを取得します。ステータスレジスタにはモータやアラーム、スイッチの状態などが含まれます。
+
+        レジスタに含まれる情報は、データシートを参照してください。このうち、一部の値はラッチされていて、ステータスレジスタを読み出すとリセットされます。本デバイスではファームウェアによって常時ステータスレジスタを繰り返し取得しているため、これらの値はすぐにリセットされてしまいます。これらの事象を個別に報告する設定が可能ですので、そちらを利用してください。
+    response: [/status]
+    see_also: [/getStatusList]
+    tables:
+      - columns:
+          - {en: Name of bits in STATUS (STEP400), ja: ステータスbit名 (STEP400)}
+          - {en: Name of bits in STATUS (STEP800), ja: ステータスbit名 (STEP800)}
+          - {en: The corresponding configuration commands, ja: 対応する設定コマンド}
+        rows:
+          - [UVLO, UVLO, "[[/enableUvloReport]]"]
+          - [UVLO_ADC, "-", {en: This feature is not available in STEP400 and is always disabled., ja: この機能はSTEP400では使えませんので常時無効になっています。}]
+          - [OCD, OCD, "[[/enableOverCurrentReport]]"]
+          - ["STALL_A, STALL_B", "STEP_LOSS_A, STEP_LOSS_B", "[[/enableStallReport]]"]
+          - [CMD_ERROR, "WRONG_CMD, NOTPREF_CMD", "[[/reportError]]"]
+          - [TH_STATUS, "TH_WRN, TH_SD", "[[/enableThermalStatusReport]]"]
+          - [SW_EVN, SW_EVN, "[[/enableSwEventReport]]"]
+          - [MOT_STATUS, MOT_STATUS, "[[/enableMotorStatusReport]]"]
+          - [SW_F, SW_F, "[[/enableHomeSwReport]]"]
+          - [BUSY, BUSY, "[[/enableBusyReport]]"]
+          - [HiZ, HiZ, "[[/enableHizReport]]"]
+
+  - address: /getConfigRegister
+    group: driver
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: |
+        Acquires the CONFIG register value from the motor driver (PowerSTEP01 or L6470). The information stored in CONFIG register includes motor, alarm and switch status.
+
+        The CONFIG register stores various settings for the motor driver. Please refer the datasheet of the PowerSTEP01/L6470 for detail.
+      ja: |
+        モータドライバ(PowerSTEP01/L6470)のCONFIGレジスタを取得します。CONFIGレジスタにはモータやアラーム、スイッチの状態などが含まれます。
+
+        CONFIGレジスタにはモータドライバの各種設定が収められています。詳細についてはモータドライバのデータシートを参照してください。
+    response: [/configRegister]
+
+  - address: /resetMotorDriver
+    group: driver
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Resets the motor driver (PowerSTEP01/L6470) and rewrites the setting.
+      ja: モータドライバ (PowerSTEP01/L6470) をリセットし、初期設定値を再度書き込みます。
+
+  - address: /getStatusList
+    group: driver
+    timing: always
+    description: {en: "", ja: ""}
+    response: [/statusList]
+    see_also: [/getStatus]
+
+  # ---------------------------------------------------------------------------
+  # alarm
+  # ---------------------------------------------------------------------------
+  - address: /enableUvloReport
+    group: alarm
+    args:
+      - use: motorID
+      - {use: enable, setting: alarmAndReport.reportUVLO}
+    timing: always
+    description:
+      en: |
+        Set the notification message when UVLO (Undervoltage Lockout) occurs in the specified motor driver.
+        UVLO occurs when the supplied voltage to the motor driver falls below the UVLO turn-off threshold voltage, with or without notification. In this state, the motor cannot be operated. It will be reset when the supply voltage is above the UVLO turn-on threshold.
+
+        These thresholds are different between STEP400(PowerSTEP01) and STEP800(L6470). For details, please refer to the corresponding datasheets.
+      ja: |
+        指定したモータドライバで UVLO (Undervoltage Lockout) が発生した際に自動で通知メッセージを送信するかどうかを指定します。
+        UVLOはモータドライバへ供給されている電圧がUVLO発生条件電圧を下回ったら通知の有無にかかわらず発生します。この状態ではモータを動かすことはできません。供給電圧がUVLO解除条件電圧を上回ったら解除されます。
+
+        これらの電圧はSTEP400(PowerSTEP01)とSTEP800(L6470)で異なっていますので、詳しくは対応するデータシートで確認してください。
+    notifies: [/uvlo]
+    see_also: [/getUvlo]
+
+  - address: /getUvlo
+    group: alarm
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Gets the current state of UVLO
+      ja: UVLOの現在の状態を取得します。
+    response: [/uvlo]
+
+  - address: /enableThermalStatusReport
+    group: alarm
+    args:
+      - use: motorID
+      - {use: enable, setting: alarmAndReport.reportThermalStatus}
+    timing: always
+    description:
+      en: Sends a notification message when a change in the temperature status (thermalStatus) of the specified motor driver is detected. On bridge shutdown or device shutdown, the motor state will automatically enter High Z state with or without notification.
+      ja: 指定したモータドライバの温度状態(thermalStatus)に変化があったら自動でメッセージを送信するかどうかを指定します。Bridge shutdown, Device shutdown 状態では、通知の有無にかかわらずモータはHiZ状態になります。
+    notifies: [/thermalStatus]
+    see_also: [/getThermalStatus]
+
+  - address: /getThermalStatus
+    group: alarm
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: |
+        Gets the current condition of the ThermalStatus. Thermal status thresholds are different between STEP400(PowerSTEP01) and STEP800(L6470).
+
+        In the bridge shutdown and device shutdown states, the motor goes into the High Z state with or without notification.
+      ja: |
+        ThermalStatusの現在の状態を取得します。STEP400とSTEP800では Thermal statusの種類や発生条件が異なります。
+
+        Bridge shutdown, Device shutdown 状態では、通知の有無にかかわらずモータはHiZ状態になります。
+    response: [/thermalStatus]
+
+  - address: /enableOverCurrentReport
+    group: alarm
+    args:
+      - use: motorID
+      - {use: enable, setting: alarmAndReport.reportOCD}
+    timing: always
+    description:
+      en: |
+        Set to send a notification when the specified motor driver goes into an overcurrent state (OCD, Over Current Detection).
+        When overcurrent is detected, the device automatically enters High Z state regardless of whether a notification being sent. The threshold can be set with [[/setOverCurrentThreshold]].
+      ja: |
+        指定したモータドライバが過電流状態(OCD, Over Current Detection)になった場合に自動でメッセージを送信するかどうかを指定します。
+        過電流状態になった場合は、通知の有無にかかわらず自動でHiZ状態になります。閾値は [[/setOverCurrentThreshold]] で設定できます。
+    notifies: [/overCurrent]
+
+  - address: /setOverCurrentThreshold
+    group: alarm
+    args:
+      - use: motorID
+      - name: OCD_TH
+        type: int
+        range: {STEP400: [0, 31], STEP800: [0, 15]}
+        setting: alarmAndReport.OCThreshold
+        description: {en: Overcurrent detection threshold, ja: Overcurrent detection threshold}
+    timing: always
+    description:
+      en: Sets the overcurrent threshold. The setting value range and corresponding currents are different between STEP400(PowerSTEP01) and STEP800(L6470).
+      ja: 過電流の閾値を設定します。STEP400とSTEP800では設定値の範囲と対応する電流が異なっています。
+    response: [/overCurrentThreshold]
+    see_also: [/getOverCurrentThreshold, /enableOverCurrentReport]
+    tables:
+      - title: Overcurrent detection threshold
+        columns: [OCD_TH, Overcurrent detection threshold]
+        rows:
+          STEP400:
+            - [0, 312.5mA]
+            - [1, 625mA]
+            - ["...", "..."]
+            - [30, 9.6875A]
+            - [31, 10A]
+          STEP800:
+            - [0, 375mA]
+            - [1, 750mA]
+            - ["...", "..."]
+            - [14, 5.625A]
+            - [15, 6A]
+
+  - address: /getOverCurrentThreshold
+    group: alarm
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Get the threshold of overcurrent.
+      ja: 過電流の閾値を取得します。
+    response: [/overCurrentThreshold]
+
+  - address: /enableStallReport
+    group: alarm
+    args:
+      - use: motorID
+      - {use: enable, setting: alarmAndReport.reportStall}
+    timing: always
+    description:
+      en: |
+        The threshold can be set by [[/setStallThreshold]].
+        When the stall is detected by the specified motor driver, the following message is sent automatically.
+      ja: |
+        閾値は [[/setStallThreshold]] で設定できます。
+        指定したモータドライバでストール（脱調）が検出された場合、自動で下記のメッセージを送信します。
+    notifies: [/stall]
+
+  - address: /setStallThreshold
+    group: alarm
+    args:
+      - use: motorID
+      - name: STALL_TH
+        type: int
+        range: {STEP400: [0, 31], STEP800: [0, 127]}
+        setting: voltageMode.STALL_TH
+        description: {en: Stall detection threshold, ja: Stall detection threshold}
+    timing: always
+    description:
+      en: Sets the threshold for stall detection. The setting value range and corresponding currents are different between STEP400(PowerSTEP01) and STEP800(L6470).
+      ja: ストール検出の閾値を設定します。STEP400とSTEP800で設定する値の範囲は異なります。
+    response: [/stallThreshold]
+    see_also: [/getStallThreshold, /enableStallReport]
+    tables:
+      - title: Stall detection threshold
+        columns: [STALL_TH, Stall detection threshold]
+        rows:
+          STEP400:
+            - [0, 312.5mA]
+            - [1, 625mA]
+            - ["...", "..."]
+            - [30, 9.6875A]
+            - [31, 10A]
+          STEP800:
+            - [0, 31.25mA]
+            - [1, 62.5mA]
+            - ["...", "..."]
+            - [126, 3.969A]
+            - [127, 4A]
+
+  - address: /getStallThreshold
+    group: alarm
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Gets the stall detection threshold.
+      ja: ストール検出の閾値を取得します。
+    response: [/stallThreshold]
+
+  - address: /setProhibitMotionOnHomeSw
+    group: alarm
+    args:
+      - use: motorID
+      - use: enable
+        setting: driverSettings.prohibitMotionOnHomeSw
+        values:
+          - {value: 1, en: Prohibit, ja: 禁止}
+          - {value: 0, en: Allow, ja: 許可}
+    timing: always
+    description:
+      en: Prohibits any motion commands towards the origin point when Home sensor is detected. The direction to the origin point can be configured through the configuration tool or by the `/setHomingDirection` command.
+      ja: Homeセンサが反応している状態で、原点復帰方向へのモーションコマンドを禁止します。原点復帰方向は configTool や `/setHomingDirection`で設定できます。
+    see_also: [/getProhibitMotionOnHomeSw, /setHomingDirection]
+
+  - address: /getProhibitMotionOnHomeSw
+    group: alarm
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Returns whether the motion command towards the origin point is prohibited when Home sensor is detected.
+      ja: Homeセンサが反応している状態で、原点復帰方向へのモーションコマンドが禁止されているかどうかを返します。
+    response: [/prohibitMotionOnHomeSw]
+
+  - address: /setProhibitMotionOnLimitSw
+    group: alarm
+    args:
+      - use: motorID
+      - use: enable
+        setting: driverSettings.prohibitMotionOnLimitSw
+        values:
+          - {value: 1, en: Prohibit, ja: 禁止}
+          - {value: 0, en: Allow, ja: 許可}
+    boards: [STEP400]
+    timing: always
+    description:
+      en: Prohibits any motion commands towards the leaving direction from origin point, when the Limit sensor is detected. The direction to the origin point can be configured through the configuration tool or by the `/setHomingDirection` command.
+      ja: Limitセンサが反応している状態で、原点復帰方向の逆方向へのモーションコマンドを禁止します。原点復帰方向は configTool や `/setHomingDirection`で設定できます。
+    see_also: [/getProhibitMotionOnLimitSw, /setHomingDirection]
+
+  - address: /getProhibitMotionOnLimitSw
+    group: alarm
+    args: [{use: motorID}]
+    boards: [STEP400]
+    timing: always
+    description:
+      en: Returns whether the motion command towards reverse direction to the origin point is prohibited when Limit sensor is detected.
+      ja: Limitセンサが反応している状態で、原点復帰方向の逆方向へのモーションコマンドが禁止されているかどうかを返します。
+    response: [/prohibitMotionOnLimitSw]
+
+  # ---------------------------------------------------------------------------
+  # drive_mode
+  # ---------------------------------------------------------------------------
+  - address: /setVoltageMode
+    group: drive_mode
+    args: [{use: motorID}]
+    boards: [STEP400]
+    timing: hiz
+    description:
+      en: |
+        Switches the specified motor to the voltage drive mode.
+
+        Note: This command is only available in STEP400.
+        STEP800 is always in this voltage mode and cannot change.
+      ja: 指定したモータを電圧モードに切り替えます。STEP800は常に電圧モードで動作しますので、この切替コマンドはSTEP400のみ利用可能です。
+    see_also: [/setCurrentMode]
+
+  - address: /setKval
+    group: drive_mode
+    args:
+      - use: motorID
+      - name: holdKVAL
+        type: int
+        range: [0, 255]
+        setting: voltageMode.KVAL_HOLD
+        description: {en: KVAL when stopped, ja: 停止時のKVAL}
+      - name: runKVAL
+        type: int
+        range: [0, 255]
+        setting: voltageMode.KVAL_RUN
+        description: {en: KVAL in constant speed operation, ja: 一定速運転時のKVAL}
+      - name: accKVAL
+        type: int
+        range: [0, 255]
+        setting: voltageMode.KVAL_ACC
+        description: {en: KVAL during acceleration, ja: 加速時のKVAL}
+      - name: decKVAL
+        type: int
+        range: [0, 255]
+        setting: voltageMode.KVAL_DEC
+        description: {en: KVAL during deceleration, ja: 減速時のKVAL}
+    timing: always
+    description:
+      en: Sets the four KVALs together.
+      ja: KVAL4種をまとめて設定します。
+    see_also: [/getKval, /setHoldKval, /setRunKval, /setAccKval, /setDecKval]
+
+  - address: /getKval
+    group: drive_mode
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Get the four KVALs together.
+      ja: KVAL4種をまとめて取得します。
+    response: [/kval]
+
+  - address: /setBemfParam
+    group: drive_mode
+    args:
+      - use: motorID
+      - name: INT_SPEED
+        type: int
+        range: [0, 16383]
+        setting: voltageMode.INT_SPEED
+        description: {en: INT_SPEED register value, ja: INT_SPEEDレジスタの値}
+      - name: ST_SLP
+        type: int
+        range: [0, 255]
+        setting: voltageMode.ST_SLP
+        description: {en: ST_SLP register value, ja: ST_SLPレジスタの値}
+      - name: FN_SLP_ACC
+        type: int
+        range: [0, 255]
+        setting: voltageMode.FN_SLP_ACC
+        description: {en: FN_SLP_ACC register value, ja: FN_SLP_ACCレジスタの値}
+      - name: FN_SLP_DEC
+        type: int
+        range: [0, 255]
+        setting: voltageMode.FN_SLP_DEC
+        description: {en: FN_SLP_DEC register value, ja: FN_SLP_DECレジスタの値}
+    timing: hiz
+    description:
+      en: Sets BEMF compensation parameter register. For the values for each parameter, refer voltage mode and current mode.
+      ja: BEMF補償パラメータのレジスタを設定します。各レジスタの設定値については 電圧モードの設定 を参照してください。
+    see_also: [/getBemfParam]
+
+  - address: /getBemfParam
+    group: drive_mode
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Get register values for the BEMF parameter.
+      ja: BEMFパラメータを設定するレジスタ値を取得します。
+    response: [/bemfParam]
+
+  - address: /setHoldKval
+    group: drive_mode
+    args:
+      - use: motorID
+      - name: holdKVAL
+        type: int
+        range: [0, 255]
+        setting: voltageMode.KVAL_HOLD
+        description: {en: KVAL when stopped, ja: 停止時のKVAL}
+    timing: always
+    description:
+      en: Sets only the hold KVAL value.
+      ja: 停止時のKVALのみを設定します。
+    see_also: [/setKval]
+
+  - address: /setRunKval
+    group: drive_mode
+    args:
+      - use: motorID
+      - name: runKVAL
+        type: int
+        range: [0, 255]
+        setting: voltageMode.KVAL_RUN
+        description: {en: KVAL in constant speed operation, ja: 一定速運転時のKVAL}
+    timing: always
+    description:
+      en: Sets only the run KVAL value.
+      ja: 一定速運転時のKVALのみを設定します。
+    see_also: [/setKval]
+
+  - address: /setAccKval
+    group: drive_mode
+    args:
+      - use: motorID
+      - name: accKVAL
+        type: int
+        range: [0, 255]
+        setting: voltageMode.KVAL_ACC
+        description: {en: KVAL during acceleration, ja: 加速時のKVAL}
+    timing: always
+    description:
+      en: Sets only the acceleration KVAL value.
+      ja: 加速時のKVALのみを設定します。
+    see_also: [/setKval]
+
+  - address: /setDecKval
+    group: drive_mode
+    args:
+      - use: motorID
+      - name: decKVAL
+        type: int
+        range: [0, 255]
+        setting: voltageMode.KVAL_DEC
+        description: {en: KVAL during deceleration, ja: 減速時のKVAL}
+    timing: always
+    description:
+      en: Sets only the deceleration KVAL value.
+      ja: 減速時のKVALのみを設定します。
+    see_also: [/setKval]
+
+  - address: /setCurrentMode
+    group: drive_mode
+    args: [{use: motorID}]
+    boards: [STEP400]
+    timing: hiz
+    description:
+      en: Switches the specified motor to the current drive mode.
+      ja: 指定したモータを電流モードに切り替えます。
+    see_also: [/setVoltageMode, /setMicrostepMode]
+
+  - address: /setTval
+    group: drive_mode
+    args:
+      - use: motorID
+      - name: holdTVAL
+        type: int
+        range: [0, 64]
+        setting: currentMode.TVAL_HOLD
+        description: {en: TVAL when stopped, ja: 停止時のTVAL}
+      - name: runTVAL
+        type: int
+        range: [0, 64]
+        setting: currentMode.TVAL_RUN
+        description: {en: TVAL in constant speed operation, ja: 一定速運転時のTVAL}
+      - name: accTVAL
+        type: int
+        range: [0, 64]
+        setting: currentMode.TVAL_ACC
+        description: {en: TVAL during acceleration, ja: 加速時のTVAL}
+      - name: decTVAL
+        type: int
+        range: [0, 64]
+        setting: currentMode.TVAL_DEC
+        description: {en: TVAL during deceleration, ja: 減速時のTVAL}
+    boards: [STEP400]
+    timing: always
+    description:
+      en: |
+        Sets the four TVALs together.
+        In STEP400, the TVAL is as follows.
+      ja: |
+        TVAL4種をまとめて設定します。
+
+        STEP400では、TVALは以下のようになっています。
+    see_also: [/getTval, /getTval_mA, /setHoldTval, /setRunTval, /setAccTval, /setDecTval]
+    tables:
+      - columns: [TVAL, {en: "Setting value[mA]", ja: "設定値[mA]"}]
+        rows:
+          - [0, 78mA]
+          - [1, 156mA]
+          - ["...", "..."]
+          - [127, "9,984mA"]
+
+  - address: /getTval
+    group: drive_mode
+    args: [{use: motorID}]
+    boards: [STEP400]
+    timing: always
+    description:
+      en: Get the four TVAL types together.
+      ja: TVAL4種をまとめて取得します。
+    response: [/tval]
+    see_also: [/getTval_mA]
+
+  - address: /getTval_mA
+    group: drive_mode
+    args: [{use: motorID}]
+    boards: [STEP400]
+    timing: always
+    description:
+      en: Get the four TVAL types together. Not in register values but in the actual current values in [mA].
+      ja: TVAL4種をまとめて取得します。レジスタの値ではなく単位[mA]の設定値で返します。
+    response: [/tval_mA]
+    see_also: [/getTval]
+
+  - address: /setDecayModeParam
+    group: drive_mode
+    args:
+      - use: motorID
+      - name: T_FAST
+        type: int
+        range: [0, 255]
+        setting: currentMode.T_FAST
+        description: {en: T_FAST register value, ja: T_FASTレジスタの値}
+      - name: TON_MIN
+        type: int
+        range: [0, 255]
+        setting: currentMode.TON_MIN
+        description: {en: TON_MIN register value, ja: TON_MINレジスタの値}
+      - name: TOFF_MIN
+        type: int
+        range: [0, 255]
+        setting: currentMode.TOFF_MIN
+        description: {en: TOFF_MIN register value, ja: TOFF_MINレジスタの値}
+    boards: [STEP400]
+    timing: hiz
+    description:
+      en: Sets registers for the current control algorithm parameters. For the each register values, refer the datasheet of the PowerSTEP01.
+      ja: 電流制御アルゴリズムのパラメータのレジスタを設定します。各レジスタの設定値については PowerSTEP01のデータシートを参照してください。
+    see_also: [/getDecayModeParam]
+
+  - address: /getDecayModeParam
+    group: drive_mode
+    args: [{use: motorID}]
+    boards: [STEP400]
+    timing: always
+    description:
+      en: Retrieves the register values for the current control algorithm parameters.
+      ja: 電流制御アルゴリズムのパラメータを設定するレジスタ値を取得します。
+    response: [/decayModeParam]
+
+  - address: /setHoldTval
+    group: drive_mode
+    args:
+      - use: motorID
+      - name: holdTVAL
+        type: int
+        range: [0, 64]
+        setting: currentMode.TVAL_HOLD
+        description: {en: TVAL when stopped, ja: 停止時のTVAL}
+    boards: [STEP400]
+    timing: always
+    description:
+      en: Sets only the hold TVAL value.
+      ja: 停止時のTVALのみを設定します。
+    see_also: [/setTval]
+
+  - address: /setRunTval
+    group: drive_mode
+    args:
+      - use: motorID
+      - name: runTVAL
+        type: int
+        range: [0, 64]
+        setting: currentMode.TVAL_RUN
+        description: {en: TVAL in constant speed operation, ja: 一定速運転時のTVAL}
+    boards: [STEP400]
+    timing: always
+    description:
+      en: Sets only the run TVAL value.
+      ja: 一定速運転時のTVALのみを設定します。
+    see_also: [/setTval]
+
+  - address: /setAccTval
+    group: drive_mode
+    args:
+      - use: motorID
+      - name: accTVAL
+        type: int
+        range: [0, 64]
+        setting: currentMode.TVAL_ACC
+        description: {en: TVAL during acceleration, ja: 加速時のTVAL}
+    boards: [STEP400]
+    timing: always
+    description:
+      en: Sets only the acceleration TVAL value.
+      ja: 加速時のTVALのみを設定します。
+    see_also: [/setTval]
+
+  - address: /setDecTval
+    group: drive_mode
+    args:
+      - use: motorID
+      - name: decTVAL
+        type: int
+        range: [0, 64]
+        setting: currentMode.TVAL_DEC
+        description: {en: TVAL during deceleration, ja: 減速時のTVAL}
+    boards: [STEP400]
+    timing: always
+    description:
+      en: Sets only the deceleration TVAL value.
+      ja: 減速時のTVALのみを設定します。
+    see_also: [/setTval]
+
+  # ---------------------------------------------------------------------------
+  # speed_profile
+  # ---------------------------------------------------------------------------
+  - address: /setSpeedProfile
+    group: speed_profile
+    args:
+      - use: motorID
+      - name: acc
+        type: float
+        range: [14.55, 59590]
+        unit: step/s/s
+        setting: speedProfile.acc
+        description: {en: acceleration, ja: 加速度}
+      - name: dec
+        type: float
+        range: [14.55, 59590]
+        unit: step/s/s
+        setting: speedProfile.dec
+        description: {en: deceleration, ja: 減速度}
+      - name: maxSpeed
+        type: float
+        range: [15.25, 15610]
+        unit: step/s
+        setting: speedProfile.maxSpeed
+        description: {en: maximum speed, ja: 最大速さ}
+    timing: stopped
+    description:
+      en: Sets the acc, dec, and maxSpeed of the speed profile together.
+      ja: スピードプロファイルのacc, dec, maxSpeedをまとめて設定します。
+    see_also: [/getSpeedProfile, /setAcc, /setDec, /setMaxSpeed]
+
+  - address: /getSpeedProfile
+    group: speed_profile
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Gets the acc, dec, and maxSpeed of the speed profile together.
+      ja: スピードプロファイルのacc, dec, maxSpeedをまとめて取得します。
+    response: [/speedProfile]
+
+  - address: /setFullstepSpeed
+    group: speed_profile
+    args:
+      - use: motorID
+      - name: fullstepSpeed
+        type: float
+        range: [7.63, 15625]
+        unit: step/s
+        setting: speedProfile.fullStepSpeed
+        description: {en: threshold, ja: 切り替わる閾値}
+    timing: always
+    description:
+      en: Sets the threshold at which the microstepping mode automatically switches to full-step mode.
+      ja: マイクロステッピングモードが自動でフルステップモードに切り替わる閾値を設定します。
+    see_also: [/getFullstepSpeed]
+
+  - address: /getFullstepSpeed
+    group: speed_profile
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Gets the threshold at which the microstepping mode automatically switches to full-step mode.
+      ja: マイクロステッピングモードが自動でフルステップモードに切り替わる閾値を取得します。
+    response: [/fullstepSpeed]
+
+  - address: /setMaxSpeed
+    group: speed_profile
+    args:
+      - use: motorID
+      - name: maxSpeed
+        type: float
+        range: [15.25, 15610]
+        unit: step/s
+        setting: speedProfile.maxSpeed
+        description: {en: maximum speed, ja: 最大速さ}
+    timing: always
+    description:
+      en: Set the maximum speed of the speed profile
+      ja: スピードプロファイルの最大速さを設定します。
+    see_also: [/setSpeedProfile]
+
+  - address: /setAcc
+    group: speed_profile
+    args:
+      - use: motorID
+      - name: acc
+        type: float
+        range: [14.55, 59590]
+        unit: step/s/s
+        setting: speedProfile.acc
+        description: {en: acceleration, ja: 加速度}
+    timing: stopped
+    description:
+      en: Sets the acceleration of the speed profile.
+      ja: スピードプロファイルの加速度を設定します。
+    see_also: [/setSpeedProfile]
+
+  - address: /setDec
+    group: speed_profile
+    args:
+      - use: motorID
+      - name: dec
+        type: float
+        range: [14.55, 59590]
+        unit: step/s/s
+        setting: speedProfile.dec
+        description: {en: deceleration, ja: 減速度}
+    timing: stopped
+    description:
+      en: Sets the deceleration of the speed profile.
+      ja: スピードプロファイルの減速度 (deceleration) を設定します。
+    see_also: [/setSpeedProfile]
+
+  - address: /setMinSpeed
+    group: speed_profile
+    args:
+      - use: motorID
+      - name: minSpeed
+        type: float
+        range: [0.0, 976.3]
+        unit: step/s
+        setting: speedProfile.minSpeed
+        description: {en: Minimum speed, ja: 最小速さ}
+    timing: stopped
+    description:
+      en: Set the speed profile minimum speed. This value is also used for the motor speed of [[/releaseSw]]. When Low speed optimization ([[/enableLowSpeedOptimize]]) is enabled, the minimum speed of the speed profile is set to zero.
+      ja: スピードプロファイルの最小速さを設定します。この値は[[/releaseSw]]時のモータ回転速さにも使用されます。Low speed optimization ([[/enableLowSpeedOptimize]])が有効になっている場合、 minSpeedは強制的に0になります。
+    see_also: [/getMinSpeed]
+
+  - address: /getMinSpeed
+    group: speed_profile
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Return the speed profile minimum speed.
+      ja: スピードプロファイルの最小速さを返します。
+    response: [/minSpeed]
+
+  - address: /getSpeed
+    group: speed_profile
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Returns the current motor speed.
+      ja: モータの現在の速度を返します。
+    response: [/speed]
+
+  - address: /setSpeedProfileRaw
+    group: speed_profile
+    args:
+      - use: motorID
+      - name: acc
+        type: int
+        range: [0, 4095]
+        description: {en: acceleration (raw register value), ja: ""}
+      - name: dec
+        type: int
+        range: [0, 4095]
+        description: {en: deceleration (raw register value), ja: ""}
+      - name: maxSpeed
+        type: int
+        range: [0, 1023]
+        description: {en: maximum speed (raw register value), ja: ""}
+    timing: stopped
+    description:
+      en: Sets the acc, dec, and maxSpeed of the speed profile using raw driver IC register values.
+      ja: ""
+    see_also: [/getSpeedProfileRaw, /setSpeedProfile]
+
+  - address: /getSpeedProfileRaw
+    group: speed_profile
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Gets the acc, dec, and maxSpeed of the speed profile as raw driver IC register values.
+      ja: ""
+    response: [/speedProfileRaw]
+
+  - address: /setMaxSpeedRaw
+    group: speed_profile
+    args:
+      - use: motorID
+      - name: maxSpeed
+        type: int
+        range: [0, 1023]
+        description: {en: maximum speed (raw register value), ja: ""}
+    timing: always
+    description:
+      en: Sets the maximum speed of the speed profile using a raw register value.
+      ja: ""
+    see_also: [/setMaxSpeed]
+
+  - address: /setMinSpeedRaw
+    group: speed_profile
+    args:
+      - use: motorID
+      - name: minSpeed
+        type: int
+        range: [0, 4095]
+        description: {en: minimum speed (raw register value), ja: ""}
+    timing: stopped
+    description:
+      en: Sets the minimum speed of the speed profile using a raw register value.
+      ja: ""
+    see_also: [/setMinSpeed]
+
+  - address: /setFullstepSpeedRaw
+    group: speed_profile
+    args:
+      - use: motorID
+      - name: fullstepSpeed
+        type: int
+        range: [0, 1023]
+        description: {en: full-step speed threshold (raw register value), ja: ""}
+    timing: always
+    description:
+      en: Sets the full-step speed threshold using a raw register value.
+      ja: ""
+    see_also: [/setFullstepSpeed]
+
+  - address: /setAccRaw
+    group: speed_profile
+    args:
+      - use: motorID
+      - name: acc
+        type: int
+        range: [0, 4095]
+        description: {en: acceleration (raw register value), ja: ""}
+    timing: stopped
+    description:
+      en: Sets the acceleration of the speed profile using a raw register value.
+      ja: ""
+    see_also: [/setAcc]
+
+  - address: /setDecRaw
+    group: speed_profile
+    args:
+      - use: motorID
+      - name: dec
+        type: int
+        range: [0, 4095]
+        description: {en: deceleration (raw register value), ja: ""}
+    timing: stopped
+    description:
+      en: Sets the deceleration of the speed profile using a raw register value.
+      ja: ""
+    see_also: [/setDec]
+
+  # ---------------------------------------------------------------------------
+  # homing
+  # ---------------------------------------------------------------------------
+  - address: /homing
+    group: homing
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: |
+        Start the homing movement. Move towards origin direction, stop when the HOME switch is activated. Then the motor reverses the direction and move slowly, halts when the HOME sensor is not active anymore, then reset location to zero at the current point.
+
+        This is equivalent to the following actions of executing [[/goUntil]] command, and after the motor stops on HOME sensor activation, execute [[/releaseSw]] command.
+
+        The `homingDirection` and the `homingSpeed` can be set by [[/setHomingDirection]] and [[/setHomingSpeed]] commands, as well as configuring from the configuration tool.
+
+        Time-out can be set for each of the `/goUntil` and `/releaseSw` commands. The controller halts the motor movement if the sensor state has not changed during this time frame. The time-out values can be set from [[/setGoUntilTimeout]] and from the [[/setReleaseSwTimeout]] command.
+
+        Depending on the state change on the homing movement, following response will be sent.
+      ja: |
+        原点復帰動作を行います。原点復帰方向に移動し、HOMEセンサが反応すると停止し、方向を反転してゆっくり移動し、HOMEセンサが反応しなくなった時点で停止し、現在位置を0にします。
+
+        これは[[/goUntil]]コマンドを実行し、HOMEセンサが反応すると停止して[[/releaseSw]]コマンドを実行することに相当します。
+
+        原点復帰方向`homingDirection`と原点復帰スピード`homingSpeed`はそれぞれ[[/setHomingDirection]]と[[/setHomingSpeed]]で設定できるほか、configToolからも設定できます。
+
+        `/goUntil`と`/releaseSw`それぞれにタイムアウト時間が設定可能で、この時間内にセンサ状態に変化がなかった場合はタイムアウトとして動作を中止します。この時間はぞれぞれ[[/setGoUntilTimeout]] [[/setReleaseSwTimeout]]で設定できます。
+
+        原点復帰動作の状態変化に応じて下記の返答があります。
+    response: [/homingStatus]
+    errors: [CommandIgnored, BrakeEngaged, GoUntilTimeout, ReleaseSwTimeout, InServoMode]
+    see_also: [/getHomingStatus]
+
+  - address: /getHomingStatus
+    group: homing
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Returns current state of homing movement.
+      ja: 原点復帰の現在のステータスを返します。
+    response: [/homingStatus]
+
+  - address: /setHomingDirection
+    group: homing
+    args:
+      - use: motorID
+      - name: direction
+        type: bool
+        setting: driverSettings.homingDirection
+        values:
+          - {value: 1, en: Forward, ja: Forward}
+          - {value: 0, en: Reverse, ja: Reverse}
+    timing: always
+    description:
+      en: Sets the `homingDirection` for the [[/homing]] command. It can be also configured from the configuration tool.
+      ja: "[[/homing]]実行時の原点復帰方向`homingDirection`を指定します。configToolからも指定できます。"
+    see_also: [/getHomingDirection]
+
+  - address: /getHomingDirection
+    group: homing
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Returns `homingDirection` parameter.
+      ja: "`homingDirection`を取得します。"
+    response: [/homingDirection]
+
+  - address: /setHomingSpeed
+    group: homing
+    args:
+      - use: motorID
+      - name: speed
+        type: float
+        range: [0.0, 15610.0]
+        unit: step/s
+        setting: driverSettings.homingSpeed
+        description: {en: homingSpeed, ja: homingSpeed}
+    timing: always
+    description:
+      en: Sets the `homingSpeed` when executing the command [[/homing]]. It can be configured from the configuration tool.
+      ja: "[[/homing]]実行時の原点復帰速さ`homingSpeed`を指定します。configToolからも指定できます。"
+    see_also: [/getHomingSpeed]
+
+  - address: /getHomingSpeed
+    group: homing
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Returns `homingSpeed` parameter.
+      ja: "`homingSpeed`を取得します。"
+    response: [/homingSpeed]
+
+  - address: /goUntil
+    group: homing
+    args:
+      - use: motorID
+      - name: ACT
+        type: bool
+        values:
+          - {value: 0, en: Reset the ABS_POS register, ja: ABS_POSレジスタをリセットします}
+          - {value: 1, en: Copy the value of the ABS_POS register to the MARK register, ja: ABS_POSレジスタの内容をMARKレジスタにコピーします}
+      - name: speed
+        type: float
+        range: [-15625, 15625]
+        unit: step/s
+    timing: always
+    description:
+      en: |
+        Move the motor at specified speed and direction. When the HOME switch turns on (the HOME switch terminal is closed), process ABS_POS register according to the ACT value.
+        The motor will softStop afterwards, but if the SW_MODE is set to 0 in the [[/setHomeSwMode]] command, it will be a hardStop instead. This command will keep the motor to the BUSY state until it stops.
+      ja: |
+        指定の速度で回転し、HOMEスイッチ端子が閉状態になるとACTの値に応じた処理を行います。
+        その後softStopしますが、[[/setHomeSwMode]]コマンドでSW_MODEが0に設定されていると、softStopではなくhardStopになります。このコマンドは、モータが停止するまでBUSY状態を保ちます。
+    errors: [BrakeEngaged, GoUntilTimeout]
+    see_also: [/setGoUntilTimeout, /releaseSw, /goUntilRaw]
+
+  - address: /setGoUntilTimeout
+    group: homing
+    args:
+      - use: motorID
+      - name: timeOut
+        type: int
+        range: [0, 2147483647]
+        unit: ms
+        setting: driverSettings.goUntilTimeout
+        description: {en: Time-out duration, ja: タイムアウト時間}
+    timing: always
+    description:
+      en: Sets the time-out duration when executing [[/goUntil]] command. If the sensor did not detect during this time frame, the controller will regard time-out and halts the movement. Specify 0 to disable the timeout. It can also be configured from the configuration tool.
+      ja: "[[/goUntil]]実行時のタイムアウト時間を指定します。この時間内にセンサに反応がなかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。configToolからも指定できます。"
+    see_also: [/getGoUntilTimeout]
+
+  - address: /getGoUntilTimeout
+    group: homing
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Returns the time-out duration when executing [[/goUntil]] command.
+      ja: "[[/goUntil]]実行時のタイムアウト時間を取得します。"
+    response: [/goUntilTimeout]
+
+  - address: /releaseSw
+    group: homing
+    args:
+      - use: motorID
+      - name: ACT
+        type: int
+        range: [0, 1]
+        values:
+          - {value: 0, en: Reset the ABS_POS register, ja: ABS_POSレジスタをリセットします}
+          - {value: 1, en: Copy the value of the ABS_POS register to the MARK register, ja: ABS_POSレジスタの内容をMARKレジスタにコピーします}
+      - name: DIR
+        type: bool
+        values:
+          - {value: 1, en: Forward, ja: 正転方向}
+          - {value: 0, en: Reverse, ja: 逆転方向}
+    timing: always
+    description:
+      en: Move at minimum speed (5[step/s] by default) in the specified direction until the HOME switch pin becomes open. Then it will process the ABS_POS register according to the value of ACT. The process of the ACT is same as the [[/goUntil]] command. Then halt the motor with hardStop.
+      ja: 指定方向にminimum speed（初期状態では5[step/s]）で回転し、HOMEスイッチ端子が開状態になると、ACTの値に応じた処理を行います。ACTの処理内容は [[/goUntil]]と同じです。その後hardStopします。
+    errors: [BrakeEngaged, ReleaseSwTimeout]
+    see_also: [/setReleaseSwTimeout, /setMinSpeed]
+
+  - address: /setReleaseSwTimeout
+    group: homing
+    args:
+      - use: motorID
+      - name: timeOut
+        type: int
+        range: [0, 2147483647]
+        unit: ms
+        setting: driverSettings.releaseSwTimeout
+        description: {en: Time-out duration, ja: タイムアウト時間}
+    timing: always
+    description:
+      en: Sets the time-out duration when executing [[/releaseSw]] command. If the sensor cannot be released during this time frame, halt the movement as time-out. Specify 0 to disable the timeout. It can be configured from the configuration tool.
+      ja: "[[/releaseSw]]実行時のタイムアウト時間を指定します。この時間内にセンサ反応範囲から脱出できかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。configToolからも指定できます。"
+    see_also: [/getReleaseSwTimeout]
+
+  - address: /getReleaseSwTimeout
+    group: homing
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Returns the time-out duration when executing [[/releaseSw]] command.
+      ja: "[[/releaseSw]]実行時のタイムアウト時間を取得します。"
+    response: [/releaseSwTimeout]
+
+  # ---------------------------------------------------------------------------
+  # sensors
+  # ---------------------------------------------------------------------------
+  - address: /enableHomeSwReport
+    group: sensors
+    args:
+      - use: motorID
+      - {use: enable, setting: alarmAndReport.reportHomeSwStatus}
+    timing: always
+    description:
+      en: Sets the following message to be sent automatically when conditional change of the HOME switch of the specified motor is detected. The response message is same as [[/getHomeSw]] command.
+      ja: 指定したモータのHOMEスイッチ端子の状態に変化があったら自動でメッセージを送信する設定を行います。送信されるメッセージは[[/getHomeSw]]の返答と同じです。
+    notifies: [/homeSw]
+
+  - address: /enableSwEventReport
+    group: sensors
+    args:
+      - use: motorID
+      - {use: enable, setting: alarmAndReport.reportSwEvn}
+    timing: always
+    description:
+      en: |
+        Sets the following message to be sent automatically when the specified motor's HOME switch terminal state drops from HIGH level to LOW (Falling Edge).
+        While the [[/enableHomeSwReport]] command observes the status by polling the STATUS register of motor driver IC from microcomputer's firmware, this `/enableSwEventReport` detects the event by driver IC's hardware, able to pick up the sensor detection shorter than 1ms.
+      ja: |
+        指定したモータのHOMEスイッチ端子の状態がHIGHレベルからLOWレベルに遷移した際(Falling Edge)に自動でメッセージを送信する設定を行います。
+        [[/enableHomeSwReport]]はマイコンのファームウェア上から約1ms毎にモータドライバICのSTATUSレジスタをポーリングすることによって状態を監視していますが、この`/enableSwEventReport`のほうはドライバIC内でハードウェアによってイベントが検出されるため、1ms以下のごくわずかな時間だけセンサが反応した場合でももとり逃しません。
+    notifies: [/swEvent]
+
+  - address: /getHomeSw
+    group: sensors
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Gets the status of the HOME switch, closed or opened.
+      ja: HOMEスイッチの状態を取得します。
+    response: [/homeSw]
+
+  - address: /enableLimitSwReport
+    group: sensors
+    args:
+      - use: motorID
+      - {use: enable, setting: alarmAndReport.reportLimitSwStatus}
+    boards: [STEP400]
+    timing: always
+    description:
+      en: Sets automatic response when conditional change on the specified motor's LIMIT switch terminal is detected. The sent message is as same as the response from [[/getLimitSw]] command.
+      ja: 指定したモータのLIMITスイッチ端子の状態に変化があったら自動でメッセージを送信する設定を行います。送信されるメッセージは[[/getLimitSw]]の返答と同じです。
+    notifies: [/limitSw]
+
+  - address: /getLimitSw
+    group: sensors
+    args: [{use: motorID}]
+    boards: [STEP400]
+    timing: always
+    description:
+      en: Returns the status of LIMIT switch.
+      ja: LIMITスイッチの状態を取得します。
+    response: [/limitSw]
+
+  - address: /setHomeSwMode
+    group: sensors
+    args:
+      - use: motorID
+      - name: SW_MODE
+        type: bool
+        setting: driverSettings.homeSwMode
+        values:
+          - {value: 0, en: HardStop interrupt (stop immediately), ja: HardStop interrupt （即時停止する）}
+          - {value: 1, en: User disposal (not stop), ja: User disposal （停止しない）}
+        description: {en: Switch mode, ja: Switch mode}
+    timing: hiz
+    description:
+      en: Sets switch mode whether to stop immediately when the HOME switch terminal state changes (falling edge).
+      ja: HOMEスイッチ端子に入力があった際に即時停止するかどうか(Switch mode)を指定します。
+    see_also: [/getHomeSwMode]
+
+  - address: /getHomeSwMode
+    group: sensors
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Get the Switch mode described above.
+      ja: 上記のSwitch modeを取得します。
+    response: [/homeSwMode]
+    see_also: [/setHomeSwMode]
+
+  - address: /setLimitSwMode
+    group: sensors
+    args:
+      - use: motorID
+      - name: SW_MODE
+        type: bool
+        setting: driverSettings.limitSwMode
+        values:
+          - {value: 0, en: HardStop interrupt (Immediate stop), ja: HardStop interrupt （即時停止する）}
+          - {value: 1, en: User disposal (Does not stop), ja: User disposal （停止しない）}
+        description: {en: Switch mode, ja: Switch mode}
+    boards: [STEP400]
+    timing: always
+    description:
+      en: Sets the Switch mode whether to stop the motor immediately when the LIMIT switch terminal condition is changed.
+      ja: LIMITスイッチ端子に入力があった際に即時停止するかどうか(Switch mode)を指定します。
+    see_also: [/getLimitSwMode]
+
+  - address: /getLimitSwMode
+    group: sensors
+    args: [{use: motorID}]
+    boards: [STEP400]
+    timing: always
+    description:
+      en: Get the Switch mode described above.
+      ja: 上記のSwitch modeを取得します。
+    response: [/limitSwMode]
+    see_also: [/setLimitSwMode]
+
+  # ---------------------------------------------------------------------------
+  # position
+  # ---------------------------------------------------------------------------
+  - address: /setPosition
+    group: position
+    args:
+      - use: motorID
+      - name: newPosition
+        type: int
+        range: [-2097152, 2097151]
+        description: {en: specified coordinates, ja: 指定座標}
+    timing: stopped
+    description:
+      en: Rewrites ABS_POS register to the specified coordinates. The current motor position is set to the specified coordinates.
+      ja: ABS_POSレジスタを指定座標に書き換えます。現在のモータ位置が指定座標になります。
+    see_also: [/getPosition, /resetPos]
+
+  - address: /getPosition
+    group: position
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: |
+        Returns the contents of the ABS_POS register (current position).
+        [[/setPositionReportInterval]] can make the controller to send this message with a specified interval.
+      ja: |
+        ABS_POSレジスタの内容（現在位置）を取得します。
+
+        [[/setPositionReportInterval]] コマンドで、指定間隔で自動送信させることもできます。
+    response: [/position]
+
+  - address: /getPositionList
+    group: position
+    timing: always
+    description:
+      en: |
+        Returns the current position of all motors at once. `/getPosition 255` returns individual messages for each motor but this command returns single message with a position list.
+        [[/setPositionListReportInterval]] can make the controller to send this list with a specified interval.
+      ja: |
+        全モータの現在位置 (`ABS_POS`) を取得します。 `/getPosition 255` を送信した場合は、モータの軸数分の個別のメッセージが返されますが、このコマンドは、すべてのモータの位置をリストにまとめた1個のメッセージが返されます。
+
+        [[/setPositionListReportInterval]] コマンドで、指定間隔で自動送信させることもできます。
+    response: [/positionList]
+    see_also: [/getPosition]
+
+  - address: /resetPos
+    group: position
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Reset ABS_POS register to 0.
+      ja: ABS_POSレジスタを0にリセットします。
+    see_also: [/setPosition]
+
+  - address: /setElPos
+    group: position
+    args:
+      - use: motorID
+      - name: newFullstep
+        type: int
+        range: [0, 3]
+        description: {en: Fullstep position, ja: フルステップでの位置}
+      - name: newMicrostep
+        type: int
+        range: [0, 127]
+        description: {en: Microstep position, ja: マイクロステップでの位置}
+    timing: stopped
+    description:
+      en: Set the electrical position of the motor. The microstep is expressed in step/128, and the value has to be matched with the current microstep mode.
+      ja: モータの電気的位置(electrical postion)を設定します。マイクロステップは0-127の128段階で表現されていますので、設定時は現在のマイクロステップと齟齬のない値を設定する必要があります。
+    see_also: [/getElPos]
+
+  - address: /getElPos
+    group: position
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Returns the current electrical position of the motor.
+      ja: モータの電気的位置 (electrical postion)を取得します。
+    response: [/elPos]
+
+  - address: /setMark
+    group: position
+    args:
+      - use: motorID
+      - name: MARK
+        type: int
+        description: {en: Coordination to be set, ja: 設定する座標}
+    timing: always
+    description:
+      en: Set the MARK register to arbitrary position.
+      ja: markを任意の位置に設定します。
+    see_also: [/getMark, /goMark]
+
+  - address: /getMark
+    group: position
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Get the MARK position.
+      ja: MARKの位置を取得します。
+    response: [/mark]
+
+  - address: /goHome
+    group: position
+    args: [{use: motorID}]
+    timing: motion_start
+    description:
+      en: Move the motor to the HOME position (zero position) according to the speed profile.
+      ja: HOME位置までスピードプロファイルに従って移動します。
+    errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
+
+  - address: /goMark
+    group: position
+    args: [{use: motorID}]
+    timing: motion_start
+    description:
+      en: Move the motor to the MARK position according to the speed profile.
+      ja: MARK位置までスピードプロファイルに従って移動します。
+    errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
+    see_also: [/setMark]
+
+  # ---------------------------------------------------------------------------
+  # motion
+  # ---------------------------------------------------------------------------
+  - address: /run
+    group: motion
+    args:
+      - use: motorID
+      - name: speed
+        type: float
+        range: [-15625, 15625]
+        unit: step/s
+        description: {en: Rotation speed, ja: 回転速度}
+    timing: motion_start
+    description:
+      en: Rotates the motor at specified speed. The acceleration is controlled with the pre-set speed profile. The speed is limited by maxSpeed. It remains in the BUSY state until the motor reaches the specified speed.
+      ja: モータを指定速度で回転させます。事前に設定したスピードプロファイルの加速度に従って加速します。指定する回転速さは、maxSpeedを超えるとmaxSpeedでリミットされます。指定速度に到達するまではBUSY状態になります。
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
+    see_also: [/runRaw, /combine/run]
+
+  - address: /move
+    group: motion
+    args:
+      - use: motorID
+      - name: step
+        type: int
+        description: {en: Moving step counts, ja: 移動ステップ数}
+    timing: [stopped, motion_start]
+    description:
+      en: Moves specified number of steps according to the pre-set speed profile. It remains in the BUSY state until it reaches the specified step count. This command can only execute when the motor is stopped.
+      ja: 事前に設定したスピードプロファイルに従って、指定ステップ数移動します。指定ステップ数を移動し終わるまではBUSY状態になります。このコマンドはモータが停止していないと実行できません。
+    errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
+    see_also: [/combine/move]
+
+  - address: /goTo
+    group: motion
+    args:
+      - use: motorID
+      - name: position
+        type: int
+        range: [-2097152, 2097151]
+        description: {en: Destination, ja: 目標位置}
+    timing: motion_start
+    description:
+      en: |
+        Moves to the specified position in the shortest route according to the pre-set speed profile. Remains in the BUSY state until it finishes moving to the specified position.
+        Inside the driver, -2,097,152 and 2,097,151 are located next to each other in a loop.
+      ja: |
+        事前に設定したスピードプロファイルにしたがって、指定位置まで最短経路で移動します。指定位置まで移動し終わるまではBUSY状態になります。
+
+        ※ドライバ内部では -2,097,152 と 2,097,151 は1周して隣り合った位置になっています。
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
+    see_also: [/goToDir, /combine/goTo]
+
+  - address: /goToDir
+    group: motion
+    args:
+      - use: motorID
+      - name: DIR
+        type: bool
+        description: {en: "", ja: 回転方向}
+      - name: position
+        type: int
+        range: [-2097152, 2097151]
+        description: {en: Destination, ja: 目標位置}
+    timing: motion_start
+    description:
+      en: Moves to the specified position in the specified direction according to the pre-set speed profile. Remains in the BUSY state until it finishes moving to the specified position.
+      ja: 事前に設定したスピードプロファイルにしたがって、指定位置まで指定方向で移動します。指定位置まで移動し終わるまではBUSY状態になります。
+    errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
+    see_also: [/goTo, /combine/goToDir]
+
+  - address: /softStop
+    group: motion
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: |
+        After decelerating according to the speed profile, the motor stops while it is kept excited. Remains in the BUSY state until the motor stops. If it was originally in the High Z state, the motor will be excited while it keeps its position.
+        If it was in the servo mode, the mode will be released.
+      ja: |
+        スピードプロファイルに従って減速したのち、モータを励磁したまま停止します。モータが停止するまではBUSY状態になります。もともとHiZ状態だった場合は、停止したままモータが励磁します。
+
+        サーボモードだった場合は解除されます。
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    see_also: [/combine/softStop]
+
+  - address: /hardStop
+    group: motion
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: |
+        Immediately stops the motor and leaves it excited. Remains in the BUSY state until the motor stops. If it was originally in the High Z state, the motor is excited while it keeps its position.
+        If it was in the servo mode, the mode will be released.
+      ja: |
+        モータを即時停止し、励磁したままにします。モータが停止するまではBUSY状態になります。もともとHiZ状態だった場合は、停止したままモータが励磁します。
+
+        サーボモードだった場合は解除されます。
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    see_also: [/combine/hardStop]
+
+  - address: /softHiZ
+    group: motion
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: |
+        Decelerate according to the speed profile, then stop the motor and release excitation. When the excitation is released, it goes into the High Z state. It remains in the BUSY state until the motor is stopped.
+        If it was in the servo mode, it will be released.
+        if electromagnetic brake mode is enabled, the controller puts the brake into hold state, and then transits to High Z state.
+      ja: |
+        スピードプロファイルに従って減速したのち、モータを停止して励磁を解除します。励磁が解除されるとHiZ状態になります。モータが停止するまではBUSY状態になります。
+
+        サーボモードだった場合は解除されます。
+
+        電磁ブレーキモードが有効になっている場合は、電磁ブレーキを保持状態にしてからHiZ状態に移行します。
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    see_also: [/combine/softHiZ, /enableElectromagnetBrake]
+
+  - address: /hardHiZ
+    group: motion
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: |
+        Immediately stops the motor and releases the stepper excitation. When the motor excitation is released, it goes into the High Z state. Remains in the BUSY state until the motor is stopped.
+        If it was in the servo mode, it will be released.
+        if electromagnetic brake mode is enabled, the controller puts the brake into hold state, and then transits to High Z state.
+      ja: |
+        モータを即時停止し、励磁を解除します。励磁が解除されるとHiZ状態になります。モータが停止するまではBUSY状態になります。
+
+        サーボモードだった場合は解除されます。
+
+        電磁ブレーキモードが有効になっている場合は、電磁ブレーキを保持状態にしてからHiZ状態に移行します。
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    see_also: [/combine/hardHiZ, /enableElectromagnetBrake]
+
+  - address: /combine/run
+    group: motion
+    args:
+      - {use: motorID, name: motorID1}
+      - {use: motorID, name: motorID2}
+      - name: speed
+        type: float
+        range: [-15625, 15625]
+        unit: step/s
+        description: {en: Rotation speed, ja: 回転速度}
+    timing: motion_start
+    description: {en: "", ja: ""}
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
+    see_also: [/run]
+
+  - address: /combine/move
+    group: motion
+    args:
+      - {use: motorID, name: motorID1}
+      - {use: motorID, name: motorID2}
+      - name: step
+        type: int
+        description: {en: Moving step counts, ja: 移動ステップ数}
+    timing: [stopped, motion_start]
+    description: {en: "", ja: ""}
+    errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
+    see_also: [/move]
+
+  - address: /combine/goTo
+    group: motion
+    args:
+      - {use: motorID, name: motorID1}
+      - {use: motorID, name: motorID2}
+      - name: position
+        type: int
+        range: [-2097152, 2097151]
+        description: {en: Destination, ja: 目標位置}
+    timing: motion_start
+    description: {en: "", ja: ""}
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
+    see_also: [/goTo]
+
+  - address: /combine/goToDir
+    group: motion
+    args:
+      - {use: motorID, name: motorID1}
+      - {use: motorID, name: motorID2}
+      - name: DIR
+        type: bool
+        description: {en: "", ja: 回転方向}
+      - name: position
+        type: int
+        range: [-2097152, 2097151]
+        description: {en: Destination, ja: 目標位置}
+    timing: motion_start
+    description: {en: "", ja: ""}
+    errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
+    see_also: [/goToDir]
+
+  - address: /combine/softStop
+    group: motion
+    args:
+      - {use: motorID, name: motorID1}
+      - {use: motorID, name: motorID2}
+    timing: always
+    description: {en: "", ja: ""}
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    see_also: [/softStop]
+
+  - address: /combine/hardStop
+    group: motion
+    args:
+      - {use: motorID, name: motorID1}
+      - {use: motorID, name: motorID2}
+    timing: always
+    description: {en: "", ja: ""}
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    see_also: [/hardStop]
+
+  - address: /combine/softHiZ
+    group: motion
+    args:
+      - {use: motorID, name: motorID1}
+      - {use: motorID, name: motorID2}
+    timing: always
+    description: {en: "", ja: ""}
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    see_also: [/softHiZ]
+
+  - address: /combine/hardHiZ
+    group: motion
+    args:
+      - {use: motorID, name: motorID1}
+      - {use: motorID, name: motorID2}
+    timing: always
+    description: {en: "", ja: ""}
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    see_also: [/hardHiZ]
+
+  - address: /runRaw
+    group: motion
+    args:
+      - use: motorID
+      - name: speed
+        type: int
+        description: {en: "Rotation speed (raw register value, signed)", ja: ""}
+    timing: motion_start
+    description:
+      en: Rotates the motor at the specified speed using a raw register value. The sign of the speed value determines the direction.
+      ja: ""
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
+    see_also: [/run, /combine/runRaw]
+
+  - address: /goUntilRaw
+    group: motion
+    args:
+      - use: motorID
+      - name: ACT
+        type: bool
+        description: {en: Same as `/goUntil`, ja: ""}
+      - name: speed
+        type: int
+        description: {en: "Speed (raw register value, signed)", ja: ""}
+    timing: always
+    description:
+      en: Same as `/goUntil` but uses a raw register value for speed. The sign of the speed value determines the direction.
+      ja: ""
+    errors: [BrakeEngaged, GoUntilTimeout]
+    see_also: [/goUntil]
+
+  - address: /combine/runRaw
+    group: motion
+    args:
+      - {use: motorID, name: motorID1}
+      - {use: motorID, name: motorID2}
+      - name: speed
+        type: int
+        description: {en: "Rotation speed (raw register value, signed)", ja: ""}
+    timing: motion_start
+    description: {en: "", ja: ""}
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
+    see_also: [/runRaw]
+
+  # ---------------------------------------------------------------------------
+  # brake
+  # ---------------------------------------------------------------------------
+  - address: /enableElectromagnetBrake
+    group: brake
+    args:
+      - use: motorID
+      - {use: enable, setting: driverSettings.electromagnetBrakeEnable}
+    timing: always
+    description:
+      en: |
+        Enables / disables electromagnetic brake mode.
+        While in the mode, the controller replies the `ERROR_BRAKE_ENGAGED` ([[/error/command]]) if motor movement command is sent without releasing the electromagnetic brake.
+      ja: |
+        電磁ブレーキモードを有効・無効にします。
+        電磁ブレーキモードが有効になると、電磁ブレーキを開放しないままモータを回すコマンドを送っても`ERROR_BRAKE_ENGAGED` ([[/error/command]])エラーになります。
+    see_also: [/activate, /free, /setBrakeTransitionDuration]
+
+  - address: /activate
+    group: brake
+    args:
+      - use: motorID
+      - name: state
+        type: bool
+        values:
+          - {value: 1, en: "Motor excited, EM brake released", ja: "モータ励磁, 電磁ブレーキ開放"}
+          - {value: 0, en: "Motor not excited, EM brake engaged", ja: "モータ励磁解除, 電磁ブレーキ保持"}
+    timing: always
+    description:
+      en: |
+        Switches motor excitation / release when electromagnetic brake mode is enabled. The electromagnetic brake (EM) also works conjunction with the motor. You cannot send motor movement command when the motor is not excited by this command.
+        If the EM mode is disabled, this command is ignored.
+      ja: |
+        電磁ブレーキモードの場合に、モータの励磁、励磁解除を切り替えます。電磁ブレーキも連動して動作します。このコマンドでモータが励磁状態になっていないと、モータを回転させるコマンドを送ることはできません。
+
+        電磁ブレーキモードが無効の場合は無視されます。
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    errors: [CommandIgnored]
+    see_also: [/enableElectromagnetBrake, /free]
+
+  - address: /free
+    group: brake
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: |
+        Releases motor axis when the electromagnetic brake mode is active. It releases motor excitation and keep EM brake in release state.
+        Be cautious when sending this command. If some load is hanged to the motor, it will loose the hold and the load may fall down.
+        If the EM mode is disabled, this command is ignored.
+      ja: |
+        電磁ブレーキモードの場合に、モータ軸を開放します。モータの励磁を解除し、電磁ブレーキも解放のままになります。
+
+        負荷を吊り下げている場合は、保持力がなくなって負荷が落下する原因になりますので、送信時には十分注意してください。
+
+        電磁ブレーキモードが無効の場合は無視されます。
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    errors: [CommandIgnored]
+    see_also: [/enableElectromagnetBrake, /activate]
+
+  - address: /setBrakeTransitionDuration
+    group: brake
+    args:
+      - use: motorID
+      - name: duration
+        type: int
+        range: [0, 10000]
+        unit: ms
+        setting: driverSettings.brakeTransitionDuration
+        description: {en: Transition duration, ja: 遷移時間}
+    timing: always
+    description:
+      en: Sets the transitional duration to keep the motor excited when the electromagnetic brake is activated or released. This is to keep holding the motor axis until the brake movement is completed, due to the physical transition time for the brake mechanism.
+      ja: 電磁ブレーキの保持・開放時に、モータを励磁したままにしておく遷移時間を指定します。これは物理的にブレーキ機構が動作する時間がかかるため、ブレーキの動作が完了するまでモータ軸を保持しておくために必要な時間です。
+    see_also: [/getBrakeTransitionDuration]
+
+  - address: /getBrakeTransitionDuration
+    group: brake
+    args: [{use: motorID}]
+    timing: always
+    description:
+      en: Returns the transitional duration to keep holding the motor axis when the electromagnetic brake is activated or released.
+      ja: 電磁ブレーキの保持・開放時に、モータを励磁したままにしておく遷移時間を取得します。
+    response: [/brakeTransitionDuration]
+
+  # ---------------------------------------------------------------------------
+  # servo
+  # ---------------------------------------------------------------------------
+  - address: /enableServoMode
+    group: servo
+    args:
+      - use: motorID
+      - use: enable
+    timing: always
+    description:
+      en: |
+        Turns on/off the servo mode (position tracking mode). To avoid sudden movement, the current position at the moment of activation is set to the target position.
+        It is not possible to send other motor control commands such as `/run` or `/goTo` while operating in this mode.
+      ja: |
+        サーボモード（位置追従モード）をオンオフします。急に動き出すことを避けるため、有効になった瞬間の現在位置が目標位置にセットされます。
+
+        このモードで動作している間は、`/run`や`/goTo` など他のモータ制御コマンドを送ることはできません。
+    response:
+      - message: /homingStatus
+        when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    see_also: [/setTargetPosition, /setServoParam]
+
+  - address: /setServoParam
+    group: servo
+    args:
+      - use: motorID
+      - name: kP
+        type: float
+        setting: servoMode.kP
+        description: {en: Proportional control gain, ja: 比例制御ゲイン}
+      - name: kI
+        type: float
+        setting: servoMode.kI
+        description: {en: Integral control gain, ja: 積分制御ゲイン}
+      - name: kD
+        type: float
+        setting: servoMode.kD
+        description: {en: Differential control gain, ja: 微分制御ゲイン}
+    timing: always
+    description:
+      en: Adjusts the PID control gain.
+      ja: PID制御のゲインを調整します。
+    see_also: [/getServoParam]
+
+  - address: /getServoParam
+    group: servo
+    args: [{use: motorID}]
+    timing: always
+    description: {en: "", ja: ""}
+    response: [/servoParam]
+
+  - address: /setTargetPosition
+    group: servo
+    args:
+      - use: motorID
+      - name: position
+        type: int
+        range: [-2097152, 2097151]
+        description: {en: target position, ja: 目標位置}
+    timing: always
+    description:
+      en: Sets the target position in servo mode.
+      ja: サーボモードの目標位置を設定します。
+    see_also: [/enableServoMode, /setTargetPositionList]
+
+  - address: /setTargetPositionList
+    group: servo
+    args:
+      - name: position
+        type: int
+        repeat: motors
+        range: [-2097152, 2097151]
+        description: {en: target position, ja: 目標位置}
+    timing: always
+    description:
+      en: Sets the target positions of the servo mode for all axes at once.
+      ja: サーボモードの目標位置を全軸分まとめて設定します。アーギュメントとして各軸の目標位置を指定しますので、STEP400の場合は4個、STEP800の場合は8個のアーギュメントが必要です。
+    see_also: [/setTargetPosition]
+
+# =============================================================================
+# Messages (board -> PC)
+# In the order of the commands that request them; messages sent on their own
+# (/booted, /error/osc, /error/command) at the end.
+# `type` is the OSC type tag the firmware actually sends.
+# =============================================================================
+
+messages:
+  - address: /destIp
+    args:
+      - name: "destIp[0]"
+        type: int
+        range: [0, 255]
+        description: {en: Each byte of destIp, ja: destIpの各桁}
+      - name: "destIp[1]"
+        type: int
+        range: [0, 255]
+        description: {en: Each byte of destIp, ja: destIpの各桁}
+      - name: "destIp[2]"
+        type: int
+        range: [0, 255]
+        description: {en: Each byte of destIp, ja: destIpの各桁}
+      - name: "destIp[3]"
+        type: int
+        range: [0, 255]
+        description: {en: Each byte of destIp, ja: destIpの各桁}
+      - name: isNewDestIp
+        type: int
+        range: [0, 1]
+        description:
+          en: Indicates if destIp has been changed. 1 if it has been changed, or 0 if the same address has already been set.
+          ja: destIpが変更されたかどうかを示します。変更されていると1, すでに同じアドレスが設定されていた場合は0
+
+  - address: /version
+    args:
+      - name: version
+        type: string
+
+  - address: /configName
+    args:
+      - name: configName
+        type: string
+        description: {en: The name of the configuration, ja: コンフィギュレーションの名称。}
+      - name: sdInitializeSucceeded
+        type: int
+        range: [0, 1]
+        description: {en: If the reading from microSD card was successful., ja: microSDカードとの通信に成功したかどうか}
+      - name: configFileOpenSucceeded
+        type: int
+        range: [0, 1]
+        description: {en: If the device could open the configuration file successfully., ja: コンフィギュレーションファイルを開くことができたかどうか}
+      - name: configFileParseSucceeded
+        type: int
+        range: [0, 1]
+        description: {en: If the config Json data could be parsed successfully., ja: コンフィギュレーションファイルのJsonをパースできたかどうか}
+      - name: configFilename
+        type: string
+        since: "2.1.0"
+        description:
+          en: The filename of the configuration file on the microSD card (e.g., `config.txt` or `STEP400_venue-A.json`). This is the on-disk filename, distinct from `configName` which is the user-editable label.
+          ja: ""
+
+  - address: /saveConfig
+    since: "2.1.0"
+    args:
+      - name: message
+        type: string
+        value: Saved to SD. Reboot to apply.
+
+  - address: /error/saveConfig
+    since: "2.1.0"
+    args:
+      - name: errorText
+        type: string
+        values:
+          - {value: SD open failed}
+          - {value: No SD card}
+
+  - address: /microstepMode
+    args:
+      - use: motorID
+      - name: STEP_SEL
+        type: int
+        range: [0, 7]
+        values:
+          - {value: 0, en: Full-step, ja: Full-step}
+          - {value: 1, en: Half-step, ja: Half-step}
+          - {value: 2, en: 1/4 microstep, ja: 1/4 microstep}
+          - {value: 3, en: 1/8 microstep, ja: 1/8 microstep}
+          - {value: 4, en: 1/16 microstep, ja: 1/16 microstep}
+          - {value: 5, en: 1/32 microstep, ja: 1/32 microstep}
+          - {value: 6, en: 1/64 microstep, ja: 1/64 microstep}
+          - {value: 7, en: 1/128 microstep, ja: 1/128 microstep}
+        description: {en: Microstepping mode, ja: Micro stepping mode}
+
+  - address: /lowSpeedOptimizeThreshold
+    args:
+      - use: motorID
+      - name: lowSpeedOptimizeThreshold
+        type: float
+        range: [0.0, 976.3]
+        unit: step/s
+        description: {en: Low speed optimization threshold, ja: Low speed optimization threshold}
+      - name: optimizationEnabled
+        type: bool
+
+  - address: /busy
+    args:
+      - use: motorID
+      - name: state
+        type: int
+        values:
+          - {value: 1, en: BUSY, ja: BUSYの場合}
+          - {value: 0, en: Not BUSY, ja: BUSYでない場合}
+
+  - address: /HiZ
+    args:
+      - use: motorID
+      - name: state
+        type: int
+        range: [0, 1]
+        description: {en: "1 if High Z state, 0 if not High Z state.", ja: "1:HiZ状態の場合, 0:HiZ状態でない場合"}
+
+  - address: /dir
+    args:
+      - use: motorID
+      - name: direction
+        type: int
+        values:
+          - {value: 1, en: Forward, ja: 正転方向}
+          - {value: 0, en: Reverse, ja: 逆転方向}
+
+  - address: /motorStatus
+    args:
+      - use: motorID
+      - name: MOT_STATUS
+        type: int
+        range: [0, 3]
+        values:
+          - {value: 0, en: Stopped, ja: モータ停止}
+          - {value: 1, en: Acceleration, ja: 加速中}
+          - {value: 2, en: Deceleration, ja: 減速中}
+          - {value: 3, en: Constant speed, ja: 一定速運転中}
+        description: {en: Motor status, ja: Motor status}
+
+  - address: /position
+    args:
+      - use: motorID
+      - name: ABS_POS
+        type: int
+        range: [-2097152, 2097151]
+        description: {en: current position, ja: 現在位置}
+
+  - address: /positionList
+    args:
+      - name: position
+        type: int
+        repeat: motors
+        range: [-2097152, 2097151]
+        description: {en: "current position of the motor #n", ja: n個目のモータの現在位置}
+
+  - address: /adcVal
+    args:
+      - use: motorID
+      - name: ADC_OUT
+        type: int
+        range: [0, 31]
+        description: {en: 5bit reading of ADC_OUT register, ja: 5bitのADC_OUTレジスタ}
+
+  - address: /status
+    args:
+      - use: motorID
+      - name: status
+        type: int
+        range: [0, 65535]
+        description: {en: 16-bit STATUS register, ja: 16bitのSTATUSレジスタ}
+
+  - address: /configRegister
+    args:
+      - use: motorID
+      - name: CONFIG
+        type: int
+        range: [0, 65535]
+        description: {en: 16bit CONFIG register content, ja: 16bitのCONFIGレジスタ}
+
+  - address: /statusList
+    args:
+      - name: status
+        type: int
+        repeat: motors
+        range: [0, 65535]
+
+  - address: /uvlo
+    args:
+      - use: motorID
+      - name: state
+        type: int
+        values:
+          - {value: 1, en: UVLO detected, ja: UVLO発生状態}
+          - {value: 0, en: No UVLO condition, ja: UVLO発生無し}
+
+  - address: /thermalStatus
+    args:
+      - use: motorID
+      - name: thermalStatus
+        type: int
+        range: [0, 3]
+        description: {en: Thermal status, ja: Thermal status}
+    tables:
+      - title: Thermal status
+        columns: [thermalStatus, Thermal status, {en: Set condition, ja: 発生条件}, {en: Release condition, ja: 解除条件}]
+        rows:
+          STEP400:
+            - [0, {en: Normal, ja: 通常}, "-", "-"]
+            - [1, Warning, 135℃, 125℃]
+            - [2, Bridge shutdown, 155℃, 145℃]
+            - [3, Device shutdown, 170℃, 130℃]
+          STEP800:
+            - [0, {en: Normal, ja: 通常}, "-", "-"]
+            - [1, Warning, 130℃, 130℃]
+            - [2, Bridge shutdown, 160℃, 130℃]
+
+  - address: /overCurrent
+    args:
+      - use: motorID
+
+  - address: /overCurrentThreshold
+    args:
+      - use: motorID
+      - name: overCurrentThreshold
+        type: float
+        range: {STEP400: [312.5, 10000.0], STEP800: [375.0, 6000.0]}
+        unit: mA
+        description: {en: "thresholds in [mA].", ja: 閾値をmA単位であらわしたものです}
+
+  - address: /stall
+    args:
+      - use: motorID
+
+  - address: /stallThreshold
+    args:
+      - use: motorID
+      - name: stallThreshold
+        type: float
+        range: {STEP400: [312.5, 10000.0], STEP800: [31.25, 4000.0]}
+        unit: mA
+        description: {en: "thresholds in [mA]", ja: 閾値をmA単位であらわしたものです}
+
+  - address: /prohibitMotionOnHomeSw
+    args:
+      - use: motorID
+      - name: enable
+        type: int
+        values:
+          - {value: 1, en: Prohibited, ja: 禁止}
+          - {value: 0, en: Allowed, ja: 許可}
+
+  - address: /prohibitMotionOnLimitSw
+    boards: [STEP400]
+    args:
+      - use: motorID
+      - name: enable
+        type: int
+        values:
+          - {value: 1, en: Prohibited, ja: 禁止}
+          - {value: 0, en: Allowed, ja: 許可}
+
+  - address: /kval
+    args:
+      - use: motorID
+      - name: holdKVAL
+        type: int
+        range: [0, 255]
+        description: {en: KVAL when stopped, ja: 停止時のKVAL}
+      - name: runKVAL
+        type: int
+        range: [0, 255]
+        description: {en: KVAL in constant speed operation, ja: 一定速運転時のKVAL}
+      - name: accKVAL
+        type: int
+        range: [0, 255]
+        description: {en: KVAL during acceleration, ja: 加速時のKVAL}
+      - name: decKVAL
+        type: int
+        range: [0, 255]
+        description: {en: KVAL during deceleration, ja: 減速時のKVAL}
+
+  - address: /bemfParam
+    args:
+      - use: motorID
+      - name: INT_SPEED
+        type: int
+        range: [0, 16383]
+        description: {en: INT_SPEED register value, ja: INT_SPEEDレジスタの値}
+      - name: ST_SLP
+        type: int
+        range: [0, 255]
+        description: {en: ST_SLP register value, ja: ST_SLPレジスタの値}
+      - name: FN_SLP_ACC
+        type: int
+        range: [0, 255]
+        description: {en: FN_SLP_ACC register value, ja: FN_SLP_ACCレジスタの値}
+      - name: FN_SLP_DEC
+        type: int
+        range: [0, 255]
+        description: {en: FN_SLP_DEC register value, ja: FN_SLP_DECレジスタの値}
+
+  - address: /tval
+    boards: [STEP400]
+    args:
+      - use: motorID
+      - name: holdTVAL
+        type: int
+        range: [0, 64]
+        description: {en: TVAL when stopped, ja: 停止時のTVAL}
+      - name: runTVAL
+        type: int
+        range: [0, 64]
+        description: {en: TVAL in constant speed operation, ja: 一定速運転時のTVAL}
+      - name: accTVAL
+        type: int
+        range: [0, 64]
+        description: {en: TVAL during acceleration, ja: 加速時のTVAL}
+      - name: decTVAL
+        type: int
+        range: [0, 64]
+        description: {en: TVAL during deceleration, ja: 減速時のTVAL}
+
+  - address: /tval_mA
+    boards: [STEP400]
+    args:
+      - use: motorID
+      - name: holdTVAL_mA
+        type: float
+        range: [78.125, 5078.125]
+        unit: mA
+        description: {en: TVAL when stopped, ja: 停止時のTVAL}
+      - name: runTVAL_mA
+        type: float
+        range: [78.125, 5078.125]
+        unit: mA
+        description: {en: TVAL in constant speed operation, ja: 一定速運転時のTVAL}
+      - name: accTVAL_mA
+        type: float
+        range: [78.125, 5078.125]
+        unit: mA
+        description: {en: TVAL during acceleration, ja: 加速時のTVAL}
+      - name: decTVAL_mA
+        type: float
+        range: [78.125, 5078.125]
+        unit: mA
+        description: {en: TVAL during deceleration, ja: 減速時のTVAL}
+
+  - address: /decayModeParam
+    boards: [STEP400]
+    args:
+      - use: motorID
+      - name: T_FAST
+        type: int
+        range: [0, 255]
+        description: {en: T_FAST register value, ja: T_FASTレジスタの値}
+      - name: TON_MIN
+        type: int
+        range: [0, 255]
+        description: {en: TON_MIN register value, ja: TON_MINレジスタの値}
+      - name: TOFF_MIN
+        type: int
+        range: [0, 255]
+        description: {en: TOFF_MIN register value, ja: TOFF_MINレジスタの値}
+
+  - address: /speedProfile
+    args:
+      - use: motorID
+      - name: acc
+        type: float
+        range: [14.55, 59590]
+        unit: step/s/s
+        description: {en: acceleration, ja: 加速度}
+      - name: dec
+        type: float
+        range: [14.55, 59590]
+        unit: step/s/s
+        description: {en: deceleration, ja: 減速度}
+      - name: maxSpeed
+        type: float
+        range: [15.25, 15610]
+        unit: step/s
+        description: {en: maximum speed, ja: 最大速さ}
+
+  - address: /fullstepSpeed
+    args:
+      - use: motorID
+      - name: fullstepSpeed
+        type: float
+        range: [7.63, 15625]
+        unit: step/s
+        description: {en: Threshold, ja: 切り替わる閾値}
+
+  - address: /minSpeed
+    args:
+      - use: motorID
+      - name: minSpeed
+        type: float
+        range: [0.0, 976.3]
+        unit: step/s
+        description: {en: Minimum speed, ja: 最小速さ}
+
+  - address: /speed
+    args:
+      - use: motorID
+      - name: speed
+        type: float
+        range: [-15625, 15625]
+        unit: step/s
+        description: {en: Current speed, ja: 現在の速度}
+
+  - address: /speedProfileRaw
+    args:
+      - use: motorID
+      - name: acc
+        type: int
+        range: [0, 4095]
+        description: {en: acceleration (raw register value), ja: ""}
+      - name: dec
+        type: int
+        range: [0, 4095]
+        description: {en: deceleration (raw register value), ja: ""}
+      - name: maxSpeed
+        type: int
+        range: [0, 1023]
+        description: {en: maximum speed (raw register value), ja: ""}
+
+  - address: /homingStatus
+    args:
+      - use: motorID
+      - name: homingStatus
+        type: int
+        range: [0, 4]
+        description: {en: Homing Status, ja: Homing Status}
+    tables:
+      - title: Homing Status
+        columns: [homingStatus, Homing Status, {en: Description, ja: 説明}]
+        rows:
+          - [0, HOMING_UNDEFINED, {en: Not yet executing homing movement, ja: 原点復帰をまだしていない状態}]
+          - [1, HOMING_GOUNTIL, {en: Executing `/goUntil`, ja: "`/goUntil`実行中"}]
+          - [2, HOMING_RELEASESW, {en: Executing `/releaseSw`, ja: "`/releaseSw`実行中"}]
+          - [3, HOMING_COMPLETED, {en: Homing done, ja: 原点復帰完了}]
+          - [4, HOMING_TIMEOUT, {en: The movement did not complete during specified time frame., ja: 規定時間内に動作が完了しなかった}]
+
+  - address: /homingDirection
+    args:
+      - use: motorID
+      - name: homingDirection
+        type: int
+        values:
+          - {value: 1, en: Forward, ja: Forward}
+          - {value: 0, en: Reverse, ja: Reverse}
+
+  - address: /homingSpeed
+    args:
+      - use: motorID
+      - name: homingSpeed
+        type: float
+        range: [0.0, 15610.0]
+        unit: step/s
+        description: {en: Homing Speed, ja: Homing Speed}
+
+  - address: /goUntilTimeout
+    args:
+      - use: motorID
+      - name: timeout
+        type: int
+        range: [0, 2147483647]
+        unit: ms
+        description: {en: Time-out duration, ja: タイムアウト時間}
+
+  - address: /releaseSwTimeout
+    args:
+      - use: motorID
+      - name: timeout
+        type: int
+        range: [0, 2147483647]
+        unit: ms
+        description: {en: Time-out duration, ja: タイムアウト時間}
+
+  - address: /homeSw
+    args:
+      - use: motorID
+      - name: swState
+        type: int
+        values:
+          - {value: 0, en: "Open, Undetected state", ja: "Open, 反応していない状態"}
+          - {value: 1, en: "Closed, Detected state", ja: "Closed, 反応している状態"}
+        description: {en: State, ja: 状態}
+      - name: direction
+        type: int
+        values:
+          - {value: 1, en: Forward, ja: 正転方向}
+          - {value: 0, en: Reverse, ja: 逆転方向}
+        description: {en: direction, ja: 方向}
+
+  - address: /swEvent
+    args:
+      - use: motorID
+
+  - address: /limitSw
+    boards: [STEP400]
+    args:
+      - use: motorID
+      - name: swState
+        type: int
+        values:
+          - {value: 0, en: "Open, Undetected state", ja: "Open, 反応していない状態"}
+          - {value: 1, en: "Closed, Detected state", ja: "Closed, 反応している状態"}
+        description: {en: Status, ja: 状態}
+      - name: direction
+        type: int
+        values:
+          - {value: 1, en: Forward, ja: 正転方向}
+          - {value: 0, en: Reverse, ja: 逆転方向}
+        description: {en: Direction, ja: 方向}
+
+  - address: /homeSwMode
+    args:
+      - use: motorID
+      - name: swMode
+        type: int
+        range: [0, 1]
+
+  - address: /limitSwMode
+    boards: [STEP400]
+    args:
+      - use: motorID
+      - name: swMode
+        type: int
+        range: [0, 1]
+
+  - address: /elPos
+    args:
+      - use: motorID
+      - name: fullstep
+        type: int
+        range: [0, 3]
+        description: {en: Fullstep position, ja: フルステップでの位置}
+      - name: microstep
+        type: int
+        range: [0, 127]
+        description: {en: Microstep position, ja: マイクロステップでの位置}
+
+  - address: /mark
+    args:
+      - use: motorID
+      - name: MARK
+        type: int
+        description: {en: Position of the MARK, ja: MARKの座標}
+
+  - address: /brakeTransitionDuration
+    args:
+      - use: motorID
+      - name: duration
+        type: int
+        range: [0, 10000]
+        unit: ms
+        description: {en: Transitional duration, ja: 遷移時間}
+
+  - address: /servoParam
+    args:
+      - use: motorID
+      - name: kP
+        type: float
+        description: {en: Proportional control gain, ja: 比例制御ゲイン}
+      - name: kI
+        type: float
+        description: {en: Integral control gain, ja: 積分制御ゲイン}
+      - name: kD
+        type: float
+        description: {en: Differential control gain, ja: 微分制御ゲイン}
+
+  # --- sent on their own ---
+  - address: /booted
+    args:
+      - name: deviceID
+        type: int
+        range: [0, 255]
+        description: {en: The device ID set by the DIP Switch, ja: DIPスイッチで設定されたデバイスのID}
+    description:
+      en: |
+        This message is automatically sent out when the device has (re)started. By watching the message, you can detect reset event of the device triggered by some reason.
+
+        The message will be sent out one second after the firmware is started up and the ethernet link is established. The message will be sent to `255.255.255.255`, means broadcasting to all nodes within the subnet.
+
+        This message can be disabled from the configuration tool.
+      ja: |
+        本デバイスが（再）起動した際に自動的に本デバイスから送信されるメッセージです。何らかの理由で本デバイスがリセットされたことを検出できます。
+
+        ファームウェアが起動して、Ethernetがリンク状態になった1秒後に送信されます。サブネット内のすべてのノード (`255.255.255.255`) へブロードキャストされます。
+
+        Config Toolの設定を用いて、このメッセージを送信しないようにも設定できます。
+
+  - address: /error/osc
+    args:
+      - name: errorText
+        type: string
+        values:
+          - {value: MessageNotMatch, en: There is no corresponding command, ja: 該当するコマンドがない。}
+          - {value: OscSyntaxError, en: The OSC format is out of standard, ja: OSCのフォーマットが規格に沿っていなかった}
+          - {value: WrongDataType, en: Wrong datatype of in argument(s), ja: OSCメッセージの引数の型が異なっている}
+        description: {en: A character string that indicates the details of an error., ja: エラーの内容を示す文字列です。}
+    description:
+      en: Sent if any error is detected in the received OSC (Open Sound Control) message.
+      ja: 受け取ったOSCメッセージに何らかのエラーがあった場合に送信されます。
+
+  - address: /error/command
+    args:
+      - name: errorText
+        type: string
+        values:
+          - {value: CommandIgnored, en: The command is currently not executable. Also refer Timing section., ja: コマンドが実行可能なタイミングではない。タイミング参照。}
+          - {value: MotorIdNotMatch, en: Motor ID is not appropriate., ja: モータIDが適切でない値になっている。}
+          - {value: BrakeEngaged, en: A motion command was sent while the electromagnetic brake was active., ja: 電磁ブレーキが効いた状態のままモーションコマンドを送信した。}
+          - {value: HomeSwActivating, en: Movement from home sensor position towards the origin point., ja: ホームセンサ上から原点復帰方向に移動しようとした。}
+          - {value: LimitSwActivating, boards: [STEP400], en: Movement from limit sensor position towards the opposite direction from origin., ja: リミットセンサ上から原点復帰方向の逆向きに移動しようとした。}
+          - {value: GoUntilTimeout, en: Timeout while executing `/goUntil` command., ja: "`/goUntil`コマンド実行中にタイムアウトした。"}
+          - {value: ReleaseSwTimeout, en: Timeout while executing `/releaseSw` command., ja: "`/releaseSw`コマンド実行中にタイムアウトした。"}
+          - {value: InServoMode, en: Received a command which can not be executed while servo mode., ja: サーボモードでは実行できないコマンドを送信した。}
+        description: {en: A character string that indicates the details of an error., ja: エラーの内容を示す文字列です。}
+      - use: motorID
+        description: {en: The motor's ID, ja: モータのID}
+    description:
+      en: |
+        This message will be sent if an error is detected while executing a command.
+        The message can be enabled or disabled with [[/reportError]] command.
+      ja: |
+        コマンドの実行時にエラーが発生した場合に送信されます。
+        [[/reportError]] によって、送信の有効/無効を切り替えることができます。
