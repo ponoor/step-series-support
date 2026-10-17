@@ -1,0 +1,200 @@
+# Maps the existing python-step-series class names to OSC addresses (and keeps them stable).
+# Read by tools/gen_python.py. Generated once from python-step-series v1.0.0 and edited by hand.
+
+commands:
+  /setDestIp: {class: SetDestIP, kind: Get}
+  /getVersion: {class: GetVersion, kind: Get}
+  /getConfigName: {class: GetConfigName, kind: Get}
+  /reportError: {class: ReportError, kind: Set}
+  /resetDevice: {class: ResetDevice, kind: Set}
+  /setMicrostepMode: {class: SetMicrostepMode, kind: Set}
+  /getMicrostepMode: {class: GetMicrostepMode, kind: Get}
+  /enableLowSpeedOptimize: {class: EnableLowSpeedOptimize, kind: Set}
+  /setLowSpeedOptimizeThreshold: {class: SetLowSpeedOptimizeThreshold, kind: Set}
+  /getLowSpeedOptimizeThreshold: {class: GetLowSpeedOptimizeThreshold, kind: Get}
+  /enableBusyReport: {class: EnableBusyReport, kind: Set}
+  /getBusy: {class: GetBusy, kind: Get}
+  /enableHizReport: {class: EnableHiZReport, kind: Set}
+  /getHiZ: {class: GetHiZ, kind: Get}
+  /enableDirReport: {class: EnableDirReport, kind: Set}
+  /getDir: {class: GetDir, kind: Get}
+  /enableMotorStatusReport: {class: EnableMotorStatusReport, kind: Set}
+  /getMotorStatus: {class: GetMotorStatus, kind: Get}
+  /setPositionReportInterval: {class: SetPositionReportInterval, kind: Set}
+  /setPositionListReportInterval: {class: SetPositionListReportInterval, kind: Set}
+  /getAdcVal: {class: GetAdcVal, kind: Get}
+  /getStatus: {class: GetStatus, kind: Get}
+  /getConfigRegister: {class: GetConfigRegister, kind: Get}
+  /resetMotorDriver: {class: ResetMotorDriver, kind: Set}
+  /enableUvloReport: {class: EnableUvloReport, kind: Set}
+  /getUvlo: {class: GetUvlo, kind: Get}
+  /enableThermalStatusReport: {class: EnableThermalStatusReport, kind: Set}
+  /getThermalStatus: {class: GetThermalStatus, kind: Get}
+  /enableOverCurrentReport: {class: EnableOverCurrentReport, kind: Set}
+  /setOverCurrentThreshold: {class: SetOverCurrentThreshold, kind: Set}
+  /getOverCurrentThreshold: {class: GetOverCurrentThreshold, kind: Get}
+  /enableStallReport: {class: EnableStallReport, kind: Set}
+  /setStallThreshold: {class: SetStallThreshold, kind: Set}
+  /getStallThreshold: {class: GetStallThreshold, kind: Get}
+  /setProhibitMotionOnHomeSw: {class: SetProhibitMotionOnHomeSw, kind: Set}
+  /getProhibitMotionOnHomeSw: {class: GetProhibitMotionOnHomeSw, kind: Get}
+  /setProhibitMotionOnLimitSw: {class: SetProhibitMotionOnLimitSw, kind: Set}
+  /getProhibitMotionOnLimitSw: {class: GetProhibitMotionOnLimitSw, kind: Get}
+  /setVoltageMode: {class: SetVoltageMode, kind: Set}
+  /setKval: {class: SetKval, kind: Set}
+  /getKval: {class: GetKval, kind: Get}
+  /setBemfParam: {class: SetBemfParam, kind: Set}
+  /getBemfParam: {class: GetBemfParam, kind: Get}
+  /setCurrentMode: {class: SetCurrentMode, kind: Set}
+  /setTval: {class: SetTval, kind: Set}
+  /getTval: {class: GetTval, kind: Get}
+  /getTval_mA: {class: GetTval_mA, kind: Get}
+  /setDecayModeParam: {class: SetDecayModeParam, kind: Set}
+  /getDecayModeParam: {class: GetDecayModeParam, kind: Get}
+  /setSpeedProfile: {class: SetSpeedProfile, kind: Set}
+  /getSpeedProfile: {class: GetSpeedProfile, kind: Get}
+  /setFullstepSpeed: {class: SetFullstepSpeed, kind: Set}
+  /getFullstepSpeed: {class: GetFullstepSpeed, kind: Get}
+  /setMaxSpeed: {class: SetMaxSpeed, kind: Set}
+  /setAcc: {class: SetAcc, kind: Set}
+  /setDec: {class: SetDec, kind: Set}
+  /setMinSpeed: {class: SetMinSpeed, kind: Set}
+  /getMinSpeed: {class: GetMinSpeed, kind: Get}
+  /getSpeed: {class: GetSpeed, kind: Get}
+  /homing: {class: Homing, kind: Set}
+  /getHomingStatus: {class: GetHomingStatus, kind: Get}
+  /setHomingDirection: {class: SetHomingDirection, kind: Set}
+  /getHomingDirection: {class: GetHomingDirection, kind: Get}
+  /setHomingSpeed: {class: SetHomingSpeed, kind: Set}
+  /getHomingSpeed: {class: GetHomingSpeed, kind: Get}
+  /goUntil: {class: GoUntil, kind: Set}
+  /setGoUntilTimeout: {class: SetGoUntilTimeout, kind: Set}
+  /getGoUntilTimeout: {class: GetGoUntilTimeout, kind: Get}
+  /releaseSw: {class: ReleaseSw, kind: Set}
+  /setReleaseSwTimeout: {class: SetReleaseSwTimeout, kind: Set}
+  /getReleaseSwTimeout: {class: GetReleaseSwTimeout, kind: Get}
+  /enableHomeSwReport: {class: EnableHomeSwReport, kind: Set}
+  /enableSwEventReport: {class: EnableSwEventReport, kind: Set}
+  /getHomeSw: {class: GetHomeSw, kind: Get}
+  /enableLimitSwReport: {class: EnableLimitSwReport, kind: Set}
+  /getLimitSw: {class: GetLimitSw, kind: Get}
+  /setHomeSwMode: {class: SetHomeSwMode, kind: Set}
+  /getHomeSwMode: {class: GetHomeSwMode, kind: Get}
+  /setLimitSwMode: {class: SetLimitSwMode, kind: Set}
+  /getLimitSwMode: {class: GetLimitSwMode, kind: Get}
+  /setPosition: {class: SetPosition, kind: Set}
+  /getPosition: {class: GetPosition, kind: Get}
+  /getPositionList: {class: GetPositionList, kind: Get}
+  /resetPos: {class: ResetPos, kind: Set}
+  /setElPos: {class: SetElPos, kind: Set}
+  /getElPos: {class: GetElPos, kind: Get}
+  /setMark: {class: SetMark, kind: Set}
+  /getMark: {class: GetMark, kind: Get}
+  /goHome: {class: GoHome, kind: Set}
+  /goMark: {class: GoMark, kind: Set}
+  /run: {class: Run, kind: Set}
+  /move: {class: Move, kind: Set}
+  /goTo: {class: GoTo, kind: Set}
+  /goToDir: {class: GoToDir, kind: Set}
+  /softStop: {class: SoftStop, kind: Set}
+  /hardStop: {class: HardStop, kind: Set}
+  /softHiZ: {class: SoftHiZ, kind: Set}
+  /hardHiZ: {class: HardHiZ, kind: Set}
+  /enableElectromagnetBrake: {class: EnableElectromagnetBrake, kind: Set}
+  /activate: {class: Activate, kind: Set}
+  /free: {class: Free, kind: Set}
+  /setBrakeTransitionDuration: {class: SetBrakeTransitionDuration, kind: Set}
+  /getBrakeTransitionDuration: {class: GetBrakeTransitionDuration, kind: Get}
+  /enableServoMode: {class: EnableServoMode, kind: Set}
+  /setServoParam: {class: SetServoParam, kind: Set}
+  /getServoParam: {class: GetServoParam, kind: Get}
+  /setTargetPosition: {class: SetTargetPosition, kind: Set}
+  /setTargetPositionList: {class: SetTargetPositionList, kind: Set}
+
+messages:
+  /booted: {class: Booted}
+  /error/command: {class: ErrorCommand}
+  /error/osc: {class: ErrorOSC}
+  /busy: {class: Busy}
+  /HiZ: {class: HiZ}
+  /motorStatus: {class: MotorStatus}
+  /homingStatus: {class: HomingStatus}
+  /uvlo: {class: Uvlo}
+  /thermalStatus: {class: ThermalStatus}
+  /overCurrent: {class: OverCurrent}
+  /stall: {class: Stall}
+  /destIp: {class: DestIP}
+  /version: {class: Version}
+  /configName: {class: ConfigName}
+  /microstepMode: {class: MicrostepMode}
+  /lowSpeedOptimizeThreshold: {class: LowSpeedOptimizeThreshold}
+  /dir: {class: Dir}
+  /adcVal: {class: AdcVal}
+  /status: {class: Status}
+  /configRegister: {class: ConfigRegister}
+  /overCurrentThreshold: {class: OverCurrentThreshold}
+  /stallThreshold: {class: StallThreshold}
+  /prohibitMotionOnHomeSw: {class: ProhibitMotionOnHomeSw}
+  /prohibitMotionOnLimitSw: {class: ProhibitMotionOnLimitSw}
+  /kval: {class: Kval}
+  /bemfParam: {class: BemfParam}
+  /tval: {class: Tval}
+  /tval_mA: {class: Tval_mA}
+  /decayModeParam: {class: DecayModeParam}
+  /speedProfile: {class: SpeedProfile}
+  /fullstepSpeed: {class: FullstepSpeed}
+  /minSpeed: {class: MinSpeed}
+  /speed: {class: Speed}
+  /homingDirection: {class: HomingDirection}
+  /homingSpeed: {class: HomingSpeed}
+  /goUntilTimeout: {class: GoUntilTimeout}
+  /releaseSwTimeout: {class: ReleaseSwTimeout}
+  /swEvent: {class: SwEvent}
+  /homeSw: {class: HomeSw}
+  /limitSw: {class: LimitSw}
+  /homeSwMode: {class: HomeSwMode}
+  /limitSwMode: {class: LimitSwMode}
+  /position: {class: Position}
+  /positionList: {class: PositionList}
+  /elPos: {class: ElPos}
+  /mark: {class: Mark}
+  /brakeTransitionDuration: {class: BrakeTransitionDuration}
+  /servoParam: {class: ServoParam}
+
+# New in v2.2.0 (not in python-step-series v1.0.0): only what cannot be derived from the YAML.
+# `kind` is derived (Get if the command has an unconditional response) unless given here.
+new_commands:
+  /saveConfig: {kind: Get}
+
+# YAML argument name -> existing field name, where they differ.
+field_names:
+  /setTval: {decTVAL: setDecTVAL}
+
+# Commands that carry a `response_cls` although the YAML has no unconditional `response` / `notifies`
+# for it (kept as in v1.0.0).
+response_cls:
+  /resetDevice: [/booted]
+  /enableLowSpeedOptimize: [/lowSpeedOptimizeThreshold]
+
+# Arguments that the library accepts as optional (default None) although the YAML lists them as plain arguments.
+optional:
+  /error/command: [motorID]
+
+# Fields the library has but the YAML does not (appended after the YAML arguments).
+extra_fields:
+  /error/osc:
+    - {name: motorID, type: int, default: "None", doc: "The motor ID the error refers to, if any."}
+
+# Fields written out by hand instead of taken from the YAML (parsing special cases).
+fields:
+  /version:
+    - {name: firmware_name, type: str, doc: Name of the firmware.}
+    - {name: firmware_version, type: str, doc: Version of the firmware.}
+    - {name: compile_date, type: str, doc: Compile date of the firmware.}
+    - raw: |
+        # Custom regex to breakout
+        compile_date_re: re.Pattern = field(
+            default=re.compile(r"\w+ ? \d{1,2} \d{4} .+"),
+            init=False,
+            repr=False,
+        )
