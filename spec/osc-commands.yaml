@@ -440,13 +440,20 @@ settings:
         - {value: 2, en: 400V/us, ja: 400V/us}
         - {value: 3, en: 520V/us, ja: 520V/us}
         - {value: 4, en: 790V/us, ja: 790V/us}
-        - {value: 5, en: 980V/us, ja: 980V/us}
+        - value: 5
+          en: 980V/us
+          ja: 980V/us
+          changes:
+            - {version: "2.2.0", en: "The driver is now really set to the 980 V/us of the datasheet (gate current 96 mA, TCC 375 ns). Firmware 2.1.0 and earlier, with driver library v1.1.0, wrote 64 mA and 2375 ns for this value by mistake, so the switching was slower than 980 V/us. This value is the initial value, so a board with the default setting switches faster than before. The values 0-4 are unchanged. The driver library recommends checking the temperature of the drivers and the EMI on the real hardware.", ja: ""}
       STEP800:
         - {value: 0, en: 180V/us, ja: 180V/us}
         - {value: 1, en: 290V/us, ja: 290V/us}
         - {value: 2, en: 530V/us, ja: 530V/us}
     description:
-      en: Set the slew rate (steepness of rising) of motor control current from a motor driver in 6 steps for STEP400, 3 steps for STEP800.
+      en: |-
+        Set the slew rate (steepness of rising) of motor control current from a motor driver in 6 steps for STEP400, 3 steps for STEP800.
+
+        A value outside the range in the configuration file is not rejected: it is limited to the range (a negative value becomes 0, a larger one the highest value).
       ja: モータドライバから出力されるモータ制御電流のスリューレート（立ち上がりの鋭さ）をSTEP400では6段階、STEP800では3段階で指定します。
 
   - key: driverSettings.electromagnetBrakeEnable
