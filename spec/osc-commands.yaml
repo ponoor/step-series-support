@@ -331,8 +331,10 @@ settings:
       en: |-
         Proceed to homing movement soon after boot when this check box is checked.
 
-        With the electromagnetic brake enabled, the brake is released first, as [[/activate]] does, and the homing starts once the brake is released. (Before 2.2.0 the homing failed because the brake was engaged.)
+        With the electromagnetic brake enabled, the brake is released first, as [[/activate]] does, and the homing starts once the brake is released.
       ja: このチェックボックスが入っていると、起動すると直ちに原点復帰動作を行います。
+    changes:
+      - {version: "2.2.0", en: "With the electromagnetic brake enabled, the brake is released first, as `/activate 1` does, and the homing starts once the brake is released. Before, the homing failed because the brake was engaged, and the timeout of the homing later sent a hard stop to the HiZ motor.", ja: ""}
 
   - key: driverSettings.homingDirection
     section: driverSettings
@@ -1058,7 +1060,7 @@ commands:
 
         Refer to "STATUS" in the data sheet for the information contained in the registers. Some of bits are latched and reset when STATUS registers are read out. Because the device firmware constantly obtains the STATUS values, these values are immediately reset. It is possible to set up these events to be reported separately, so please use those commands.
 
-        Since 2.2.0 this command does not clear the latched flags; only the status poll of the firmware (every 5 ms) does.
+        This command does not clear the latched flags; only the status poll of the firmware (every 5 ms) does.
       ja: |
         モータドライバ(PowerSTEP01/L6470)のステータスレジスタを取得します。ステータスレジスタにはモータやアラーム、スイッチの状態などが含まれます。
 
@@ -3854,7 +3856,7 @@ messages:
 
         This message can be disabled from the configuration tool.
 
-        `resetCause` (since 2.2.0): the numbers are part of the specification; new causes will only be added as 7, 8, .... A client should treat a number it does not know as "other", and accept 6. If several causes are flagged, the first of CPU fault, brown-out, power-on, watchdog, reset pin, software is reported. After a power-on or a brown-out the CPU fault is never reported, so a fault followed by a power cycle reports 1 or 2. The numbers are those reported by the MCU as they are; with another MCU in the future the same operation may report a different number (the meaning of each number does not change).
+        `resetCause`: the numbers are part of the specification; new causes will only be added as 7, 8, .... A client should treat a number it does not know as "other", and accept 6. If several causes are flagged, the first of CPU fault, brown-out, power-on, watchdog, reset pin, software is reported. After a power-on or a brown-out the CPU fault is never reported, so a fault followed by a power cycle reports 1 or 2. The numbers are those reported by the MCU as they are; with another MCU in the future the same operation may report a different number (the meaning of each number does not change).
       ja: |
         本デバイスが（再）起動した際に自動的に本デバイスから送信されるメッセージです。何らかの理由で本デバイスがリセットされたことを検出できます。
 
@@ -3873,9 +3875,17 @@ messages:
         type: string
         values:
           - {value: MessageNotMatch, en: There is no corresponding command, ja: 該当するコマンドがない。}
-          - {value: OscSyntaxError, en: "The OSC format is out of standard. Also sent for a packet larger than 512 bytes and for a message with more than 16 arguments (since 2.2.0).", ja: OSCのフォーマットが規格に沿っていなかった}
-          - {value: WrongDataType, en: "Wrong datatype of in argument(s): a string for a number, NaN or infinity, or a non-string for `/setConfigName`. Nothing is applied (before 2.2.0 such an argument was applied as 0).", ja: OSCメッセージの引数の型が異なっている}
-          - {value: MissingArgument, en: "The message has fewer arguments than the command needs. Nothing is applied. (since 2.2.0)"}
+          - value: OscSyntaxError
+            en: The OSC format is out of standard. Also sent for a packet larger than 512 bytes and for a message with more than 16 arguments.
+            ja: OSCのフォーマットが規格に沿っていなかった
+            changes:
+              - {version: "2.2.0", en: "Also sent for a packet larger than 512 bytes and for a message with more than 16 arguments.", ja: ""}
+          - value: WrongDataType
+            en: "Wrong datatype of in argument(s): a string for a number, NaN or infinity, or a non-string for `/setConfigName`. Nothing is applied."
+            ja: OSCメッセージの引数の型が異なっている
+            changes:
+              - {version: "2.2.0", en: "Nothing is applied. Before, such an argument was applied as 0.", ja: ""}
+          - {value: MissingArgument, since: "2.2.0", en: "The message has fewer arguments than the command needs. Nothing is applied.", ja: ""}
         description: {en: A character string that indicates the details of an error., ja: エラーの内容を示す文字列です。}
     description:
       en: |-
@@ -3895,18 +3905,30 @@ messages:
         type: string
         values:
           - {value: CommandIgnored, en: "The command is currently not executable. Also refer Timing section. Also sent when a value is outside the range of the command; nothing is applied (the motor ID is 255 for `/setPositionListReportInterval`).", ja: コマンドが実行可能なタイミングではない。タイミング参照。}
-          - {value: MotorIdNotMatch, en: "Motor ID is not appropriate. A motor ID outside 0-255 is replied with the value sent (257 and 511 were read as 1 and 255 before 2.2.0).", ja: モータIDが適切でない値になっている。}
+          - value: MotorIdNotMatch
+            en: Motor ID is not appropriate. A motor ID outside 0-255 is replied with the value sent.
+            ja: モータIDが適切でない値になっている。
+            changes:
+              - {version: "2.2.0", en: "A motor ID outside 0-255 is replied with the value sent. Before, 257 and 511 were read as 1 and 255.", ja: ""}
           - {value: BrakeEngaged, en: "A motion command was sent while the electromagnetic brake was active. Also sent for `/enableServoMode 1` and `/homing` while the brake is engaged, releasing or engaging (not while stopping or after `/free`).", ja: 電磁ブレーキが効いた状態のままモーションコマンドを送信した。}
-          - {value: HomeSwActivating, en: "Movement from home sensor position towards the origin point. Also sent by `/goUntil` and `/goUntilRaw` when the home switch is already activated (it was sent as `HomeSwActivated` before 2.2.0).", ja: ホームセンサ上から原点復帰方向に移動しようとした。}
+          - value: HomeSwActivating
+            en: Movement from home sensor position towards the origin point. Also sent by `/goUntil` and `/goUntilRaw` when the home switch is already activated.
+            ja: ホームセンサ上から原点復帰方向に移動しようとした。
+            changes:
+              - {version: "2.2.0", en: "Sent by `/goUntil` and `/goUntilRaw` when the home switch is already activated. It was sent as `HomeSwActivated` before.", ja: ""}
           - {value: LimitSwActivating, boards: [STEP400], en: Movement from limit sensor position towards the opposite direction from origin., ja: リミットセンサ上から原点復帰方向の逆向きに移動しようとした。}
           - {value: GoUntilTimeout, en: Timeout while executing `/goUntil` command., ja: "`/goUntil`コマンド実行中にタイムアウトした。"}
           - {value: ReleaseSwTimeout, en: Timeout while executing `/releaseSw` command., ja: "`/releaseSw`コマンド実行中にタイムアウトした。"}
-          - {value: InServoMode, en: "Received a command which can not be executed while servo mode. Also sent for `/goUntil`, `/goUntilRaw` and `/releaseSw` (since 2.2.0).", ja: サーボモードでは実行できないコマンドを送信した。}
-          - {value: BrakeReleaseFailed, en: "`/activate 1` was sent but the driver stayed HiZ (for example without motor power), so the brake stays engaged. (since 2.2.0)"}
-          - {value: BrakeEngagedOnHiZ, en: "The driver went HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) while the brake was released, so the brake was engaged. (since 2.2.0)"}
-          - {value: ServoModeCancelledOnHiZ, en: "The driver went HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) in the servo mode, so the servo mode was cancelled. Enable it again with `/enableServoMode 1`. (since 2.2.0)"}
-          - {value: MotorNotHiZ, en: "The command writes a driver register that can be written only while the outputs are HiZ, and the motor is not HiZ. A motor holding its position is not HiZ: send `/softHiZ` or `/hardHiZ` first. Nothing is applied. (since 2.2.0)"}
-          - {value: MotorNotStopped, en: "The command writes a driver register that can be written only while the motor is stopped or HiZ, and the motor is turning. Nothing is applied. (since 2.2.0)"}
+          - value: InServoMode
+            en: Received a command which can not be executed while servo mode.
+            ja: サーボモードでは実行できないコマンドを送信した。
+            changes:
+              - {version: "2.2.0", en: "Also sent for `/goUntil`, `/goUntilRaw` and `/releaseSw`.", ja: ""}
+          - {value: BrakeReleaseFailed, since: "2.2.0", en: "`/activate 1` was sent but the driver stayed HiZ (for example without motor power), so the brake stays engaged.", ja: ""}
+          - {value: BrakeEngagedOnHiZ, since: "2.2.0", en: "The driver went HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) while the brake was released, so the brake was engaged.", ja: ""}
+          - {value: ServoModeCancelledOnHiZ, en: "The driver went HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) in the servo mode, so the servo mode was cancelled. Enable it again with `/enableServoMode 1`.", since: "2.2.0", ja: ""}
+          - {value: MotorNotHiZ, en: "The command writes a driver register that can be written only while the outputs are HiZ, and the motor is not HiZ. A motor holding its position is not HiZ: send `/softHiZ` or `/hardHiZ` first. Nothing is applied.", since: "2.2.0", ja: ""}
+          - {value: MotorNotStopped, en: "The command writes a driver register that can be written only while the motor is stopped or HiZ, and the motor is turning. Nothing is applied.", since: "2.2.0", ja: ""}
         description: {en: A character string that indicates the details of an error., ja: エラーの内容を示す文字列です。}
       - use: motorID
         description: {en: The motor's ID, ja: モータのID}

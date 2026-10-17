@@ -59,7 +59,7 @@ lang: ja
 
 | キー | 名称 | 型 | 初期値 | 範囲 / 単位 | コマンド | 説明 |
 | --- | --- | --- | --- | --- | --- | --- |
-| <a id="driversettings-homingatstartup"></a>`homingAtStartup` | Homing when the system starts (モータごと) | bool | false |  |  | このチェックボックスが入っていると、起動すると直ちに原点復帰動作を行います。 |
+| <a id="driversettings-homingatstartup"></a>`homingAtStartup` | Homing when the system starts (モータごと) | bool | false |  |  | このチェックボックスが入っていると、起動すると直ちに原点復帰動作を行います。 **v2.2.0**: With the electromagnetic brake enabled, the brake is released first, as `/activate 1` does, and the homing starts once the brake is released. Before, the homing failed because the brake was engaged, and the timeout of the homing later sent a hard stop to the HiZ motor. |
 | <a id="driversettings-homingdirection"></a>`homingDirection` | Homing Direction (モータごと) | int | 0 (Reverse) |  | [`/setHomingDirection`](../reference/homing.md#sethomingdirection) |  |
 | <a id="driversettings-homingspeed"></a>`homingSpeed` | Homing Speed (モータごと) | float | 50 | step/s | [`/setHomingSpeed`](../reference/homing.md#sethomingspeed) |  |
 | <a id="driversettings-homeswmode"></a>`homeSwMode` | Home switch won't cause HardStop (モータごと) | bool | true |  | [`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode) |  |
