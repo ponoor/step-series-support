@@ -2735,7 +2735,7 @@ commands:
         After decelerating according to the speed profile, the motor stops while it is kept excited. Remains in the BUSY state until the motor stops. If it was originally in the High Z state, the motor will be excited while it keeps its position.
         If it was in the servo mode, the mode will be released.
 
-        With the electromagnetic brake enabled, the command does nothing while the brake is engaged or after [[/free]] (the motor is HiZ).
+        With the electromagnetic brake enabled, the command does nothing while the brake is engaged or after [[/free]] (the motor is HiZ). During the deceleration of [[/softHiZ]] or `/activate 0` (brake state 3), the command is executed and cancels the engaging: the brake stays released (state 2).
       ja: |
         スピードプロファイルに従って減速したのち、モータを励磁したまま停止します。モータが停止するまではBUSY状態になります。もともとHiZ状態だった場合は、停止したままモータが励磁します。
 
@@ -2757,7 +2757,7 @@ commands:
         Immediately stops the motor and leaves it excited. Remains in the BUSY state until the motor stops. If it was originally in the High Z state, the motor is excited while it keeps its position.
         If it was in the servo mode, the mode will be released.
 
-        With the electromagnetic brake enabled, the command does nothing while the brake is engaged or after [[/free]] (the motor is HiZ).
+        With the electromagnetic brake enabled, the command does nothing while the brake is engaged or after [[/free]] (the motor is HiZ). During the deceleration of [[/softHiZ]] or `/activate 0` (brake state 3), the command is executed and cancels the engaging: the brake stays released (state 2).
       ja: |
         モータを即時停止し、励磁したままにします。モータが停止するまではBUSY状態になります。もともとHiZ状態だった場合は、停止したままモータが励磁します。
 
@@ -2903,10 +2903,14 @@ commands:
       - {use: motorID, name: motorID1}
       - {use: motorID, name: motorID2}
     timing: always
-    description: {en: "", ja: ""}
+    description:
+      en: "Same as [[/softStop]] for two motors: it is handled as [[/softStop]] for motorID1 and then for motorID2."
+      ja: ""
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    changes:
+      - {version: "2.2.0", en: "Cancels pending motion like [[/softStop]] (each of the two motors is handled as a separate [[/softStop]]), also for a motor with the brake disabled.", ja: ""}
     see_also: [/softStop]
 
   - address: /combine/hardStop
@@ -2915,10 +2919,14 @@ commands:
       - {use: motorID, name: motorID1}
       - {use: motorID, name: motorID2}
     timing: always
-    description: {en: "", ja: ""}
+    description:
+      en: "Same as [[/hardStop]] for two motors: it is handled as [[/hardStop]] for motorID1 and then for motorID2."
+      ja: ""
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    changes:
+      - {version: "2.2.0", en: "Cancels pending motion like [[/hardStop]] (each of the two motors is handled as a separate [[/hardStop]]), also for a motor with the brake disabled.", ja: ""}
     see_also: [/hardStop]
 
   - address: /combine/softHiZ
@@ -2927,10 +2935,14 @@ commands:
       - {use: motorID, name: motorID1}
       - {use: motorID, name: motorID2}
     timing: always
-    description: {en: "", ja: ""}
+    description:
+      en: "Same as [[/softHiZ]] for two motors: it is handled as [[/softHiZ]] for motorID1 and then for motorID2."
+      ja: ""
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    changes:
+      - {version: "2.2.0", en: "Cancels pending motion like [[/softHiZ]] (each of the two motors is handled as a separate [[/softHiZ]]), also for a motor with the brake disabled.", ja: ""}
     see_also: [/softHiZ]
 
   - address: /combine/hardHiZ
@@ -2939,10 +2951,14 @@ commands:
       - {use: motorID, name: motorID1}
       - {use: motorID, name: motorID2}
     timing: always
-    description: {en: "", ja: ""}
+    description:
+      en: "Same as [[/hardHiZ]] for two motors: it is handled as [[/hardHiZ]] for motorID1 and then for motorID2."
+      ja: ""
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
+    changes:
+      - {version: "2.2.0", en: "Cancels pending motion like [[/hardHiZ]] (each of the two motors is handled as a separate [[/hardHiZ]]), also for a motor with the brake disabled.", ja: ""}
     see_also: [/hardHiZ]
 
   - address: /runRaw
