@@ -53,6 +53,8 @@ lang: ja
 | [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH (初期値) | 15 | 7 (ファームウェア) / 15 (テンプレート) |
 | [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | STALL_TH (範囲) | 0-31 | 0-127 |
 | [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | STALL_TH (初期値) | 31 | 127 |
+| [`/setSpeedProfile`](speed-profile.md#setspeedprofile) | dec (範囲) | 14.55-59590 | 14.55-59575 |
+| [`/setDec`](speed-profile.md#setdec) | dec (範囲) | 14.55-59590 | 14.55-59575 |
 
 ## ボードによって値が異なるメッセージ
 

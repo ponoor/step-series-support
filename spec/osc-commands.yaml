@@ -1813,13 +1813,13 @@ commands:
       - use: motorID
       - name: acc
         type: float
-        range: [14.55, 59590]
+        range: [14.55, 59575]
         unit: step/s/s
         setting: speedProfile.acc
         description: {en: acceleration, ja: 加速度}
       - name: dec
         type: float
-        range: [14.55, 59590]
+        range: {STEP400: [14.55, 59590], STEP800: [14.55, 59575]}
         unit: step/s/s
         setting: speedProfile.dec
         description: {en: deceleration, ja: 減速度}
@@ -1866,7 +1866,10 @@ commands:
         description: {en: threshold, ja: 切り替わる閾値}
     timing: always
     description:
-      en: Sets the threshold at which the microstepping mode automatically switches to full-step mode.
+      en: |-
+        Sets the threshold at which the microstepping mode automatically switches to full-step mode.
+
+        A value above the range is limited to 15625 step/s by the driver library. A value from 0 up to the lower end of the range is written as the lower end (7.63 step/s). A negative value below about -7.6 is not limited to the lower end: the driver library converts it to a huge unsigned number and limits that to the maximum, so it becomes 15625 step/s.
       ja: マイクロステッピングモードが自動でフルステップモードに切り替わる閾値を設定します。
     see_also: [/getFullstepSpeed]
 
@@ -1906,7 +1909,7 @@ commands:
       - use: motorID
       - name: acc
         type: float
-        range: [14.55, 59590]
+        range: [14.55, 59575]
         unit: step/s/s
         setting: speedProfile.acc
         description: {en: acceleration, ja: 加速度}
@@ -1931,7 +1934,7 @@ commands:
       - use: motorID
       - name: dec
         type: float
-        range: [14.55, 59590]
+        range: {STEP400: [14.55, 59590], STEP800: [14.55, 59575]}
         unit: step/s/s
         setting: speedProfile.dec
         description: {en: deceleration, ja: 減速度}
@@ -1966,6 +1969,8 @@ commands:
         Set the speed profile minimum speed. This value is also used for the motor speed of [[/releaseSw]]. When Low speed optimization ([[/enableLowSpeedOptimize]]) is enabled, the minimum speed of the speed profile is set to zero.
 
         While the low speed optimization is disabled, the motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value. While it is enabled, only the saved value changes and no error is sent.
+
+        A value above the range is limited to 976.3 step/s by the driver library. A negative value below about -0.24 is not limited to 0: the driver library converts it to a huge unsigned number and limits that to the maximum, so it becomes 976.3 step/s.
       ja: スピードプロファイルの最小速さを設定します。この値は[[/releaseSw]]時のモータ回転速さにも使用されます。Low speed optimization ([[/enableLowSpeedOptimize]])が有効になっている場合、 minSpeedは強制的に0になります。
     errors: [MotorNotStopped]
     changes:
@@ -2255,7 +2260,7 @@ commands:
         Move the motor at specified speed and direction. When the HOME switch turns on (the HOME switch terminal is closed), process ABS_POS register according to the ACT value.
         The motor will softStop afterwards, but if the SW_MODE is set to 0 in the [[/setHomeSwMode]] command, it will be a hardStop instead. This command will keep the motor to the BUSY state until it stops.
 
-        A speed outside the range is limited by the driver library.
+        The sign of the speed is the direction. A speed whose absolute value is above the range is limited to the largest register value (0xFFFFF, about 15625 step/s) by the driver library.
       ja: |
         指定の速度で回転し、HOMEスイッチ端子が閉状態になるとACTの値に応じた処理を行います。
         その後softStopしますが、[[/setHomeSwMode]]コマンドでSW_MODEが0に設定されていると、softStopではなくhardStopになります。このコマンドは、モータが停止するまでBUSY状態を保ちます。
@@ -2645,7 +2650,7 @@ commands:
       en: |-
         Rotates the motor at specified speed. The acceleration is controlled with the pre-set speed profile. The speed is limited by maxSpeed. It remains in the BUSY state until the motor reaches the specified speed.
 
-        A speed outside the range is limited by the driver library.
+        The sign of the speed is the direction. A speed whose absolute value is above the range is limited to the largest register value (0xFFFFF, about 15625 step/s) by the driver library.
       ja: モータを指定速度で回転させます。事前に設定したスピードプロファイルの加速度に従って加速します。指定する回転速さは、maxSpeedを超えるとmaxSpeedでリミットされます。指定速度に到達するまではBUSY状態になります。
     response:
       - message: /homingStatus
@@ -2665,7 +2670,7 @@ commands:
       en: |-
         Moves specified number of steps according to the pre-set speed profile. It remains in the BUSY state until it reaches the specified step count. This command can only execute when the motor is stopped.
 
-        A step count outside the 22-bit range is not rejected: the driver truncates it to 22 bits.
+        A step count whose absolute value is above 4,194,303 (22 bits) is not rejected: it is limited to 4,194,303 by the driver library.
       ja: 事前に設定したスピードプロファイルに従って、指定ステップ数移動します。指定ステップ数を移動し終わるまではBUSY状態になります。このコマンドはモータが停止していないと実行できません。
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     see_also: [/combine/move]
@@ -2684,7 +2689,7 @@ commands:
         Moves to the specified position in the shortest route according to the pre-set speed profile. Remains in the BUSY state until it finishes moving to the specified position.
         Inside the driver, -2,097,152 and 2,097,151 are located next to each other in a loop.
 
-        A position outside the range is not rejected: the driver truncates it to 22 bits.
+        A position outside the range is not rejected. A position above 4,194,303 is limited to 4,194,303 by the driver library, which the driver reads as -1. Any other position is cut to its lower 22 bits and read as a signed number: 2,097,152 becomes -2,097,152 and -2,097,153 becomes 2,097,151.
       ja: |
         事前に設定したスピードプロファイルにしたがって、指定位置まで最短経路で移動します。指定位置まで移動し終わるまではBUSY状態になります。
 
@@ -2714,7 +2719,7 @@ commands:
       en: |-
         Moves to the specified position in the specified direction according to the pre-set speed profile. Remains in the BUSY state until it finishes moving to the specified position.
 
-        A position outside the range is not rejected: the driver truncates it to 22 bits.
+        A position outside the range is not rejected. A position above 4,194,303 is limited to 4,194,303 by the driver library, which the driver reads as -1. Any other position is cut to its lower 22 bits and read as a signed number: 2,097,152 becomes -2,097,152 and -2,097,153 becomes 2,097,151.
       ja: 事前に設定したスピードプロファイルにしたがって、指定位置まで指定方向で移動します。指定位置まで移動し終わるまではBUSY状態になります。
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     changes:
@@ -2826,7 +2831,7 @@ commands:
         description: {en: Rotation speed, ja: 回転速度}
     timing: motion_start
     description:
-      en: A speed outside the range is limited by the driver library.
+      en: Same as [[/run]] for two motors. The sign of the speed is the direction. A speed whose absolute value is above the range is limited to the largest register value (0xFFFFF, about 15625 step/s) by the driver library.
       ja: ""
     response:
       - message: /homingStatus
@@ -2845,7 +2850,7 @@ commands:
     timing: [stopped, motion_start]
     description:
       en: |-
-        A step count outside the 22-bit range is not rejected: the driver truncates it to 22 bits.
+        Same as [[/move]] for two motors. A step count whose absolute value is above 4,194,303 (22 bits) is not rejected: it is limited to 4,194,303 by the driver library.
       ja: ""
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     see_also: [/move]
@@ -2862,7 +2867,7 @@ commands:
     timing: motion_start
     description:
       en: |-
-        A position outside the range is not rejected: the driver truncates it to 22 bits.
+        Same as [[/goTo]] for two motors. A position outside the range is not rejected. A position above 4,194,303 is limited to 4,194,303 by the driver library, which the driver reads as -1. Any other position is cut to its lower 22 bits and read as a signed number: 2,097,152 becomes -2,097,152 and -2,097,153 becomes 2,097,151.
       ja: ""
     response:
       - message: /homingStatus
@@ -2887,7 +2892,7 @@ commands:
     timing: motion_start
     description:
       en: |-
-        A position outside the range is not rejected: the driver truncates it to 22 bits.
+        Same as [[/goToDir]] for two motors. A position outside the range is not rejected. A position above 4,194,303 is limited to 4,194,303 by the driver library, which the driver reads as -1. Any other position is cut to its lower 22 bits and read as a signed number: 2,097,152 becomes -2,097,152 and -2,097,153 becomes 2,097,151.
       ja: ""
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     see_also: [/goToDir]

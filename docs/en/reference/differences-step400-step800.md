@@ -53,6 +53,8 @@ None.
 | [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH (Initial value) | 15 | 7 (firmware) / 15 (template) |
 | [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | STALL_TH (Range) | 0-31 | 0-127 |
 | [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | STALL_TH (Initial value) | 31 | 127 |
+| [`/setSpeedProfile`](speed-profile.md#setspeedprofile) | dec (Range) | 14.55-59590 | 14.55-59575 |
+| [`/setDec`](speed-profile.md#setdec) | dec (Range) | 14.55-59590 | 14.55-59575 |
 
 ## Messages with board-specific values
 
