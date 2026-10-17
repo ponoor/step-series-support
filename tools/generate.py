@@ -327,6 +327,9 @@ def render_values_tables(ctx: Ctx, a: dict, name: str) -> list[str]:
             meaning = ctx.item_text(it, "value")
             if only and set(only) != set(spec.board_names):
                 meaning = f"{meaning} ({L['boards_only'].format(boards=boards_text(spec, board_sorted(spec, only)))})"
+            notes = inline_notes(ctx, it)
+            if notes:
+                meaning = f"{meaning} {notes}"
             rows.append([fmt(it["value"]), meaning])
         title = f"`{name}`" + (f" - {board}" if board else "")
         out.append(f"{title}\n\n" + table([L["value"], L["meaning"]], rows))
@@ -478,6 +481,16 @@ def render_changes(ctx: Ctx, item: dict) -> str:
     return f"#### {ctx.L['changes']}\n\n" + "\n".join(lines)
 
 
+def inline_notes(ctx: Ctx, item: dict) -> str:
+    """`since` and `changes` of a value or a configuration item, on one line (for table cells and lists)."""
+    parts = []
+    if item.get("since"):
+        parts.append(ctx.L["added"].format(v=item["since"]))
+    for c in item.get("changes") or []:
+        parts.append(f"**v{c['version']}**: " + ctx.md(ctx.item_text(c, "change")).replace("\n", " "))
+    return " ".join(parts)
+
+
 def render_command_block(ctx: Ctx, addr: str) -> str:
     spec, L = ctx.spec, ctx.L
     cmd = spec.command(addr)
@@ -539,6 +552,9 @@ def _error_line(ctx: Ctx, name: str) -> str:
     for v in msg["args"][0].get("values", []):
         if v["value"] == name:
             text = ctx.item_text(v, "error")
+            notes = inline_notes(ctx, v)
+            if notes:
+                text = f"{text} {notes}".strip()
     return f"- `{name}`" + (f": {text}" if text else "")
 
 
@@ -783,6 +799,9 @@ def page_settings(ctx: Ctx) -> str:
             cmds = ", ".join(f"[`{c}`]({ctx.link_to(c)})" for c in s.get("commands", []))
             desc = ctx.tx(s.get("description"), "description") if s.get("description") else ""
             desc = ctx.md(desc).replace("\n", " ") if desc else ""
+            notes = inline_notes(ctx, s)
+            if notes:
+                desc = f"{desc} {notes}".strip()
             rows.append([name, label, s["type"], init, rng, cmds, desc])
         out += [table([L["key"], L["label"], L["type"], L["initial_col"], f"{L['range']} / {L['unit']}", L["commands_col"], L["description"]], rows), ""]
     return "\n".join(out)

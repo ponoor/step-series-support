@@ -119,7 +119,9 @@
         "value": {"$ref": "#/$defs/scalar"},
         "en": {"type": "string"},
         "ja": {"type": "string"},
-        "boards": {"$ref": "#/$defs/boardList"}
+        "boards": {"$ref": "#/$defs/boardList"},
+        "since": {"$ref": "#/$defs/version"},
+        "changes": {"type": "array", "items": {"$ref": "#/$defs/change"}}
       }
     },
     "valueList": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/valueItem"}},
@@ -271,6 +273,8 @@
         "commands": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/address"}},
         "aliases": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
         "boards": {"$ref": "#/$defs/boardList"},
+        "since": {"$ref": "#/$defs/version"},
+        "changes": {"type": "array", "items": {"$ref": "#/$defs/change"}},
         "description": {"$ref": "#/$defs/localized"}
       }
     }

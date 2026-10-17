@@ -170,6 +170,34 @@ class GenerateTest(unittest.TestCase):
         n = int(text.split("Japanese texts filled with English:")[1].split()[0])
         self.assertGreater(n, 0)                          # /booted resetCause etc. have no ja
 
+    def test_since_and_changes_of_values_and_settings(self):
+        """`since` / `changes` of a value, an error and a configuration item are shown like those of a command."""
+        import copy
+        data = copy.deepcopy(SPEC.data)
+        msg = next(m for m in data["messages"] if m["address"] == "/error/command")
+        vals = msg["args"][0]["values"]
+        vals[0]["since"] = "9.9.9"
+        vals[0]["changes"] = [{"version": "9.9.9", "en": "Changed text of a value.", "ja": "値の変更。"}]
+        setting = next(x for x in data["settings"] if x["key"] == "driverSettings.homingAtStartup")
+        setting["since"] = "9.9.9"
+        setting["changes"] = [{"version": "9.9.9", "en": "Changed text of a setting.", "ja": ""}]
+        spec = Spec(data)
+        page = self.docs / "en" / "reference" / "system-settings.md"
+        page.write_text(PAGE_EN.replace("<!-- osc: /getVersion -->", "<!-- osc-message: /error/command -->"), encoding="utf-8")
+        out = io.StringIO()
+        self.assertEqual(generate.run(self.docs, spec, out=out), 0, out.getvalue())
+        text = page.read_text(encoding="utf-8")
+        self.assertIn("Added in v9.9.9.", text)
+        self.assertIn("**v9.9.9**: Changed text of a value.", text)
+        settings_en = (self.docs / "en" / "connections" / "configuration-items.md").read_text(encoding="utf-8")
+        line = [l for l in settings_en.splitlines() if "`homingAtStartup`" in l][0]
+        self.assertIn("Added in v9.9.9.", line)
+        self.assertIn("**v9.9.9**: Changed text of a setting.", line)
+        settings_ja = (self.docs / "ja" / "connections" / "configuration-items.md").read_text(encoding="utf-8")
+        line = [l for l in settings_ja.splitlines() if "`homingAtStartup`" in l][0]
+        self.assertIn("v9.9.9 で追加。", line)
+        self.assertIn("Changed text of a setting.", line)    # no Japanese yet: English is used
+
     def test_coverage_check_reports_missing_markers(self):
         code, text = run(self.docs, coverage=True)
         self.assertEqual(code, 1)

@@ -10,7 +10,7 @@ Checks
     settings.*.commands (-> commands), errors (-> values of /error/command)
   - duplicated addresses and setting keys
   - keys of board-specific values are boards defined in `boards`
-Warnings (not failures): empty texts (missing Japanese etc.), messages without description.
+Warnings (not failures): empty texts (missing Japanese etc.), values with en but no ja, messages without description.
 Exit code 1 if any check fails.
 """
 
@@ -162,6 +162,27 @@ def check_warnings(spec: Spec, rep: Report):
     for m in spec.messages:
         if "description" not in m:
             rep.warn(f"message without description: {m['address']}")
+    # `values` entries write en / ja next to `value`; the schema does not require ja
+    def values_of(owner: str, args: list, kind: str):
+        for a in args:
+            vals = spec.expand_arg(a).get("values") if "use" in a else a.get("values")
+            lists = list(vals.values()) if spec.is_board_map(vals) else [vals]
+            for lst in lists:
+                for v in lst or []:
+                    yield f"{owner}.{a.get('name', a.get('use'))}.{v['value']}", v
+
+    owners = [(c["address"], c.get("args", [])) for c in spec.commands]
+    owners += [(m["address"], m.get("args", [])) for m in spec.messages]
+    for owner, args in owners:
+        for where, v in values_of(owner, args, "arg"):
+            if v.get("en", "").strip() and "ja" not in v:
+                rep.warn(f"missing ja text: {where}")
+    for s in spec.settings:
+        lists = list(s["values"].values()) if spec.is_board_map(s.get("values")) else [s.get("values")]
+        for lst in lists:
+            for v in lst or []:
+                if v.get("en", "").strip() and "ja" not in v:
+                    rep.warn(f"missing ja text: {s['key']}.{v['value']}")
 
 
 def main() -> int:
