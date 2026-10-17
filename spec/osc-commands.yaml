@@ -2137,7 +2137,7 @@ commands:
     response: [/homingStatus]
     errors: [CommandIgnored, BrakeEngaged, GoUntilTimeout, ReleaseSwTimeout, InServoMode]
     changes:
-      - {version: "2.2.0", en: "While the brake is not released, replies `/error/command BrakeEngaged` and does nothing. Before, it set the homing state although it did not start.", ja: ""}
+      - {version: "2.2.0", en: "While the brake is engaged, releasing or engaging (not while stopping or after `/free`), replies `/error/command BrakeEngaged` and does nothing. Before, it set the homing state although it did not start.", ja: ""}
       - {version: "2.2.0", en: "The homing no longer often ends with `/homingStatus` 4 and `ReleaseSwTimeout` about 1 ms after the switch was found, instead of 3 (a timing error of the timeout check; it happened in almost every homing or almost never, depending on the start-up).", ja: ""}
     see_also: [/getHomingStatus]
 
@@ -3009,7 +3009,7 @@ commands:
         Switches motor excitation / release when electromagnetic brake mode is enabled. The electromagnetic brake (EM) also works conjunction with the motor. You cannot send motor movement command when the motor is not excited by this command.
         If the EM mode is disabled, this command is ignored.
 
-        `/activate 1` while the brake is released does nothing. Otherwise it energizes the driver and releases the brake after `brakeTransitionDuration`, but only if a status read after the command shows the driver energized. If the driver stays HiZ (for example without motor power), the brake stays engaged and `BrakeReleaseFailed` is sent.
+        `/activate 1` while the brake is released does nothing. From the engaged state it energizes the driver and releases the brake after `brakeTransitionDuration`, but only if a status read after the command shows the driver energized (during the engaging it goes back to the release sequence, during the stopping it only cancels the engaging, after [[/free]] it releases at once). If the driver stays HiZ (for example without motor power), the brake stays engaged and `BrakeReleaseFailed` is sent.
 
         `/activate 0` on a turning motor decelerates it and engages the brake when it has stopped, like [[/softHiZ]]; on a stopped motor the brake is engaged at the next status read (up to 5 ms later). The driver goes HiZ after `brakeTransitionDuration`. The brake state can be read with [[/getBrakeStatus]].
       ja: |
@@ -3028,7 +3028,7 @@ commands:
       - {version: "2.2.0", en: "`/activate 0` on a stopped motor engages the brake at the next status read (up to 5 ms later). The stop is now judged on a status read after the command.", ja: ""}
       - {version: "2.2.0", en: "After `/free`: `/activate 1` returns the motor to the released (energized) state, and `/activate 0` engages the brake at once (the motor is already HiZ).", ja: ""}
       - {version: "2.2.0", en: "KVAL_HOLD (TVAL_HOLD in the current mode) is raised to at least half of KVAL_RUN (TVAL_RUN) whenever the motor is energized again: from engaged or engaging (as before), and now also after `/free`.", ja: ""}
-      - {version: "2.2.0", en: "Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: ""}
+      - {version: "2.2.0", en: "`/activate 0` cancels pending motion of a motor with the brake enabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: ""}
     see_also: [/enableElectromagnetBrake, /free, /getBrakeStatus]
 
   - address: /free
@@ -3056,7 +3056,7 @@ commands:
       - {version: "2.2.0", en: "After `/free`, a stop of the motor no longer engages the brake (when `/free` was sent during the deceleration of `/softHiZ`).", ja: ""}
       - {version: "2.2.0", en: "After `/free`, a motion command (`/run`, `/move`, `/goTo`, ...) is executed and the motor returns to the released (energized) state. `/activate 1` does the same. `/activate 0`, `/softHiZ` and `/hardHiZ` engage the brake at once (the motor is already HiZ).", ja: ""}
       - {version: "2.2.0", en: "KVAL_HOLD (TVAL_HOLD in the current mode) is raised to at least half of KVAL_RUN (TVAL_RUN) when the motor is energized again after `/free`. Before, the motor was energized with the configured holding value.", ja: ""}
-      - {version: "2.2.0", en: "Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: ""}
+      - {version: "2.2.0", en: "`/free` cancels pending motion of a motor with the brake enabled (with the brake disabled it replies `CommandIgnored`): a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: ""}
     see_also: [/enableElectromagnetBrake, /activate, /getBrakeStatus]
 
   - address: /setBrakeTransitionDuration
@@ -3118,7 +3118,7 @@ commands:
 
         Enabling the servo mode turns off the BUSY, motor status and direction reports ([[/enableBusyReport]], [[/enableMotorStatusReport]], [[/enableDirReport]]) of the motor. Disabling the servo mode does not turn them on again; send the enable commands again if needed. It also resets the integral term and the previous error of the PID controller. While in the servo mode, [[/goUntil]], [[/goUntilRaw]], [[/releaseSw]] and [[/homing]] reply `InServoMode`.
 
-        With the electromagnetic brake enabled, `/enableServoMode 1` replies `BrakeEngaged` and does nothing while the brake is not released; `/enableServoMode 0` does nothing while the brake is engaged or after [[/free]].
+        With the electromagnetic brake enabled, `/enableServoMode 1` replies `BrakeEngaged` and does nothing while the brake is engaged, releasing or engaging (while stopping or after `/free` the command is executed); `/enableServoMode 0` does nothing while the brake is engaged or after [[/free]].
 
         When the driver goes HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) in the servo mode, the servo mode is cancelled and `ServoModeCancelledOnHiZ` is sent (`BrakeEngagedOnHiZ` too, with the brake enabled). Enable the servo mode again with `/enableServoMode 1`; the current position becomes the target.
       ja: |
@@ -3130,12 +3130,12 @@ commands:
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
     errors: [BrakeEngaged]
     changes:
-      - {version: "2.2.0", en: "With the brake enabled, `/enableServoMode 1` while the brake is not released replies `/error/command BrakeEngaged` and does nothing. Before, it energized and moved the motor with the brake engaged.", ja: ""}
+      - {version: "2.2.0", en: "With the brake enabled, `/enableServoMode 1` while the brake is engaged, releasing or engaging (not while stopping or after `/free`) replies `/error/command BrakeEngaged` and does nothing. Before, it energized and moved the motor with the brake engaged.", ja: ""}
       - {version: "2.2.0", en: "With the brake enabled, `/enableServoMode 0` while the brake is engaged or after `/free` (motor HiZ) does nothing. Before, it energized the motor.", ja: ""}
       - {version: "2.2.0", en: "When a driver goes HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) in the servo mode, the servo mode is cancelled and `/error/command ServoModeCancelledOnHiZ` is sent (follows [[/reportError]]), with or without the brake. With the brake enabled, `BrakeEngagedOnHiZ` is also sent. Before, with the brake disabled the next servo update energized the driver again. The commands that make the driver HiZ cancel the servo mode first and do not send this error.", ja: ""}
       - {version: "2.2.0", en: "Enabling the servo mode resets the integral and the previous error of the PID controller. The previous values were kept from the last time the servo mode was used.", ja: ""}
-      - {version: "2.2.0", en: "The update period is 5 ms instead of 10 ms (and no longer varies between 7 and 13 ms when position reports are enabled). The integral and derivative terms are scaled by the period, so the same `kP`, `kI` and `kD` were designed to give about the same response; retune the gains if needed.", ja: ""}
-      - {version: "2.2.0", en: "STEP400: the home switch and the limit switch are judged separately. A pressed home switch stops the motion towards `homingDirection`, and a pressed limit switch stops the motion away from it. While the home switch was pressed, the limit switch was not checked. Only a motor with both switches pressed behaves differently.", ja: ""}
+      - {version: "2.2.0", en: "The update period is 5 ms instead of 10 ms (and no longer varies between 7 and 13 ms when position reports are enabled; an OSC message that sends several replies can still delay one update, up to 7.75 ms measured). The integral and derivative terms are scaled by the period, so the same `kP`, `kI` and `kD` were designed to give about the same response; retune the gains if needed.", ja: ""}
+      - {version: "2.2.0", en: "STEP400: the home switch and the limit switch are judged separately. A pressed home switch stops the motion towards `homingDirection` (with `/setProhibitMotionOnHomeSw` or the home switch in the hard stop mode), and a pressed limit switch stops the motion away from it (with `/setProhibitMotionOnLimitSw` or the limit switch in the hard stop mode), as before. While the home switch was pressed, the limit switch was not checked. Only a motor with both switches pressed behaves differently.", ja: ""}
       - {version: "2.2.0", en: "The automatic hard stop at a switch event in the servo mode is not sent to a motor whose driver is HiZ.", ja: ""}
       - {version: "2.2.0", en: "Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: ""}
     see_also: [/setTargetPosition, /setServoParam]
@@ -3239,7 +3239,7 @@ messages:
           en: Indicates if destIp has been changed. 1 if it has been changed, or 0 if the same address has already been set.
           ja: destIpが変更されたかどうかを示します。変更されていると1, すでに同じアドレスが設定されていた場合は0
     changes:
-      - {version: "2.2.0", en: "The message is sent once the MAC address of the destination has been resolved, so it can come up to about 2 s after [[/setDestIp]]. If it does not come, send `/setDestIp` again.", ja: ""}
+      - {version: "2.2.0", en: "When the [[/setDestIp]] starts the resolution of the MAC address (the first one, one from another address, or one 1.5 s or more after the last packet from the destination), the message is sent once it has been resolved, so it can come up to about 2 s later; otherwise it is sent at once. If it does not come, send `/setDestIp` again.", ja: ""}
 
   - address: /version
     args:
@@ -3442,10 +3442,10 @@ messages:
       - use: motorID
     description:
       en: |-
-        Sent at once when the overcurrent condition starts and then, while it lasts, at most every 200 ms per motor. Detections within the 200 ms are not lost: they give one message at the end of the interval. Detections while the report is disabled ([[/enableOverCurrentReport]]) are not sent later.
+        Sent at once when the overcurrent condition starts (if no such report of the motor went out in the last 200 ms) and then, while it lasts, at most every 200 ms per motor. Detections within the 200 ms are not lost: they give one message at the end of the interval. Detections while the report is disabled ([[/enableOverCurrentReport]]) are not sent later.
       ja: ""
     changes:
-      - {version: "2.2.0", en: "Sent at once when the condition starts and then, while it lasts, at most every 200 ms per motor. Before, it was sent at every status read while the condition lasted (every 10 ms). The message is unchanged.", ja: ""}
+      - {version: "2.2.0", en: "Sent at once when the condition starts (if no such report of the motor went out in the last 200 ms) and then, while it lasts, at most every 200 ms per motor. Before, it was sent at every status read while the condition lasted (every 10 ms). The message is unchanged.", ja: ""}
 
   - address: /overCurrentThreshold
     args:
@@ -3461,10 +3461,10 @@ messages:
       - use: motorID
     description:
       en: |-
-        Sent at once when the stall condition starts and then, while it lasts, at most every 200 ms per motor. Detections within the 200 ms are not lost: they give one message at the end of the interval. Detections while the report is disabled ([[/enableStallReport]]) are not sent later.
+        Sent at once when the stall condition starts (if no such report of the motor went out in the last 200 ms) and then, while it lasts, at most every 200 ms per motor. Detections within the 200 ms are not lost: they give one message at the end of the interval. Detections while the report is disabled ([[/enableStallReport]]) are not sent later.
       ja: ""
     changes:
-      - {version: "2.2.0", en: "Sent at once when the condition starts and then, while it lasts, at most every 200 ms per motor. Before, it was sent at every status read while the condition lasted (every 10 ms). The message is unchanged.", ja: ""}
+      - {version: "2.2.0", en: "Sent at once when the condition starts (if no such report of the motor went out in the last 200 ms) and then, while it lasts, at most every 200 ms per motor. Before, it was sent at every status read while the condition lasted (every 10 ms). The message is unchanged.", ja: ""}
 
   - address: /stallThreshold
     args:
@@ -3896,7 +3896,7 @@ messages:
         values:
           - {value: CommandIgnored, en: "The command is currently not executable. Also refer Timing section. Also sent when a value is outside the range of the command; nothing is applied (the motor ID is 255 for `/setPositionListReportInterval`).", ja: コマンドが実行可能なタイミングではない。タイミング参照。}
           - {value: MotorIdNotMatch, en: "Motor ID is not appropriate. A motor ID outside 0-255 is replied with the value sent (257 and 511 were read as 1 and 255 before 2.2.0).", ja: モータIDが適切でない値になっている。}
-          - {value: BrakeEngaged, en: "A motion command was sent while the electromagnetic brake was active. Also sent for `/enableServoMode 1` and `/homing` while the brake is not released.", ja: 電磁ブレーキが効いた状態のままモーションコマンドを送信した。}
+          - {value: BrakeEngaged, en: "A motion command was sent while the electromagnetic brake was active. Also sent for `/enableServoMode 1` and `/homing` while the brake is engaged, releasing or engaging (not while stopping or after `/free`).", ja: 電磁ブレーキが効いた状態のままモーションコマンドを送信した。}
           - {value: HomeSwActivating, en: "Movement from home sensor position towards the origin point. Also sent by `/goUntil` and `/goUntilRaw` when the home switch is already activated (it was sent as `HomeSwActivated` before 2.2.0).", ja: ホームセンサ上から原点復帰方向に移動しようとした。}
           - {value: LimitSwActivating, boards: [STEP400], en: Movement from limit sensor position towards the opposite direction from origin., ja: リミットセンサ上から原点復帰方向の逆向きに移動しようとした。}
           - {value: GoUntilTimeout, en: Timeout while executing `/goUntil` command., ja: "`/goUntil`コマンド実行中にタイムアウトした。"}
