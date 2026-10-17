@@ -1,0 +1,134 @@
+# MkDocs configuration (Material). Pages are frames until R4 moves the contents.
+# The old pages (docs/connections-and-settings, ...) are excluded with exclude_docs until they are moved.
+# site_url is a placeholder: all links are relative. The header design of ponoor.com goes into overrides/.
+site_name: STEP Series
+site_description: Documentation of the STEP400 / STEP800 stepper motor controllers
+site_url: https://example.invalid/step-series/
+docs_dir: docs
+use_directory_urls: true
+theme:
+  name: material
+  custom_dir: overrides
+  features:
+  - navigation.sections
+  - navigation.top
+  - search.suggest
+  - content.code.copy
+extra_css:
+- assets/extra.css
+plugins:
+- search
+- i18n:
+    docs_structure: folder
+    fallback_to_default: true
+    reconfigure_material: true
+    reconfigure_search: true
+    languages:
+    - locale: en
+      default: true
+      name: English
+      build: true
+    - locale: ja
+      name: 日本語
+      build: true
+      nav_translations:
+        Getting started: はじめに
+        Connections and settings: 接続と設定
+        Functional guides: 機能ガイド
+        OSC reference: OSC リファレンス
+        Hardware: ハードウェア
+        Maintenance: 保守
+        STEP100 / STEP200: STEP100 / STEP200
+markdown_extensions:
+- attr_list
+- tables
+- admonition
+- toc:
+    permalink: true
+- pymdownx.details
+- pymdownx.superfences
+exclude_docs: '/connections-and-settings/
+
+  /emb-step400/
+
+  /functional-descriptions/
+
+  /osc-command-references/
+
+  /step100-200/
+
+  /technical-informations/
+
+  /tutorial_en.md
+
+  /tutorial_jp.md
+
+  /README.md
+
+  /UPDATE_PROGRESS.md
+
+  /_redirects_map.md
+
+  '
+nav:
+- index.md
+- Getting started:
+  - getting-started/index.md
+  - getting-started/quickstart.md
+- Connections and settings:
+  - connections/index.md
+  - connections/power-supply-and-motor.md
+  - connections/sensors-and-switches.md
+  - connections/network-and-dip-switch.md
+  - connections/electromagnetic-brake-wiring.md
+  - connections/how-settings-work.md
+  - connections/microsd-card.md
+  - connections/browser-config-tool.md
+  - connections/configuration-items.md
+  - connections/example-parameters.md
+- Functional guides:
+  - guides/index.md
+  - guides/communication-and-messages.md
+  - guides/voltage-and-current-mode.md
+  - guides/speed-profile-and-motions.md
+  - guides/homing-and-position.md
+  - guides/servo-mode.md
+  - guides/electromagnetic-brake.md
+  - guides/alarms-and-protection.md
+- OSC reference:
+  - reference/index.md
+  - reference/command-list.md
+  - reference/system-settings.md
+  - reference/motor-driver-settings.md
+  - reference/alarm-settings.md
+  - reference/voltage-and-current-mode-settings.md
+  - reference/speed-profile.md
+  - reference/homing.md
+  - reference/home-and-limit-sensors.md
+  - reference/position-management.md
+  - reference/motor-control.md
+  - reference/brake.md
+  - reference/servo-mode_reference.md
+  - reference/automatically-sent-messages.md
+  - reference/differences-step400-step800.md
+- Hardware:
+  - hardware/step400.md
+  - hardware/step800.md
+  - hardware/emb-step400.md
+- Maintenance:
+  - maintenance/index.md
+  - maintenance/firmware-update.md
+  - maintenance/compile-the-arduino-sketch.md
+  - maintenance/usb-serial-diagnosis.md
+  - maintenance/troubleshooting.md
+  - maintenance/changelog.md
+  - maintenance/migration-guide.md
+- STEP100 / STEP200:
+  - step100-200/index.md
+  - step100-200/get-the-materials.md
+  - step100-200/assemble/index.md
+  - step100-200/assemble/connections.md
+  - step100-200/assemble/step100.md
+  - step100-200/assemble/step200.md
+  - step100-200/upload-the-sketch.md
+  - step100-200/usage.md

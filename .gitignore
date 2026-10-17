@@ -12,3 +12,4 @@ TASK_*.md
 PLAN_*.md
 REPORT_*.md
 .venv/
+/site/
