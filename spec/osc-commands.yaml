@@ -524,7 +524,7 @@ settings:
     default: 0
     commands: [/setKval, /setHoldKval]
     description:
-      en: With the electromagnetic brake enabled, KVAL_HOLD is raised to at least half of KVAL_RUN whenever the motor is energized again; the raised value is also returned by [[/getKval]].
+      en: With the electromagnetic brake enabled, KVAL_HOLD is raised to at least half of KVAL_RUN whenever the motor is energized again; the raised value replaces the stored setting (so `/saveConfig` saves it) and is returned by [[/getKval]].
       ja: ""
 
   - key: voltageMode.KVAL_RUN
@@ -618,7 +618,7 @@ settings:
     default: 0
     commands: [/setTval, /setHoldTval]
     description:
-      en: With the electromagnetic brake enabled, TVAL_HOLD is raised to at least half of TVAL_RUN whenever the motor is energized again; the raised value is also returned by [[/getTval]].
+      en: With the electromagnetic brake enabled, TVAL_HOLD is raised to at least half of TVAL_RUN whenever the motor is energized again; the raised value replaces the stored setting (so `/saveConfig` saves it) and is returned by [[/getTval]].
       ja: ""
 
   - key: currentMode.TVAL_RUN
@@ -720,6 +720,8 @@ commands:
         Also, until `destIp` is set, no OSC (Open Sound Control) messages will be sent from the device, so send this command first. One single exception is the [[/booted]] message.
 
         From the configuration tool, you can set the board to start sending out the OSC message without waiting the `destIp` to be set.
+
+        To resolve the MAC address, the board sends one byte of UDP to port 9 (discard) of the destination; a Mac answers with ICMP port unreachable, which has no effect on the board. To check that the board is alive, use a command with a reply such as [[/getVersion]], not `/setDestIp`.
       ja: |
         モータの状態に変化があったときに通知するメッセージや、問い合わせへ返答するメッセージなどの送り先IPアドレス(`destIp`)を指定します。このメッセージを送信したIPアドレスを`destIp`に設定します。
 
@@ -728,10 +730,10 @@ commands:
         Config Toolの設定を用いて、`destIp`が設定されていなくてもOSCメッセージを送信できるように設定できます。
     response: [/destIp]
     changes:
-      - {version: "2.2.0", en: "The reply `/destIp` is sent once the MAC address of the destination has been resolved, so it can come later than before (a few ms on a wired network, up to about 2 s on Wi-Fi). If it does not come, send `/setDestIp` again.", ja: ""}
+      - {version: "2.2.0", en: "When this `/setDestIp` starts the resolution of the MAC address of the destination, the reply `/destIp` is sent once it has been resolved, so it can come later than before (a few ms on a wired network, up to about 2 s on Wi-Fi). If it does not come, send `/setDestIp` again. A `/setDestIp` that starts no resolution (for example one sent every second as a heartbeat) is answered at once.", ja: ""}
       - {version: "2.2.0", en: "Messages to the destination (replies, reports, errors) are dropped while the MAC address is being resolved (up to 2 s). The broadcast `/booted` is still sent.", ja: ""}
       - {version: "2.2.0", en: "A `/setDestIp` from a different device with the same IP address (another PC or network adapter), sent 1.5 s or more after the last packet from the old one, now makes the board send to the new device. Before, the board kept sending to the old MAC address until it was restarted.", ja: ""}
-      - {version: "2.2.0", en: "A send to a destination that has never answered ARP (for example a wrong destination address) no longer blocks the processing for each message (about 41 ms instead of 1.6 s or more). The sends to that destination are paused for 1 s: the messages in that time are dropped, not sent later. A packet received from that destination resumes the sends at once. The broadcast `/booted` is not affected.", ja: ""}
+      - {version: "2.2.0", en: "A send to a destination that has never answered ARP (for example a wrong destination address) blocks the processing for about 41 ms (1.6 s or more before). It no longer happens for every message: the sends to that destination are paused for 1 s: the messages in that time are dropped, not sent later. A packet received from that destination resumes the sends at once. The broadcast `/booted` is not affected.", ja: ""}
 
   - address: /getVersion
     group: system
@@ -797,7 +799,7 @@ commands:
         After the restart, [[/booted]] is sent with `resetCause` 5 (software reset).
       ja: 基板全体をリセットします。基板上のリセットスイッチを押した場合と同じ動作です。
     changes:
-      - {version: "2.2.0", en: "First stops the turning motors with a hard stop, engages their brakes and waits for the longest `brakeTransitionDuration` of them (at most 1 s), then restarts. Before, the board restarted at once.", ja: ""}
+      - {version: "2.2.0", en: "First stops the turning motors that have the electromagnetic brake enabled and not engaged with a hard stop, engages their brakes and waits for the longest `brakeTransitionDuration` of them (at most 1 s), then restarts. Motors without the brake are not stopped by the firmware. Before, the board restarted at once.", ja: ""}
       - {version: "2.2.0", en: "Resets with a software reset: `/booted` reports `resetCause` 5. Before, it caused a HardFault and the watchdog timeout restarted the board.", ja: ""}
 
   # ---------------------------------------------------------------------------
@@ -873,7 +875,7 @@ commands:
         unit: step/s
         setting: voltageMode.lowSpeedOptimize
         description: {en: Low speed optimization threshold, ja: Low speed optimization threshold}
-    timing: stopped
+    timing: always
     description:
       en: |-
         Set the threshold for phase current distortion compensation at very low speed. For details, refer to "Low speed optimization" section in the corresponding datasheet.
@@ -1003,7 +1005,7 @@ commands:
     errors: [CommandIgnored]
     changes:
       - {version: "2.2.0", en: "A value above 65535 replies `/error/command CommandIgnored` and nothing is applied. Before, 32768 and above were read as negative and disabled the report. A negative interval still disables it.", ja: ""}
-      - {version: "2.2.0", en: "For one motor, the saved position list report interval is cleared too, as it was for 255. Before, a configuration saved after switching from the list report to one motor's report started the list report again at the next start and cleared the motor's report.", ja: ""}
+      - {version: "2.2.0", en: "When the report is enabled (interval above 0) for one motor, the saved position list report interval is cleared too, as it was for 255. Before, a configuration saved after switching from the list report to one motor's report started the list report again at the next start and cleared the motor's report.", ja: ""}
     see_also: [/getPosition, /setPositionListReportInterval]
 
   - address: /setPositionListReportInterval
@@ -1042,7 +1044,7 @@ commands:
       en: |-
         Acquires ADC_OUT register values from the PowerSTEP01 chip. This register stores 5-bit AD-converted voltage reading from ADC pin. This pin is pull-upped with 10kOhm resistor and wired to LIMITSW connector.
 
-        STEP400 only. The firmware also accepts the command on STEP800, but the ADC input is connected to GND there, so the value is meaningless.
+        STEP400 only. The firmware also accepts the command on STEP800, but it is not meaningful there.
       ja: PowerSTEP01チップのADC_OUTレジスタの値を取得します。このレジスタはADCピンの電圧を5ビットでAD変換した値が収められています。このピンは10kΩでプルアップされていて、LIMITSWコネクタに接続されています。
     response: [/adcVal]
 
@@ -1063,7 +1065,7 @@ commands:
         レジスタに含まれる情報は、データシートを参照してください。このうち、一部の値はラッチされていて、ステータスレジスタを読み出すとリセットされます。本デバイスではファームウェアによって常時ステータスレジスタを繰り返し取得しているため、これらの値はすぐにリセットされてしまいます。これらの事象を個別に報告する設定が可能ですので、そちらを利用してください。
     response: [/status]
     changes:
-      - {version: "2.2.0", en: "Reads the STATUS register with GetParam instead of GetStatus, so it no longer clears the latched driver flags (OCD, stall flags, UVLO, SW_EVN). The register values are the same. Only the status poll of the firmware (every 5 ms) clears them now, so a `/getStatus` sent right after another can show a flag the earlier reply showed (until the next poll, up to 5 ms).", ja: ""}
+      - {version: "2.2.0", en: "Reads the STATUS register with GetParam instead of GetStatus, so it no longer clears the latched driver flags (e.g. OCD, stall flags, UVLO, SW_EVN). The register values are the same. Only the status poll of the firmware (every 5 ms) clears them now, so a `/getStatus` sent right after another can show a flag the earlier reply showed (until the next poll, up to 5 ms).", ja: ""}
     see_also: [/getStatusList]
     tables:
       - columns:
@@ -1117,7 +1119,7 @@ commands:
   - address: /getStatusList
     group: driver
     timing: always
-    description: {en: "", ja: ""}
+    description: {en: "Gets the STATUS registers of all motors at once. See [[/getStatus]] for the contents of the register.", ja: ""}
     response: [/statusList]
     changes:
       - {version: "2.2.0", en: "Reads the STATUS registers with GetParam instead of GetStatus, so it no longer clears the latched driver flags. See [[/getStatus]].", ja: ""}
@@ -1405,6 +1407,8 @@ commands:
         Sets the four KVALs together.
 
         A value outside 0-255 is not rejected: it is limited to 0-255.
+
+        On STEP400 in the current mode only the stored setting changes; [[/setVoltageMode]] writes it to the registers.
       ja: KVAL4種をまとめて設定します。
     see_also: [/getKval, /setHoldKval, /setRunKval, /setAccKval, /setDecKval]
 
@@ -1416,7 +1420,7 @@ commands:
       en: |-
         Get the four KVALs together.
 
-        With the electromagnetic brake enabled, KVAL_HOLD is raised to at least half of KVAL_RUN whenever the motor is energized again, and this command returns the raised value.
+        With the electromagnetic brake enabled and the voltage mode, KVAL_HOLD is raised to at least half of KVAL_RUN whenever the motor is energized again (from engaged, engaging or after [[/free]]), and this command returns the raised value. In the current mode TVAL_HOLD is raised instead.
       ja: KVAL4種をまとめて取得します。
     response: [/kval]
     changes:
@@ -1484,6 +1488,8 @@ commands:
         Sets only the hold KVAL value.
 
         A value outside 0-255 is not rejected: it is limited to 0-255.
+
+        On STEP400 in the current mode only the stored setting changes; [[/setVoltageMode]] writes it to the registers.
       ja: 停止時のKVALのみを設定します。
     see_also: [/setKval]
 
@@ -1502,6 +1508,8 @@ commands:
         Sets only the run KVAL value.
 
         A value outside 0-255 is not rejected: it is limited to 0-255.
+
+        On STEP400 in the current mode only the stored setting changes; [[/setVoltageMode]] writes it to the registers.
       ja: 一定速運転時のKVALのみを設定します。
     see_also: [/setKval]
 
@@ -1520,6 +1528,8 @@ commands:
         Sets only the acceleration KVAL value.
 
         A value outside 0-255 is not rejected: it is limited to 0-255.
+
+        On STEP400 in the current mode only the stored setting changes; [[/setVoltageMode]] writes it to the registers.
       ja: 加速時のKVALのみを設定します。
     see_also: [/setKval]
 
@@ -1538,6 +1548,8 @@ commands:
         Sets only the deceleration KVAL value.
 
         A value outside 0-255 is not rejected: it is limited to 0-255.
+
+        On STEP400 in the current mode only the stored setting changes; [[/setVoltageMode]] writes it to the registers.
       ja: 減速時のKVALのみを設定します。
     see_also: [/setKval]
 
@@ -1587,6 +1599,8 @@ commands:
         In STEP400, the TVAL is as follows.
 
         A value outside 0-64 is not rejected: it is limited to 0-64. The upper limit 64 (about 5 A) is a safety limit of the firmware.
+
+        In the voltage mode only the stored setting changes; [[/setCurrentMode]] writes it to the registers.
       ja: |
         TVAL4種をまとめて設定します。
 
@@ -1609,7 +1623,7 @@ commands:
       en: |-
         Get the four TVAL types together.
 
-        With the electromagnetic brake enabled, TVAL_HOLD is raised to at least half of TVAL_RUN whenever the motor is energized again, and this command returns the raised value.
+        With the electromagnetic brake enabled and the current mode, TVAL_HOLD is raised to at least half of TVAL_RUN whenever the motor is energized again (from engaged, engaging or after [[/free]]), and this command returns the raised value. In the voltage mode KVAL_HOLD is raised instead.
       ja: TVAL4種をまとめて取得します。
     response: [/tval]
     changes:
@@ -1690,6 +1704,8 @@ commands:
         Sets only the hold TVAL value.
 
         A value outside 0-64 is not rejected: it is limited to 0-64. The upper limit 64 (about 5 A) is a safety limit of the firmware.
+
+        In the voltage mode only the stored setting changes; [[/setCurrentMode]] writes it to the registers.
       ja: 停止時のTVALのみを設定します。
     see_also: [/setTval]
 
@@ -1709,6 +1725,8 @@ commands:
         Sets only the run TVAL value.
 
         A value outside 0-64 is not rejected: it is limited to 0-64. The upper limit 64 (about 5 A) is a safety limit of the firmware.
+
+        In the voltage mode only the stored setting changes; [[/setCurrentMode]] writes it to the registers.
       ja: 一定速運転時のTVALのみを設定します。
     see_also: [/setTval]
 
@@ -1728,6 +1746,8 @@ commands:
         Sets only the acceleration TVAL value.
 
         A value outside 0-64 is not rejected: it is limited to 0-64. The upper limit 64 (about 5 A) is a safety limit of the firmware.
+
+        In the voltage mode only the stored setting changes; [[/setCurrentMode]] writes it to the registers.
       ja: 加速時のTVALのみを設定します。
     see_also: [/setTval]
 
@@ -1747,6 +1767,8 @@ commands:
         Sets only the deceleration TVAL value.
 
         A value outside 0-64 is not rejected: it is limited to 0-64. The upper limit 64 (about 5 A) is a safety limit of the firmware.
+
+        In the voltage mode only the stored setting changes; [[/setCurrentMode]] writes it to the registers.
       ja: 減速時のTVALのみを設定します。
     see_also: [/setTval]
 
@@ -1911,11 +1933,11 @@ commands:
       en: |-
         Set the speed profile minimum speed. This value is also used for the motor speed of [[/releaseSw]]. When Low speed optimization ([[/enableLowSpeedOptimize]]) is enabled, the minimum speed of the speed profile is set to zero.
 
-        The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value.
+        While the low speed optimization is disabled, the motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value. While it is enabled, only the saved value changes and no error is sent.
       ja: スピードプロファイルの最小速さを設定します。この値は[[/releaseSw]]時のモータ回転速さにも使用されます。Low speed optimization ([[/enableLowSpeedOptimize]])が有効になっている場合、 minSpeedは強制的に0になります。
     errors: [MotorNotStopped]
     changes:
-      - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: ""}
+      - {version: "2.2.0", en: "While the low speed optimization is disabled, the motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: ""}
       - {version: "2.2.0", en: "`/setMinSpeed 255` (all motors) checks the low speed optimization setting of each motor. It read an invalid array element.", ja: ""}
     see_also: [/getMinSpeed]
 
@@ -1994,6 +2016,8 @@ commands:
         Sets the maximum speed of the speed profile using a raw register value.
 
         A value outside the range is not rejected: it is converted to 16 bits (70000 becomes 4464) and then masked to the width of the register by the driver.
+
+        `/setMaxSpeedRaw 0` writes 0, also on STEP400.
       ja: ""
     changes:
       - {version: "2.2.0", en: "Also sets the maximum speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.", ja: ""}
@@ -2012,12 +2036,12 @@ commands:
       en: |-
         Sets the minimum speed of the speed profile using a raw register value.
 
-        A value outside the range is not rejected: it is converted to 16 bits (70000 becomes 4464) and then masked to the width of the register by the driver. The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value.
+        A value outside the range is not rejected: it is converted to 16 bits (70000 becomes 4464) and then masked to the width of the register by the driver. While the low speed optimization is disabled, the motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value. While it is enabled, only the saved value changes and no error is sent.
       ja: ""
     errors: [MotorNotStopped]
     changes:
       - {version: "2.2.0", en: "Also sets the minimum speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.", ja: ""}
-      - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: ""}
+      - {version: "2.2.0", en: "While the low speed optimization is disabled, the motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: ""}
       - {version: "2.2.0", en: "Bit 12 is ignored (it switched the low speed optimization on without [[/enableLowSpeedOptimize]]). While the optimization is on, the command only changes the saved value, as [[/setMinSpeed]] does.", ja: ""}
     see_also: [/setMinSpeed]
 
