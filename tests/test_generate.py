@@ -162,13 +162,27 @@ class GenerateTest(unittest.TestCase):
         self.assertIn("| 2000 |", [l for l in outs["template"].splitlines() if "`acc`" in l][0])
 
     def test_japanese_falls_back_to_english_and_is_counted(self):
-        code, text = run(self.docs)
-        self.assertEqual(code, 0)
+        """A Japanese text that is empty is filled with the English one and counted."""
+        import copy
+        data = copy.deepcopy(SPEC.data)
+        msg = next(m for m in data["messages"] if m["address"] == "/booted")
+        change = msg["changes"][0]
+        change["ja"] = ""
+        out = io.StringIO()
+        self.assertEqual(generate.run(self.docs, Spec(data), out=out), 0)
+        text = out.getvalue()
         page = (self.docs / "ja" / "reference" / "system-settings.md").read_text(encoding="utf-8")
         self.assertIn("実行可能タイミング", page)       # labels are Japanese
-        self.assertIn("Japanese texts filled with English:", text)
-        n = int(text.split("Japanese texts filled with English:")[1].split()[0])
-        self.assertGreater(n, 0)                          # /booted resetCause etc. have no ja
+        self.assertIn(change["en"], page)                # the English text is used
+        self.assertIn("Japanese texts filled with English: 1 (change 1)", text)
+
+    def test_repository_spec_has_no_empty_japanese_text(self):
+        """Every text of the spec has a Japanese draft (the warnings of validate_spec.py)."""
+        import validate_spec
+        rep = validate_spec.Report()
+        validate_spec.check_warnings(SPEC, rep)
+        missing = [w for w in rep.warnings if w.startswith(("empty", "missing ja"))]
+        self.assertEqual(missing, [])
 
     def test_since_and_changes_of_values_and_settings(self):
         """`since` / `changes` of a value, an error and a configuration item are shown like those of a command."""

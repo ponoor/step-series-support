@@ -105,7 +105,7 @@ settings:
     description:
       en: |-
         If the address with the ID added would be beyond .254 (ID 155 or more with the default 10.0.0.100), the ID is not added: the configured address is used and a warning is printed on USB serial.
-      ja: ""
+      ja: "ID を加算したアドレスが .254 を超える場合（既定の 10.0.0.100 では ID が 155 以上のとき）は、ID を加算せず、設定したアドレスをそのまま使い、USBシリアルに警告を表示します。"
 
   - key: network.destIp
     section: network
@@ -158,7 +158,7 @@ settings:
     description:
       en: |-
         If the port with the ID added would be beyond 65535, the ID is not added: the configured port is used and a warning is printed on USB serial.
-      ja: ""
+      ja: "ID を加算したポート番号が 65535 を超える場合は、ID を加算せず、設定したポート番号をそのまま使い、USBシリアルに警告を表示します。"
 
   - key: network.mac
     section: network
@@ -280,7 +280,7 @@ settings:
 
   - key: alarmAndReport.reportOCD
     section: alarmAndReport
-    label: {en: "", ja: ""}
+    label: {en: Report overcurrent detection, ja: Report overcurrent detection}
     type: bool
     per_motor: true
     default: true
@@ -296,7 +296,7 @@ settings:
 
   - key: alarmAndReport.reportPositionInterval
     section: alarmAndReport
-    label: {en: "", ja: ""}
+    label: {en: Report position interval, ja: Report position interval}
     type: int
     unit: ms
     per_motor: true
@@ -308,11 +308,14 @@ settings:
         The interval of the position report ([[/position]]) of each motor. 0 turns the report off.
 
         The value is not range-checked when the configuration file is read (or written over USB serial): it is kept in a 16-bit variable, so a value outside 0-65535 wraps around (65536 becomes 0, which turns the report off; -1 becomes 65535). [[/setPositionReportInterval]] rejects a value above 65535 with `CommandIgnored`, and a negative value turns the report off.
-      ja: ""
+      ja: |-
+        各モータの位置を通知する間隔（[[/position]]）です。0 にすると通知を止めます。
+
+        設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。値は16ビットの変数に保持されるため、0〜65535 の範囲外の値は一周します（65536 は 0 になって通知が止まり、-1 は 65535 になります）。[[/setPositionReportInterval]] は 65535 を超える値を `CommandIgnored` で拒否し、負の値では通知を止めます。
 
   - key: alarmAndReport.reportPositionListInterval
     section: alarmAndReport
-    label: {en: "", ja: ""}
+    label: {en: Report position list interval, ja: Report position list interval}
     type: int
     unit: ms
     default: 0
@@ -323,7 +326,10 @@ settings:
         The interval of the position list report ([[/positionList]]). 0 turns the report off. When it is greater than 0, the position report of each motor ([[/position]]) is turned off.
 
         The value is not range-checked when the configuration file is read (or written over USB serial): it is kept in a 16-bit variable, so a value outside 0-65535 wraps around (65536 becomes 0, -1 becomes 65535). [[/setPositionListReportInterval]] rejects a value above 65535 with `CommandIgnored`.
-      ja: ""
+      ja: |-
+        位置のリスト通知（[[/positionList]]）の間隔です。0 にすると通知を止めます。0 より大きくすると、モータごとの位置通知（[[/position]]）は止まります。
+
+        設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。値は16ビットの変数に保持されるため、0〜65535 の範囲外の値は一周します（65536 は 0、-1 は 65535 になります）。[[/setPositionListReportInterval]] は 65535 を超える値を `CommandIgnored` で拒否します。
 
   - key: alarmAndReport.OCThreshold
     section: alarmAndReport
@@ -346,9 +352,12 @@ settings:
         Proceed to homing movement soon after boot when this check box is checked.
 
         With the electromagnetic brake enabled, the brake is released first, as [[/activate]] does, and the homing starts once the brake is released.
-      ja: このチェックボックスが入っていると、起動すると直ちに原点復帰動作を行います。
+      ja: |-
+        このチェックボックスが入っていると、起動すると直ちに原点復帰動作を行います。
+
+        電磁ブレーキが有効なときは、[[/activate]] と同じようにブレーキを先に開放し、開放が終わってから原点復帰を始めます。
     changes:
-      - {version: "2.2.0", en: "With the electromagnetic brake enabled, the brake is released first, as `/activate 1` does, and the homing starts once the brake is released. Before, the homing failed because the brake was engaged, and the timeout of the homing later sent a hard stop to the HiZ motor.", ja: ""}
+      - {version: "2.2.0", en: "With the electromagnetic brake enabled, the brake is released first, as `/activate 1` does, and the homing starts once the brake is released. Before, the homing failed because the brake was engaged, and the timeout of the homing later sent a hard stop to the HiZ motor.", ja: "電磁ブレーキが有効なときは、[[/activate]] と同じようにブレーキを先に開放し、開放が終わってから原点復帰を始めます。以前は、ブレーキが保持されたままだったため原点復帰が失敗し、原点復帰のタイムアウトで HiZ のモータにハードストップが送られていました。"}
 
   - key: driverSettings.homingDirection
     section: driverSettings
@@ -458,7 +467,7 @@ settings:
           en: 980V/us
           ja: 980V/us
           changes:
-            - {version: "2.2.0", en: "The driver is now really set to the 980 V/us of the datasheet (gate current 96 mA, TCC 375 ns). Firmware 2.1.0 and earlier, with driver library v1.1.0, wrote 64 mA and 2375 ns for this value by mistake, so the switching was slower than 980 V/us. This value is the initial value, so a board with the default setting switches faster than before. The values 0-4 are unchanged. The driver library recommends checking the temperature of the drivers and the EMI on the real hardware.", ja: ""}
+            - {version: "2.2.0", en: "The driver is now really set to the 980 V/us of the datasheet (gate current 96 mA, TCC 375 ns). Firmware 2.1.0 and earlier, with driver library v1.1.0, wrote 64 mA and 2375 ns for this value by mistake, so the switching was slower than 980 V/us. This value is the initial value, so a board with the default setting switches faster than before. The values 0-4 are unchanged. The driver library recommends checking the temperature of the drivers and the EMI on the real hardware.", ja: "ドライバに、データシートの 980 V/us の設定（ゲート電流 96 mA、TCC 375 ns）が正しく書き込まれるようになりました。ファームウェア 2.1.0 以前（ドライバライブラリ v1.1.0）は、この値に 64 mA と 2375 ns を誤って書き込んでいたため、実際のスイッチングは 980 V/us より遅くなっていました。この値は初期値なので、初期設定のままの基板ではスイッチングが以前より速くなります。0〜4 の値は変わりません。ドライバライブラリは、実機でドライバの温度とEMIを確認することを勧めています。"}
       STEP800:
         - {value: 0, en: 180V/us, ja: 180V/us}
         - {value: 1, en: 290V/us, ja: 290V/us}
@@ -468,7 +477,10 @@ settings:
         Set the slew rate (steepness of rising) of motor control current from a motor driver in 6 steps for STEP400, 3 steps for STEP800.
 
         A value outside the range in the configuration file is not rejected: it is limited to the range (a negative value becomes 0, a larger one the highest value).
-      ja: モータドライバから出力されるモータ制御電流のスリューレート（立ち上がりの鋭さ）をSTEP400では6段階、STEP800では3段階で指定します。
+      ja: |-
+        モータドライバから出力されるモータ制御電流のスリューレート（立ち上がりの鋭さ）をSTEP400では6段階、STEP800では3段階で指定します。
+
+        設定ファイルの範囲外の値は拒否されず、範囲内に制限されます（負の値は 0、大きい値は最大の値になります）。
 
   - key: driverSettings.electromagnetBrakeEnable
     section: driverSettings
@@ -492,7 +504,10 @@ settings:
         The time to wait for the brake to release or to engage. See [[/setBrakeTransitionDuration]].
 
         The value is not range-checked when the configuration file is read (or written over USB serial): it is kept in a 16-bit variable, so a value outside 0-65535 wraps around (65536 becomes 0, -1 becomes 65535). [[/setBrakeTransitionDuration]] rejects such a value with `CommandIgnored`.
-      ja: ""
+      ja: |-
+        電磁ブレーキの開放や保持を待つ時間です。[[/setBrakeTransitionDuration]] を参照してください。
+
+        設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。値は16ビットの変数に保持されるため、0〜65535 の範囲外の値は一周します（65536 は 0、-1 は 65535 になります）。[[/setBrakeTransitionDuration]] はこのような値を `CommandIgnored` で拒否します。
 
   # --- speedProfile ---
   - key: speedProfile.acc
@@ -537,7 +552,7 @@ settings:
 
   - key: speedProfile.minSpeed
     section: speedProfile
-    label: {en: "", ja: ""}
+    label: {en: Minimum speed, ja: Minimum speed}
     type: float
     unit: step/s
     per_motor: true
@@ -554,7 +569,7 @@ settings:
     commands: [/setKval, /setHoldKval]
     description:
       en: With the electromagnetic brake enabled, KVAL_HOLD is raised to at least half of KVAL_RUN whenever the motor is energized again; the raised value replaces the stored setting (so `/saveConfig` saves it) and is returned by [[/getKval]].
-      ja: ""
+      ja: "電磁ブレーキが有効なとき、モータが再び励磁されるたびに、KVAL_HOLD が KVAL_RUN の半分以上に引き上げられます。引き上げられた値は保存されている設定を置き換えるため（`/saveConfig` で保存されます）、[[/getKval]] でも返されます。"
 
   - key: voltageMode.KVAL_RUN
     section: voltageMode
@@ -622,7 +637,7 @@ settings:
 
   - key: voltageMode.lowSpeedOptimizeEnable
     section: voltageMode
-    label: {en: "", ja: ""}
+    label: {en: Low speed optimize enable, ja: Low speed optimize enable}
     type: bool
     per_motor: true
     default: false
@@ -648,7 +663,7 @@ settings:
     commands: [/setTval, /setHoldTval]
     description:
       en: With the electromagnetic brake enabled, TVAL_HOLD is raised to at least half of TVAL_RUN whenever the motor is energized again; the raised value replaces the stored setting (so `/saveConfig` saves it) and is returned by [[/getTval]].
-      ja: ""
+      ja: "電磁ブレーキが有効なとき、モータが再び励磁されるたびに、TVAL_HOLD が TVAL_RUN の半分以上に引き上げられます。引き上げられた値は保存されている設定を置き換えるため（`/saveConfig` で保存されます）、[[/getTval]] でも返されます。"
 
   - key: currentMode.TVAL_RUN
     section: currentMode
@@ -751,18 +766,20 @@ commands:
         From the configuration tool, you can set the board to start sending out the OSC message without waiting the `destIp` to be set.
 
         To resolve the MAC address, the board sends one byte of UDP to port 9 (discard) of the destination; a Mac answers with ICMP port unreachable, which has no effect on the board. To check that the board is alive, use a command with a reply such as [[/getVersion]], not `/setDestIp`.
-      ja: |
+      ja: |-
         モータの状態に変化があったときに通知するメッセージや、問い合わせへ返答するメッセージなどの送り先IPアドレス(`destIp`)を指定します。このメッセージを送信したIPアドレスを`destIp`に設定します。
 
         また、`destIp`が設定されるまでは、本デバイスからOSCメッセージの送信は行いませんので、一番最初にこのコマンドを送信してください。唯一の例外は [[/booted]] メッセージです。
 
         Config Toolの設定を用いて、`destIp`が設定されていなくてもOSCメッセージを送信できるように設定できます。
+
+        MAC アドレスの解決のために、宛先の UDP ポート 9（discard）に 1 バイトを送信します。Mac は ICMP の port unreachable で応答しますが、本デバイスには影響しません。本デバイスが動作しているかを確認するには、`/setDestIp` ではなく、[[/getVersion]] のように返答のあるコマンドを使ってください。
     response: [/destIp]
     changes:
-      - {version: "2.2.0", en: "When this `/setDestIp` starts the resolution of the MAC address of the destination, the reply `/destIp` is sent once it has been resolved, so it can come later than before (a few ms on a wired network, up to about 2 s on Wi-Fi). If it does not come, send `/setDestIp` again. A `/setDestIp` that starts no resolution (for example one sent every second as a heartbeat) is answered at once.", ja: ""}
-      - {version: "2.2.0", en: "Messages to the destination (replies, reports, errors) are dropped while the MAC address is being resolved (up to 2 s). The broadcast `/booted` is still sent.", ja: ""}
-      - {version: "2.2.0", en: "A `/setDestIp` from a different device with the same IP address (another PC or network adapter), sent 1.5 s or more after the last packet from the old one, now makes the board send to the new device. Before, the board kept sending to the old MAC address until it was restarted.", ja: ""}
-      - {version: "2.2.0", en: "A send to a destination that has never answered ARP (for example a wrong destination address) blocks the processing for about 41 ms (1.6 s or more before). It no longer happens for every message: the sends to that destination are paused for 1 s: the messages in that time are dropped, not sent later. A packet received from that destination resumes the sends at once. The broadcast `/booted` is not affected.", ja: ""}
+      - {version: "2.2.0", en: "When this `/setDestIp` starts the resolution of the MAC address of the destination, the reply `/destIp` is sent once it has been resolved, so it can come later than before (a few ms on a wired network, up to about 2 s on Wi-Fi). If it does not come, send `/setDestIp` again. A `/setDestIp` that starts no resolution (for example one sent every second as a heartbeat) is answered at once.", ja: "この `/setDestIp` が宛先の MAC アドレスの解決を始めたときは、解決が終わってから返信の `/destIp` を送信します。そのため、以前より遅れて届くことがあります（有線では数 ms、Wi-Fi では最大約 2 秒）。届かないときは、もう一度 `/setDestIp` を送ってください。解決を始めない `/setDestIp`（たとえば死活監視として毎秒送るもの）には、すぐに返信します。"}
+      - {version: "2.2.0", en: "Messages to the destination (replies, reports, errors) are dropped while the MAC address is being resolved (up to 2 s). The broadcast `/booted` is still sent.", ja: "MAC アドレスの解決中（最大 2 秒）は、宛先へのメッセージ（返信、通知、エラー）は破棄されます。ブロードキャストの `/booted` は送信されます。"}
+      - {version: "2.2.0", en: "A `/setDestIp` from a different device with the same IP address (another PC or network adapter), sent 1.5 s or more after the last packet from the old one, now makes the board send to the new device. Before, the board kept sending to the old MAC address until it was restarted.", ja: "同じ IP アドレスの別のデバイス（別のPCやネットワークアダプタ）から、元のデバイスからの最後のパケットの 1.5 秒以上後に `/setDestIp` を受け取ると、本デバイスは新しいデバイスへ送信するようになります。以前は、再起動するまで古い MAC アドレスへ送信し続けていました。"}
+      - {version: "2.2.0", en: "A send to a destination that has never answered ARP (for example a wrong destination address) blocks the processing for about 41 ms (1.6 s or more before). It no longer happens for every message: the sends to that destination are paused for 1 s: the messages in that time are dropped, not sent later. A packet received from that destination resumes the sends at once. The broadcast `/booted` is not affected.", ja: "ARP に一度も応答しない宛先（たとえば誤った宛先アドレス）への送信は、処理を約 41 ms 止めます（以前は 1.6 秒以上）。これがメッセージごとに起きることはなくなり、その宛先への送信を 1 秒間止めます。その間のメッセージは破棄され、後から送られることはありません。その宛先からパケットを受信すると、送信はすぐに再開します。ブロードキャストの `/booted` は影響を受けません。"}
 
   - address: /getVersion
     group: system
@@ -798,11 +815,11 @@ commands:
       - name: configName
         type: string
         setting: information.configName
-        description: {en: Configuration name string, ja: ""}
+        description: {en: Configuration name string, ja: "設定名の文字列"}
     timing: always
     description:
       en: Sets the configuration name stored in the device. This is a user-editable label for identifying configurations and is distinct from the on-disk filename.
-      ja: ""
+      ja: "本デバイスに保存される設定名を設定します。設定を見分けるためにユーザーが自由に編集できるラベルで、ディスク上のファイル名とは別のものです。"
     see_also: [/getConfigName, /saveConfig]
 
   - address: /saveConfig
@@ -811,7 +828,7 @@ commands:
     timing: always
     description:
       en: Saves the current running configuration to the microSD card as a JSON file. The filename used is the one previously set, or the filename from which the configuration was originally loaded.
-      ja: ""
+      ja: "現在動作中の設定を、JSON ファイルとして microSD カードに保存します。ファイル名は、以前に設定されたもの、または設定を最初に読み込んだファイルの名前が使われます。"
     response:
       - message: /saveConfig
         when: {en: Saved, ja: 保存できたとき}
@@ -826,10 +843,13 @@ commands:
         Resets the entire device. A programmatic version of physically pressing the RESET button.
 
         After the restart, [[/booted]] is sent with `resetCause` 5 (software reset).
-      ja: 基板全体をリセットします。基板上のリセットスイッチを押した場合と同じ動作です。
+      ja: |-
+        基板全体をリセットします。基板上のリセットスイッチを押した場合と同じ動作です。
+
+        再起動後、[[/booted]] が `resetCause` 5（ソフトウェアリセット）で送信されます。
     changes:
-      - {version: "2.2.0", en: "First stops the turning motors that have the electromagnetic brake enabled and not engaged with a hard stop, engages their brakes and waits for the longest `brakeTransitionDuration` of them (at most 1 s), then restarts. Motors without the brake are not stopped by the firmware. Before, the board restarted at once.", ja: ""}
-      - {version: "2.2.0", en: "Resets with a software reset: `/booted` reports `resetCause` 5. Before, it caused a HardFault and the watchdog timeout restarted the board.", ja: ""}
+      - {version: "2.2.0", en: "First stops the turning motors that have the electromagnetic brake enabled and not engaged with a hard stop, engages their brakes and waits for the longest `brakeTransitionDuration` of them (at most 1 s), then restarts. Motors without the brake are not stopped by the firmware. Before, the board restarted at once.", ja: "電磁ブレーキが有効でブレーキが保持されていない、回転中のモータをまずハードストップで止め、ブレーキを保持し、それらのモータのうち最長の `brakeTransitionDuration`（最大 1 秒）を待ってから再起動します。ブレーキのないモータは、ファームウェアでは止められません。以前は、すぐに再起動していました。"}
+      - {version: "2.2.0", en: "Resets with a software reset: `/booted` reports `resetCause` 5. Before, it caused a HardFault and the watchdog timeout restarted the board.", ja: "ソフトウェアリセットで再起動します。`/booted` は `resetCause` 5 を報告します。以前は HardFault を起こし、ウォッチドッグのタイムアウトで再起動していました。"}
 
   # ---------------------------------------------------------------------------
   # driver
@@ -861,14 +881,18 @@ commands:
         The motor must be HiZ. A motor holding its position is not HiZ: send [[/softHiZ]] or [[/hardHiZ]] first, otherwise `MotorNotHiZ` is replied and nothing is applied. On STEP400 in the current mode, a step mode finer than 1/16 replies `CommandIgnored`.
 
         A value outside 0-7 is not rejected: it is converted to 8 bits and then limited to 0-7 (-1 becomes 7, 256 becomes 0).
-      ja: |
+      ja: |-
         マイクロステッピングのモードを切り替えます。
 
         定電流制御モード (current mode) では、Full-stepから1/16 microstepまでしか使えません。
+
+        モータは HiZ でなければなりません。位置を保持しているモータは HiZ ではありません。先に [[/softHiZ]] か [[/hardHiZ]] を送ってください。そうでないときは `MotorNotHiZ` を返し、何も適用されません。STEP400 の電流モードでは、1/16 より細かいステップモードに `CommandIgnored` を返します。
+
+        0〜7 の範囲外の値は拒否されません。8 ビットに変換されてから 0〜7 に制限されます（-1 は 7、256 は 0 になります）。
     errors: [MotorNotHiZ, CommandIgnored]
     changes:
-      - {version: "2.2.0", en: "The motor must be HiZ; otherwise `/error/command MotorNotHiZ` is replied and nothing is applied. Before, the driver ignored the write while the firmware variable and the saved configuration took the new value.", ja: ""}
-      - {version: "2.2.0", en: "STEP400 in the current mode: a step mode finer than 1/16 replies `CommandIgnored` (the PowerSTEP01 current mode goes up to 1/16).", ja: ""}
+      - {version: "2.2.0", en: "The motor must be HiZ; otherwise `/error/command MotorNotHiZ` is replied and nothing is applied. Before, the driver ignored the write while the firmware variable and the saved configuration took the new value.", ja: "モータは HiZ でなければなりません。そうでないときは `/error/command MotorNotHiZ` を返し、何も適用されません。以前は、ドライバが書き込みを無視する一方で、ファームウェアの変数と保存される設定は新しい値になっていました。"}
+      - {version: "2.2.0", en: "STEP400 in the current mode: a step mode finer than 1/16 replies `CommandIgnored` (the PowerSTEP01 current mode goes up to 1/16).", ja: "STEP400 の電流モードでは、1/16 より細かいステップモードに `CommandIgnored` を返します（PowerSTEP01 の電流モードは 1/16 までです）。"}
     see_also: [/getMicrostepMode, /setCurrentMode]
 
   - address: /getMicrostepMode
@@ -891,7 +915,7 @@ commands:
       ja: 低速回転時の相電流ひずみ補正 (Low speed optimization) の有効無効を切り替えます。この設定が有効になっていると、`Min Speed` は自動的に0になります。この補正は電圧モードでのみ利用可能です。詳しくは対応するデータシートの "Low speed optimization"を参照してください。
     errors: [MotorNotStopped]
     changes:
-      - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and nothing is applied.", ja: ""}
+      - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and nothing is applied.", ja: "モータは停止中か HiZ でなければなりません。回転中のモータには `/error/command MotorNotStopped` を返し、何も適用されません。"}
     see_also: [/setLowSpeedOptimizeThreshold, /setMinSpeed]
 
   - address: /setLowSpeedOptimizeThreshold
@@ -912,10 +936,15 @@ commands:
         No reply is sent. Read the value back with [[/getLowSpeedOptimizeThreshold]].
 
         While the low speed optimization is enabled, the motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and nothing is applied.
-      ja: 低速回転時の相電流ひずみ補正を行う閾値を設定します。
+      ja: |-
+        低速回転時の相電流ひずみ補正を行う閾値を設定します。
+
+        返答はありません。値は [[/getLowSpeedOptimizeThreshold]] で読み戻してください。
+
+        低速最適化が有効の間は、モータは停止中か HiZ でなければなりません。回転中のモータには `MotorNotStopped` を返し、何も適用されません。
     errors: [MotorNotStopped]
     changes:
-      - {version: "2.2.0", en: "While the low speed optimization is enabled, a turning motor replies `/error/command MotorNotStopped` and nothing is applied.", ja: ""}
+      - {version: "2.2.0", en: "While the low speed optimization is enabled, a turning motor replies `/error/command MotorNotStopped` and nothing is applied.", ja: "低速最適化が有効の間は、回転中のモータに `/error/command MotorNotStopped` を返し、何も適用されません。"}
     see_also: [/getLowSpeedOptimizeThreshold, /enableLowSpeedOptimize]
 
   - address: /getLowSpeedOptimizeThreshold
@@ -987,7 +1016,7 @@ commands:
       ja: 指定したモータの回転方向を取得します。
     response: [/dir]
     changes:
-      - {version: "2.2.0", en: "`/getDir 255` (all motors) returns the direction. It returned the HiZ state.", ja: ""}
+      - {version: "2.2.0", en: "`/getDir 255` (all motors) returns the direction. It returned the HiZ state.", ja: "`/getDir 255`（全モータ）が方向を返します。以前は HiZ の状態が返っていました。"}
 
   - address: /enableMotorStatusReport
     group: driver
@@ -1027,14 +1056,16 @@ commands:
         When this function enabled, `/setPositionListReportInterval` will be automatically disabled and stop the transmitting.
 
         An interval above 65535 replies `CommandIgnored` and nothing is applied. A negative interval disables the report, as 0.
-      ja: |
+      ja: |-
         指定したモータの現在位置 (`ABS_POS`) を指定間隔で自動送信します。0を指定すると無効化され、送信を停止します。
         いずれかのモータで有効化された場合、`/setPositionListReportInterval`は無効になり自動停止します。
+
+        65535 を超える間隔には `CommandIgnored` を返し、何も適用されません。負の間隔は、0 と同じく通知を無効にします。
     notifies: [/position]
     errors: [CommandIgnored]
     changes:
-      - {version: "2.2.0", en: "A value above 65535 replies `/error/command CommandIgnored` and nothing is applied. Before, 32768 and above were read as negative and disabled the report. A negative interval still disables it.", ja: ""}
-      - {version: "2.2.0", en: "When the report is enabled (interval above 0) for one motor, the saved position list report interval is cleared too, as it was for 255. Before, a configuration saved after switching from the list report to one motor's report started the list report again at the next start and cleared the motor's report.", ja: ""}
+      - {version: "2.2.0", en: "A value above 65535 replies `/error/command CommandIgnored` and nothing is applied. Before, 32768 and above were read as negative and disabled the report. A negative interval still disables it.", ja: "65535 を超える値には `/error/command CommandIgnored` を返し、何も適用されません。以前は 32768 以上が負の値として読まれ、通知が止まっていました。負の間隔で通知が止まる点は変わりません。"}
+      - {version: "2.2.0", en: "When the report is enabled (interval above 0) for one motor, the saved position list report interval is cleared too, as it was for 255. Before, a configuration saved after switching from the list report to one motor's report started the list report again at the next start and cleared the motor's report.", ja: "1 つのモータで通知を有効にしたとき（間隔が 0 より大きいとき）は、保存されている位置リスト通知の間隔も、255 の場合と同じように消去されます。以前は、リスト通知から 1 つのモータの通知に切り替えて保存した設定が、次の起動でリスト通知を再び始め、そのモータの通知を消していました。"}
     see_also: [/getPosition, /setPositionListReportInterval]
 
   - address: /setPositionListReportInterval
@@ -1054,13 +1085,15 @@ commands:
         When this function enabled, `/setPositionReportInterval` will be disabled automatically for all motors and stop the transmitting.
 
         An interval above 65535 replies `CommandIgnored` with the motor ID 255 and nothing is applied. A negative interval disables the report, as 0.
-      ja: |
+      ja: |-
         全モータの現在位置 (`ABS_POS`) をひとつのリストにまとめたメッセージを指定間隔で自動送信します。0を指定すると無効化され、送信を停止します。
         このコマンドが有効化される際には `/setPositionReportInterval`はすべての軸で無効になり自動停止します。
+
+        65535 を超える間隔には、モータ ID 255 で `CommandIgnored` を返し、何も適用されません。負の間隔は、0 と同じく通知を無効にします。
     notifies: [/positionList]
     errors: [CommandIgnored]
     changes:
-      - {version: "2.2.0", en: "A value above 65535 replies `/error/command CommandIgnored 255` and nothing is applied. Before, 32768 and above were read as negative and disabled the report. A negative interval still disables it.", ja: ""}
+      - {version: "2.2.0", en: "A value above 65535 replies `/error/command CommandIgnored 255` and nothing is applied. Before, 32768 and above were read as negative and disabled the report. A negative interval still disables it.", ja: "65535 を超える値には `/error/command CommandIgnored 255` を返し、何も適用されません。以前は 32768 以上が負の値として読まれ、通知が止まっていました。負の間隔で通知が止まる点は変わりません。"}
     see_also: [/getPositionList, /setPositionReportInterval]
 
   - address: /getAdcVal
@@ -1074,7 +1107,10 @@ commands:
         Acquires ADC_OUT register values from the PowerSTEP01 chip. This register stores 5-bit AD-converted voltage reading from ADC pin. This pin is pull-upped with 10kOhm resistor and wired to LIMITSW connector.
 
         STEP400 only. The firmware also accepts the command on STEP800, but it is not meaningful there.
-      ja: PowerSTEP01チップのADC_OUTレジスタの値を取得します。このレジスタはADCピンの電圧を5ビットでAD変換した値が収められています。このピンは10kΩでプルアップされていて、LIMITSWコネクタに接続されています。
+      ja: |-
+        PowerSTEP01チップのADC_OUTレジスタの値を取得します。このレジスタはADCピンの電圧を5ビットでAD変換した値が収められています。このピンは10kΩでプルアップされていて、LIMITSWコネクタに接続されています。
+
+        STEP400 のみです。ファームウェアは STEP800 でもこのコマンドを受け付けますが、意味のある値は得られません。
     response: [/adcVal]
 
   - address: /getStatus
@@ -1088,13 +1124,15 @@ commands:
         Refer to "STATUS" in the data sheet for the information contained in the registers. Some of bits are latched and reset when STATUS registers are read out. Because the device firmware constantly obtains the STATUS values, these values are immediately reset. It is possible to set up these events to be reported separately, so please use those commands.
 
         This command does not clear the latched flags; only the status poll of the firmware (every 5 ms) does.
-      ja: |
+      ja: |-
         モータドライバ(PowerSTEP01/L6470)のステータスレジスタを取得します。ステータスレジスタにはモータやアラーム、スイッチの状態などが含まれます。
 
         レジスタに含まれる情報は、データシートを参照してください。このうち、一部の値はラッチされていて、ステータスレジスタを読み出すとリセットされます。本デバイスではファームウェアによって常時ステータスレジスタを繰り返し取得しているため、これらの値はすぐにリセットされてしまいます。これらの事象を個別に報告する設定が可能ですので、そちらを利用してください。
+
+        このコマンドはラッチされたフラグを消しません。消すのはファームウェアのステータスの読み出し（5 ms ごと）だけです。
     response: [/status]
     changes:
-      - {version: "2.2.0", en: "Reads the STATUS register with GetParam instead of GetStatus, so it no longer clears the latched driver flags (e.g. OCD, stall flags, UVLO, SW_EVN). The register values are the same. Only the status poll of the firmware (every 5 ms) clears them now, so a `/getStatus` sent right after another can show a flag the earlier reply showed (until the next poll, up to 5 ms).", ja: ""}
+      - {version: "2.2.0", en: "Reads the STATUS register with GetParam instead of GetStatus, so it no longer clears the latched driver flags (e.g. OCD, stall flags, UVLO, SW_EVN). The register values are the same. Only the status poll of the firmware (every 5 ms) clears them now, so a `/getStatus` sent right after another can show a flag the earlier reply showed (until the next poll, up to 5 ms).", ja: "STATUS レジスタを GetStatus ではなく GetParam で読み出すため、ラッチされたドライバのフラグ（OCD、脱調のフラグ、UVLO、SW_EVN など）を消さなくなりました。レジスタの値は同じです。フラグを消すのはファームウェアのステータスの読み出し（5 ms ごと）だけになったため、直前に別の `/getStatus` を送っていても、先の返答に出ていたフラグが次の返答にも出ることがあります（次の読み出しまでの最大 5 ms）。"}
     see_also: [/getStatusList]
     tables:
       - columns:
@@ -1138,20 +1176,23 @@ commands:
         Resets the motor driver (PowerSTEP01/L6470) and rewrites the setting.
 
         With the electromagnetic brake enabled, the command is accepted only while the brake is engaged or after [[/free]] (the motor is HiZ); otherwise it replies `CommandIgnored`. When it is accepted (also with the brake disabled), it cancels pending motion and the servo mode. A command that is refused (`CommandIgnored`) cancels nothing.
-      ja: モータドライバ (PowerSTEP01/L6470) をリセットし、初期設定値を再度書き込みます。
+      ja: |-
+        モータドライバ (PowerSTEP01/L6470) をリセットし、初期設定値を再度書き込みます。
+
+        電磁ブレーキが有効なときは、ブレーキが保持されている間か [[/free]] の後（モータが HiZ）だけ受け付けます。それ以外では `CommandIgnored` を返します。受け付けたときは（ブレーキが無効でも）、保留中の動作とサーボモードを取り消します。拒否されたコマンド（`CommandIgnored`）は、何も取り消しません。
     errors: [CommandIgnored]
     changes:
-      - {version: "2.2.0", en: "With the electromagnetic brake enabled, accepted only while the brake is engaged or after `/free`; otherwise `/error/command CommandIgnored`. Before, it made the driver HiZ with the brake released.", ja: ""}
-      - {version: "2.2.0", en: "Cancels pending motion (a `/goTo` etc. waiting for the BUSY flag, the homing, the servo mode) when it is accepted, also with the brake disabled. A refused command (`CommandIgnored`) cancels nothing.", ja: ""}
-      - {version: "2.2.0", en: "The settings applied again after the reset include those made with the Raw commands (see [[/setAccRaw]]).", ja: ""}
+      - {version: "2.2.0", en: "With the electromagnetic brake enabled, accepted only while the brake is engaged or after `/free`; otherwise `/error/command CommandIgnored`. Before, it made the driver HiZ with the brake released.", ja: "電磁ブレーキが有効なときは、ブレーキが保持されている間か `/free` の後だけ受け付けます。それ以外では `/error/command CommandIgnored` を返します。以前は、ブレーキを開放したままドライバを HiZ にしていました。"}
+      - {version: "2.2.0", en: "Cancels pending motion (a `/goTo` etc. waiting for the BUSY flag, the homing, the servo mode) when it is accepted, also with the brake disabled. A refused command (`CommandIgnored`) cancels nothing.", ja: "受け付けたときは、保留中の動作（BUSY フラグが下りるのを待つ `/goTo` など、原点復帰、サーボモード）を取り消します。ブレーキが無効なモータでも同じです。拒否されたコマンド（`CommandIgnored`）は、何も取り消しません。"}
+      - {version: "2.2.0", en: "The settings applied again after the reset include those made with the Raw commands (see [[/setAccRaw]]).", ja: "リセット後に再び適用される設定には、Raw コマンドで設定したもの（[[/setAccRaw]] を参照）も含まれます。"}
 
   - address: /getStatusList
     group: driver
     timing: always
-    description: {en: "Gets the STATUS registers of all motors at once. See [[/getStatus]] for the contents of the register.", ja: ""}
+    description: {en: "Gets the STATUS registers of all motors at once. See [[/getStatus]] for the contents of the register.", ja: "すべてのモータの STATUS レジスタをまとめて取得します。レジスタの内容は [[/getStatus]] を参照してください。"}
     response: [/statusList]
     changes:
-      - {version: "2.2.0", en: "Reads the STATUS registers with GetParam instead of GetStatus, so it no longer clears the latched driver flags. See [[/getStatus]].", ja: ""}
+      - {version: "2.2.0", en: "Reads the STATUS registers with GetParam instead of GetStatus, so it no longer clears the latched driver flags. See [[/getStatus]].", ja: "STATUS レジスタを GetStatus ではなく GetParam で読み出すため、ラッチされたドライバのフラグを消さなくなりました。[[/getStatus]] を参照してください。"}
     see_also: [/getStatus]
 
   # ---------------------------------------------------------------------------
@@ -1243,7 +1284,10 @@ commands:
         Sets the overcurrent threshold. The setting value range and corresponding currents are different between STEP400(PowerSTEP01) and STEP800(L6470).
 
         A value above the range is not rejected: only the low bits are used (STEP400: 0x1F, STEP800: 0x0F), so the value wraps around (for example 16 becomes 0 on STEP800).
-      ja: 過電流の閾値を設定します。STEP400とSTEP800では設定値の範囲と対応する電流が異なっています。
+      ja: |-
+        過電流の閾値を設定します。STEP400とSTEP800では設定値の範囲と対応する電流が異なっています。
+
+        範囲を超える値は拒否されません。下位ビットだけが使われるため（STEP400: 0x1F、STEP800: 0x0F）、値は一周します（たとえば STEP800 で 16 は 0 になります）。
     response: [/overCurrentThreshold]
     see_also: [/getOverCurrentThreshold, /enableOverCurrentReport]
     tables:
@@ -1302,10 +1346,13 @@ commands:
         Sets the threshold for stall detection. The setting value range and corresponding currents are different between STEP400(PowerSTEP01) and STEP800(L6470).
 
         A value above the range is not rejected: only the low bits are used (STEP400: 0x1F, STEP800: 0x7F), so the value wraps around (for example 128 becomes 0 on STEP800).
-      ja: ストール検出の閾値を設定します。STEP400とSTEP800で設定する値の範囲は異なります。
+      ja: |-
+        ストール検出の閾値を設定します。STEP400とSTEP800で設定する値の範囲は異なります。
+
+        範囲を超える値は拒否されません。下位ビットだけが使われるため（STEP400: 0x1F、STEP800: 0x7F）、値は一周します（たとえば STEP800 で 128 は 0 になります）。
     response: [/stallThreshold]
     changes:
-      - {version: "2.2.0", en: "Also changes the saved STALL_TH (`/saveConfig`, `/resetMotorDriver`). Before, it changed the register only.", ja: ""}
+      - {version: "2.2.0", en: "Also changes the saved STALL_TH (`/saveConfig`, `/resetMotorDriver`). Before, it changed the register only.", ja: "保存される STALL_TH（`/saveConfig`、`/resetMotorDriver`）も変更します。以前は、レジスタだけを変更していました。"}
     see_also: [/getStallThreshold, /enableStallReport]
     tables:
       - title: Stall detection threshold
@@ -1347,7 +1394,7 @@ commands:
       en: Prohibits any motion commands towards the origin point when Home sensor is detected. The direction to the origin point can be configured through the configuration tool or by the `/setHomingDirection` command.
       ja: Homeセンサが反応している状態で、原点復帰方向へのモーションコマンドを禁止します。原点復帰方向は configTool や `/setHomingDirection`で設定できます。
     changes:
-      - {version: "2.2.0", en: "The automatic hard stop at the home switch is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver).", ja: ""}
+      - {version: "2.2.0", en: "The automatic hard stop at the home switch is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver).", ja: "ドライバが HiZ のモータには、HOME センサでの自動ハードストップを送りません。電磁ブレーキが無効でも同じです（ハードストップは HiZ のドライバを励磁してしまうため）。"}
     see_also: [/getProhibitMotionOnHomeSw, /setHomingDirection]
 
   - address: /getProhibitMotionOnHomeSw
@@ -1402,8 +1449,8 @@ commands:
       ja: 指定したモータを電圧モードに切り替えます。STEP800は常に電圧モードで動作しますので、この切替コマンドはSTEP400のみ利用可能です。
     errors: [MotorNotHiZ, CommandIgnored]
     changes:
-      - {version: "2.2.0", en: "The outputs must be HiZ; otherwise `/error/command MotorNotHiZ` is replied and nothing is applied.", ja: ""}
-      - {version: "2.2.0", en: "The mode is changed only if the driver took it (STEP_MODE is read back); otherwise `/error/command CommandIgnored`. Before, the stored mode was changed while the driver kept the old one, so [[/setKval]] and [[/setTval]] then wrote the wrong registers.", ja: ""}
+      - {version: "2.2.0", en: "The outputs must be HiZ; otherwise `/error/command MotorNotHiZ` is replied and nothing is applied.", ja: "出力は HiZ でなければなりません。そうでないときは `/error/command MotorNotHiZ` を返し、何も適用されません。"}
+      - {version: "2.2.0", en: "The mode is changed only if the driver took it (STEP_MODE is read back); otherwise `/error/command CommandIgnored`. Before, the stored mode was changed while the driver kept the old one, so [[/setKval]] and [[/setTval]] then wrote the wrong registers.", ja: "ドライバがモードを受け付けたとき（STEP_MODE を読み戻して確認します）だけモードを変更します。そうでないときは `/error/command CommandIgnored` を返します。以前は、ドライバが元のモードのままなのに保存されるモードだけが変わっていたため、その後の [[/setKval]] と [[/setTval]] が誤ったレジスタに書き込んでいました。"}
     see_also: [/setCurrentMode]
 
   - address: /setKval
@@ -1438,7 +1485,12 @@ commands:
         A value outside 0-255 is not rejected: it is limited to 0-255.
 
         On STEP400 in the current mode only the stored setting changes; [[/setVoltageMode]] writes it to the registers.
-      ja: KVAL4種をまとめて設定します。
+      ja: |-
+        KVAL4種をまとめて設定します。
+
+        0〜255 の範囲外の値は拒否されず、0〜255 に制限されます。
+
+        STEP400 の電流モードでは、保存される設定だけが変わります。[[/setVoltageMode]] でレジスタに書き込まれます。
     see_also: [/getKval, /setHoldKval, /setRunKval, /setAccKval, /setDecKval]
 
   - address: /getKval
@@ -1450,10 +1502,13 @@ commands:
         Get the four KVALs together.
 
         With the electromagnetic brake enabled and the voltage mode, KVAL_HOLD is raised to at least half of KVAL_RUN whenever the motor is energized again (from engaged, engaging or after [[/free]]), and this command returns the raised value. In the current mode TVAL_HOLD is raised instead.
-      ja: KVAL4種をまとめて取得します。
+      ja: |-
+        KVAL4種をまとめて取得します。
+
+        電磁ブレーキが有効で電圧モードのとき、モータが再び励磁されるたびに（保持、保持への移行中、`/free` の後から）KVAL_HOLD が KVAL_RUN の半分以上に引き上げられ、このコマンドは引き上げられた値を返します。電流モードでは、代わりに TVAL_HOLD が引き上げられます。
     response: [/kval]
     changes:
-      - {version: "2.2.0", en: "Returns the settings (what [[/setKval]] sets and `/saveConfig` saves) instead of the driver registers. In the current mode the KVAL registers keep the value from before; in the voltage mode they are the registers. KVAL_HOLD raised for a motor with the electromagnetic brake is returned too. STEP800: the reply is the same as before.", ja: ""}
+      - {version: "2.2.0", en: "Returns the settings (what [[/setKval]] sets and `/saveConfig` saves) instead of the driver registers. In the current mode the KVAL registers keep the value from before; in the voltage mode they are the registers. KVAL_HOLD raised for a motor with the electromagnetic brake is returned too. STEP800: the reply is the same as before.", ja: "ドライバのレジスタではなく、設定（[[/setKval]] で設定し、`/saveConfig` で保存される値）を返します。電流モードでは KVAL のレジスタは以前の値のままで、電圧モードではレジスタの値です。電磁ブレーキのモータで引き上げられた KVAL_HOLD も返されます。STEP800 の返答は以前と同じです。"}
 
   - address: /setBemfParam
     group: drive_mode
@@ -1487,10 +1542,15 @@ commands:
         The outputs must be HiZ; otherwise `MotorNotHiZ` is replied and nothing is applied.
 
         A value outside the range is not rejected: INT_SPEED is limited to 0-16383 and the other parameters to 0-255.
-      ja: BEMF補償パラメータのレジスタを設定します。各レジスタの設定値については 電圧モードの設定 を参照してください。
+      ja: |-
+        BEMF補償パラメータのレジスタを設定します。各レジスタの設定値については 電圧モードの設定 を参照してください。
+
+        出力は HiZ でなければなりません。そうでないときは `MotorNotHiZ` を返し、何も適用されません。
+
+        範囲外の値は拒否されません。INT_SPEED は 0〜16383 に、他のパラメータは 0〜255 に制限されます。
     errors: [MotorNotHiZ]
     changes:
-      - {version: "2.2.0", en: "The outputs must be HiZ (INT_SPEED, ST_SLP, FN_SLP_ACC and FN_SLP_DEC are writable only in HiZ); otherwise `/error/command MotorNotHiZ` and nothing is applied.", ja: ""}
+      - {version: "2.2.0", en: "The outputs must be HiZ (INT_SPEED, ST_SLP, FN_SLP_ACC and FN_SLP_DEC are writable only in HiZ); otherwise `/error/command MotorNotHiZ` and nothing is applied.", ja: "出力は HiZ でなければなりません（INT_SPEED、ST_SLP、FN_SLP_ACC、FN_SLP_DEC は HiZ のときだけ書き込めます）。そうでないときは `/error/command MotorNotHiZ` を返し、何も適用されません。"}
     see_also: [/getBemfParam]
 
   - address: /getBemfParam
@@ -1519,7 +1579,12 @@ commands:
         A value outside 0-255 is not rejected: it is limited to 0-255.
 
         On STEP400 in the current mode only the stored setting changes; [[/setVoltageMode]] writes it to the registers.
-      ja: 停止時のKVALのみを設定します。
+      ja: |-
+        停止時のKVALのみを設定します。
+
+        0〜255 の範囲外の値は拒否されず、0〜255 に制限されます。
+
+        STEP400 の電流モードでは、保存される設定だけが変わります。[[/setVoltageMode]] でレジスタに書き込まれます。
     see_also: [/setKval]
 
   - address: /setRunKval
@@ -1539,7 +1604,12 @@ commands:
         A value outside 0-255 is not rejected: it is limited to 0-255.
 
         On STEP400 in the current mode only the stored setting changes; [[/setVoltageMode]] writes it to the registers.
-      ja: 一定速運転時のKVALのみを設定します。
+      ja: |-
+        一定速運転時のKVALのみを設定します。
+
+        0〜255 の範囲外の値は拒否されず、0〜255 に制限されます。
+
+        STEP400 の電流モードでは、保存される設定だけが変わります。[[/setVoltageMode]] でレジスタに書き込まれます。
     see_also: [/setKval]
 
   - address: /setAccKval
@@ -1559,7 +1629,12 @@ commands:
         A value outside 0-255 is not rejected: it is limited to 0-255.
 
         On STEP400 in the current mode only the stored setting changes; [[/setVoltageMode]] writes it to the registers.
-      ja: 加速時のKVALのみを設定します。
+      ja: |-
+        加速時のKVALのみを設定します。
+
+        0〜255 の範囲外の値は拒否されず、0〜255 に制限されます。
+
+        STEP400 の電流モードでは、保存される設定だけが変わります。[[/setVoltageMode]] でレジスタに書き込まれます。
     see_also: [/setKval]
 
   - address: /setDecKval
@@ -1579,7 +1654,12 @@ commands:
         A value outside 0-255 is not rejected: it is limited to 0-255.
 
         On STEP400 in the current mode only the stored setting changes; [[/setVoltageMode]] writes it to the registers.
-      ja: 減速時のKVALのみを設定します。
+      ja: |-
+        減速時のKVALのみを設定します。
+
+        0〜255 の範囲外の値は拒否されず、0〜255 に制限されます。
+
+        STEP400 の電流モードでは、保存される設定だけが変わります。[[/setVoltageMode]] でレジスタに書き込まれます。
     see_also: [/setKval]
 
   - address: /setCurrentMode
@@ -1592,11 +1672,14 @@ commands:
         Switches the specified motor to the current drive mode.
 
         The PowerSTEP01 current mode goes up to 1/16 microsteps: a finer microstep mode is lowered to 1/16, and the stored setting ([[/setMicrostepMode]], `driverSettings.stepMode`) is changed with it.
-      ja: 指定したモータを電流モードに切り替えます。
+      ja: |-
+        指定したモータを電流モードに切り替えます。
+
+        PowerSTEP01 の電流モードは 1/16 マイクロステップまでです。それより細かいマイクロステップモードは 1/16 に下げられ、保存されている設定（[[/setMicrostepMode]]、`driverSettings.stepMode`）も一緒に変わります。
     errors: [MotorNotHiZ, CommandIgnored]
     changes:
-      - {version: "2.2.0", en: "The outputs must be HiZ; otherwise `/error/command MotorNotHiZ` is replied and nothing is applied.", ja: ""}
-      - {version: "2.2.0", en: "The mode is changed only if the driver took it (STEP_MODE is read back); otherwise `/error/command CommandIgnored`. Before, the stored mode was changed while the driver kept the old one, so [[/setKval]] and [[/setTval]] then wrote the wrong registers.", ja: ""}
+      - {version: "2.2.0", en: "The outputs must be HiZ; otherwise `/error/command MotorNotHiZ` is replied and nothing is applied.", ja: "出力は HiZ でなければなりません。そうでないときは `/error/command MotorNotHiZ` を返し、何も適用されません。"}
+      - {version: "2.2.0", en: "The mode is changed only if the driver took it (STEP_MODE is read back); otherwise `/error/command CommandIgnored`. Before, the stored mode was changed while the driver kept the old one, so [[/setKval]] and [[/setTval]] then wrote the wrong registers.", ja: "ドライバがモードを受け付けたとき（STEP_MODE を読み戻して確認します）だけモードを変更します。そうでないときは `/error/command CommandIgnored` を返します。以前は、ドライバが元のモードのままなのに保存されるモードだけが変わっていたため、その後の [[/setKval]] と [[/setTval]] が誤ったレジスタに書き込んでいました。"}
     see_also: [/setVoltageMode, /setMicrostepMode]
 
   - address: /setTval
@@ -1633,10 +1716,14 @@ commands:
         A value outside 0-64 is not rejected: it is limited to 0-64. The upper limit 64 (about 5 A) is a safety limit of the firmware.
 
         In the voltage mode only the stored setting changes; [[/setCurrentMode]] writes it to the registers.
-      ja: |
+      ja: |-
         TVAL4種をまとめて設定します。
 
         STEP400では、TVALは以下のようになっています。
+
+        0〜64 の範囲外の値は拒否されず、0〜64 に制限されます。上限の 64（約 5 A）はファームウェアの安全上の上限です。
+
+        電圧モードでは、保存される設定だけが変わります。[[/setCurrentMode]] でレジスタに書き込まれます。
     see_also: [/getTval, /getTval_mA, /setHoldTval, /setRunTval, /setAccTval, /setDecTval]
     tables:
       - columns: [TVAL, {en: "Setting value[mA]", ja: "設定値[mA]"}]
@@ -1656,10 +1743,13 @@ commands:
         Get the four TVAL types together.
 
         With the electromagnetic brake enabled and the current mode, TVAL_HOLD is raised to at least half of TVAL_RUN whenever the motor is energized again (from engaged, engaging or after [[/free]]), and this command returns the raised value. In the voltage mode KVAL_HOLD is raised instead.
-      ja: TVAL4種をまとめて取得します。
+      ja: |-
+        TVAL4種をまとめて取得します。
+
+        電磁ブレーキが有効で電流モードのとき、モータが再び励磁されるたびに（保持、保持への移行中、`/free` の後から）TVAL_HOLD が TVAL_RUN の半分以上に引き上げられ、このコマンドは引き上げられた値を返します。電圧モードでは、代わりに KVAL_HOLD が引き上げられます。
     response: [/tval]
     changes:
-      - {version: "2.2.0", en: "Returns the settings (what [[/setTval]] sets and `/saveConfig` saves) instead of the driver registers. In the voltage mode the TVAL registers keep the value from before. TVAL_HOLD raised for a motor with the electromagnetic brake is returned too.", ja: ""}
+      - {version: "2.2.0", en: "Returns the settings (what [[/setTval]] sets and `/saveConfig` saves) instead of the driver registers. In the voltage mode the TVAL registers keep the value from before. TVAL_HOLD raised for a motor with the electromagnetic brake is returned too.", ja: "ドライバのレジスタではなく、設定（[[/setTval]] で設定し、`/saveConfig` で保存される値）を返します。電圧モードでは TVAL のレジスタは以前の値のままです。電磁ブレーキのモータで引き上げられた TVAL_HOLD も返されます。"}
     see_also: [/getTval_mA]
 
   - address: /getTval_mA
@@ -1672,7 +1762,7 @@ commands:
       ja: TVAL4種をまとめて取得します。レジスタの値ではなく単位[mA]の設定値で返します。
     response: [/tval_mA]
     changes:
-      - {version: "2.2.0", en: "Returns the settings (what [[/setTval]] sets and `/saveConfig` saves) instead of the driver registers. In the voltage mode the TVAL registers keep the value from before. TVAL_HOLD raised for a motor with the electromagnetic brake is returned too.", ja: ""}
+      - {version: "2.2.0", en: "Returns the settings (what [[/setTval]] sets and `/saveConfig` saves) instead of the driver registers. In the voltage mode the TVAL registers keep the value from before. TVAL_HOLD raised for a motor with the electromagnetic brake is returned too.", ja: "ドライバのレジスタではなく、設定（[[/setTval]] で設定し、`/saveConfig` で保存される値）を返します。電圧モードでは TVAL のレジスタは以前の値のままです。電磁ブレーキのモータで引き上げられた TVAL_HOLD も返されます。"}
     see_also: [/getTval]
 
   - address: /setDecayModeParam
@@ -1703,11 +1793,16 @@ commands:
         The outputs must be HiZ; otherwise `MotorNotHiZ` is replied and nothing is applied.
 
         TON_MIN and TOFF_MIN are 7 bit (0-127): a value outside it replies `CommandIgnored` and nothing is applied. A T_FAST outside 0-255 is limited to 0-255.
-      ja: 電流制御アルゴリズムのパラメータのレジスタを設定します。各レジスタの設定値については PowerSTEP01のデータシートを参照してください。
+      ja: |-
+        電流制御アルゴリズムのパラメータのレジスタを設定します。各レジスタの設定値については PowerSTEP01のデータシートを参照してください。
+
+        出力は HiZ でなければなりません。そうでないときは `MotorNotHiZ` を返し、何も適用されません。
+
+        TON_MIN と TOFF_MIN は 7 ビット（0〜127）です。範囲外の値には `CommandIgnored` を返し、何も適用されません。0〜255 の範囲外の T_FAST は 0〜255 に制限されます。
     errors: [MotorNotHiZ, CommandIgnored]
     changes:
-      - {version: "2.2.0", en: "TON_MIN and TOFF_MIN are 0-127 (7 bit); a value outside it replies `/error/command CommandIgnored` and nothing is applied. Before, 128-255 were taken modulo 128 by the driver while the saved value stayed 128-255. T_FAST is 0-255 as before.", ja: ""}
-      - {version: "2.2.0", en: "The outputs must be HiZ; otherwise `/error/command MotorNotHiZ` and nothing is applied.", ja: ""}
+      - {version: "2.2.0", en: "TON_MIN and TOFF_MIN are 0-127 (7 bit); a value outside it replies `/error/command CommandIgnored` and nothing is applied. Before, 128-255 were taken modulo 128 by the driver while the saved value stayed 128-255. T_FAST is 0-255 as before.", ja: "TON_MIN と TOFF_MIN は 0〜127（7 ビット）です。範囲外の値には `/error/command CommandIgnored` を返し、何も適用されません。以前は、128〜255 はドライバで 128 の剰余として扱われる一方、保存される値は 128〜255 のままでした。T_FAST は以前と同じく 0〜255 です。"}
+      - {version: "2.2.0", en: "The outputs must be HiZ; otherwise `/error/command MotorNotHiZ` and nothing is applied.", ja: "出力は HiZ でなければなりません。そうでないときは `/error/command MotorNotHiZ` を返し、何も適用されません。"}
     see_also: [/getDecayModeParam]
 
   - address: /getDecayModeParam
@@ -1738,7 +1833,12 @@ commands:
         A value outside 0-64 is not rejected: it is limited to 0-64. The upper limit 64 (about 5 A) is a safety limit of the firmware.
 
         In the voltage mode only the stored setting changes; [[/setCurrentMode]] writes it to the registers.
-      ja: 停止時のTVALのみを設定します。
+      ja: |-
+        停止時のTVALのみを設定します。
+
+        0〜64 の範囲外の値は拒否されず、0〜64 に制限されます。上限の 64（約 5 A）はファームウェアの安全上の上限です。
+
+        電圧モードでは、保存される設定だけが変わります。[[/setCurrentMode]] でレジスタに書き込まれます。
     see_also: [/setTval]
 
   - address: /setRunTval
@@ -1759,7 +1859,12 @@ commands:
         A value outside 0-64 is not rejected: it is limited to 0-64. The upper limit 64 (about 5 A) is a safety limit of the firmware.
 
         In the voltage mode only the stored setting changes; [[/setCurrentMode]] writes it to the registers.
-      ja: 一定速運転時のTVALのみを設定します。
+      ja: |-
+        一定速運転時のTVALのみを設定します。
+
+        0〜64 の範囲外の値は拒否されず、0〜64 に制限されます。上限の 64（約 5 A）はファームウェアの安全上の上限です。
+
+        電圧モードでは、保存される設定だけが変わります。[[/setCurrentMode]] でレジスタに書き込まれます。
     see_also: [/setTval]
 
   - address: /setAccTval
@@ -1780,7 +1885,12 @@ commands:
         A value outside 0-64 is not rejected: it is limited to 0-64. The upper limit 64 (about 5 A) is a safety limit of the firmware.
 
         In the voltage mode only the stored setting changes; [[/setCurrentMode]] writes it to the registers.
-      ja: 加速時のTVALのみを設定します。
+      ja: |-
+        加速時のTVALのみを設定します。
+
+        0〜64 の範囲外の値は拒否されず、0〜64 に制限されます。上限の 64（約 5 A）はファームウェアの安全上の上限です。
+
+        電圧モードでは、保存される設定だけが変わります。[[/setCurrentMode]] でレジスタに書き込まれます。
     see_also: [/setTval]
 
   - address: /setDecTval
@@ -1801,7 +1911,12 @@ commands:
         A value outside 0-64 is not rejected: it is limited to 0-64. The upper limit 64 (about 5 A) is a safety limit of the firmware.
 
         In the voltage mode only the stored setting changes; [[/setCurrentMode]] writes it to the registers.
-      ja: 減速時のTVALのみを設定します。
+      ja: |-
+        減速時のTVALのみを設定します。
+
+        0〜64 の範囲外の値は拒否されず、0〜64 に制限されます。上限の 64（約 5 A）はファームウェアの安全上の上限です。
+
+        電圧モードでは、保存される設定だけが変わります。[[/setCurrentMode]] でレジスタに書き込まれます。
     see_also: [/setTval]
 
   # ---------------------------------------------------------------------------
@@ -1835,12 +1950,15 @@ commands:
         Sets the acc, dec, and maxSpeed of the speed profile together.
 
         ACC and DEC are rounded to the nearest register value, so the written value can differ by 1 LSB. MAX_SPEED alone is writable at any time, but nothing is written to a motor that replies with `MotorNotStopped`. A value outside the range is limited by the driver library. On STEP400, a maximum speed of 0 is written as 1 (the register value 0 is reserved).
-      ja: スピードプロファイルのacc, dec, maxSpeedをまとめて設定します。
+      ja: |-
+        スピードプロファイルのacc, dec, maxSpeedをまとめて設定します。
+
+        ACC と DEC は最も近いレジスタ値に丸められるため、書き込まれる値は 1 LSB ずれることがあります。MAX_SPEED だけはいつでも書き込めますが、`MotorNotStopped` を返したモータには何も書き込まれません。範囲外の値は、ドライバライブラリによって制限されます。STEP400 では、最大速さ 0 は 1 として書き込まれます（レジスタ値 0 は予約されています）。
     errors: [MotorNotStopped]
     changes:
-      - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old values.", ja: ""}
-      - {version: "2.2.0", en: "`acc` and `dec` are rounded to the nearest register value, so the written value can differ by 1 LSB.", ja: ""}
-      - {version: "2.2.0", en: "STEP400: a maximum speed of 0 is written as 1 (the register value 0 is reserved).", ja: ""}
+      - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old values.", ja: "モータは停止中か HiZ でなければなりません。回転中のモータには `/error/command MotorNotStopped` を返し、元の値のままにします。"}
+      - {version: "2.2.0", en: "`acc` and `dec` are rounded to the nearest register value, so the written value can differ by 1 LSB.", ja: "`acc` と `dec` は最も近いレジスタ値に丸められるため、書き込まれる値は 1 LSB ずれることがあります。"}
+      - {version: "2.2.0", en: "STEP400: a maximum speed of 0 is written as 1 (the register value 0 is reserved).", ja: "STEP400: 最大速さ 0 は 1 として書き込まれます（レジスタ値 0 は予約されています）。"}
     see_also: [/getSpeedProfile, /setAcc, /setDec, /setMaxSpeed]
 
   - address: /getSpeedProfile
@@ -1852,7 +1970,7 @@ commands:
       ja: スピードプロファイルのacc, dec, maxSpeedをまとめて取得します。
     response: [/speedProfile]
     changes:
-      - {version: "2.2.0", en: "The acceleration and deceleration are reported about 4.9% smaller than before; they now match the datasheet (driver libraries v1.2.0).", ja: ""}
+      - {version: "2.2.0", en: "The acceleration and deceleration are reported about 4.9% smaller than before; they now match the datasheet (driver libraries v1.2.0).", ja: "加速度と減速度の報告値が、以前より約 4.9% 小さくなりました。データシートに一致する値になっています（ドライバライブラリ v1.2.0）。"}
 
   - address: /setFullstepSpeed
     group: speed_profile
@@ -1870,7 +1988,10 @@ commands:
         Sets the threshold at which the microstepping mode automatically switches to full-step mode.
 
         A value above the range is limited to 15625 step/s by the driver library. A value from 0 up to the lower end of the range is written as the lower end (7.63 step/s). A negative value below about -7.6 is not limited to the lower end: the driver library converts it to a huge unsigned number and limits that to the maximum, so it becomes 15625 step/s.
-      ja: マイクロステッピングモードが自動でフルステップモードに切り替わる閾値を設定します。
+      ja: |-
+        マイクロステッピングモードが自動でフルステップモードに切り替わる閾値を設定します。
+
+        範囲を超える値は、ドライバライブラリによって 15625 step/s に制限されます。0 から範囲の下限までの値は、下限（7.63 step/s）として書き込まれます。-7.6 程度より小さい負の値は下限に制限されません。ドライバライブラリが大きな符号なしの数に変換してから最大値に制限するため、15625 step/s になります。
     see_also: [/getFullstepSpeed]
 
   - address: /getFullstepSpeed
@@ -1898,9 +2019,12 @@ commands:
         Set the maximum speed of the speed profile
 
         A value outside the range is limited by the driver library. On STEP400, a maximum speed of 0 is written as 1 (the register value 0 is reserved).
-      ja: スピードプロファイルの最大速さを設定します。
+      ja: |-
+        スピードプロファイルの最大速さを設定します。
+
+        範囲外の値は、ドライバライブラリによって制限されます。STEP400 では、最大速さ 0 は 1 として書き込まれます（レジスタ値 0 は予約されています）。
     changes:
-      - {version: "2.2.0", en: "STEP400: a maximum speed of 0 is written as 1 (the register value 0 is reserved). STEP800 is unchanged.", ja: ""}
+      - {version: "2.2.0", en: "STEP400: a maximum speed of 0 is written as 1 (the register value 0 is reserved). STEP800 is unchanged.", ja: "STEP400: 最大速さ 0 は 1 として書き込まれます（レジスタ値 0 は予約されています）。STEP800 は変わりません。"}
     see_also: [/setSpeedProfile]
 
   - address: /setAcc
@@ -1921,11 +2045,16 @@ commands:
         The value is rounded to the nearest register value, so the written value can differ by 1 LSB. A value outside the range is limited by the driver library.
 
         The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value.
-      ja: スピードプロファイルの加速度を設定します。
+      ja: |-
+        スピードプロファイルの加速度を設定します。
+
+        最も近いレジスタ値に丸められるため、書き込まれる値は 1 LSB ずれることがあります。範囲外の値は、ドライバライブラリによって制限されます。
+
+        モータは停止中か HiZ でなければなりません。回転中のモータには `MotorNotStopped` を返し、元の値のままにします。
     errors: [MotorNotStopped]
     changes:
-      - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: ""}
-      - {version: "2.2.0", en: "Rounds to the nearest register value, so the written value can differ by 1 LSB.", ja: ""}
+      - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: "モータは停止中か HiZ でなければなりません。回転中のモータには `/error/command MotorNotStopped` を返し、元の値のままにします。"}
+      - {version: "2.2.0", en: "Rounds to the nearest register value, so the written value can differ by 1 LSB.", ja: "最も近いレジスタ値に丸められるため、書き込まれる値は 1 LSB ずれることがあります。"}
     see_also: [/setSpeedProfile]
 
   - address: /setDec
@@ -1946,11 +2075,16 @@ commands:
         The value is rounded to the nearest register value, so the written value can differ by 1 LSB. A value outside the range is limited by the driver library.
 
         The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value.
-      ja: スピードプロファイルの減速度 (deceleration) を設定します。
+      ja: |-
+        スピードプロファイルの減速度 (deceleration) を設定します。
+
+        最も近いレジスタ値に丸められるため、書き込まれる値は 1 LSB ずれることがあります。範囲外の値は、ドライバライブラリによって制限されます。
+
+        モータは停止中か HiZ でなければなりません。回転中のモータには `MotorNotStopped` を返し、元の値のままにします。
     errors: [MotorNotStopped]
     changes:
-      - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: ""}
-      - {version: "2.2.0", en: "Rounds to the nearest register value, so the written value can differ by 1 LSB.", ja: ""}
+      - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: "モータは停止中か HiZ でなければなりません。回転中のモータには `/error/command MotorNotStopped` を返し、元の値のままにします。"}
+      - {version: "2.2.0", en: "Rounds to the nearest register value, so the written value can differ by 1 LSB.", ja: "最も近いレジスタ値に丸められるため、書き込まれる値は 1 LSB ずれることがあります。"}
     see_also: [/setSpeedProfile]
 
   - address: /setMinSpeed
@@ -1971,11 +2105,16 @@ commands:
         While the low speed optimization is disabled, the motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value. While it is enabled, only the saved value changes and no error is sent.
 
         A value above the range is limited to 976.3 step/s by the driver library. A negative value below about -0.24 is not limited to 0: the driver library converts it to a huge unsigned number and limits that to the maximum, so it becomes 976.3 step/s.
-      ja: スピードプロファイルの最小速さを設定します。この値は[[/releaseSw]]時のモータ回転速さにも使用されます。Low speed optimization ([[/enableLowSpeedOptimize]])が有効になっている場合、 minSpeedは強制的に0になります。
+      ja: |-
+        スピードプロファイルの最小速さを設定します。この値は[[/releaseSw]]時のモータ回転速さにも使用されます。Low speed optimization ([[/enableLowSpeedOptimize]])が有効になっている場合、 minSpeedは強制的に0になります。
+
+        低速最適化が無効の間は、モータは停止中か HiZ でなければなりません。回転中のモータには `MotorNotStopped` を返し、元の値のままにします。有効の間は、保存される値だけが変わり、エラーは送信されません。
+
+        範囲を超える値は、ドライバライブラリによって 976.3 step/s に制限されます。-0.24 程度より小さい負の値は 0 に制限されません。ドライバライブラリが大きな符号なしの数に変換してから最大値に制限するため、976.3 step/s になります。
     errors: [MotorNotStopped]
     changes:
-      - {version: "2.2.0", en: "While the low speed optimization is disabled, the motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: ""}
-      - {version: "2.2.0", en: "`/setMinSpeed 255` (all motors) checks the low speed optimization setting of each motor. It read an invalid array element.", ja: ""}
+      - {version: "2.2.0", en: "While the low speed optimization is disabled, the motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: "低速最適化が無効の間は、モータは停止中か HiZ でなければなりません。回転中のモータには `/error/command MotorNotStopped` を返し、元の値のままにします。"}
+      - {version: "2.2.0", en: "`/setMinSpeed 255` (all motors) checks the low speed optimization setting of each motor. It read an invalid array element.", ja: "`/setMinSpeed 255`（全モータ）は、モータごとに低速最適化の設定を確認します。以前は、不正な配列の要素を読んでいました。"}
     see_also: [/getMinSpeed]
 
   - address: /getMinSpeed
@@ -1987,10 +2126,13 @@ commands:
         Return the speed profile minimum speed.
 
         Returns 0.0 for a motor with the low speed optimization enabled: the MIN_SPEED register then holds the optimization threshold (read it with [[/getLowSpeedOptimizeThreshold]]) and the actual minimum speed is 0. For a motor with the optimization disabled, it returns the MIN_SPEED register value of the driver in step/s.
-      ja: スピードプロファイルの最小速さを返します。
+      ja: |-
+        スピードプロファイルの最小速さを返します。
+
+        低速最適化が有効なモータでは 0.0 を返します。このとき MIN_SPEED レジスタには最適化の閾値が入っていて（[[/getLowSpeedOptimizeThreshold]] で読み出せます）、実際の最小速さは 0 です。低速最適化が無効のモータでは、ドライバの MIN_SPEED レジスタの値を step/s で返します。
     response: [/minSpeed]
     changes:
-      - {version: "2.2.0", en: "Returns 0.0 for a motor with the low speed optimization enabled. A single motor returned the MIN_SPEED register value (the threshold) and `255` (all motors) returned the stored minimum speed setting; both behave the same now.", ja: ""}
+      - {version: "2.2.0", en: "Returns 0.0 for a motor with the low speed optimization enabled. A single motor returned the MIN_SPEED register value (the threshold) and `255` (all motors) returned the stored minimum speed setting; both behave the same now.", ja: "低速最適化が有効なモータでは 0.0 を返します。以前は、1 つのモータでは MIN_SPEED レジスタの値（閾値）を返し、`255`（全モータ）では保存されている最小速さの設定を返していました。今はどちらも同じ動作です。"}
 
   - address: /getSpeed
     group: speed_profile
@@ -2008,26 +2150,29 @@ commands:
       - name: acc
         type: int
         range: [0, 4095]
-        description: {en: acceleration (raw register value), ja: ""}
+        description: {en: acceleration (raw register value), ja: "加速度（Raw レジスタ値）"}
       - name: dec
         type: int
         range: [0, 4095]
-        description: {en: deceleration (raw register value), ja: ""}
+        description: {en: deceleration (raw register value), ja: "減速度（Raw レジスタ値）"}
       - name: maxSpeed
         type: int
         range: [0, 1023]
-        description: {en: maximum speed (raw register value), ja: ""}
+        description: {en: maximum speed (raw register value), ja: "最大速さ（Raw レジスタ値）"}
     timing: stopped
     description:
       en: |-
         Sets the acc, dec, and maxSpeed of the speed profile using raw driver IC register values.
 
         A value outside the range is not rejected: it is converted to 16 bits (70000 becomes 4464) and then masked to the width of the register by the driver. The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value.
-      ja: ""
+      ja: |-
+        ドライバ IC のレジスタ値（Raw）で、スピードプロファイルの acc, dec, maxSpeed を設定します。
+
+        範囲外の値は拒否されません。16 ビットに変換され（70000 は 4464 になります）、さらにドライバがレジスタの幅でマスクします。モータは停止中か HiZ でなければなりません。回転中のモータには `MotorNotStopped` を返し、元の値のままにします。
     errors: [MotorNotStopped]
     changes:
-      - {version: "2.2.0", en: "Also sets the acceleration, deceleration and maximum speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.", ja: ""}
-      - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: ""}
+      - {version: "2.2.0", en: "Also sets the acceleration, deceleration and maximum speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.", ja: "保存される設定（`/saveConfig`）と、`/resetMotorDriver` で再び適用される加速度、減速度、最大速さの設定も変更します。以前はレジスタだけを変更していたため、リセットや保存した設定で元の値に戻っていました。"}
+      - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: "モータは停止中か HiZ でなければなりません。回転中のモータには `/error/command MotorNotStopped` を返し、元の値のままにします。"}
     see_also: [/getSpeedProfileRaw, /setSpeedProfile]
 
   - address: /getSpeedProfileRaw
@@ -2036,7 +2181,7 @@ commands:
     timing: always
     description:
       en: Gets the acc, dec, and maxSpeed of the speed profile as raw driver IC register values.
-      ja: ""
+      ja: "ドライバ IC のレジスタ値（Raw）で、スピードプロファイルの acc, dec, maxSpeed を取得します。"
     response: [/speedProfileRaw]
 
   - address: /setMaxSpeedRaw
@@ -2046,7 +2191,7 @@ commands:
       - name: maxSpeed
         type: int
         range: [0, 1023]
-        description: {en: maximum speed (raw register value), ja: ""}
+        description: {en: maximum speed (raw register value), ja: "最大速さ（Raw レジスタ値）"}
     timing: always
     description:
       en: |-
@@ -2055,9 +2200,14 @@ commands:
         A value outside the range is not rejected: it is converted to 16 bits (70000 becomes 4464) and then masked to the width of the register by the driver.
 
         `/setMaxSpeedRaw 0` writes 0, also on STEP400.
-      ja: ""
+      ja: |-
+        レジスタ値（Raw）で、スピードプロファイルの最大速さを設定します。
+
+        範囲外の値は拒否されません。16 ビットに変換され（70000 は 4464 になります）、さらにドライバがレジスタの幅でマスクします。
+
+        `/setMaxSpeedRaw 0` は、STEP400 でも 0 を書き込みます。
     changes:
-      - {version: "2.2.0", en: "Also sets the maximum speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.", ja: ""}
+      - {version: "2.2.0", en: "Also sets the maximum speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.", ja: "保存される設定（`/saveConfig`）と、`/resetMotorDriver` で再び適用される最大速さの設定も変更します。以前はレジスタだけを変更していたため、リセットや保存した設定で元の値に戻っていました。"}
     see_also: [/setMaxSpeed]
 
   - address: /setMinSpeedRaw
@@ -2067,19 +2217,22 @@ commands:
       - name: minSpeed
         type: int
         range: [0, 4095]
-        description: {en: minimum speed (raw register value), ja: ""}
+        description: {en: minimum speed (raw register value), ja: "最小速さ（Raw レジスタ値）"}
     timing: stopped
     description:
       en: |-
         Sets the minimum speed of the speed profile using a raw register value.
 
         A value outside the range is not rejected: it is converted to 16 bits (70000 becomes 4464) and then masked to the width of the register by the driver. While the low speed optimization is disabled, the motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value. While it is enabled, only the saved value changes and no error is sent.
-      ja: ""
+      ja: |-
+        レジスタ値（Raw）で、スピードプロファイルの最小速さを設定します。
+
+        範囲外の値は拒否されません。16 ビットに変換され（70000 は 4464 になります）、さらにドライバがレジスタの幅でマスクします。低速最適化が無効の間は、モータは停止中か HiZ でなければなりません。回転中のモータには `MotorNotStopped` を返し、元の値のままにします。有効の間は、保存される値だけが変わり、エラーは送信されません。
     errors: [MotorNotStopped]
     changes:
-      - {version: "2.2.0", en: "Also sets the minimum speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.", ja: ""}
-      - {version: "2.2.0", en: "While the low speed optimization is disabled, the motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: ""}
-      - {version: "2.2.0", en: "Bit 12 is ignored (it switched the low speed optimization on without [[/enableLowSpeedOptimize]]). While the optimization is on, the command only changes the saved value, as [[/setMinSpeed]] does.", ja: ""}
+      - {version: "2.2.0", en: "Also sets the minimum speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.", ja: "保存される設定（`/saveConfig`）と、`/resetMotorDriver` で再び適用される最小速さの設定も変更します。以前はレジスタだけを変更していたため、リセットや保存した設定で元の値に戻っていました。"}
+      - {version: "2.2.0", en: "While the low speed optimization is disabled, the motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: "低速最適化が無効の間は、モータは停止中か HiZ でなければなりません。回転中のモータには `/error/command MotorNotStopped` を返し、元の値のままにします。"}
+      - {version: "2.2.0", en: "Bit 12 is ignored (it switched the low speed optimization on without [[/enableLowSpeedOptimize]]). While the optimization is on, the command only changes the saved value, as [[/setMinSpeed]] does.", ja: "ビット 12 は無視されます（以前は、[[/enableLowSpeedOptimize]] なしで低速最適化が有効になっていました）。低速最適化が有効の間は、[[/setMinSpeed]] と同じく、保存される値だけを変更します。"}
     see_also: [/setMinSpeed]
 
   - address: /setFullstepSpeedRaw
@@ -2089,16 +2242,19 @@ commands:
       - name: fullstepSpeed
         type: int
         range: [0, 1023]
-        description: {en: full-step speed threshold (raw register value), ja: ""}
+        description: {en: full-step speed threshold (raw register value), ja: "フルステップ速度の閾値（Raw レジスタ値）"}
     timing: always
     description:
       en: |-
         Sets the full-step speed threshold using a raw register value.
 
         A value outside the range is not rejected: it is converted to 16 bits (70000 becomes 4464) and then masked to the width of the register by the driver.
-      ja: ""
+      ja: |-
+        レジスタ値（Raw）で、フルステップに切り替わる速度の閾値を設定します。
+
+        範囲外の値は拒否されません。16 ビットに変換され（70000 は 4464 になります）、さらにドライバがレジスタの幅でマスクします。
     changes:
-      - {version: "2.2.0", en: "Also sets the full-step speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.", ja: ""}
+      - {version: "2.2.0", en: "Also sets the full-step speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.", ja: "保存される設定（`/saveConfig`）と、`/resetMotorDriver` で再び適用されるフルステップ速度の設定も変更します。以前はレジスタだけを変更していたため、リセットや保存した設定で元の値に戻っていました。"}
     see_also: [/setFullstepSpeed]
 
   - address: /setAccRaw
@@ -2108,18 +2264,21 @@ commands:
       - name: acc
         type: int
         range: [0, 4095]
-        description: {en: acceleration (raw register value), ja: ""}
+        description: {en: acceleration (raw register value), ja: "加速度（Raw レジスタ値）"}
     timing: stopped
     description:
       en: |-
         Sets the acceleration of the speed profile using a raw register value.
 
         A value outside the range is not rejected: it is converted to 16 bits (70000 becomes 4464) and then masked to the width of the register by the driver. The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value.
-      ja: ""
+      ja: |-
+        レジスタ値（Raw）で、スピードプロファイルの加速度を設定します。
+
+        範囲外の値は拒否されません。16 ビットに変換され（70000 は 4464 になります）、さらにドライバがレジスタの幅でマスクします。モータは停止中か HiZ でなければなりません。回転中のモータには `MotorNotStopped` を返し、元の値のままにします。
     errors: [MotorNotStopped]
     changes:
-      - {version: "2.2.0", en: "Also sets the acceleration setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.", ja: ""}
-      - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: ""}
+      - {version: "2.2.0", en: "Also sets the acceleration setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.", ja: "保存される設定（`/saveConfig`）と、`/resetMotorDriver` で再び適用される加速度の設定も変更します。以前はレジスタだけを変更していたため、リセットや保存した設定で元の値に戻っていました。"}
+      - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: "モータは停止中か HiZ でなければなりません。回転中のモータには `/error/command MotorNotStopped` を返し、元の値のままにします。"}
     see_also: [/setAcc]
 
   - address: /setDecRaw
@@ -2129,18 +2288,21 @@ commands:
       - name: dec
         type: int
         range: [0, 4095]
-        description: {en: deceleration (raw register value), ja: ""}
+        description: {en: deceleration (raw register value), ja: "減速度（Raw レジスタ値）"}
     timing: stopped
     description:
       en: |-
         Sets the deceleration of the speed profile using a raw register value.
 
         A value outside the range is not rejected: it is converted to 16 bits (70000 becomes 4464) and then masked to the width of the register by the driver. The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value.
-      ja: ""
+      ja: |-
+        レジスタ値（Raw）で、スピードプロファイルの減速度を設定します。
+
+        範囲外の値は拒否されません。16 ビットに変換され（70000 は 4464 になります）、さらにドライバがレジスタの幅でマスクします。モータは停止中か HiZ でなければなりません。回転中のモータには `MotorNotStopped` を返し、元の値のままにします。
     errors: [MotorNotStopped]
     changes:
-      - {version: "2.2.0", en: "Also sets the deceleration setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.", ja: ""}
-      - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: ""}
+      - {version: "2.2.0", en: "Also sets the deceleration setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.", ja: "保存される設定（`/saveConfig`）と、`/resetMotorDriver` で再び適用される減速度の設定も変更します。以前はレジスタだけを変更していたため、リセットや保存した設定で元の値に戻っていました。"}
+      - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.", ja: "モータは停止中か HiZ でなければなりません。回転中のモータには `/error/command MotorNotStopped` を返し、元の値のままにします。"}
     see_also: [/setDec]
 
   # ---------------------------------------------------------------------------
@@ -2174,8 +2336,8 @@ commands:
     response: [/homingStatus]
     errors: [CommandIgnored, BrakeEngaged, GoUntilTimeout, ReleaseSwTimeout, InServoMode]
     changes:
-      - {version: "2.2.0", en: "While the brake is engaged, releasing or engaging (not while stopping or after `/free`), replies `/error/command BrakeEngaged` and does nothing. Before, it set the homing state although it did not start.", ja: ""}
-      - {version: "2.2.0", en: "The homing no longer often ends with `/homingStatus` 4 and `ReleaseSwTimeout` about 1 ms after the switch was found, instead of 3 (a timing error of the timeout check; it happened in almost every homing or almost never, depending on the start-up).", ja: ""}
+      - {version: "2.2.0", en: "While the brake is engaged, releasing or engaging (not while stopping or after `/free`), replies `/error/command BrakeEngaged` and does nothing. Before, it set the homing state although it did not start.", ja: "ブレーキが保持されている間、開放中、保持への移行中（停止処理中と `/free` の後は除く）は、`/error/command BrakeEngaged` を返し、何もしません。以前は、原点復帰が始まらないのに原点復帰の状態になっていました。"}
+      - {version: "2.2.0", en: "The homing no longer often ends with `/homingStatus` 4 and `ReleaseSwTimeout` about 1 ms after the switch was found, instead of 3 (a timing error of the timeout check; it happened in almost every homing or almost never, depending on the start-up).", ja: "原点復帰が、センサを検出した約 1 ms 後に、3（ReleaseSW 完了）ではなく `/homingStatus` 4 と `ReleaseSwTimeout` で終わることが多かった問題を修正しました（タイムアウト判定の時刻の誤差が原因で、起動のしかたによって、ほとんどの原点復帰で起きるか、ほとんど起きないかのどちらかでした）。"}
     see_also: [/getHomingStatus]
 
   - address: /getHomingStatus
@@ -2230,6 +2392,8 @@ commands:
         A value outside the range is not rejected: it is limited to 0-15610.
       ja: |-
         [[/homing]]実行時の原点復帰速さ`homingSpeed`を指定します。configToolからも指定できます。
+
+        範囲外の値は拒否されず、0〜15610 に制限されます。
     see_also: [/getHomingSpeed]
 
   - address: /getHomingSpeed
@@ -2261,13 +2425,15 @@ commands:
         The motor will softStop afterwards, but if the SW_MODE is set to 0 in the [[/setHomeSwMode]] command, it will be a hardStop instead. This command will keep the motor to the BUSY state until it stops.
 
         The sign of the speed is the direction. A speed whose absolute value is above the range is limited to the largest register value (0xFFFFF, about 15625 step/s) by the driver library.
-      ja: |
+      ja: |-
         指定の速度で回転し、HOMEスイッチ端子が閉状態になるとACTの値に応じた処理を行います。
         その後softStopしますが、[[/setHomeSwMode]]コマンドでSW_MODEが0に設定されていると、softStopではなくhardStopになります。このコマンドは、モータが停止するまでBUSY状態を保ちます。
+
+        速度の符号が方向になります。絶対値が範囲を超える速度は、ドライバライブラリによってレジスタの最大値（0xFFFFF、約 15625 step/s）に制限されます。
     errors: [BrakeEngaged, GoUntilTimeout, HomeSwActivating, InServoMode]
     changes:
-      - {version: "2.2.0", en: "An activated home switch is reported as `/error/command HomeSwActivating`, the text in the error list. It was sent as `HomeSwActivated`. It now follows [[/reportError]] like the other command errors.", ja: ""}
-      - {version: "2.2.0", en: "For a motor in the servo mode, replies `/error/command InServoMode` and does nothing. Before, the command was sent to the driver. With 255, only the motors in the servo mode reply the error; the others execute the command.", ja: ""}
+      - {version: "2.2.0", en: "An activated home switch is reported as `/error/command HomeSwActivating`, the text in the error list. It was sent as `HomeSwActivated`. It now follows [[/reportError]] like the other command errors.", ja: "HOME センサが作動している場合は、エラーの一覧にあるとおり `/error/command HomeSwActivating` として報告されます。以前は `HomeSwActivated` として送信されていました。他のコマンドのエラーと同じように、[[/reportError]] に従います。"}
+      - {version: "2.2.0", en: "For a motor in the servo mode, replies `/error/command InServoMode` and does nothing. Before, the command was sent to the driver. With 255, only the motors in the servo mode reply the error; the others execute the command.", ja: "サーボモードのモータには `/error/command InServoMode` を返し、何もしません。以前は、コマンドがドライバに送られていました。255 のときは、サーボモードのモータだけがエラーを返し、他のモータはコマンドを実行します。"}
     see_also: [/setGoUntilTimeout, /releaseSw, /goUntilRaw]
 
   - address: /setGoUntilTimeout
@@ -2288,10 +2454,12 @@ commands:
         A negative value replies `CommandIgnored` and nothing is applied. The maximum is 2147483647. The automatic hard stop at the timeout is not sent to a motor whose driver is HiZ (the timeout error is still sent).
       ja: |-
         [[/goUntil]]実行時のタイムアウト時間を指定します。この時間内にセンサに反応がなかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。configToolからも指定できます。
+
+        負の値には `CommandIgnored` を返し、何も適用されません。最大値は 2147483647 です。タイムアウトでの自動ハードストップは、ドライバが HiZ のモータには送られません（タイムアウトのエラーは送信されます）。
     errors: [CommandIgnored]
     changes:
-      - {version: "2.2.0", en: "A negative value replies `/error/command CommandIgnored` and nothing is applied. Before, it became about 49 days.", ja: ""}
-      - {version: "2.2.0", en: "The hard stop at the timeout is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver). The timeout error is still sent.", ja: ""}
+      - {version: "2.2.0", en: "A negative value replies `/error/command CommandIgnored` and nothing is applied. Before, it became about 49 days.", ja: "負の値には `/error/command CommandIgnored` を返し、何も適用されません。以前は約 49 日になっていました。"}
+      - {version: "2.2.0", en: "The hard stop at the timeout is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver). The timeout error is still sent.", ja: "タイムアウト時のハードストップは、ドライバが HiZ のモータには送りません。電磁ブレーキが無効でも同じです（ハードストップは HiZ のドライバを励磁してしまうため）。タイムアウトのエラーは送信されます。"}
     see_also: [/getGoUntilTimeout]
 
   - address: /getGoUntilTimeout
@@ -2323,8 +2491,8 @@ commands:
       ja: 指定方向にminimum speed（初期状態では5[step/s]）で回転し、HOMEスイッチ端子が開状態になると、ACTの値に応じた処理を行います。ACTの処理内容は [[/goUntil]]と同じです。その後hardStopします。
     errors: [BrakeEngaged, ReleaseSwTimeout, InServoMode]
     changes:
-      - {version: "2.2.0", en: "`ACT` is read like the other boolean arguments (a number of 1.0 or more, or a positive integer, is true). It was read as an integer, so 0.5 was 0.", ja: ""}
-      - {version: "2.2.0", en: "For a motor in the servo mode, replies `/error/command InServoMode` and does nothing. Before, the command was sent to the driver. With 255, only the motors in the servo mode reply the error; the others execute the command.", ja: ""}
+      - {version: "2.2.0", en: "`ACT` is read like the other boolean arguments (a number of 1.0 or more, or a positive integer, is true). It was read as an integer, so 0.5 was 0.", ja: "`ACT` は、他の真偽値の引数と同じように読まれます（1.0 以上の数か、正の整数が真）。以前は整数として読まれていたため、0.5 は 0 になっていました。"}
+      - {version: "2.2.0", en: "For a motor in the servo mode, replies `/error/command InServoMode` and does nothing. Before, the command was sent to the driver. With 255, only the motors in the servo mode reply the error; the others execute the command.", ja: "サーボモードのモータには `/error/command InServoMode` を返し、何もしません。以前は、コマンドがドライバに送られていました。255 のときは、サーボモードのモータだけがエラーを返し、他のモータはコマンドを実行します。"}
     see_also: [/setReleaseSwTimeout, /setMinSpeed]
 
   - address: /setReleaseSwTimeout
@@ -2345,10 +2513,12 @@ commands:
         A negative value replies `CommandIgnored` and nothing is applied. The maximum is 2147483647. The automatic hard stop at the timeout is not sent to a motor whose driver is HiZ (the timeout error is still sent).
       ja: |-
         [[/releaseSw]]実行時のタイムアウト時間を指定します。この時間内にセンサ反応範囲から脱出できかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。configToolからも指定できます。
+
+        負の値には `CommandIgnored` を返し、何も適用されません。最大値は 2147483647 です。タイムアウトでの自動ハードストップは、ドライバが HiZ のモータには送られません（タイムアウトのエラーは送信されます）。
     errors: [CommandIgnored]
     changes:
-      - {version: "2.2.0", en: "A negative value replies `/error/command CommandIgnored` and nothing is applied. Before, it became about 49 days.", ja: ""}
-      - {version: "2.2.0", en: "The hard stop at the timeout is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver). The timeout error is still sent.", ja: ""}
+      - {version: "2.2.0", en: "A negative value replies `/error/command CommandIgnored` and nothing is applied. Before, it became about 49 days.", ja: "負の値には `/error/command CommandIgnored` を返し、何も適用されません。以前は約 49 日になっていました。"}
+      - {version: "2.2.0", en: "The hard stop at the timeout is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver). The timeout error is still sent.", ja: "タイムアウト時のハードストップは、ドライバが HiZ のモータには送りません。電磁ブレーキが無効でも同じです（ハードストップは HiZ のドライバを励磁してしまうため）。タイムアウトのエラーは送信されます。"}
     see_also: [/getReleaseSwTimeout]
 
   - address: /getReleaseSwTimeout
@@ -2437,10 +2607,13 @@ commands:
         Sets switch mode whether to stop immediately when the HOME switch terminal state changes (falling edge).
 
         The outputs must be HiZ; otherwise `MotorNotHiZ` is replied and nothing is applied.
-      ja: HOMEスイッチ端子に入力があった際に即時停止するかどうか(Switch mode)を指定します。
+      ja: |-
+        HOMEスイッチ端子に入力があった際に即時停止するかどうか(Switch mode)を指定します。
+
+        出力は HiZ でなければなりません。そうでないときは `MotorNotHiZ` を返し、何も適用されません。
     errors: [MotorNotHiZ]
     changes:
-      - {version: "2.2.0", en: "The outputs must be HiZ (SW_MODE of the CONFIG register is writable only in HiZ); otherwise `/error/command MotorNotHiZ` and nothing is applied.", ja: ""}
+      - {version: "2.2.0", en: "The outputs must be HiZ (SW_MODE of the CONFIG register is writable only in HiZ); otherwise `/error/command MotorNotHiZ` and nothing is applied.", ja: "出力は HiZ でなければなりません（CONFIG レジスタの SW_MODE は HiZ のときだけ書き込めます）。そうでないときは `/error/command MotorNotHiZ` を返し、何も適用されません。"}
     see_also: [/getHomeSwMode]
 
   - address: /getHomeSwMode
@@ -2470,7 +2643,7 @@ commands:
       en: Sets the Switch mode whether to stop the motor immediately when the LIMIT switch terminal condition is changed.
       ja: LIMITスイッチ端子に入力があった際に即時停止するかどうか(Switch mode)を指定します。
     changes:
-      - {version: "2.2.0", en: "The automatic hard stop at the limit switch (`SW_HARD_STOP`) is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver).", ja: ""}
+      - {version: "2.2.0", en: "The automatic hard stop at the limit switch (`SW_HARD_STOP`) is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver).", ja: "ドライバが HiZ のモータには、LIMIT センサでの自動ハードストップ（`SW_HARD_STOP`）を送りません。電磁ブレーキが無効でも同じです（ハードストップは HiZ のドライバを励磁してしまうため）。"}
     see_also: [/getLimitSwMode]
 
   - address: /getLimitSwMode
@@ -2503,7 +2676,12 @@ commands:
         Do not use it while the motor is running or in the servo mode. There is no guard: if the driver refuses the write, `CommandIgnored` is sent.
 
         A value outside the range is not rejected: the driver truncates it to 22 bits.
-      ja: ABS_POSレジスタを指定座標に書き換えます。現在のモータ位置が指定座標になります。
+      ja: |-
+        ABS_POSレジスタを指定座標に書き換えます。現在のモータ位置が指定座標になります。
+
+        モータの回転中やサーボモード中には使わないでください。ガードはありません。ドライバが書き込みを拒否した場合は `CommandIgnored` が送信されます。
+
+        範囲外の値は拒否されません。ドライバが 22 ビットに切り捨てます。
     errors: [CommandIgnored]
     see_also: [/getPosition, /resetPos]
 
@@ -2544,7 +2722,10 @@ commands:
         Reset ABS_POS register to 0.
 
         Do not use it while the motor is running or in the servo mode. There is no guard: if the driver refuses the write, `CommandIgnored` is sent.
-      ja: ABS_POSレジスタを0にリセットします。
+      ja: |-
+        ABS_POSレジスタを0にリセットします。
+
+        モータの回転中やサーボモード中には使わないでください。ガードはありません。ドライバが書き込みを拒否した場合は `CommandIgnored` が送信されます。
     errors: [CommandIgnored]
     see_also: [/setPosition]
 
@@ -2568,10 +2749,15 @@ commands:
         Use it while the motor is HiZ. There is no guard on the motor state: the L6470 also refuses the write while the motor is stopped and energized (which the datasheet allows), and then `CommandIgnored` is sent.
 
         A full step outside 0-3 or a microstep outside 0-127 replies `CommandIgnored` and nothing is applied.
-      ja: モータの電気的位置(electrical postion)を設定します。マイクロステップは0-127の128段階で表現されていますので、設定時は現在のマイクロステップと齟齬のない値を設定する必要があります。
+      ja: |-
+        モータの電気的位置(electrical postion)を設定します。マイクロステップは0-127の128段階で表現されていますので、設定時は現在のマイクロステップと齟齬のない値を設定する必要があります。
+
+        モータが HiZ のときに使ってください。モータの状態に対するガードはありません。L6470 は、モータが停止して励磁されているとき（データシートでは書き込める）も書き込みを拒否し、そのときは `CommandIgnored` が送信されます。
+
+        0〜3 の範囲外のフルステップ、0〜127 の範囲外のマイクロステップには `CommandIgnored` を返し、何も適用されません。
     errors: [CommandIgnored]
     changes:
-      - {version: "2.2.0", en: "A full step outside 0-3 or a microstep outside 0-127 replies `/error/command CommandIgnored` and nothing is applied. Before, they were clamped.", ja: ""}
+      - {version: "2.2.0", en: "A full step outside 0-3 or a microstep outside 0-127 replies `/error/command CommandIgnored` and nothing is applied. Before, they were clamped.", ja: "0〜3 の範囲外のフルステップ、0〜127 の範囲外のマイクロステップには、`/error/command CommandIgnored` を返し、何も適用されません。以前は範囲内に丸められていました。"}
     see_also: [/getElPos]
 
   - address: /getElPos
@@ -2596,7 +2782,10 @@ commands:
         Set the MARK register to arbitrary position.
 
         A value outside the range is not rejected: the driver truncates it to 22 bits.
-      ja: markを任意の位置に設定します。
+      ja: |-
+        markを任意の位置に設定します。
+
+        範囲外の値は拒否されません。ドライバが 22 ビットに切り捨てます。
     see_also: [/getMark, /goMark]
 
   - address: /getMark
@@ -2617,8 +2806,8 @@ commands:
       ja: HOME位置までスピードプロファイルに従って移動します。
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     changes:
-      - {version: "2.2.0", en: "Judges its direction correctly when the home switch or the limit switch prohibits a motion ([[/setProhibitMotionOnHomeSw]], [[/setProhibitMotionOnLimitSw]]): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.", ja: ""}
-      - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched warning flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: ""}
+      - {version: "2.2.0", en: "Judges its direction correctly when the home switch or the limit switch prohibits a motion ([[/setProhibitMotionOnHomeSw]], [[/setProhibitMotionOnLimitSw]]): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.", ja: "HOME センサまたは LIMIT センサが動作を禁止する場合（[[/setProhibitMotionOnHomeSw]]、[[/setProhibitMotionOnLimitSw]]）の方向を、正しく判定します。目標との 22 ビットの差の符号で決まり、ドライバが進む向き（最短経路）と同じです。以前は、目標が 2048 ステップ未満の距離にあると方向が逆になり（センサから離れる短い移動が `HomeSwActivating` / `LimitSwActivating` で拒否され、センサに向かう短い移動が開始されていました）、2^21 ステップを超えるとまた誤っていました。"}
+      - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched warning flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: "BUSY のモータでは、ラッチされた警告フラグを消さない GetParam で STATUS レジスタを読みます。以前は GetStatus で読んでいたため、ステータスの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo` など）が失われることがありました。"}
 
   - address: /goMark
     group: position
@@ -2629,8 +2818,8 @@ commands:
       ja: MARK位置までスピードプロファイルに従って移動します。
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     changes:
-      - {version: "2.2.0", en: "Judges its direction correctly when the home switch or the limit switch prohibits a motion ([[/setProhibitMotionOnHomeSw]], [[/setProhibitMotionOnLimitSw]]): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.", ja: ""}
-      - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched warning flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: ""}
+      - {version: "2.2.0", en: "Judges its direction correctly when the home switch or the limit switch prohibits a motion ([[/setProhibitMotionOnHomeSw]], [[/setProhibitMotionOnLimitSw]]): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.", ja: "HOME センサまたは LIMIT センサが動作を禁止する場合（[[/setProhibitMotionOnHomeSw]]、[[/setProhibitMotionOnLimitSw]]）の方向を、正しく判定します。目標との 22 ビットの差の符号で決まり、ドライバが進む向き（最短経路）と同じです。以前は、目標が 2048 ステップ未満の距離にあると方向が逆になり（センサから離れる短い移動が `HomeSwActivating` / `LimitSwActivating` で拒否され、センサに向かう短い移動が開始されていました）、2^21 ステップを超えるとまた誤っていました。"}
+      - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched warning flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: "BUSY のモータでは、ラッチされた警告フラグを消さない GetParam で STATUS レジスタを読みます。以前は GetStatus で読んでいたため、ステータスの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo` など）が失われることがありました。"}
     see_also: [/setMark]
 
   # ---------------------------------------------------------------------------
@@ -2651,7 +2840,10 @@ commands:
         Rotates the motor at specified speed. The acceleration is controlled with the pre-set speed profile. The speed is limited by maxSpeed. It remains in the BUSY state until the motor reaches the specified speed.
 
         The sign of the speed is the direction. A speed whose absolute value is above the range is limited to the largest register value (0xFFFFF, about 15625 step/s) by the driver library.
-      ja: モータを指定速度で回転させます。事前に設定したスピードプロファイルの加速度に従って加速します。指定する回転速さは、maxSpeedを超えるとmaxSpeedでリミットされます。指定速度に到達するまではBUSY状態になります。
+      ja: |-
+        モータを指定速度で回転させます。事前に設定したスピードプロファイルの加速度に従って加速します。指定する回転速さは、maxSpeedを超えるとmaxSpeedでリミットされます。指定速度に到達するまではBUSY状態になります。
+
+        速度の符号が方向になります。絶対値が範囲を超える速度は、ドライバライブラリによってレジスタの最大値（0xFFFFF、約 15625 step/s）に制限されます。
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
@@ -2671,7 +2863,10 @@ commands:
         Moves specified number of steps according to the pre-set speed profile. It remains in the BUSY state until it reaches the specified step count. This command can only execute when the motor is stopped.
 
         A step count whose absolute value is above 4,194,303 (22 bits) is not rejected: it is limited to 4,194,303 by the driver library.
-      ja: 事前に設定したスピードプロファイルに従って、指定ステップ数移動します。指定ステップ数を移動し終わるまではBUSY状態になります。このコマンドはモータが停止していないと実行できません。
+      ja: |-
+        事前に設定したスピードプロファイルに従って、指定ステップ数移動します。指定ステップ数を移動し終わるまではBUSY状態になります。このコマンドはモータが停止していないと実行できません。
+
+        絶対値が 4,194,303（22 ビット）を超えるステップ数は拒否されず、ドライバライブラリによって 4,194,303 に制限されます。
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     see_also: [/combine/move]
 
@@ -2690,17 +2885,19 @@ commands:
         Inside the driver, -2,097,152 and 2,097,151 are located next to each other in a loop.
 
         A position outside the range is not rejected. A position above 4,194,303 is limited to 4,194,303 by the driver library, which the driver reads as -1. Any other position is cut to its lower 22 bits and read as a signed number: 2,097,152 becomes -2,097,152 and -2,097,153 becomes 2,097,151.
-      ja: |
+      ja: |-
         事前に設定したスピードプロファイルにしたがって、指定位置まで最短経路で移動します。指定位置まで移動し終わるまではBUSY状態になります。
 
         ※ドライバ内部では -2,097,152 と 2,097,151 は1周して隣り合った位置になっています。
+
+        範囲外の位置は拒否されません。4,194,303 を超える位置は、ドライバライブラリによって 4,194,303 に制限され、ドライバはこれを -1 として読みます。それ以外の位置は、下位 22 ビットだけが使われ、符号付きの数として読まれます。2,097,152 は -2,097,152 に、-2,097,153 は 2,097,151 になります。
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     changes:
-      - {version: "2.2.0", en: "Judges its direction correctly when the home switch or the limit switch prohibits a motion ([[/setProhibitMotionOnHomeSw]], [[/setProhibitMotionOnLimitSw]]): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.", ja: ""}
-      - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched warning flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: ""}
+      - {version: "2.2.0", en: "Judges its direction correctly when the home switch or the limit switch prohibits a motion ([[/setProhibitMotionOnHomeSw]], [[/setProhibitMotionOnLimitSw]]): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.", ja: "HOME センサまたは LIMIT センサが動作を禁止する場合（[[/setProhibitMotionOnHomeSw]]、[[/setProhibitMotionOnLimitSw]]）の方向を、正しく判定します。目標との 22 ビットの差の符号で決まり、ドライバが進む向き（最短経路）と同じです。以前は、目標が 2048 ステップ未満の距離にあると方向が逆になり（センサから離れる短い移動が `HomeSwActivating` / `LimitSwActivating` で拒否され、センサに向かう短い移動が開始されていました）、2^21 ステップを超えるとまた誤っていました。"}
+      - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched warning flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: "BUSY のモータでは、ラッチされた警告フラグを消さない GetParam で STATUS レジスタを読みます。以前は GetStatus で読んでいたため、ステータスの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo` など）が失われることがありました。"}
     see_also: [/goToDir, /combine/goTo]
 
   - address: /goToDir
@@ -2709,7 +2906,7 @@ commands:
       - use: motorID
       - name: DIR
         type: bool
-        description: {en: "", ja: 回転方向}
+        description: {en: Rotation direction, ja: 回転方向}
       - name: position
         type: int
         range: [-2097152, 2097151]
@@ -2720,10 +2917,13 @@ commands:
         Moves to the specified position in the specified direction according to the pre-set speed profile. Remains in the BUSY state until it finishes moving to the specified position.
 
         A position outside the range is not rejected. A position above 4,194,303 is limited to 4,194,303 by the driver library, which the driver reads as -1. Any other position is cut to its lower 22 bits and read as a signed number: 2,097,152 becomes -2,097,152 and -2,097,153 becomes 2,097,151.
-      ja: 事前に設定したスピードプロファイルにしたがって、指定位置まで指定方向で移動します。指定位置まで移動し終わるまではBUSY状態になります。
+      ja: |-
+        事前に設定したスピードプロファイルにしたがって、指定位置まで指定方向で移動します。指定位置まで移動し終わるまではBUSY状態になります。
+
+        範囲外の位置は拒否されません。4,194,303 を超える位置は、ドライバライブラリによって 4,194,303 に制限され、ドライバはこれを -1 として読みます。それ以外の位置は、下位 22 ビットだけが使われ、符号付きの数として読まれます。2,097,152 は -2,097,152 に、-2,097,153 は 2,097,151 になります。
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     changes:
-      - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched warning flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: ""}
+      - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched warning flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: "BUSY のモータでは、ラッチされた警告フラグを消さない GetParam で STATUS レジスタを読みます。以前は GetStatus で読んでいたため、ステータスの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo` など）が失われることがありました。"}
     see_also: [/goTo, /combine/goToDir]
 
   - address: /softStop
@@ -2736,16 +2936,18 @@ commands:
         If it was in the servo mode, the mode will be released.
 
         With the electromagnetic brake enabled, the command does nothing while the brake is engaged or after [[/free]] (the motor is HiZ). During the deceleration of [[/softHiZ]] or `/activate 0` (brake state 3), the command is executed and cancels the engaging: the brake stays released (state 2).
-      ja: |
+      ja: |-
         スピードプロファイルに従って減速したのち、モータを励磁したまま停止します。モータが停止するまではBUSY状態になります。もともとHiZ状態だった場合は、停止したままモータが励磁します。
 
         サーボモードだった場合は解除されます。
+
+        電磁ブレーキが有効なとき、ブレーキが保持されている間と [[/free]] の後（モータが HiZ）は、何もしません。[[/softHiZ]] または `/activate 0` の減速中（ブレーキの状態 3）は、コマンドが実行され、ブレーキの保持を取り消します。ブレーキは開放されたままになります（状態 2）。
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
     changes:
-      - {version: "2.2.0", en: "With the brake enabled, does nothing while the brake is engaged or after `/free` (motor HiZ). Before, it energized the motor and left the brake state engaged, so `/activate 0` and `/hardHiZ` could not make the motor HiZ again.", ja: ""}
-      - {version: "2.2.0", en: "Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: ""}
+      - {version: "2.2.0", en: "With the brake enabled, does nothing while the brake is engaged or after `/free` (motor HiZ). Before, it energized the motor and left the brake state engaged, so `/activate 0` and `/hardHiZ` could not make the motor HiZ again.", ja: "電磁ブレーキが有効なとき、ブレーキが保持されている間と `/free` の後（モータが HiZ）は、何もしません。以前は、モータを励磁してブレーキの状態は保持のままにしていたため、`/activate 0` と `/hardHiZ` でモータを再び HiZ にできませんでした。"}
+      - {version: "2.2.0", en: "Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: "保留中の動作を取り消します。ブレーキが無効なモータでも同じです。取り消されるのは、BUSY フラグが下りるのを待っている `/goTo`、`/goToDir`、`/goHome`、`/goMark`（以前は、モータが BUSY でなくなったときに送られていたため、止まっていたモータが再び動き出していました）、原点復帰（以前は、そのタイムアウトで送られるハードストップが、その間に HiZ になったモータを励磁していました）、サーボモードです。"}
     see_also: [/combine/softStop]
 
   - address: /hardStop
@@ -2758,16 +2960,18 @@ commands:
         If it was in the servo mode, the mode will be released.
 
         With the electromagnetic brake enabled, the command does nothing while the brake is engaged or after [[/free]] (the motor is HiZ). During the deceleration of [[/softHiZ]] or `/activate 0` (brake state 3), the command is executed and cancels the engaging: the brake stays released (state 2).
-      ja: |
+      ja: |-
         モータを即時停止し、励磁したままにします。モータが停止するまではBUSY状態になります。もともとHiZ状態だった場合は、停止したままモータが励磁します。
 
         サーボモードだった場合は解除されます。
+
+        電磁ブレーキが有効なとき、ブレーキが保持されている間と [[/free]] の後（モータが HiZ）は、何もしません。[[/softHiZ]] または `/activate 0` の減速中（ブレーキの状態 3）は、コマンドが実行され、ブレーキの保持を取り消します。ブレーキは開放されたままになります（状態 2）。
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
     changes:
-      - {version: "2.2.0", en: "With the brake enabled, does nothing while the brake is engaged or after `/free` (motor HiZ). Before, it energized the motor and left the brake state engaged, so `/activate 0` and `/hardHiZ` could not make the motor HiZ again.", ja: ""}
-      - {version: "2.2.0", en: "Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: ""}
+      - {version: "2.2.0", en: "With the brake enabled, does nothing while the brake is engaged or after `/free` (motor HiZ). Before, it energized the motor and left the brake state engaged, so `/activate 0` and `/hardHiZ` could not make the motor HiZ again.", ja: "電磁ブレーキが有効なとき、ブレーキが保持されている間と `/free` の後（モータが HiZ）は、何もしません。以前は、モータを励磁してブレーキの状態は保持のままにしていたため、`/activate 0` と `/hardHiZ` でモータを再び HiZ にできませんでした。"}
+      - {version: "2.2.0", en: "Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: "保留中の動作を取り消します。ブレーキが無効なモータでも同じです。取り消されるのは、BUSY フラグが下りるのを待っている `/goTo`、`/goToDir`、`/goHome`、`/goMark`（以前は、モータが BUSY でなくなったときに送られていたため、止まっていたモータが再び動き出していました）、原点復帰（以前は、そのタイムアウトで送られるハードストップが、その間に HiZ になったモータを励磁していました）、サーボモードです。"}
     see_also: [/combine/hardStop]
 
   - address: /softHiZ
@@ -2789,10 +2993,10 @@ commands:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
     changes:
-      - {version: "2.2.0", en: "With the brake enabled, on a stopped motor the brake is engaged at the next status read (up to 5 ms later). The stop is judged on a status read after the command.", ja: ""}
-      - {version: "2.2.0", en: "A motion command (`/run`, `/move`, `/goTo`, ...) or `/activate 1` during the deceleration cancels the engaging; the brake stays released. Before, the brake engaged when the motor stopped later.", ja: ""}
-      - {version: "2.2.0", en: "After `/free`, the brake is engaged at once (the motor is already HiZ).", ja: ""}
-      - {version: "2.2.0", en: "Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: ""}
+      - {version: "2.2.0", en: "With the brake enabled, on a stopped motor the brake is engaged at the next status read (up to 5 ms later). The stop is judged on a status read after the command.", ja: "電磁ブレーキが有効で、モータが停止しているときは、次のステータスの読み出し（最大 5 ms 後）でブレーキを保持します。停止の判定は、コマンドの後のステータスの読み出しで行います。"}
+      - {version: "2.2.0", en: "A motion command (`/run`, `/move`, `/goTo`, ...) or `/activate 1` during the deceleration cancels the engaging; the brake stays released. Before, the brake engaged when the motor stopped later.", ja: "減速中に動作コマンド（`/run`、`/move`、`/goTo` など）か `/activate 1` を受け取ると、ブレーキの保持を取り消し、ブレーキは開放されたままになります。以前は、モータがその後止まったときにブレーキが保持されていました。"}
+      - {version: "2.2.0", en: "After `/free`, the brake is engaged at once (the motor is already HiZ).", ja: "`/free` の後は、ブレーキをすぐに保持します（モータはすでに HiZ です）。"}
+      - {version: "2.2.0", en: "Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: "保留中の動作を取り消します。ブレーキが無効なモータでも同じです。取り消されるのは、BUSY フラグが下りるのを待っている `/goTo`、`/goToDir`、`/goHome`、`/goMark`（以前は、モータが BUSY でなくなったときに送られていたため、止まっていたモータが再び動き出していました）、原点復帰（以前は、そのタイムアウトで送られるハードストップが、その間に HiZ になったモータを励磁していました）、サーボモードです。"}
     see_also: [/combine/softHiZ, /enableElectromagnetBrake]
 
   - address: /hardHiZ
@@ -2814,9 +3018,9 @@ commands:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
     changes:
-      - {version: "2.2.0", en: "A single motor no longer sends a soft stop before the hard HiZ; a single motor, all motors (255) and `/combine/hardHiZ` behave the same. With the brake enabled and released (after `/activate 1`), the motor is stopped with a hard stop (still energized) before the brake is engaged, so it does not keep running during the brake transition time. While the brake is engaged or engaging, the command does nothing as before.", ja: ""}
-      - {version: "2.2.0", en: "After `/free`, the brake is engaged at once (the motor is already HiZ).", ja: ""}
-      - {version: "2.2.0", en: "Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: ""}
+      - {version: "2.2.0", en: "A single motor no longer sends a soft stop before the hard HiZ; a single motor, all motors (255) and `/combine/hardHiZ` behave the same. With the brake enabled and released (after `/activate 1`), the motor is stopped with a hard stop (still energized) before the brake is engaged, so it does not keep running during the brake transition time. While the brake is engaged or engaging, the command does nothing as before.", ja: "1 つのモータでも、ハード HiZ の前にソフトストップを送らなくなりました。1 つのモータ、全モータ（255）、`/combine/hardHiZ` は同じ動作です。電磁ブレーキが有効で開放されている（`/activate 1` の後の）ときは、ブレーキを保持する前に、ハードストップでモータを止めます（励磁されたまま）。ブレーキの移行時間の間にモータが回り続けることはありません。ブレーキが保持されている間と保持への移行中は、以前と同じく何もしません。"}
+      - {version: "2.2.0", en: "After `/free`, the brake is engaged at once (the motor is already HiZ).", ja: "`/free` の後は、ブレーキをすぐに保持します（モータはすでに HiZ です）。"}
+      - {version: "2.2.0", en: "Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: "保留中の動作を取り消します。ブレーキが無効なモータでも同じです。取り消されるのは、BUSY フラグが下りるのを待っている `/goTo`、`/goToDir`、`/goHome`、`/goMark`（以前は、モータが BUSY でなくなったときに送られていたため、止まっていたモータが再び動き出していました）、原点復帰（以前は、そのタイムアウトで送られるハードストップが、その間に HiZ になったモータを励磁していました）、サーボモードです。"}
     see_also: [/combine/hardHiZ, /enableElectromagnetBrake]
 
   - address: /combine/run
@@ -2832,7 +3036,7 @@ commands:
     timing: motion_start
     description:
       en: Same as [[/run]] for two motors. The sign of the speed is the direction. A speed whose absolute value is above the range is limited to the largest register value (0xFFFFF, about 15625 step/s) by the driver library.
-      ja: ""
+      ja: "2 つのモータに対する [[/run]] と同じです。速度の符号が方向になります。絶対値が範囲を超える速度は、ドライバライブラリによってレジスタの最大値（0xFFFFF、約 15625 step/s）に制限されます。"
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
@@ -2851,7 +3055,7 @@ commands:
     description:
       en: |-
         Same as [[/move]] for two motors. A step count whose absolute value is above 4,194,303 (22 bits) is not rejected: it is limited to 4,194,303 by the driver library.
-      ja: ""
+      ja: "2 つのモータに対する [[/move]] と同じです。絶対値が 4,194,303（22 ビット）を超えるステップ数は拒否されず、ドライバライブラリによって 4,194,303 に制限されます。"
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     see_also: [/move]
 
@@ -2868,13 +3072,13 @@ commands:
     description:
       en: |-
         Same as [[/goTo]] for two motors. A position outside the range is not rejected. A position above 4,194,303 is limited to 4,194,303 by the driver library, which the driver reads as -1. Any other position is cut to its lower 22 bits and read as a signed number: 2,097,152 becomes -2,097,152 and -2,097,153 becomes 2,097,151.
-      ja: ""
+      ja: "2 つのモータに対する [[/goTo]] と同じです。範囲外の位置は拒否されません。4,194,303 を超える位置は、ドライバライブラリによって 4,194,303 に制限され、ドライバはこれを -1 として読みます。それ以外の位置は、下位 22 ビットだけが使われ、符号付きの数として読まれます。2,097,152 は -2,097,152 に、-2,097,153 は 2,097,151 になります。"
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     changes:
-      - {version: "2.2.0", en: "Judges its direction correctly when the home switch or the limit switch prohibits a motion ([[/setProhibitMotionOnHomeSw]], [[/setProhibitMotionOnLimitSw]]): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.", ja: ""}
+      - {version: "2.2.0", en: "Judges its direction correctly when the home switch or the limit switch prohibits a motion ([[/setProhibitMotionOnHomeSw]], [[/setProhibitMotionOnLimitSw]]): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.", ja: "HOME センサまたは LIMIT センサが動作を禁止する場合（[[/setProhibitMotionOnHomeSw]]、[[/setProhibitMotionOnLimitSw]]）の方向を、正しく判定します。目標との 22 ビットの差の符号で決まり、ドライバが進む向き（最短経路）と同じです。以前は、目標が 2048 ステップ未満の距離にあると方向が逆になり（センサから離れる短い移動が `HomeSwActivating` / `LimitSwActivating` で拒否され、センサに向かう短い移動が開始されていました）、2^21 ステップを超えるとまた誤っていました。"}
     see_also: [/goTo]
 
   - address: /combine/goToDir
@@ -2884,7 +3088,7 @@ commands:
       - {use: motorID, name: motorID2}
       - name: DIR
         type: bool
-        description: {en: "", ja: 回転方向}
+        description: {en: Rotation direction, ja: 回転方向}
       - name: position
         type: int
         range: [-2097152, 2097151]
@@ -2893,7 +3097,7 @@ commands:
     description:
       en: |-
         Same as [[/goToDir]] for two motors. A position outside the range is not rejected. A position above 4,194,303 is limited to 4,194,303 by the driver library, which the driver reads as -1. Any other position is cut to its lower 22 bits and read as a signed number: 2,097,152 becomes -2,097,152 and -2,097,153 becomes 2,097,151.
-      ja: ""
+      ja: "2 つのモータに対する [[/goToDir]] と同じです。範囲外の位置は拒否されません。4,194,303 を超える位置は、ドライバライブラリによって 4,194,303 に制限され、ドライバはこれを -1 として読みます。それ以外の位置は、下位 22 ビットだけが使われ、符号付きの数として読まれます。2,097,152 は -2,097,152 に、-2,097,153 は 2,097,151 になります。"
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     see_also: [/goToDir]
 
@@ -2905,12 +3109,12 @@ commands:
     timing: always
     description:
       en: "Same as [[/softStop]] for two motors: it is handled as [[/softStop]] for motorID1 and then for motorID2."
-      ja: ""
+      ja: "2 つのモータに対する [[/softStop]] と同じです。motorID1、続いて motorID2 に対して、[[/softStop]] として処理されます。"
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
     changes:
-      - {version: "2.2.0", en: "Cancels pending motion like [[/softStop]] (each of the two motors is handled as a separate [[/softStop]]), also for a motor with the brake disabled.", ja: ""}
+      - {version: "2.2.0", en: "Cancels pending motion like [[/softStop]] (each of the two motors is handled as a separate [[/softStop]]), also for a motor with the brake disabled.", ja: "[[/softStop]] と同じように、保留中の動作を取り消します（2 つのモータは、それぞれ別の [[/softStop]] として処理されます）。ブレーキが無効なモータでも同じです。"}
     see_also: [/softStop]
 
   - address: /combine/hardStop
@@ -2921,12 +3125,12 @@ commands:
     timing: always
     description:
       en: "Same as [[/hardStop]] for two motors: it is handled as [[/hardStop]] for motorID1 and then for motorID2."
-      ja: ""
+      ja: "2 つのモータに対する [[/hardStop]] と同じです。motorID1、続いて motorID2 に対して、[[/hardStop]] として処理されます。"
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
     changes:
-      - {version: "2.2.0", en: "Cancels pending motion like [[/hardStop]] (each of the two motors is handled as a separate [[/hardStop]]), also for a motor with the brake disabled.", ja: ""}
+      - {version: "2.2.0", en: "Cancels pending motion like [[/hardStop]] (each of the two motors is handled as a separate [[/hardStop]]), also for a motor with the brake disabled.", ja: "[[/hardStop]] と同じように、保留中の動作を取り消します（2 つのモータは、それぞれ別の [[/hardStop]] として処理されます）。ブレーキが無効なモータでも同じです。"}
     see_also: [/hardStop]
 
   - address: /combine/softHiZ
@@ -2937,12 +3141,12 @@ commands:
     timing: always
     description:
       en: "Same as [[/softHiZ]] for two motors: it is handled as [[/softHiZ]] for motorID1 and then for motorID2."
-      ja: ""
+      ja: "2 つのモータに対する [[/softHiZ]] と同じです。motorID1、続いて motorID2 に対して、[[/softHiZ]] として処理されます。"
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
     changes:
-      - {version: "2.2.0", en: "Cancels pending motion like [[/softHiZ]] (each of the two motors is handled as a separate [[/softHiZ]]), also for a motor with the brake disabled.", ja: ""}
+      - {version: "2.2.0", en: "Cancels pending motion like [[/softHiZ]] (each of the two motors is handled as a separate [[/softHiZ]]), also for a motor with the brake disabled.", ja: "[[/softHiZ]] と同じように、保留中の動作を取り消します（2 つのモータは、それぞれ別の [[/softHiZ]] として処理されます）。ブレーキが無効なモータでも同じです。"}
     see_also: [/softHiZ]
 
   - address: /combine/hardHiZ
@@ -2953,12 +3157,12 @@ commands:
     timing: always
     description:
       en: "Same as [[/hardHiZ]] for two motors: it is handled as [[/hardHiZ]] for motorID1 and then for motorID2."
-      ja: ""
+      ja: "2 つのモータに対する [[/hardHiZ]] と同じです。motorID1、続いて motorID2 に対して、[[/hardHiZ]] として処理されます。"
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
     changes:
-      - {version: "2.2.0", en: "Cancels pending motion like [[/hardHiZ]] (each of the two motors is handled as a separate [[/hardHiZ]]), also for a motor with the brake disabled.", ja: ""}
+      - {version: "2.2.0", en: "Cancels pending motion like [[/hardHiZ]] (each of the two motors is handled as a separate [[/hardHiZ]]), also for a motor with the brake disabled.", ja: "[[/hardHiZ]] と同じように、保留中の動作を取り消します（2 つのモータは、それぞれ別の [[/hardHiZ]] として処理されます）。ブレーキが無効なモータでも同じです。"}
     see_also: [/hardHiZ]
 
   - address: /runRaw
@@ -2967,14 +3171,17 @@ commands:
       - use: motorID
       - name: speed
         type: int
-        description: {en: "Rotation speed (raw register value, signed)", ja: ""}
+        description: {en: "Rotation speed (raw register value, signed)", ja: "回転速度（Raw レジスタ値、符号付き）"}
     timing: motion_start
     description:
       en: |-
         Rotates the motor at the specified speed using a raw register value. The sign of the speed value determines the direction.
 
         A speed outside the 20-bit range is limited to 20 bits by the driver.
-      ja: ""
+      ja: |-
+        レジスタ値（Raw）で指定した速度で、モータを回転させます。速度の符号が方向になります。
+
+        20 ビットの範囲を超える速度は、ドライバによって 20 ビットに制限されます。
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
@@ -2987,23 +3194,26 @@ commands:
       - use: motorID
       - name: ACT
         type: bool
-        description: {en: Same as `/goUntil`, ja: ""}
+        description: {en: Same as `/goUntil`, ja: "`/goUntil` と同じ"}
       - name: speed
         type: int
-        description: {en: "Speed (raw register value, signed)", ja: ""}
+        description: {en: "Speed (raw register value, signed)", ja: "速度（Raw レジスタ値、符号付き）"}
     timing: always
     description:
       en: |-
         Same as `/goUntil` but uses a raw register value for speed. The sign of the speed value determines the direction.
 
         The speed is limited to 20 bits (0xFFFFF) by the firmware and the driver libraries. `/goUntilRaw 255` (all motors) interprets the speed as a raw register value, like for a single motor.
-      ja: ""
+      ja: |-
+        `/goUntil` と同じですが、速度にレジスタ値（Raw）を使います。速度の符号が方向になります。
+
+        速度は、ファームウェアとドライバライブラリによって 20 ビット（0xFFFFF）に制限されます。`/goUntilRaw 255`（全モータ）は、1 つのモータのときと同じように、速度をレジスタ値として解釈します。
     errors: [BrakeEngaged, GoUntilTimeout, HomeSwActivating, InServoMode]
     changes:
-      - {version: "2.2.0", en: "Limits the speed to 20 bits (`0xFFFFF`), like [[/runRaw]]. Larger values were sent as is, and the driver ignored the upper bits.", ja: ""}
-      - {version: "2.2.0", en: "`/goUntilRaw 255` (all motors) interprets the speed as a raw register value, like for a single motor. It was treated as steps/s.", ja: ""}
-      - {version: "2.2.0", en: "An activated home switch is reported as `/error/command HomeSwActivating`, the text in the error list. It was sent as `HomeSwActivated`. It now follows [[/reportError]] like the other command errors.", ja: ""}
-      - {version: "2.2.0", en: "For a motor in the servo mode, replies `/error/command InServoMode` and does nothing. Before, the command was sent to the driver. With 255, only the motors in the servo mode reply the error; the others execute the command.", ja: ""}
+      - {version: "2.2.0", en: "Limits the speed to 20 bits (`0xFFFFF`), like [[/runRaw]]. Larger values were sent as is, and the driver ignored the upper bits.", ja: "[[/runRaw]] と同じように、速度を 20 ビット（`0xFFFFF`）に制限します。以前は、大きな値がそのまま送られ、ドライバは上位ビットを無視していました。"}
+      - {version: "2.2.0", en: "`/goUntilRaw 255` (all motors) interprets the speed as a raw register value, like for a single motor. It was treated as steps/s.", ja: "`/goUntilRaw 255`（全モータ）は、1 つのモータのときと同じように、速度をレジスタ値として解釈します。以前は step/s として扱われていました。"}
+      - {version: "2.2.0", en: "An activated home switch is reported as `/error/command HomeSwActivating`, the text in the error list. It was sent as `HomeSwActivated`. It now follows [[/reportError]] like the other command errors.", ja: "HOME センサが作動している場合は、エラーの一覧にあるとおり `/error/command HomeSwActivating` として報告されます。以前は `HomeSwActivated` として送信されていました。他のコマンドのエラーと同じように、[[/reportError]] に従います。"}
+      - {version: "2.2.0", en: "For a motor in the servo mode, replies `/error/command InServoMode` and does nothing. Before, the command was sent to the driver. With 255, only the motors in the servo mode reply the error; the others execute the command.", ja: "サーボモードのモータには `/error/command InServoMode` を返し、何もしません。以前は、コマンドがドライバに送られていました。255 のときは、サーボモードのモータだけがエラーを返し、他のモータはコマンドを実行します。"}
     see_also: [/goUntil]
 
   - address: /combine/runRaw
@@ -3013,11 +3223,11 @@ commands:
       - {use: motorID, name: motorID2}
       - name: speed
         type: int
-        description: {en: "Rotation speed (raw register value, signed)", ja: ""}
+        description: {en: "Rotation speed (raw register value, signed)", ja: "回転速度（Raw レジスタ値、符号付き）"}
     timing: motion_start
     description:
       en: A speed outside the 20-bit range is limited to 20 bits by the driver.
-      ja: ""
+      ja: "20 ビットの範囲を超える速度は、ドライバによって 20 ビットに制限されます。"
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
@@ -3044,7 +3254,7 @@ commands:
         電磁ブレーキモードが有効になると、電磁ブレーキを開放しないままモータを回すコマンドを送っても`BrakeEngaged` ([[/error/command]])エラーになります。
     errors: [CommandIgnored]
     changes:
-      - {version: "2.2.0", en: "Changes the setting only while the driver is HiZ, and disables the brake only while it is engaged or after `/free`; otherwise `/error/command CommandIgnored`. Sending the current value does nothing. After a change the brake output is engaged and the state is engaged. Before, disabling a released brake engaged it on a turning motor, and enabling it on an energized motor left a state where `/activate 0` and `/hardHiZ` did nothing.", ja: ""}
+      - {version: "2.2.0", en: "Changes the setting only while the driver is HiZ, and disables the brake only while it is engaged or after `/free`; otherwise `/error/command CommandIgnored`. Sending the current value does nothing. After a change the brake output is engaged and the state is engaged. Before, disabling a released brake engaged it on a turning motor, and enabling it on an energized motor left a state where `/activate 0` and `/hardHiZ` did nothing.", ja: "ドライバが HiZ のときだけ設定を変更し、ブレーキを無効にできるのは、ブレーキが保持されている間か `/free` の後だけです。それ以外では `/error/command CommandIgnored` を返します。現在の値を送っても何も起きません。変更後は、ブレーキ出力が保持され、状態も保持になります。以前は、開放中のブレーキを無効にすると、回転中のモータでブレーキが保持され、励磁中のモータで有効にすると、`/activate 0` と `/hardHiZ` が何もしない状態になっていました。"}
     see_also: [/activate, /free, /setBrakeTransitionDuration, /getBrakeStatus]
 
   - address: /activate
@@ -3065,23 +3275,27 @@ commands:
         `/activate 1` while the brake is released does nothing. From the engaged state it energizes the driver and releases the brake after `brakeTransitionDuration`, but only if a status read after the command shows the driver energized (during the engaging it goes back to the release sequence (the transition time starts again), during the stopping it only cancels the engaging, after [[/free]] it releases at once). If the driver stays HiZ (for example without motor power), the brake stays engaged and `BrakeReleaseFailed` is sent.
 
         `/activate 0` on a turning motor decelerates it and engages the brake when it has stopped, like [[/softHiZ]]; on a stopped motor the brake is engaged at the next status read (up to 5 ms later). The driver goes HiZ after `brakeTransitionDuration`. The brake state can be read with [[/getBrakeStatus]].
-      ja: |
+      ja: |-
         電磁ブレーキモードの場合に、モータの励磁、励磁解除を切り替えます。電磁ブレーキも連動して動作します。このコマンドでモータが励磁状態になっていないと、モータを回転させるコマンドを送ることはできません。
 
-        電磁ブレーキモードが無効の場合は無視されます。
+        電磁ブレーキモードが無効の場合は無視されます。`CommandIgnored` だけが送信され、保留中の動作は取り消されません。
+
+        ブレーキが開放されているときの `/activate 1` は、何もしません。ブレーキが保持されている状態からは、ドライバを励磁し、`brakeTransitionDuration` の後にブレーキを開放しますが、コマンドの後のステータスの読み出しでドライバが励磁されていることを確認できたときだけです（保持への移行中は開放の手順に戻り（移行時間は最初からやり直しです）、停止処理中は保持の取り消しだけを行い、[[/free]] の後はすぐに開放します）。ドライバが HiZ のまま（たとえばモータ電源がない）のときは、ブレーキは保持されたままになり、`BrakeReleaseFailed` が送信されます。
+
+        回転中のモータへの `/activate 0` は、[[/softHiZ]] と同じように減速し、停止してからブレーキを保持します。停止中のモータでは、次のステータスの読み出し（最大 5 ms 後）でブレーキを保持します。`brakeTransitionDuration` の後にドライバが HiZ になります。ブレーキの状態は [[/getBrakeStatus]] で読み出せます。
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
     errors: [CommandIgnored, BrakeReleaseFailed]
     changes:
-      - {version: "2.2.0", en: "`/activate 1` while the brake is released does nothing. Before, it sent a hard stop, which stopped a turning motor abruptly.", ja: ""}
-      - {version: "2.2.0", en: "`/activate 1` releases the brake only if a status read after the command shows the driver energized. If the driver stays HiZ (e.g. no motor power), the brake stays engaged and `/error/command BrakeReleaseFailed motorID` is sent. Before, the brake was released after `brakeTransitionDuration` in any case.", ja: ""}
-      - {version: "2.2.0", en: "`/activate 1` during the deceleration of `/softHiZ` (or `/activate 0`) cancels the engaging and keeps the brake released; the deceleration goes on. Before, it stopped the motor with a hard stop, and the brake still engaged when the motor stopped.", ja: ""}
-      - {version: "2.2.0", en: "`/activate 0` on a turning motor decelerates it and engages the brake when it has stopped, like `/softHiZ`. Before, it engaged the brake without stopping the motor.", ja: ""}
-      - {version: "2.2.0", en: "`/activate 0` on a stopped motor engages the brake at the next status read (up to 5 ms later). The stop is now judged on a status read after the command.", ja: ""}
-      - {version: "2.2.0", en: "After `/free`: `/activate 1` returns the motor to the released (energized) state, and `/activate 0` engages the brake at once (the motor is already HiZ).", ja: ""}
-      - {version: "2.2.0", en: "KVAL_HOLD (TVAL_HOLD in the current mode) is raised to at least half of KVAL_RUN (TVAL_RUN) whenever the motor is energized again: from engaged or engaging (as before), and now also after `/free`.", ja: ""}
-      - {version: "2.2.0", en: "`/activate 0` cancels pending motion of a motor with the brake enabled (with the brake disabled it replies `CommandIgnored` and cancels nothing): a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: ""}
+      - {version: "2.2.0", en: "`/activate 1` while the brake is released does nothing. Before, it sent a hard stop, which stopped a turning motor abruptly.", ja: "ブレーキが開放されているときの `/activate 1` は、何もしません。以前はハードストップを送り、回転中のモータを急停止させていました。"}
+      - {version: "2.2.0", en: "`/activate 1` releases the brake only if a status read after the command shows the driver energized. If the driver stays HiZ (e.g. no motor power), the brake stays engaged and `/error/command BrakeReleaseFailed motorID` is sent. Before, the brake was released after `brakeTransitionDuration` in any case.", ja: "`/activate 1` は、コマンドの後のステータスの読み出しでドライバが励磁されていることを確認できたときだけ、ブレーキを開放します。ドライバが HiZ のままのとき（たとえばモータ電源がないとき）は、ブレーキは保持されたままになり、`/error/command BrakeReleaseFailed motorID` が送信されます。以前は、常に `brakeTransitionDuration` の後にブレーキを開放していました。"}
+      - {version: "2.2.0", en: "`/activate 1` during the deceleration of `/softHiZ` (or `/activate 0`) cancels the engaging and keeps the brake released; the deceleration goes on. Before, it stopped the motor with a hard stop, and the brake still engaged when the motor stopped.", ja: "`/softHiZ`（または `/activate 0`）の減速中の `/activate 1` は、ブレーキの保持を取り消し、ブレーキは開放されたままになります。減速は続きます。以前は、ハードストップでモータを止め、モータが止まるとブレーキが保持されていました。"}
+      - {version: "2.2.0", en: "`/activate 0` on a turning motor decelerates it and engages the brake when it has stopped, like `/softHiZ`. Before, it engaged the brake without stopping the motor.", ja: "回転中のモータへの `/activate 0` は、`/softHiZ` と同じように、減速してモータが止まってからブレーキを保持します。以前は、モータを止めずにブレーキを保持していました。"}
+      - {version: "2.2.0", en: "`/activate 0` on a stopped motor engages the brake at the next status read (up to 5 ms later). The stop is now judged on a status read after the command.", ja: "停止中のモータへの `/activate 0` は、次のステータスの読み出し（最大 5 ms 後）でブレーキを保持します。停止の判定は、コマンドの後のステータスの読み出しで行うようになりました。"}
+      - {version: "2.2.0", en: "After `/free`: `/activate 1` returns the motor to the released (energized) state, and `/activate 0` engages the brake at once (the motor is already HiZ).", ja: "`/free` の後: `/activate 1` はモータを開放（励磁）の状態に戻し、`/activate 0` はブレーキをすぐに保持します（モータはすでに HiZ です）。"}
+      - {version: "2.2.0", en: "KVAL_HOLD (TVAL_HOLD in the current mode) is raised to at least half of KVAL_RUN (TVAL_RUN) whenever the motor is energized again: from engaged or engaging (as before), and now also after `/free`.", ja: "モータが再び励磁されるたびに、KVAL_HOLD（電流モードでは TVAL_HOLD）が KVAL_RUN（TVAL_RUN）の半分以上に引き上げられます。ブレーキが保持中または保持への移行中だった場合は以前と同じで、`/free` の後も引き上げられるようになりました。"}
+      - {version: "2.2.0", en: "`/activate 0` cancels pending motion of a motor with the brake enabled (with the brake disabled it replies `CommandIgnored` and cancels nothing): a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: "`/activate 0` は、電磁ブレーキが有効なモータの保留中の動作を取り消します（ブレーキが無効なモータには `CommandIgnored` を返し、何も取り消しません）。取り消されるのは、BUSY フラグが下りるのを待っている `/goTo`、`/goToDir`、`/goHome`、`/goMark`（以前は、モータが BUSY でなくなったときに送られていたため、止まっていたモータが再び動き出していました）、原点復帰（以前は、そのタイムアウトで送られるハードストップが、その間に HiZ になったモータを励磁していました）、サーボモードが対象です。"}
     see_also: [/enableElectromagnetBrake, /free, /getBrakeStatus]
 
   - address: /free
@@ -3095,21 +3309,23 @@ commands:
         If the EM mode is disabled, this command is ignored: only `CommandIgnored` is sent, and pending motion is not cancelled.
 
         After `/free`, a stop of the motor no longer engages the brake (when `/free` was sent during the deceleration of [[/softHiZ]]). A motion command (`/run`, `/move`, `/goTo`, ...) or `/activate 1` energizes the motor again and returns it to the released state. `/activate 0`, `/softHiZ` and `/hardHiZ` engage the brake at once.
-      ja: |
+      ja: |-
         電磁ブレーキモードの場合に、モータ軸を開放します。モータの励磁を解除し、電磁ブレーキも解放のままになります。
 
         負荷を吊り下げている場合は、保持力がなくなって負荷が落下する原因になりますので、送信時には十分注意してください。
 
-        電磁ブレーキモードが無効の場合は無視されます。
+        電磁ブレーキモードが無効の場合は無視されます。`CommandIgnored` だけが送信され、保留中の動作は取り消されません。
+
+        `/free` の後は、モータが停止してもブレーキを保持しなくなります（`/softHiZ` の減速中に `/free` を送った場合）。動作コマンド（`/run`、`/move`、`/goTo` など）か `/activate 1` を送ると、モータが再び励磁されて、開放の状態に戻ります。`/activate 0`、`/softHiZ`、`/hardHiZ` は、ブレーキをすぐに保持します。
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
     errors: [CommandIgnored]
     changes:
-      - {version: "2.2.0", en: "After `/free`, a stop of the motor no longer engages the brake (when `/free` was sent during the deceleration of `/softHiZ`).", ja: ""}
-      - {version: "2.2.0", en: "After `/free`, a motion command (`/run`, `/move`, `/goTo`, ...) is executed and the motor returns to the released (energized) state. `/activate 1` does the same. `/activate 0`, `/softHiZ` and `/hardHiZ` engage the brake at once (the motor is already HiZ).", ja: ""}
-      - {version: "2.2.0", en: "KVAL_HOLD (TVAL_HOLD in the current mode) is raised to at least half of KVAL_RUN (TVAL_RUN) when the motor is energized again after `/free`. Before, the motor was energized with the configured holding value.", ja: ""}
-      - {version: "2.2.0", en: "`/free` cancels pending motion of a motor with the brake enabled (with the brake disabled it replies `CommandIgnored`): a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: ""}
+      - {version: "2.2.0", en: "After `/free`, a stop of the motor no longer engages the brake (when `/free` was sent during the deceleration of `/softHiZ`).", ja: "`/free` の後は、モータが停止してもブレーキを保持しなくなりました（`/softHiZ` の減速中に `/free` を送った場合）。"}
+      - {version: "2.2.0", en: "After `/free`, a motion command (`/run`, `/move`, `/goTo`, ...) is executed and the motor returns to the released (energized) state. `/activate 1` does the same. `/activate 0`, `/softHiZ` and `/hardHiZ` engage the brake at once (the motor is already HiZ).", ja: "`/free` の後に動作コマンド（`/run`、`/move`、`/goTo` など）を送ると、コマンドが実行され、モータは開放（励磁）の状態に戻ります。`/activate 1` も同じです。`/activate 0`、`/softHiZ`、`/hardHiZ` は、ブレーキをすぐに保持します（モータはすでに HiZ です）。"}
+      - {version: "2.2.0", en: "KVAL_HOLD (TVAL_HOLD in the current mode) is raised to at least half of KVAL_RUN (TVAL_RUN) when the motor is energized again after `/free`. Before, the motor was energized with the configured holding value.", ja: "`/free` の後でモータが再び励磁されるとき、KVAL_HOLD（電流モードでは TVAL_HOLD）が KVAL_RUN（TVAL_RUN）の半分以上に引き上げられます。以前は、設定された保持の値で励磁されていました。"}
+      - {version: "2.2.0", en: "`/free` cancels pending motion of a motor with the brake enabled (with the brake disabled it replies `CommandIgnored`): a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: "`/free` は、電磁ブレーキが有効なモータの保留中の動作を取り消します（ブレーキが無効なモータには `CommandIgnored` を返します）。取り消されるのは、BUSY フラグが下りるのを待っている `/goTo`、`/goToDir`、`/goHome`、`/goMark`（以前は、モータが BUSY でなくなったときに送られていたため、止まっていたモータが再び動き出していました）、原点復帰（以前は、そのタイムアウトで送られるハードストップが、その間に HiZ になったモータを励磁していました）、サーボモードが対象です。"}
     see_also: [/enableElectromagnetBrake, /activate, /getBrakeStatus]
 
   - address: /setBrakeTransitionDuration
@@ -3128,11 +3344,14 @@ commands:
         Sets the transitional duration to keep the motor excited when the electromagnetic brake is activated or released. This is to keep holding the motor axis until the brake movement is completed, due to the physical transition time for the brake mechanism.
 
         A value outside 0-65535 replies `CommandIgnored` and the setting is kept. The release after [[/activate]] comes 0-5 ms after the set time, because the brake is handled every 5 ms.
-      ja: 電磁ブレーキの保持・開放時に、モータを励磁したままにしておく遷移時間を指定します。これは物理的にブレーキ機構が動作する時間がかかるため、ブレーキの動作が完了するまでモータ軸を保持しておくために必要な時間です。
+      ja: |-
+        電磁ブレーキの保持・開放時に、モータを励磁したままにしておく遷移時間を指定します。これは物理的にブレーキ機構が動作する時間がかかるため、ブレーキの動作が完了するまでモータ軸を保持しておくために必要な時間です。
+
+        0〜65535 の範囲外の値には `CommandIgnored` を返し、設定は変わりません。ブレーキは 5 ms ごとに処理されるため、[[/activate]] の後の開放は、設定した時間の 0〜5 ms 後になります。
     errors: [CommandIgnored]
     changes:
-      - {version: "2.2.0", en: "A value outside 0-65535 replies `/error/command CommandIgnored` and keeps the setting. Before, the value wrapped around.", ja: ""}
-      - {version: "2.2.0", en: "The brake times are in 5 ms steps: the release after `/activate 1` comes 0-5 ms after `brakeTransitionDuration` (measured 99.8-105.4 ms for 100 ms; before 99.8-107.6 ms), and the engage after a stop or a HiZ is judged at the next status read.", ja: ""}
+      - {version: "2.2.0", en: "A value outside 0-65535 replies `/error/command CommandIgnored` and keeps the setting. Before, the value wrapped around.", ja: "0〜65535 の範囲外の値には `/error/command CommandIgnored` を返し、設定は変わりません。以前は、値が一周していました。"}
+      - {version: "2.2.0", en: "The brake times are in 5 ms steps: the release after `/activate 1` comes 0-5 ms after `brakeTransitionDuration` (measured 99.8-105.4 ms for 100 ms; before 99.8-107.6 ms), and the engage after a stop or a HiZ is judged at the next status read.", ja: "ブレーキの時間は 5 ms 単位です。`/activate 1` の後の開放は、`brakeTransitionDuration` の 0〜5 ms 後になります（100 ms の設定で実測 99.8〜105.4 ms。以前は 99.8〜107.6 ms）。停止や HiZ の後の保持は、次のステータスの読み出しで判定されます。"}
     see_also: [/getBrakeTransitionDuration]
 
   - address: /getBrakeTransitionDuration
@@ -3151,7 +3370,7 @@ commands:
     timing: always
     description:
       en: Returns the state of the electromagnetic brake of the specified motor. The state is -1 for a motor with the brake disabled.
-      ja: ""
+      ja: "指定したモータの電磁ブレーキの状態を返します。ブレーキが無効なモータでは -1 です。"
     response: [/brakeStatus]
     see_also: [/activate, /free, /enableElectromagnetBrake]
 
@@ -3174,23 +3393,29 @@ commands:
         With the electromagnetic brake enabled, `/enableServoMode 1` replies `BrakeEngaged` and does nothing while the brake is engaged, releasing or engaging (while stopping or after `/free` the command is executed); `/enableServoMode 0` does nothing while the brake is engaged or after [[/free]].
 
         When the driver goes HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) in the servo mode, the servo mode is cancelled and `ServoModeCancelledOnHiZ` is sent (`BrakeEngagedOnHiZ` too, with the brake enabled). Enable the servo mode again with `/enableServoMode 1`; the current position becomes the target.
-      ja: |
+      ja: |-
         サーボモード（位置追従モード）をオンオフします。急に動き出すことを避けるため、有効になった瞬間の現在位置が目標位置にセットされます。
 
         このモードで動作している間は、`/run`や`/goTo` など他のモータ制御コマンドを送ることはできません。
+
+        サーボモードを有効にすると、そのモータの BUSY、モータステータス、方向の通知（[[/enableBusyReport]]、[[/enableMotorStatusReport]]、[[/enableDirReport]]）がオフになります。サーボモードを無効にしても、オンには戻りません。必要なら、有効にするコマンドをもう一度送ってください。積分項と PID 制御の前回の誤差もリセットされます。サーボモード中に [[/goUntil]]、[[/goUntilRaw]]、[[/releaseSw]]、[[/homing]] を送ると `InServoMode` を返します。
+
+        電磁ブレーキが有効なとき、ブレーキが保持されている間、開放中、保持への移行中の `/enableServoMode 1` は `BrakeEngaged` を返し、何もしません（停止処理中と `/free` の後はコマンドが実行されます）。`/enableServoMode 0` は、ブレーキが保持されている間と [[/free]] の後は何もしません。
+
+        サーボモード中にドライバが自分で HiZ になったとき（過電流の遮断、温度の遮断、UVLO）、サーボモードを取り消し、`ServoModeCancelledOnHiZ` を送信します（電磁ブレーキが有効なときは `BrakeEngagedOnHiZ` も送信されます）。もう一度 `/enableServoMode 1` で有効にしてください。現在位置が目標位置になります。
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
     errors: [BrakeEngaged]
     changes:
-      - {version: "2.2.0", en: "With the brake enabled, `/enableServoMode 1` while the brake is engaged, releasing or engaging (not while stopping or after `/free`) replies `/error/command BrakeEngaged` and does nothing. Before, it energized and moved the motor with the brake engaged.", ja: ""}
-      - {version: "2.2.0", en: "With the brake enabled, `/enableServoMode 0` while the brake is engaged or after `/free` (motor HiZ) does nothing. Before, it energized the motor.", ja: ""}
-      - {version: "2.2.0", en: "When a driver goes HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) in the servo mode, the servo mode is cancelled and `/error/command ServoModeCancelledOnHiZ` is sent (follows [[/reportError]]), with or without the brake. With the brake enabled, `BrakeEngagedOnHiZ` is also sent. Before, with the brake disabled the next servo update energized the driver again. The commands that make the driver HiZ cancel the servo mode first and do not send this error.", ja: ""}
-      - {version: "2.2.0", en: "Enabling the servo mode resets the integral and the previous error of the PID controller. The previous values were kept from the last time the servo mode was used.", ja: ""}
-      - {version: "2.2.0", en: "The update period is 5 ms instead of 10 ms (and no longer varies between 7 and 13 ms when position reports are enabled; an OSC message that sends several replies can still delay one update, up to 7.75 ms measured). The integral and derivative terms are scaled by the period, so the same `kP`, `kI` and `kD` were designed to give about the same response; retune the gains if needed.", ja: ""}
-      - {version: "2.2.0", en: "STEP400: the home switch and the limit switch are judged separately. A pressed home switch stops the motion towards `homingDirection` (with `/setProhibitMotionOnHomeSw` or the home switch in the hard stop mode), and a pressed limit switch stops the motion away from it (with `/setProhibitMotionOnLimitSw` or the limit switch in the hard stop mode), as before. While the home switch was pressed, the limit switch was not checked. Only a motor with both switches pressed behaves differently.", ja: ""}
-      - {version: "2.2.0", en: "The automatic hard stop at a switch event in the servo mode is not sent to a motor whose driver is HiZ.", ja: ""}
-      - {version: "2.2.0", en: "Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: ""}
+      - {version: "2.2.0", en: "With the brake enabled, `/enableServoMode 1` while the brake is engaged, releasing or engaging (not while stopping or after `/free`) replies `/error/command BrakeEngaged` and does nothing. Before, it energized and moved the motor with the brake engaged.", ja: "電磁ブレーキが有効なとき、ブレーキが保持されている間、開放中、保持への移行中（停止処理中と `/free` の後は除く）の `/enableServoMode 1` は、`/error/command BrakeEngaged` を返し、何もしません。以前は、ブレーキが保持されたままモータを励磁して動かしていました。"}
+      - {version: "2.2.0", en: "With the brake enabled, `/enableServoMode 0` while the brake is engaged or after `/free` (motor HiZ) does nothing. Before, it energized the motor.", ja: "電磁ブレーキが有効なとき、ブレーキが保持されている間と `/free` の後（モータが HiZ）の `/enableServoMode 0` は、何もしません。以前は、モータを励磁していました。"}
+      - {version: "2.2.0", en: "When a driver goes HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) in the servo mode, the servo mode is cancelled and `/error/command ServoModeCancelledOnHiZ` is sent (follows [[/reportError]]), with or without the brake. With the brake enabled, `BrakeEngagedOnHiZ` is also sent. Before, with the brake disabled the next servo update energized the driver again. The commands that make the driver HiZ cancel the servo mode first and do not send this error.", ja: "サーボモード中にドライバが自分で HiZ になったとき（過電流の遮断、温度の遮断、UVLO）、サーボモードを取り消し、`/error/command ServoModeCancelledOnHiZ` を送信します（[[/reportError]] に従います）。ブレーキの有無によらず同じです。電磁ブレーキが有効なときは、`BrakeEngagedOnHiZ` も送信されます。以前は、ブレーキが無効だと、次のサーボの更新でドライバが再び励磁されていました。ドライバを HiZ にするコマンドは、先にサーボモードを取り消すので、このエラーは送信されません。"}
+      - {version: "2.2.0", en: "Enabling the servo mode resets the integral and the previous error of the PID controller. The previous values were kept from the last time the servo mode was used.", ja: "サーボモードを有効にすると、PID 制御の積分値と前回の誤差がリセットされます。以前は、前回サーボモードを使ったときの値が残っていました。"}
+      - {version: "2.2.0", en: "The update period is 5 ms instead of 10 ms (and no longer varies between 7 and 13 ms when position reports are enabled; an OSC message that sends several replies can still delay one update, up to 7.75 ms measured). The integral and derivative terms are scaled by the period, so the same `kP`, `kI` and `kD` were designed to give about the same response; retune the gains if needed.", ja: "更新周期が 10 ms から 5 ms になりました（位置通知が有効なときに 7〜13 ms の間で変動することもなくなりました。複数の返答を送る OSC メッセージが、1 回の更新を遅らせることはあります。実測で最大 7.75 ms）。積分項と微分項は周期に応じて換算されるので、同じ `kP`、`kI`、`kD` でほぼ同じ応答になるように設計されていますが、必要に応じてゲインを調整してください。"}
+      - {version: "2.2.0", en: "STEP400: the home switch and the limit switch are judged separately. A pressed home switch stops the motion towards `homingDirection` (with `/setProhibitMotionOnHomeSw` or the home switch in the hard stop mode), and a pressed limit switch stops the motion away from it (with `/setProhibitMotionOnLimitSw` or the limit switch in the hard stop mode), as before. While the home switch was pressed, the limit switch was not checked. Only a motor with both switches pressed behaves differently.", ja: "STEP400: HOME センサと LIMIT センサを別々に判定します。押された HOME センサは `homingDirection` に向かう動作を止め（`/setProhibitMotionOnHomeSw` が有効か、HOME センサがハードストップモードのとき）、押された LIMIT センサはそれと逆向きの動作を止めます（`/setProhibitMotionOnLimitSw` が有効か、LIMIT センサがハードストップモードのとき）。ここまでは以前と同じです。以前は、HOME センサが押されている間は LIMIT センサを確認していませんでした。動作が変わるのは、2 つのセンサが両方押されているモータだけです。"}
+      - {version: "2.2.0", en: "The automatic hard stop at a switch event in the servo mode is not sent to a motor whose driver is HiZ.", ja: "サーボモード中のセンサイベントでの自動ハードストップは、ドライバが HiZ のモータには送りません。"}
+      - {version: "2.2.0", en: "Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: "保留中の動作を取り消します。ブレーキが無効なモータでも同じです。取り消されるのは、BUSY フラグが下りるのを待っている `/goTo`、`/goToDir`、`/goHome`、`/goMark`（以前は、モータが BUSY でなくなったときに送られていたため、止まっていたモータが再び動き出していました）、原点復帰（以前は、そのタイムアウトで送られるハードストップが、その間に HiZ になったモータを励磁していました）、サーボモードです。"}
     see_also: [/setTargetPosition, /setServoParam]
 
   - address: /setServoParam
@@ -3215,18 +3440,21 @@ commands:
         Adjusts the PID control gain.
 
         A negative gain replies `CommandIgnored` and nothing is applied. The update period of the servo mode is 5 ms; the integral and derivative terms are scaled by the period.
-      ja: PID制御のゲインを調整します。
+      ja: |-
+        PID制御のゲインを調整します。
+
+        負のゲインには `CommandIgnored` を返し、何も適用されません。サーボモードの更新周期は 5 ms です。積分項と微分項は周期に応じて換算されます。
     errors: [CommandIgnored]
     changes:
-      - {version: "2.2.0", en: "A negative gain replies `/error/command CommandIgnored` and nothing is applied. Before, it was set to 0.", ja: ""}
-      - {version: "2.2.0", en: "The servo update period is 5 ms instead of 10 ms. The same gains were designed to give about the same response, but retune them if needed.", ja: ""}
+      - {version: "2.2.0", en: "A negative gain replies `/error/command CommandIgnored` and nothing is applied. Before, it was set to 0.", ja: "負のゲインには `/error/command CommandIgnored` を返し、何も適用されません。以前は 0 に設定されていました。"}
+      - {version: "2.2.0", en: "The servo update period is 5 ms instead of 10 ms. The same gains were designed to give about the same response, but retune them if needed.", ja: "サーボの更新周期が 10 ms から 5 ms になりました。同じゲインでほぼ同じ応答になるように設計されていますが、必要に応じて調整してください。"}
     see_also: [/getServoParam]
 
   - address: /getServoParam
     group: servo
     args: [{use: motorID}]
     timing: always
-    description: {en: "", ja: ""}
+    description: {en: "Gets the PID gains (kP, kI, kD) of the servo mode.", ja: "サーボモードの PID ゲイン（kP、kI、kD）を取得します。"}
     response: [/servoParam]
 
   - address: /setTargetPosition
@@ -3256,7 +3484,7 @@ commands:
       en: Sets the target positions of the servo mode for all axes at once.
       ja: サーボモードの目標位置を全軸分まとめて設定します。アーギュメントとして各軸の目標位置を指定しますので、STEP400の場合は4個、STEP800の場合は8個のアーギュメントが必要です。
     changes:
-      - {version: "2.2.0", en: "A message with fewer positions than the number of motors replies `/error/osc MissingArgument` and nothing is applied. Before, the missing positions became 0 and a servo-mode motor ran to 0.", ja: ""}
+      - {version: "2.2.0", en: "A message with fewer positions than the number of motors replies `/error/osc MissingArgument` and nothing is applied. Before, the missing positions became 0 and a servo-mode motor ran to 0.", ja: "モータの数より少ない位置のメッセージには `/error/osc MissingArgument` を返し、何も適用されません。以前は、足りない位置が 0 になり、サーボモードのモータが 0 に向かって動いていました。"}
     see_also: [/setTargetPosition]
 
 # =============================================================================
@@ -3292,7 +3520,7 @@ messages:
           en: Indicates if destIp has been changed. 1 if it has been changed, or 0 if the same address has already been set.
           ja: destIpが変更されたかどうかを示します。変更されていると1, すでに同じアドレスが設定されていた場合は0
     changes:
-      - {version: "2.2.0", en: "When the [[/setDestIp]] starts the resolution of the MAC address (the first one, one from another address, or one 1.5 s or more after the last packet from the destination), the message is sent once it has been resolved, so it can come up to about 2 s later; otherwise it is sent at once. If it does not come, send `/setDestIp` again.", ja: ""}
+      - {version: "2.2.0", en: "When the [[/setDestIp]] starts the resolution of the MAC address (the first one, one from another address, or one 1.5 s or more after the last packet from the destination), the message is sent once it has been resolved, so it can come up to about 2 s later; otherwise it is sent at once. If it does not come, send `/setDestIp` again.", ja: "[[/setDestIp]] が MAC アドレスの解決を始めるとき（最初の 1 回、別のアドレスからのとき、宛先からの最後のパケットから 1.5 秒以上後のとき）は、解決が終わってからこのメッセージを送信するため、最大約 2 秒遅れることがあります。それ以外のときはすぐに送信されます。届かないときは、もう一度 `/setDestIp` を送ってください。"}
 
   - address: /version
     args:
@@ -3321,7 +3549,7 @@ messages:
         since: "2.1.0"
         description:
           en: The filename of the configuration file on the microSD card (e.g., `config.txt` or `STEP400_venue-A.json`). This is the on-disk filename, distinct from `configName` which is the user-editable label.
-          ja: ""
+          ja: "microSD カード上の設定ファイルのファイル名です（例: `config.txt`、`STEP400_venue-A.json`）。ディスク上のファイル名で、ユーザーが編集できるラベルである `configName` とは別のものです。"
 
   - address: /saveConfig
     since: "2.1.0"
@@ -3370,7 +3598,7 @@ messages:
           - {value: 1, en: Low speed optimization enabled, ja: Low speed optimization 有効}
           - {value: 0, en: Low speed optimization disabled, ja: Low speed optimization 無効}
     changes:
-      - {version: "2.2.0", en: "The third argument `optimizationEnabled` is sent with the integer type tag `i` (0 / 1). Before, it used `T` / `F`. Clients that expect `T` / `F` must be updated.", ja: ""}
+      - {version: "2.2.0", en: "The third argument `optimizationEnabled` is sent with the integer type tag `i` (0 / 1). Before, it used `T` / `F`. Clients that expect `T` / `F` must be updated.", ja: "第 3 引数の `optimizationEnabled` は、整数の型タグ `i`（0 / 1）で送信されます。以前は `T` / `F` でした。`T` / `F` を想定しているクライアントは、更新が必要です。"}
 
   - address: /busy
     args:
@@ -3467,7 +3695,7 @@ messages:
           - {value: 1, en: UVLO detected, ja: UVLO発生状態}
           - {value: 0, en: No UVLO condition, ja: UVLO発生無し}
     changes:
-      - {version: "2.2.0", en: "The report sent when the UVLO state changes (enabled by [[/enableUvloReport]]) is sent with the integer type tag `i` (0 / 1), as the reply to [[/getUvlo]] always was. Before, the report used `T` / `F`. Clients that expect `T` / `F` must be updated.", ja: ""}
+      - {version: "2.2.0", en: "The report sent when the UVLO state changes (enabled by [[/enableUvloReport]]) is sent with the integer type tag `i` (0 / 1), as the reply to [[/getUvlo]] always was. Before, the report used `T` / `F`. Clients that expect `T` / `F` must be updated.", ja: "UVLO の状態が変わったときの通知（[[/enableUvloReport]] で有効にします）は、[[/getUvlo]] への返答と同じく、整数の型タグ `i`（0 / 1）で送信されます。以前の通知は `T` / `F` でした。`T` / `F` を想定しているクライアントは、更新が必要です。"}
 
   - address: /thermalStatus
     args:
@@ -3496,9 +3724,9 @@ messages:
     description:
       en: |-
         Sent at once when the overcurrent condition starts (if no such report of the motor went out in the last 200 ms) and then, while it lasts, at most every 200 ms per motor. Detections within the 200 ms are not lost: they give one message at the end of the interval. Detections while the report is disabled ([[/enableOverCurrentReport]]) are not sent later.
-      ja: ""
+      ja: "過電流の状態が始まったときにすぐ送信し（直近 200 ms にそのモータの同種の通知がなかった場合）、状態が続く間はモータごとに最短 200 ms の間隔で送信します。200 ms の間の検出は失われず、その間隔の終わりに 1 つのメッセージとして送信されます。通知が無効の間（[[/enableOverCurrentReport]]）の検出は、後から送信されません。"
     changes:
-      - {version: "2.2.0", en: "Sent at once when the condition starts (if no such report of the motor went out in the last 200 ms) and then, while it lasts, at most every 200 ms per motor. Before, it was sent at every status read while the condition lasted (every 10 ms). The message is unchanged.", ja: ""}
+      - {version: "2.2.0", en: "Sent at once when the condition starts (if no such report of the motor went out in the last 200 ms) and then, while it lasts, at most every 200 ms per motor. Before, it was sent at every status read while the condition lasted (every 10 ms). The message is unchanged.", ja: "状態が始まったときにすぐ送信し（直近 200 ms にそのモータの同種の通知がなかった場合）、状態が続く間はモータごとに最短 200 ms の間隔で送信します。以前は、状態が続く間、ステータスを読み出すたびに（10 ms ごとに）送信していました。メッセージ自体は変わりません。"}
 
   - address: /overCurrentThreshold
     args:
@@ -3515,9 +3743,9 @@ messages:
     description:
       en: |-
         Sent at once when the stall condition starts (if no such report of the motor went out in the last 200 ms) and then, while it lasts, at most every 200 ms per motor. Detections within the 200 ms are not lost: they give one message at the end of the interval. Detections while the report is disabled ([[/enableStallReport]]) are not sent later.
-      ja: ""
+      ja: "脱調の状態が始まったときにすぐ送信し（直近 200 ms にそのモータの同種の通知がなかった場合）、状態が続く間はモータごとに最短 200 ms の間隔で送信します。200 ms の間の検出は失われず、その間隔の終わりに 1 つのメッセージとして送信されます。通知が無効の間（[[/enableStallReport]]）の検出は、後から送信されません。"
     changes:
-      - {version: "2.2.0", en: "Sent at once when the condition starts (if no such report of the motor went out in the last 200 ms) and then, while it lasts, at most every 200 ms per motor. Before, it was sent at every status read while the condition lasted (every 10 ms). The message is unchanged.", ja: ""}
+      - {version: "2.2.0", en: "Sent at once when the condition starts (if no such report of the motor went out in the last 200 ms) and then, while it lasts, at most every 200 ms per motor. Before, it was sent at every status read while the condition lasted (every 10 ms). The message is unchanged.", ja: "状態が始まったときにすぐ送信し（直近 200 ms にそのモータの同種の通知がなかった場合）、状態が続く間はモータごとに最短 200 ms の間隔で送信します。以前は、状態が続く間、ステータスを読み出すたびに（10 ms ごとに）送信していました。メッセージ自体は変わりません。"}
 
   - address: /stallThreshold
     args:
@@ -3702,15 +3930,15 @@ messages:
       - name: acc
         type: int
         range: [0, 4095]
-        description: {en: acceleration (raw register value), ja: ""}
+        description: {en: acceleration (raw register value), ja: "加速度（Raw レジスタ値）"}
       - name: dec
         type: int
         range: [0, 4095]
-        description: {en: deceleration (raw register value), ja: ""}
+        description: {en: deceleration (raw register value), ja: "減速度（Raw レジスタ値）"}
       - name: maxSpeed
         type: int
         range: [0, 1023]
-        description: {en: maximum speed (raw register value), ja: ""}
+        description: {en: maximum speed (raw register value), ja: "最大速さ（Raw レジスタ値）"}
 
   - address: /homingStatus
     args:
@@ -3852,18 +4080,18 @@ messages:
       - name: state
         type: int
         values:
-          - {value: -1, en: The electromagnetic brake is disabled for the motor}
-          - {value: 0, en: "Engaged. Brake output: engaged. Driver: HiZ"}
-          - {value: 1, en: "Releasing (`/activate 1`, waiting `brakeTransitionDuration`). Brake output: engaged. Driver: energized"}
-          - {value: 2, en: "Released. Brake output: released. Driver: energized"}
-          - {value: 3, en: "Stopping (`/softHiZ`, `/activate 0`: decelerating, engages when stopped). Brake output: released. Driver: energized"}
-          - {value: 4, en: "Engaging (waiting `brakeTransitionDuration`, then HiZ). Brake output: engaged. Driver: energized"}
-          - {value: 5, en: "Free (`/free`). Brake output: released. Driver: HiZ"}
-        description: {en: State of the brake, ja: ""}
+          - {value: -1, en: The electromagnetic brake is disabled for the motor, ja: "このモータの電磁ブレーキは無効です"}
+          - {value: 0, en: "Engaged. Brake output: engaged. Driver: HiZ", ja: "保持。ブレーキ出力: 保持。ドライバ: HiZ"}
+          - {value: 1, en: "Releasing (`/activate 1`, waiting `brakeTransitionDuration`). Brake output: engaged. Driver: energized", ja: "開放中（`/activate 1`、`brakeTransitionDuration` を待っています）。ブレーキ出力: 保持。ドライバ: 励磁"}
+          - {value: 2, en: "Released. Brake output: released. Driver: energized", ja: "開放。ブレーキ出力: 開放。ドライバ: 励磁"}
+          - {value: 3, en: "Stopping (`/softHiZ`, `/activate 0`: decelerating, engages when stopped). Brake output: released. Driver: energized", ja: "停止処理中（`/softHiZ`、`/activate 0`: 減速中で、停止すると保持します）。ブレーキ出力: 開放。ドライバ: 励磁"}
+          - {value: 4, en: "Engaging (waiting `brakeTransitionDuration`, then HiZ). Brake output: engaged. Driver: energized", ja: "保持への移行中（`brakeTransitionDuration` を待ち、その後 HiZ にします）。ブレーキ出力: 保持。ドライバ: 励磁"}
+          - {value: 5, en: "Free (`/free`). Brake output: released. Driver: HiZ", ja: "フリー（`/free`）。ブレーキ出力: 開放。ドライバ: HiZ"}
+        description: {en: State of the brake, ja: "ブレーキの状態"}
     description:
       en: |
         Reply to [[/getBrakeStatus]]. The state numbers are part of the specification; new states will only be added as 6, 7, ....
-      ja: ""
+      ja: "[[/getBrakeStatus]] への返答です。状態の番号は仕様の一部です。新しい状態は 6、7、... として追加されます。"
 
   - address: /servoParam
     args:
@@ -3889,16 +4117,16 @@ messages:
         type: int
         since: "2.2.0"
         values:
-          - {value: 0, en: Unknown}
-          - {value: 1, en: "Power-on. Treat 1 and 2 both as a reset by the power supply"}
-          - {value: 2, en: "Brown-out (supply voltage drop). On the SAMD21 a normal power-up is often reported as 2"}
-          - {value: 3, en: Reset pin}
-          - {value: 4, en: Watchdog}
-          - {value: 5, en: "Software reset (for example after [[/resetDevice]] or a firmware upload over USB)"}
-          - {value: 6, en: "CPU fault: the reset after a CPU exception (HardFault on the SAMD21)"}
+          - {value: 0, en: Unknown, ja: "不明"}
+          - {value: 1, en: "Power-on. Treat 1 and 2 both as a reset by the power supply", ja: "電源投入。1 と 2 は、どちらも電源によるリセットとして扱ってください"}
+          - {value: 2, en: "Brown-out (supply voltage drop). On the SAMD21 a normal power-up is often reported as 2", ja: "ブラウンアウト（電源電圧の低下）。SAMD21 では、通常の電源投入が 2 として報告されることが多くあります"}
+          - {value: 3, en: Reset pin, ja: "リセットピン"}
+          - {value: 4, en: Watchdog, ja: "ウォッチドッグ"}
+          - {value: 5, en: "Software reset (for example after [[/resetDevice]] or a firmware upload over USB)", ja: "ソフトウェアリセット（たとえば [[/resetDevice]] の後や、USB でのファームウェア書き込みの後）"}
+          - {value: 6, en: "CPU fault: the reset after a CPU exception (HardFault on the SAMD21)", ja: "CPU フォルト: CPU 例外（SAMD21 では HardFault）の後のリセット"}
         description:
           en: "The cause of the reset, as reported by the MCU."
-          ja: ""
+          ja: "MCU が報告する、リセットの原因です。"
     description:
       en: |
         This message is automatically sent out when the device has (re)started. By watching the message, you can detect reset event of the device triggered by some reason.
@@ -3908,17 +4136,19 @@ messages:
         This message can be disabled from the configuration tool.
 
         `resetCause`: the numbers are part of the specification; new causes will only be added as 7, 8, .... A client should treat a number it does not know as "other", and accept 6. If several causes are flagged, the first of CPU fault, brown-out, power-on, watchdog, reset pin, software is reported. After a power-on or a brown-out the CPU fault is never reported, so a fault followed by a power cycle reports 1 or 2. The numbers are those reported by the MCU as they are; with another MCU in the future the same operation may report a different number (the meaning of each number does not change).
-      ja: |
+      ja: |-
         本デバイスが（再）起動した際に自動的に本デバイスから送信されるメッセージです。何らかの理由で本デバイスがリセットされたことを検出できます。
 
         ファームウェアが起動して、Ethernetがリンク状態になった1秒後に送信されます。サブネット内のすべてのノード (`255.255.255.255`) へブロードキャストされます。
 
         Config Toolの設定を用いて、このメッセージを送信しないようにも設定できます。
+
+        `resetCause`: 番号は仕様の一部です。新しい原因は 7、8、... として追加されます。クライアントは、知らない番号を「その他」として扱い、6 を受け付けてください。複数の原因が記録されているときは、CPU フォルト、ブラウンアウト、電源投入、ウォッチドッグ、リセットピン、ソフトウェアの順で最初のものが報告されます。電源投入やブラウンアウトの後には CPU フォルトは報告されないため、フォルトの後に電源を入れ直すと 1 か 2 が報告されます。番号は MCU が報告したものがそのまま使われます。将来別の MCU を使うと、同じ操作でも別の番号が報告されることがあります（各番号の意味は変わりません）。
     changes:
-      - {version: "2.2.0", en: "A second argument, `resetCause` (`i`), is added: `/booted myId resetCause`. Clients that check the exact number of arguments are affected.", ja: ""}
-      - {version: "2.2.0", en: "After a watchdog detects a hang (about 250 ms after the last watchdog reset), every brake output is engaged first and the firmware waits for the longest `brakeTransitionDuration` of the motors with the brake enabled and not engaged (at most 1 s) before the board is reset, so the reset comes up to 1 s later than before; `resetCause` is still 4. v2.1.0 reset the board about 62.5 ms after a hang.", ja: ""}
-      - {version: "2.2.0", en: "A CPU fault (HardFault) now engages every brake output at once, waits as above (at most 1 s), and restarts with `resetCause` 6.", ja: ""}
-      - {version: "2.2.0", en: "The reset by [[/resetDevice]] now reports `resetCause` 5 (software).", ja: ""}
+      - {version: "2.2.0", en: "A second argument, `resetCause` (`i`), is added: `/booted myId resetCause`. Clients that check the exact number of arguments are affected.", ja: "第 2 引数 `resetCause`（`i`）が追加されました: `/booted myId resetCause`。引数の数を厳密に確認しているクライアントは影響を受けます。"}
+      - {version: "2.2.0", en: "After a watchdog detects a hang (about 250 ms after the last watchdog reset), every brake output is engaged first and the firmware waits for the longest `brakeTransitionDuration` of the motors with the brake enabled and not engaged (at most 1 s) before the board is reset, so the reset comes up to 1 s later than before; `resetCause` is still 4. v2.1.0 reset the board about 62.5 ms after a hang.", ja: "ウォッチドッグが停止を検出すると（最後のウォッチドッグのリセットから約 250 ms 後）、まずすべてのブレーキ出力を保持し、電磁ブレーキが有効でブレーキが保持されていないモータのうち最長の `brakeTransitionDuration`（最大 1 秒）を待ってから、基板をリセットします。そのため、リセットは以前より最大 1 秒遅れます。`resetCause` は 4 のままです。v2.1.0 は、停止から約 62.5 ms 後に基板をリセットしていました。"}
+      - {version: "2.2.0", en: "A CPU fault (HardFault) now engages every brake output at once, waits as above (at most 1 s), and restarts with `resetCause` 6.", ja: "CPU フォルト（HardFault）では、すべてのブレーキ出力をすぐに保持し、上と同じように待って（最大 1 秒）から、`resetCause` 6 で再起動します。"}
+      - {version: "2.2.0", en: "The reset by [[/resetDevice]] now reports `resetCause` 5 (software).", ja: "[[/resetDevice]] によるリセットは、`resetCause` 5（ソフトウェア）を報告するようになりました。"}
 
   - address: /error/osc
     args:
@@ -3928,45 +4158,48 @@ messages:
           - {value: MessageNotMatch, en: There is no corresponding command, ja: 該当するコマンドがない。}
           - value: OscSyntaxError
             en: The OSC format is out of standard. Also sent for a packet larger than 512 bytes and for a message with more than 16 arguments.
-            ja: OSCのフォーマットが規格に沿っていなかった
+            ja: "OSCのフォーマットが規格に沿っていなかった。512バイトを超えるパケットと、16個を超える引数を持つメッセージにも送信される。"
             changes:
-              - {version: "2.2.0", en: "Also sent for a packet larger than 512 bytes and for a message with more than 16 arguments.", ja: ""}
+              - {version: "2.2.0", en: "Also sent for a packet larger than 512 bytes and for a message with more than 16 arguments.", ja: "512 バイトを超えるパケットと、16 個を超える引数を持つメッセージにも送信されます。"}
           - value: WrongDataType
             en: "Wrong datatype of in argument(s): a string for a number, NaN or infinity, or a non-string for `/setConfigName`. Nothing is applied."
-            ja: OSCメッセージの引数の型が異なっている
+            ja: "OSCメッセージの引数の型が異なっている: 数値の位置に文字列、NaN、無限大、または `/setConfigName` に文字列以外。何も適用されない。"
             changes:
-              - {version: "2.2.0", en: "Nothing is applied. Before, such an argument was applied as 0.", ja: ""}
-          - {value: MissingArgument, since: "2.2.0", en: "The message has fewer arguments than the command needs. Nothing is applied.", ja: ""}
+              - {version: "2.2.0", en: "Nothing is applied. Before, such an argument was applied as 0.", ja: "何も適用されません。以前は、このような引数は 0 として適用されていました。"}
+          - {value: MissingArgument, since: "2.2.0", en: "The message has fewer arguments than the command needs. Nothing is applied.", ja: "メッセージの引数の数が、コマンドに必要な数より少なかった。何も適用されない。"}
         description: {en: A character string that indicates the details of an error., ja: エラーの内容を示す文字列です。}
     description:
       en: |-
         Sent if any error is detected in the received OSC (Open Sound Control) message.
 
         The arguments of every command are checked before the command is applied. Arguments beyond the ones a command needs are ignored. The message is not sent while error reports are disabled ([[/reportError]]).
-      ja: 受け取ったOSCメッセージに何らかのエラーがあった場合に送信されます。
+      ja: |-
+        受け取ったOSCメッセージに何らかのエラーがあった場合に送信されます。
+
+        コマンドを適用する前に、すべてのコマンドの引数が検査されます。コマンドが必要とする数を超える引数は無視されます。エラーの通知が無効の間（[[/reportError]]）は送信されません。
     changes:
-      - {version: "2.2.0", en: "`MissingArgument` is new: a command with too few arguments replies it and applies nothing. Before, missing arguments were applied as 0 (`/setKval 1` set every KVAL of motor 1 to 0, `/setSpeedProfile 1` set acc, dec and max speed to 0, and the positions missing in `/setTargetPositionList` became 0).", ja: ""}
-      - {version: "2.2.0", en: "`WrongDataType` is replied for an argument of the wrong type (a string for a number, NaN or infinity, `/setConfigName` with a non-string) and applies nothing. Before, the argument was applied as 0.", ja: ""}
-      - {version: "2.2.0", en: "A packet larger than 512 bytes and a message with more than 16 arguments are answered with `OscSyntaxError`.", ja: ""}
-      - {version: "2.2.0", en: "In some corner cases where the former OSC library read past the end of the address pattern (for example characters following a `{...}` list), the match result can differ from before.", ja: ""}
+      - {version: "2.2.0", en: "`MissingArgument` is new: a command with too few arguments replies it and applies nothing. Before, missing arguments were applied as 0 (`/setKval 1` set every KVAL of motor 1 to 0, `/setSpeedProfile 1` set acc, dec and max speed to 0, and the positions missing in `/setTargetPositionList` became 0).", ja: "`MissingArgument` が新しく追加されました。引数が足りないコマンドにはこのエラーを返し、何も適用しません。以前は、足りない引数が 0 として適用されていました（`/setKval 1` はモータ 1 のすべての KVAL を 0 に、`/setSpeedProfile 1` は acc、dec、最大速さを 0 にし、`/setTargetPositionList` の足りない位置は 0 になっていました）。"}
+      - {version: "2.2.0", en: "`WrongDataType` is replied for an argument of the wrong type (a string for a number, NaN or infinity, `/setConfigName` with a non-string) and applies nothing. Before, the argument was applied as 0.", ja: "`WrongDataType` は、型の誤った引数（数値の位置の文字列、NaN、無限大、`/setConfigName` の文字列以外）に対して返され、何も適用されません。以前は、その引数が 0 として適用されていました。"}
+      - {version: "2.2.0", en: "A packet larger than 512 bytes and a message with more than 16 arguments are answered with `OscSyntaxError`.", ja: "512 バイトを超えるパケットと、16 個を超える引数を持つメッセージには、`OscSyntaxError` を返します。"}
+      - {version: "2.2.0", en: "In some corner cases where the former OSC library read past the end of the address pattern (for example characters following a `{...}` list), the match result can differ from before.", ja: "以前の OSC ライブラリがアドレスパターンの末尾を越えて読んでいた一部の特殊なケース（たとえば `{...}` のリストの後ろに文字が続く場合）では、マッチの結果が以前と異なることがあります。"}
 
   - address: /error/command
     args:
       - name: errorText
         type: string
         values:
-          - {value: CommandIgnored, en: "The command is currently not executable. Also refer Timing section. Also sent when a value is outside the range of the command; nothing is applied (the motor ID is 255 for `/setPositionListReportInterval`).", ja: コマンドが実行可能なタイミングではない。タイミング参照。}
+          - {value: CommandIgnored, en: "The command is currently not executable. Also refer Timing section. Also sent when a value is outside the range of the command; nothing is applied (the motor ID is 255 for `/setPositionListReportInterval`).", ja: "コマンドが実行可能なタイミングではない。タイミング参照。値がコマンドの範囲外のときにも送信され、何も適用されない（`/setPositionListReportInterval` のモータ ID は 255）。"}
           - value: MotorIdNotMatch
             en: Motor ID is not appropriate. A motor ID outside 0-255 is replied with the value sent.
-            ja: モータIDが適切でない値になっている。
+            ja: "モータIDが適切でない値になっている。0〜255 の範囲外のモータ ID は、送信された値のまま返される。"
             changes:
-              - {version: "2.2.0", en: "A motor ID outside 0-255 is replied with the value sent. Before, 257 and 511 were read as 1 and 255.", ja: ""}
-          - {value: BrakeEngaged, en: "A motion command was sent while the electromagnetic brake was active. Also sent for `/enableServoMode 1` and `/homing` while the brake is engaged, releasing or engaging (not while stopping or after `/free`).", ja: 電磁ブレーキが効いた状態のままモーションコマンドを送信した。}
+              - {version: "2.2.0", en: "A motor ID outside 0-255 is replied with the value sent. Before, 257 and 511 were read as 1 and 255.", ja: "0〜255 の範囲外のモータ ID は、送信された値のまま返されます。以前は、257 と 511 が 1 と 255 として読まれていました。"}
+          - {value: BrakeEngaged, en: "A motion command was sent while the electromagnetic brake was active. Also sent for `/enableServoMode 1` and `/homing` while the brake is engaged, releasing or engaging (not while stopping or after `/free`).", ja: "電磁ブレーキが効いた状態のままモーションコマンドを送信した。ブレーキが保持されている間、開放中、保持への移行中の `/enableServoMode 1` と `/homing` でも送信される（停止処理中と `/free` の後は除く）。"}
           - value: HomeSwActivating
             en: Movement from home sensor position towards the origin point. Also sent by `/goUntil` and `/goUntilRaw` when the home switch is already activated.
-            ja: ホームセンサ上から原点復帰方向に移動しようとした。
+            ja: "ホームセンサ上から原点復帰方向に移動しようとした。HOME センサがすでに作動しているときの `/goUntil` と `/goUntilRaw` でも送信される。"
             changes:
-              - {version: "2.2.0", en: "Sent by `/goUntil` and `/goUntilRaw` when the home switch is already activated. It was sent as `HomeSwActivated` before.", ja: ""}
+              - {version: "2.2.0", en: "Sent by `/goUntil` and `/goUntilRaw` when the home switch is already activated. It was sent as `HomeSwActivated` before.", ja: "`/goUntil` と `/goUntilRaw` が、HOME センサがすでに作動しているときに送信します。以前は `HomeSwActivated` として送信されていました。"}
           - {value: LimitSwActivating, boards: [STEP400], en: Movement from limit sensor position towards the opposite direction from origin., ja: リミットセンサ上から原点復帰方向の逆向きに移動しようとした。}
           - {value: GoUntilTimeout, en: Timeout while executing `/goUntil` command., ja: "`/goUntil`コマンド実行中にタイムアウトした。"}
           - {value: ReleaseSwTimeout, en: Timeout while executing `/releaseSw` command., ja: "`/releaseSw`コマンド実行中にタイムアウトした。"}
@@ -3974,12 +4207,12 @@ messages:
             en: Received a command which can not be executed while servo mode.
             ja: サーボモードでは実行できないコマンドを送信した。
             changes:
-              - {version: "2.2.0", en: "Also sent for `/goUntil`, `/goUntilRaw` and `/releaseSw`.", ja: ""}
-          - {value: BrakeReleaseFailed, since: "2.2.0", en: "`/activate 1` was sent but the driver stayed HiZ (for example without motor power), so the brake stays engaged.", ja: ""}
-          - {value: BrakeEngagedOnHiZ, since: "2.2.0", en: "The driver went HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) while the brake was released, so the brake was engaged.", ja: ""}
-          - {value: ServoModeCancelledOnHiZ, en: "The driver went HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) in the servo mode, so the servo mode was cancelled. Enable it again with `/enableServoMode 1`.", since: "2.2.0", ja: ""}
-          - {value: MotorNotHiZ, en: "The command writes a driver register that can be written only while the outputs are HiZ, and the motor is not HiZ. A motor holding its position is not HiZ: send `/softHiZ` or `/hardHiZ` first. Nothing is applied.", since: "2.2.0", ja: ""}
-          - {value: MotorNotStopped, en: "The command writes a driver register that can be written only while the motor is stopped or HiZ, and the motor is turning. Nothing is applied.", since: "2.2.0", ja: ""}
+              - {version: "2.2.0", en: "Also sent for `/goUntil`, `/goUntilRaw` and `/releaseSw`.", ja: "`/goUntil`、`/goUntilRaw`、`/releaseSw` でも送信されます。"}
+          - {value: BrakeReleaseFailed, since: "2.2.0", en: "`/activate 1` was sent but the driver stayed HiZ (for example without motor power), so the brake stays engaged.", ja: "`/activate 1` を送信したが、ドライバが HiZ のままだった（たとえばモータ電源がない）ため、ブレーキは保持されたままになった。"}
+          - {value: BrakeEngagedOnHiZ, since: "2.2.0", en: "The driver went HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) while the brake was released, so the brake was engaged.", ja: "ブレーキが開放されている間に、ドライバが自分で HiZ になった（過電流の遮断、温度の遮断、UVLO）ため、ブレーキを保持した。"}
+          - {value: ServoModeCancelledOnHiZ, en: "The driver went HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) in the servo mode, so the servo mode was cancelled. Enable it again with `/enableServoMode 1`.", since: "2.2.0", ja: "サーボモード中に、ドライバが自分で HiZ になった（過電流の遮断、温度の遮断、UVLO）ため、サーボモードを取り消した。`/enableServoMode 1` でもう一度有効にする。"}
+          - {value: MotorNotHiZ, en: "The command writes a driver register that can be written only while the outputs are HiZ, and the motor is not HiZ. A motor holding its position is not HiZ: send `/softHiZ` or `/hardHiZ` first. Nothing is applied.", since: "2.2.0", ja: "ドライバのレジスタのうち、出力が HiZ のときだけ書き込めるものをコマンドが書き込もうとしたが、モータが HiZ ではなかった。位置を保持しているモータは HiZ ではない。先に `/softHiZ` か `/hardHiZ` を送る。何も適用されない。"}
+          - {value: MotorNotStopped, en: "The command writes a driver register that can be written only while the motor is stopped or HiZ, and the motor is turning. Nothing is applied.", since: "2.2.0", ja: "停止中か HiZ のときだけ書き込めるドライバのレジスタをコマンドが書き込もうとしたが、モータが回転していた。何も適用されない。"}
         description: {en: A character string that indicates the details of an error., ja: エラーの内容を示す文字列です。}
       - use: motorID
         description: {en: The motor's ID, ja: モータのID}
@@ -3989,11 +4222,13 @@ messages:
         The message can be enabled or disabled with [[/reportError]] command.
 
         With 255 (all motors), each motor is judged alone for the errors that depend on the state of a motor (`MotorNotHiZ`, `MotorNotStopped`): the motors in the required state are changed and the others reply the error.
-      ja: |
+      ja: |-
         コマンドの実行時にエラーが発生した場合に送信されます。
         [[/reportError]] によって、送信の有効/無効を切り替えることができます。
+
+        255（全モータ）のとき、モータの状態に依存するエラー（`MotorNotHiZ`、`MotorNotStopped`）は、モータごとに判定されます。必要な状態のモータは変更され、他のモータはエラーを返します。
     changes:
-      - {version: "2.2.0", en: "New errors: `BrakeReleaseFailed`, `BrakeEngagedOnHiZ`, `ServoModeCancelledOnHiZ` (electromagnetic brake and servo mode), `MotorNotHiZ` and `MotorNotStopped` (registers that can be written only in some states). All follow [[/reportError]].", ja: ""}
-      - {version: "2.2.0", en: "`CommandIgnored` is also replied when a value is outside the range of the command, and nothing is applied: [[/setPositionReportInterval]] and [[/setPositionListReportInterval]] above 65535 (255 for the list), [[/setGoUntilTimeout]] and [[/setReleaseSwTimeout]] below 0, [[/setElPos]] with a full step outside 0-3 or a microstep outside 0-127, [[/setServoParam]] with a negative gain, [[/setBrakeTransitionDuration]] outside 0-65535, [[/setDecayModeParam]] with TON_MIN or TOFF_MIN above 127.", ja: ""}
-      - {version: "2.2.0", en: "`MotorIdNotMatch` is replied for a motor ID outside 0-255, with the value sent. Before, 257 and 511 were read as 1 and 255.", ja: ""}
-      - {version: "2.2.0", en: "`HomeSwActivating` is replied by `/goUntil` and `/goUntilRaw` for an activated home switch. It was sent as `HomeSwActivated`, and it now follows `/reportError` like the other command errors.", ja: ""}
+      - {version: "2.2.0", en: "New errors: `BrakeReleaseFailed`, `BrakeEngagedOnHiZ`, `ServoModeCancelledOnHiZ` (electromagnetic brake and servo mode), `MotorNotHiZ` and `MotorNotStopped` (registers that can be written only in some states). All follow [[/reportError]].", ja: "新しいエラー: `BrakeReleaseFailed`、`BrakeEngagedOnHiZ`、`ServoModeCancelledOnHiZ`（電磁ブレーキとサーボモード）、`MotorNotHiZ` と `MotorNotStopped`（特定の状態でしか書き込めないレジスタ）。いずれも [[/reportError]] に従います。"}
+      - {version: "2.2.0", en: "`CommandIgnored` is also replied when a value is outside the range of the command, and nothing is applied: [[/setPositionReportInterval]] and [[/setPositionListReportInterval]] above 65535 (255 for the list), [[/setGoUntilTimeout]] and [[/setReleaseSwTimeout]] below 0, [[/setElPos]] with a full step outside 0-3 or a microstep outside 0-127, [[/setServoParam]] with a negative gain, [[/setBrakeTransitionDuration]] outside 0-65535, [[/setDecayModeParam]] with TON_MIN or TOFF_MIN above 127.", ja: "`CommandIgnored` は、値がコマンドの範囲外のときにも返され、何も適用されません: 65535 を超える [[/setPositionReportInterval]] と [[/setPositionListReportInterval]]（リストは 255）、0 未満の [[/setGoUntilTimeout]] と [[/setReleaseSwTimeout]]、0〜3 の範囲外のフルステップまたは 0〜127 の範囲外のマイクロステップの [[/setElPos]]、負のゲインの [[/setServoParam]]、0〜65535 の範囲外の [[/setBrakeTransitionDuration]]、127 を超える TON_MIN または TOFF_MIN の [[/setDecayModeParam]]。"}
+      - {version: "2.2.0", en: "`MotorIdNotMatch` is replied for a motor ID outside 0-255, with the value sent. Before, 257 and 511 were read as 1 and 255.", ja: "`MotorIdNotMatch` は、0〜255 の範囲外のモータ ID に対して、送信された値とともに返されます。以前は、257 と 511 が 1 と 255 として読まれていました。"}
+      - {version: "2.2.0", en: "`HomeSwActivating` is replied by `/goUntil` and `/goUntilRaw` for an activated home switch. It was sent as `HomeSwActivated`, and it now follows `/reportError` like the other command errors.", ja: "`HomeSwActivating` は、HOME センサが作動しているときの `/goUntil` と `/goUntilRaw` が返します。以前は `HomeSwActivated` として送信され、今は他のコマンドのエラーと同じように `/reportError` に従います。"}
