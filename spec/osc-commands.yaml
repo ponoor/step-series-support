@@ -1588,7 +1588,10 @@ commands:
     boards: [STEP400]
     timing: hiz
     description:
-      en: Switches the specified motor to the current drive mode.
+      en: |-
+        Switches the specified motor to the current drive mode.
+
+        The PowerSTEP01 current mode goes up to 1/16 microsteps: a finer microstep mode is lowered to 1/16, and the stored setting ([[/setMicrostepMode]], `driverSettings.stepMode`) is changed with it.
       ja: 指定したモータを電流モードに切り替えます。
     errors: [MotorNotHiZ, CommandIgnored]
     changes:
