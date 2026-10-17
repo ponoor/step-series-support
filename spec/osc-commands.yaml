@@ -1137,12 +1137,12 @@ commands:
       en: |-
         Resets the motor driver (PowerSTEP01/L6470) and rewrites the setting.
 
-        With the electromagnetic brake enabled, the command is accepted only while the brake is engaged or after [[/free]] (the motor is HiZ); otherwise it replies `CommandIgnored`. It cancels pending motion and the servo mode.
+        With the electromagnetic brake enabled, the command is accepted only while the brake is engaged or after [[/free]] (the motor is HiZ); otherwise it replies `CommandIgnored`. When it is accepted (also with the brake disabled), it cancels pending motion and the servo mode. A command that is refused (`CommandIgnored`) cancels nothing.
       ja: モータドライバ (PowerSTEP01/L6470) をリセットし、初期設定値を再度書き込みます。
     errors: [CommandIgnored]
     changes:
       - {version: "2.2.0", en: "With the electromagnetic brake enabled, accepted only while the brake is engaged or after `/free`; otherwise `/error/command CommandIgnored`. Before, it made the driver HiZ with the brake released.", ja: ""}
-      - {version: "2.2.0", en: "Cancels pending motion (a `/goTo` etc. waiting for the BUSY flag, the homing, the servo mode), also with the brake disabled.", ja: ""}
+      - {version: "2.2.0", en: "Cancels pending motion (a `/goTo` etc. waiting for the BUSY flag, the homing, the servo mode) when it is accepted, also with the brake disabled. A refused command (`CommandIgnored`) cancels nothing.", ja: ""}
       - {version: "2.2.0", en: "The settings applied again after the reset include those made with the Raw commands (see [[/setAccRaw]]).", ja: ""}
 
   - address: /getStatusList
@@ -3044,9 +3044,9 @@ commands:
     description:
       en: |
         Switches motor excitation / release when electromagnetic brake mode is enabled. The electromagnetic brake (EM) also works conjunction with the motor. You cannot send motor movement command when the motor is not excited by this command.
-        If the EM mode is disabled, this command is ignored.
+        If the EM mode is disabled, this command is ignored: only `CommandIgnored` is sent, and pending motion is not cancelled.
 
-        `/activate 1` while the brake is released does nothing. From the engaged state it energizes the driver and releases the brake after `brakeTransitionDuration`, but only if a status read after the command shows the driver energized (during the engaging it goes back to the release sequence, during the stopping it only cancels the engaging, after [[/free]] it releases at once). If the driver stays HiZ (for example without motor power), the brake stays engaged and `BrakeReleaseFailed` is sent.
+        `/activate 1` while the brake is released does nothing. From the engaged state it energizes the driver and releases the brake after `brakeTransitionDuration`, but only if a status read after the command shows the driver energized (during the engaging it goes back to the release sequence (the transition time starts again), during the stopping it only cancels the engaging, after [[/free]] it releases at once). If the driver stays HiZ (for example without motor power), the brake stays engaged and `BrakeReleaseFailed` is sent.
 
         `/activate 0` on a turning motor decelerates it and engages the brake when it has stopped, like [[/softHiZ]]; on a stopped motor the brake is engaged at the next status read (up to 5 ms later). The driver goes HiZ after `brakeTransitionDuration`. The brake state can be read with [[/getBrakeStatus]].
       ja: |
@@ -3065,7 +3065,7 @@ commands:
       - {version: "2.2.0", en: "`/activate 0` on a stopped motor engages the brake at the next status read (up to 5 ms later). The stop is now judged on a status read after the command.", ja: ""}
       - {version: "2.2.0", en: "After `/free`: `/activate 1` returns the motor to the released (energized) state, and `/activate 0` engages the brake at once (the motor is already HiZ).", ja: ""}
       - {version: "2.2.0", en: "KVAL_HOLD (TVAL_HOLD in the current mode) is raised to at least half of KVAL_RUN (TVAL_RUN) whenever the motor is energized again: from engaged or engaging (as before), and now also after `/free`.", ja: ""}
-      - {version: "2.2.0", en: "`/activate 0` cancels pending motion of a motor with the brake enabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: ""}
+      - {version: "2.2.0", en: "`/activate 0` cancels pending motion of a motor with the brake enabled (with the brake disabled it replies `CommandIgnored` and cancels nothing): a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: ""}
     see_also: [/enableElectromagnetBrake, /free, /getBrakeStatus]
 
   - address: /free
@@ -3076,7 +3076,7 @@ commands:
       en: |
         Releases motor axis when the electromagnetic brake mode is active. It releases motor excitation and keep EM brake in release state.
         Be cautious when sending this command. If some load is hanged to the motor, it will loose the hold and the load may fall down.
-        If the EM mode is disabled, this command is ignored.
+        If the EM mode is disabled, this command is ignored: only `CommandIgnored` is sent, and pending motion is not cancelled.
 
         After `/free`, a stop of the motor no longer engages the brake (when `/free` was sent during the deceleration of [[/softHiZ]]). A motion command (`/run`, `/move`, `/goTo`, ...) or `/activate 1` energizes the motor again and returns it to the released state. `/activate 0`, `/softHiZ` and `/hardHiZ` engage the brake at once.
       ja: |
