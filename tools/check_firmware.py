@@ -14,6 +14,11 @@ Checks
     in src/boardsDef.h (STEP400 -> STEP400_R1, STEP800 -> STEP800_R1).
     Reported: addresses missing in the YAML, addresses missing in the firmware, and
     board differences (compared with `routed_on`, else `boards`, else all boards).
+  - Argument types: the third column of `OSC_ROUTE` in src/oscRoutes.h (one character per
+    argument: m motor ID, n number, b boolean, s string, L one number per motor) compared with
+    the YAML arguments of the command: `use: motorID` -> m, `repeat: motors` -> L,
+    type bool -> b, int / float -> n, string -> s. Reported when the string differs
+    (number and type of the arguments). Skipped if the ref has no such column.
   - Sent messages: addresses sent by src/*.cpp (OSCMessage / OscWriter constructors and send*()
     helpers) compared with the YAML `messages`.
   - Settings: keys read by src/loadConfig.cpp and their built-in defaults (`| value`),
@@ -212,6 +217,40 @@ def routes(fw: Firmware, defined: set[str]) -> tuple[str, set[str]]:
     raise SystemExit("no route table found")
 
 
+ROUTE_ARGS_RE = re.compile(r'OSC_ROUTE\s*\(\s*"(/[^"]*)"\s*,\s*\w+\s*,\s*"([^"]*)"\s*\)')
+
+
+def route_arg_types(fw: Firmware, defined: set[str]) -> dict[str, str] | None:
+    """{address: argument type string} from the third column of oscRoutes.h (None if absent)."""
+    src = fw.read("src/oscRoutes.h")
+    if src is None:
+        return None
+    found: dict[str, str] = {}
+    for _, line in active_lines(src, defined):
+        for addr, types in ROUTE_ARGS_RE.findall(line):
+            found[addr] = types
+    return found or None
+
+
+def yaml_arg_types(spec: Spec, cmd: dict) -> str:
+    """The argument type string of a YAML command, in the notation of oscRoutes.h."""
+    out = []
+    for a in spec.args(cmd):
+        if a.get("repeat") == "motors":
+            out.append("L")
+        elif a.get("use") == "motorID":
+            out.append("m")
+        elif a.get("type") == "bool":
+            out.append("b")
+        elif a.get("type") in ("int", "float"):
+            out.append("n")
+        elif a.get("type") == "string":
+            out.append("s")
+        else:
+            out.append("?")
+    return "".join(out)
+
+
 def sent_messages(fw: Firmware, defined: set[str]) -> set[str]:
     found = set()
     for file in fw.list_src():
@@ -368,6 +407,24 @@ def main() -> int:
         if expected != actual:
             field = "routed_on" if c.get("routed_on") else ("boards" if c.get("boards") else "all boards")
             mismatches.append(f"boards differ: {a}: YAML {field} {sorted(expected)}, firmware {sorted(actual)}")
+
+    # --- argument types --------------------------------------------------
+    arg_types = {b: route_arg_types(fw, d) for b, d in board_defs.items()}
+    if all(v is not None for v in arg_types.values()):
+        checked = 0
+        for a in sorted(set(yaml_cmds) & all_fw):
+            fw_types = {b: arg_types[b][a] for b in arg_types if a in arg_types[b]}
+            if len(set(fw_types.values())) > 1:
+                mismatches.append(f"argument types differ between boards: {a}: {fw_types}")
+                continue
+            expected = yaml_arg_types(spec, yaml_cmds[a])
+            actual = next(iter(fw_types.values()))
+            checked += 1
+            if expected != actual:
+                mismatches.append(f"argument types differ: {a}: YAML '{expected}', firmware '{actual}'")
+        print(f"argument types checked: {checked}")
+    else:
+        notes.append("argument types not checked: the ref has no argument column in oscRoutes.h")
 
     # --- messages --------------------------------------------------------
     fw_msgs: dict[str, set[str]] = {b: sent_messages(fw, d) for b, d in board_defs.items()}
