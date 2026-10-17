@@ -18,13 +18,13 @@ What it does (docs directory: --docs, default `docs/`)
    `<!-- generated:begin ... -->` and `<!-- generated:end ... -->`. The marker itself stays,
    so running the script again replaces the block with the same text (idempotent). A page without
    markers is never touched. A marker with an unknown address is an error and nothing is written.
-   The language of a page comes from its name (`_en.md` / `_jp.md`, `.en.md` / `.ja.md`) or a
-   `en` / `ja` directory in its path.
+   The language of a page comes from the `en` / `ja` directory in its path (docs/en/..., docs/ja/...)
+   or from its name (`_en.md` / `_jp.md`, `.en.md` / `.ja.md`).
 
 2. Writes the generated pages (first line says they are generated; do not edit them):
    command list, differences between STEP400 and STEP800 (both under
-   `osc-command-references/`), and the list of configuration items
-   (`connections-and-settings/`). English and Japanese. An existing front matter is kept.
+   `<lang>/reference/`), and the list of configuration items
+   (`<lang>/connections/`). English and Japanese. An existing front matter is kept.
 
 Japanese texts are taken from the YAML. A Japanese text that does not exist yet is filled with
 the English one; the number of such texts is printed.
@@ -50,17 +50,17 @@ from spec import LINK_RE, REPO_ROOT, SPEC_PATH, Spec, anchor  # noqa: E402
 # ---------------------------------------------------------------------------
 # Layout of the pages. Change here when the site structure changes.
 
-REF_DIR = "osc-command-references"                       # reference pages of the groups
-MESSAGES_PAGE = "automatically-sent-messages-from-step-400"   # page of the messages
+REF_DIR = "reference"                                    # reference pages of the groups (under docs/<lang>/)
+MESSAGES_PAGE = "automatically-sent-messages"            # page of the messages
 COMMAND_LIST_PAGE = "command-list"
-DIFF_PAGE = "diff_400_800_command"
-SETTINGS_DIR = "connections-and-settings"
+DIFF_PAGE = "differences-step400-step800"
+SETTINGS_DIR = "connections"
 SETTINGS_PAGE = "configuration-items"
-# The Japanese file of a page that has another name than the English one
-JP_PAGE_NAMES = {"home-and-limit-sensors": "home-and-limit-sensers"}
+# The Japanese file of a page that has another name than the English one (none now)
+JP_PAGE_NAMES: dict[str, str] = {}
 
-LANGS = ("en", "ja")
-SUFFIX = {"en": "_en.md", "ja": "_jp.md"}
+LANGS = ("en", "ja")                                      # docs/en/..., docs/ja/... (mkdocs-static-i18n, folder structure)
+SUFFIX = {"en": ".md", "ja": ".md"}
 
 GENERATED_NOTE = {
     "en": "<!-- This page is generated from spec/osc-commands.yaml by tools/generate.py. Do not edit it directly. -->",
@@ -131,8 +131,8 @@ class Ctx:
         self.counter = counter
         self.errors = errors
         self.L = LABELS[lang]
-        self.page_dir = REF_DIR        # directory (under docs/) of the page being written
-        self.rel_from = Path(REF_DIR)  # directory (under docs/) links are relative to
+        self.page_dir = REF_DIR        # directory (under docs/<lang>/) of the page being written
+        self.rel_from = Path(REF_DIR)  # directory (under docs/<lang>/) links are relative to
         self.where = ""
 
     # -- texts ------------------------------------------------------------
@@ -839,7 +839,7 @@ def generate_pages(docs: Path, spec: Spec, defaults: str, counter: Counter, erro
             ctx.page_dir = directory
             ctx.rel_from = Path(directory)
             name = JP_PAGE_NAMES.get(page, page) if lang == "ja" else page
-            path = docs / directory / f"{name}{SUFFIX[lang]}"
+            path = docs / lang / directory / f"{name}{SUFFIX[lang]}"
             existing = path.read_text(encoding="utf-8") if path.exists() else None
             ttl = {"en": title, "ja": LABELS["ja"]["list_title"] if page == COMMAND_LIST_PAGE else
                    LABELS["ja"]["diff_title"] if page == DIFF_PAGE else LABELS["ja"]["settings_title"]}[lang]
@@ -860,7 +860,7 @@ def generate_markers(docs: Path, spec: Spec, defaults: str, counter: Counter, er
         lang = lang_of(path.relative_to(docs))
         ctx = Ctx(spec, lang, defaults, counter, errors)
         rel = path.relative_to(docs)
-        ctx.rel_from = rel.parent
+        ctx.rel_from = Path(*rel.parts[1:-1]) if rel.parts[0] in LANGS else rel.parent
         new = expand_text(text, ctx, rel)
         if new != text:
             out[path] = new
@@ -908,13 +908,13 @@ def check_coverage(docs: Path, spec: Spec) -> list[str]:
                 continue
             for m in MARKER_RE.finditer(path.read_text(encoding="utf-8")):
                 if m.group(1) == "osc":
-                    found.setdefault(m.group(2).strip(), []).append(path.name)
+                    found.setdefault(m.group(2).strip(), []).append(path.stem)
         for c in spec.commands:
             names = found.get(c["address"], [])
             page = spec.groups[c["group"]]["page"]
             if len(names) != 1:
                 errors.append(f"[{lang}] {c['address']}: marker found {len(names)} times (expected once in {page})")
-            elif not names[0].startswith(JP_PAGE_NAMES.get(page, page) if lang == "ja" else page):
+            elif names[0] != JP_PAGE_NAMES.get(page, page):
                 errors.append(f"[{lang}] {c['address']}: marker in {names[0]}, expected the page of group '{c['group']}' ({page})")
     return errors
 
