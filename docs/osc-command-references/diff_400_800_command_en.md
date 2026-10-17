@@ -12,64 +12,96 @@ menu_order: 96
 
 # Differences between STEP400 and STEP800
 
-## Commands only available in STEP400
+<!-- This page is generated from spec/osc-commands.yaml by tools/generate.py. Do not edit it directly. -->
 
-### Current mode commands
+## Commands available on STEP400 only
 
-STEP800 doesn't have a current driving mode so following commands related with a current mode are only available in STEP400.
+- [`/getAdcVal`](motor-driver-settings_en.md#getadcval) (int)motorID (the firmware also accepts it on STEP800, but the value is meaningless there)
+- [`/setProhibitMotionOnLimitSw`](alarm-settings_en.md#setprohibitmotiononlimitsw) (int)motorID (bool)enable
+- [`/getProhibitMotionOnLimitSw`](alarm-settings_en.md#getprohibitmotiononlimitsw) (int)motorID
+- [`/setVoltageMode`](voltage-and-current-mode-settings_en.md#setvoltagemode) (int)motorID
+- [`/setCurrentMode`](voltage-and-current-mode-settings_en.md#setcurrentmode) (int)motorID
+- [`/setTval`](voltage-and-current-mode-settings_en.md#settval) (int)motorID (int)holdTVAL (int)runTVAL (int)accTVAL (int)decTVAL
+- [`/getTval`](voltage-and-current-mode-settings_en.md#gettval) (int)motorID
+- [`/getTval_mA`](voltage-and-current-mode-settings_en.md#gettval_ma) (int)motorID
+- [`/setDecayModeParam`](voltage-and-current-mode-settings_en.md#setdecaymodeparam) (int)motorID (int)T_FAST (int)TON_MIN (int)TOFF_MIN
+- [`/getDecayModeParam`](voltage-and-current-mode-settings_en.md#getdecaymodeparam) (int)motorID
+- [`/setHoldTval`](voltage-and-current-mode-settings_en.md#setholdtval) (int)motorID (int)holdTVAL
+- [`/setRunTval`](voltage-and-current-mode-settings_en.md#setruntval) (int)motorID (int)runTVAL
+- [`/setAccTval`](voltage-and-current-mode-settings_en.md#setacctval) (int)motorID (int)accTVAL
+- [`/setDecTval`](voltage-and-current-mode-settings_en.md#setdectval) (int)motorID (int)decTVAL
+- [`/enableLimitSwReport`](home-and-limit-sensors_en.md#enablelimitswreport) (int)motorID (bool)enable
+- [`/getLimitSw`](home-and-limit-sensors_en.md#getlimitsw) (int)motorID
+- [`/setLimitSwMode`](home-and-limit-sensors_en.md#setlimitswmode) (int)motorID (bool)SW_MODE
+- [`/getLimitSwMode`](home-and-limit-sensors_en.md#getlimitswmode) (int)motorID
 
-- [`/setVoltageMode (int)motorID`](https://ponoor.com/en/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#setvoltagemode_intmotorid)
-- [`/setCurrentMode (int)motorID`](https://ponoor.com/en/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#setcurrentmode_intmotorid)
-- [`/setTval (int)motorID (int)holdTVAL (int)runTVAL (int)accTVAL (int)setDecTVAL`](https://ponoor.com/en/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#settval_intmotorid_intholdtval_intruntval_intacctval_intsetdectval)
-- [`/setHoldTval (int)motorID (int)holdTVAL`](https://ponoor.com/en/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#setholdtval_intmotorid_intholdtval)
-- [`/setRunTval (int)motorID (int)runTVAL`](https://ponoor.com/en/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#setruntval_intmotorid_intruntval)
-- [`/setAccTval (int)motorID (int)accTVAL`](https://ponoor.com/en/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#setacctval_intmotorid_intacctval)
-- [`/setDecTval (int)motorID (int)decTVAL`](https://ponoor.com/en/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#setdectval_intmotorid_intdectval)
-- [`/getTval (int)motorID`](https://ponoor.com/en/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#gettval_intmotorid)
-- [`/getTval_mA (int)motorID`](https://ponoor.com/en/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#gettval_ma_intmotorid)
-- [`/setDecayModeParam (int)motorID (int)T_FAST (int)TON_MIN (int)TOFF_MIN`](https://ponoor.com/en/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#setdecaymodeparam_intmotorid_intt_fast_intton_min_inttoff_min)
-- [`/getDecayModeParam (int)motorID`](https://ponoor.com/en/docs/step-series/osc-command-reference/voltage-and-current-mode-settings/#getdecaymodeparam_intmotorid)
+## Messages sent by STEP400 only
 
-### LIMIT input commands
+- [`/prohibitMotionOnLimitSw`](automatically-sent-messages-from-step-400_en.md#prohibitmotiononlimitsw) (int)motorID (int)enable
+- [`/tval`](automatically-sent-messages-from-step-400_en.md#tval) (int)motorID (int)holdTVAL (int)runTVAL (int)accTVAL (int)decTVAL
+- [`/tval_mA`](automatically-sent-messages-from-step-400_en.md#tval_ma) (int)motorID (float)holdTVAL_mA (float)runTVAL_mA (float)accTVAL_mA (float)decTVAL_mA
+- [`/decayModeParam`](automatically-sent-messages-from-step-400_en.md#decaymodeparam) (int)motorID (int)T_FAST (int)TON_MIN (int)TOFF_MIN
+- [`/limitSw`](automatically-sent-messages-from-step-400_en.md#limitsw) (int)motorID (int)swState (int)direction
+- [`/limitSwMode`](automatically-sent-messages-from-step-400_en.md#limitswmode) (int)motorID (int)swMode
 
-There are no LIMIT inputs in STEP800 (only HOME inputs), so following commands relate with LIMIT inputs are only available in STEP400.
+## Commands available on STEP800 only
 
-- [`/enableLimitSwReport (int)motorID (bool)enable`](https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#enablelimitswreport_intmotorid_boolenable)
-- [`/getLimitSw (int)motorID`](https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#getlimitsw_intmotorid)
-- [`/setLimitSwMode (int)motorID (bool)SW_MODE`](https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#setlimitswmode_intmotorid_boolsw_mode)
-- [`/getLimitSwMode (int)motorID`](https://ponoor.com/en/docs/step-series/osc-command-reference/home-limit-sensors/#getlimitswmode_intmotorid)
+None.
 
-### Other
+## Messages sent by STEP800 only
 
-- [`/getAdcVal (int)motorID`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#getadcval_intmotorid)  
-  ADC inputs of STEP800 are tied with GND so this command is not available in STEP800.
+None.
 
-## Commands which have different setting value
+## Commands with board-specific values
 
-### [`/setOverCurrentThreshold (int)motorID (int)OCD_TH`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#setovercurrentthreshold_intmotorid_intocd_th)
-
-This command specifies the `OCD_TH` register value directly but possible value ranges and corresponding currents are different between STEP400(PowerSTEP01) and STEP800(L6470) as following;
-
-| Model | OCD\_TH range | Corresponding current | Initial value |
+| Command | Argument | STEP400 | STEP800 |
 | --- | --- | --- | --- |
-| STEP400 | 0-31 | 312.5mA - 10A | 15 (5A) |
-| STEP800 | 0-15 | 375mA - 6A | 7 (3A) |
+| [`/setOverCurrentThreshold`](alarm-settings_en.md#setovercurrentthreshold) | OCD_TH (Range) | 0-31 | 0-15 |
+| [`/setOverCurrentThreshold`](alarm-settings_en.md#setovercurrentthreshold) | OCD_TH (Initial value) | 15 | 7 (firmware) / 15 (template) |
+| [`/setStallThreshold`](alarm-settings_en.md#setstallthreshold) | STALL_TH (Range) | 0-31 | 0-127 |
+| [`/setStallThreshold`](alarm-settings_en.md#setstallthreshold) | STALL_TH (Initial value) | 31 | 127 |
 
-### [`/setStallThreshold (int)motorID (int)STALL_TH`](https://ponoor.com/en/docs/step-series/osc-command-reference/alarm-settings/#setstallthreshold_intmotorid_intstall_th)
+## Messages with board-specific values
 
-This command specifies the `STALL_TH` register value directly but possible value ranges and corresponding currents are different between STEP400(PowerSTEP01) and STEP800(L6470) as following;
-
-| Model | STALL\_TH range | Corresponding current | Initial value |
+| Command | Argument | STEP400 | STEP800 |
 | --- | --- | --- | --- |
-| STEP400 | 0-31 | 312.5mA - 10A | 31 (10A) |
-| STEP800 | 0-127 | 31.25mA - 4A | 127 (4A) |
+| [`/overCurrentThreshold`](automatically-sent-messages-from-step-400_en.md#overcurrentthreshold) | overCurrentThreshold (Range) | 312.5-10000 | 375-6000 |
+| [`/stallThreshold`](automatically-sent-messages-from-step-400_en.md#stallthreshold) | stallThreshold (Range) | 312.5-10000 | 31.25-4000 |
 
-## Commands which have different response
+## Board-specific tables
 
-### [`/getStatus (int)motorID`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#getstatus_intmotorid)
+| Command | Description |
+| --- | --- |
+| [`/setOverCurrentThreshold`](alarm-settings_en.md#setovercurrentthreshold) | Overcurrent detection threshold |
+| [`/setStallThreshold`](alarm-settings_en.md#setstallthreshold) | Stall detection threshold |
+| [`/thermalStatus`](automatically-sent-messages-from-step-400_en.md#thermalstatus) | Thermal status |
 
-This command returns `STATUS` register of the motor driver. Information contained in the register is different between STEP400(PowerSTEP01) and STEP800(L6470). Please see the command reference for details.
+## Configuration items of STEP400 only
 
-### [`/getConfigRegister (int)motorID`](https://ponoor.com/en/docs/step-series/osc-command-reference/motordriver-settings/#getconfigregister_intmotorid)
+- [`alarmAndReport.reportLimitSwStatus`](../connections-and-settings/configuration-items_en.md#alarmandreport-reportlimitswstatus)
+- [`driverSettings.limitSwMode`](../connections-and-settings/configuration-items_en.md#driversettings-limitswmode)
+- [`driverSettings.prohibitMotionOnLimitSw`](../connections-and-settings/configuration-items_en.md#driversettings-prohibitmotiononlimitsw)
+- [`driverSettings.isCurrentMode`](../connections-and-settings/configuration-items_en.md#driversettings-iscurrentmode)
+- [`currentMode.TVAL_HOLD`](../connections-and-settings/configuration-items_en.md#currentmode-tval_hold)
+- [`currentMode.TVAL_RUN`](../connections-and-settings/configuration-items_en.md#currentmode-tval_run)
+- [`currentMode.TVAL_ACC`](../connections-and-settings/configuration-items_en.md#currentmode-tval_acc)
+- [`currentMode.TVAL_DEC`](../connections-and-settings/configuration-items_en.md#currentmode-tval_dec)
+- [`currentMode.T_FAST`](../connections-and-settings/configuration-items_en.md#currentmode-t_fast)
+- [`currentMode.TON_MIN`](../connections-and-settings/configuration-items_en.md#currentmode-ton_min)
+- [`currentMode.TOFF_MIN`](../connections-and-settings/configuration-items_en.md#currentmode-toff_min)
 
-This command returns `CONFIG` register of the motor driver. Information contained in the register is different between STEP400(PowerSTEP01) and STEP800(L6470). Please see the data sheets for details.
+## Configuration items of STEP800 only
+
+None.
+
+## Configuration items with board-specific values
+
+| Key | Description | STEP400 | STEP800 |
+| --- | --- | --- | --- |
+| [`information.targetProduct`](../connections-and-settings/configuration-items_en.md#information-targetproduct) | template | STEP400 | STEP800 |
+| [`network.mac`](../connections-and-settings/configuration-items_en.md#network-mac) | template | 60:95:CE:10:02:00 | 60:95:CE:10:03:00 |
+| [`alarmAndReport.OCThreshold`](../connections-and-settings/configuration-items_en.md#alarmandreport-octhreshold) | default | 15 | 7 |
+| [`alarmAndReport.OCThreshold`](../connections-and-settings/configuration-items_en.md#alarmandreport-octhreshold) | template | - | 15 |
+| [`driverSettings.slewRate`](../connections-and-settings/configuration-items_en.md#driversettings-slewrate) | default | 5 | 2 |
+| [`driverSettings.slewRate`](../connections-and-settings/configuration-items_en.md#driversettings-slewrate) | range | 0-5 | 0-2 |
+| [`voltageMode.STALL_TH`](../connections-and-settings/configuration-items_en.md#voltagemode-stall_th) | default | 31 | 127 |
