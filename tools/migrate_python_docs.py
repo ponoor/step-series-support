@@ -11,7 +11,10 @@ The old docstrings are split into paragraphs (blank-line separated blocks).
 
 - Tables (the `Executable Timing` table, the range / value tables of the arguments) are not moved:
   the timing table is written again by gen_python.py and the argument tables are added from the YAML when
-  the Sphinx documentation is built.
+  the Sphinx documentation is built. An old table is moved all the same if it says something in words that
+  the YAML does not (for example the STATUS bits table of `Status`); a table whose only difference is a number
+  is dropped, since the YAML has the current numbers. Tables that the YAML replaces on purpose are listed in
+  SUPERSEDED_TABLES.
 - A prose paragraph is dropped only if the YAML description says (almost) the same, i.e. if at least
   COVER of its content words are in the YAML text of that class or argument. Every other paragraph is moved
   unchanged to `_docstrings.py`; gen_python.py appends it to the text taken from the YAML.
@@ -39,6 +42,16 @@ import gen_python as gp  # noqa: E402
 from spec import Spec  # noqa: E402
 
 MODULES = ("commands", "responses")
+
+# Old tables that the spec replaces: the error names (the YAML lists the current ones as `values`) and the
+# thermal status tables (the YAML has them as `tables` of /thermalStatus).
+SUPERSEDED_TABLES = {
+    "responses.ErrorCommand", "responses.ErrorOSC",
+    "commands.EnableThermalStatusReport", "commands.GetThermalStatus", "responses.ThermalStatus",
+}
+STRUCTURAL = {"executable", "timing", "range", "description", "default", "valid", "controller", "motor",
+              "false", "true", "step", "steps", "s", "ms", "step400", "step800", "stepsel"}
+UNIT_OR_NUMBER = re.compile(r"[0-9.]+|x[0-9a-f]+|[0-9]+[a-f]|ma|c|a|n|v|s|ms|bit|bits")
 
 
 def read_old(lib: Path, ref: str, module: str) -> str:
@@ -85,11 +98,60 @@ def yaml_texts(gen: gp.Gen, spec: Spec) -> dict[str, dict]:
     return out
 
 
+def _strings(o):
+    if isinstance(o, dict):
+        for v in o.values():
+            yield from _strings(v)
+    elif isinstance(o, list):
+        for v in o:
+            yield from _strings(v)
+    elif o is not None:
+        yield str(o)
+
+
+def _words(text: str) -> set[str]:
+    out = set()
+    for w in re.findall(r"[a-z0-9_.+]+", text.lower().replace("-", " ").replace(",", "")):
+        out.add(w.strip(".").lstrip("0") or "0")
+    return out
+
+
+def item_words(spec: Spec, item: dict) -> set[str]:
+    """Every word of the YAML entry, its arguments and the messages it replies or reports."""
+    items = [item]
+    for key in ("response", "notifies"):
+        for r in item.get(key, []):
+            m = spec.message(r if isinstance(r, str) else r["message"])
+            if m:
+                items.append(m)
+    words: set[str] = set()
+    for it in items:
+        for s in _strings([it] + [spec.expand_arg(a) for a in it.get("args", [])]):
+            words |= _words(s)
+    for s in _strings(spec.timings):
+        words |= _words(s)
+    return words | {b.lower() for b in spec.boards}
+
+
+def table_says_more(table: str, words: set[str]) -> bool:
+    """True if the table has a word (not a number or a unit) that the YAML entry does not have."""
+    found = set()
+    for line in table.split("\n"):
+        if not re.match(r"^[+=\-\s]+$", line):
+            found |= _words(line.replace("|", " "))
+    missing = {w for w in found - words - STRUCTURAL if not UNIT_OR_NUMBER.fullmatch(w)}
+    return bool(missing)
+
+
 def build(lib: Path, ref: str) -> tuple[dict, list[dict]]:
     spec = Spec.load()
     compat = yaml.safe_load(gp.COMPAT_PATH.read_text(encoding="utf-8"))
     gen = gp.Gen(spec, compat, {})
     yt = yaml_texts(gen, spec)
+    items = {}
+    for mod, source, names in (("commands", spec.commands, gen.cmd_class), ("responses", spec.messages, gen.msg_class)):
+        for it in source:
+            items[f"{mod}.{names[it['address']]}"] = it
     overrides: dict[str, dict] = {}
     log: list[dict] = []
     for mod in MODULES:
@@ -103,7 +165,16 @@ def build(lib: Path, ref: str) -> tuple[dict, list[dict]]:
             for kind, fname, doc, ytext in targets:
                 for p in gp.paragraphs(doc):
                     if gp.is_table(p):
-                        log.append({"class": qual, "field": fname, "status": "table", "text": p})
+                        keep = (
+                            qual in items and qual not in SUPERSEDED_TABLES and "Executable Timing" not in p
+                            and table_says_more(p, item_words(spec, items[qual]))
+                        )
+                        if keep:
+                            slot = overrides.setdefault(qual, {"class": [], "fields": {}})
+                            (slot["class"] if kind == "class" else slot["fields"].setdefault(fname, [])).append(p)
+                            log.append({"class": qual, "field": fname, "status": "table-moved", "text": p})
+                        else:
+                            log.append({"class": qual, "field": fname, "status": "table", "text": p})
                         continue
                     r = gp.recall(p, ytext)
                     if gp.is_target(p) or r < gp.COVER:
@@ -164,7 +235,7 @@ def new_docs(lib: Path) -> dict[str, dict]:
 
 def check(lib: Path, ref: str, verbose: bool) -> int:
     new = new_docs(lib)
-    counts = {"verbatim": 0, "covered": 0, "missing": 0, "table": 0}
+    counts = {"verbatim": 0, "covered": 0, "missing": 0, "table kept": 0, "table replaced": 0}
     weak: list[str] = []
     missing: list[str] = []
     for mod in MODULES:
@@ -181,7 +252,7 @@ def check(lib: Path, ref: str, verbose: bool) -> int:
                 for p in gp.paragraphs(old_doc):
                     where = f"{mod}.{cname}" + (f".{fname}" if fname else "")
                     if gp.is_table(p):
-                        counts["table"] += 1
+                        counts["table kept" if p in new_paras else "table replaced"] += 1
                     elif p in new_paras:
                         counts["verbatim"] += 1
                     else:
