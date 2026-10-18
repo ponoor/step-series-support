@@ -116,6 +116,15 @@ class TestGenerate(unittest.TestCase):
             self.assertNotIn("Valid Range", text)
             self.assertNotIn("STEP400|1-4", text)
 
+    def test_step400_only_list_follows_the_yaml(self):
+        tree = ast.parse(self.out["commands.py"])
+        node = next(n for n in tree.body if isinstance(n, ast.AnnAssign) and n.target.id == "STEP400_ONLY")
+        names = [e.id for e in node.value.elts]
+        expected = [c["address"] for c in SPEC.commands if "STEP800" not in SPEC.boards_of(c)]
+        self.assertEqual([self.cmds[n]["address"] for n in names], expected)
+        self.assertIn("SetTval", names)
+        self.assertNotIn("SetMicrostepMode", names)
+
     def test_timing_table(self):
         self.assertIn("|Executable Timing|Always|", self.out["commands.py"])
 

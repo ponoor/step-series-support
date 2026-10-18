@@ -1,6 +1,5 @@
 """Messages received from the device."""
 
-
 import ast
 import re
 from dataclasses import dataclass as _dataclass

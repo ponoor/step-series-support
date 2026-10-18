@@ -166,7 +166,7 @@ def py_doc(blocks: list[str], indent: str) -> list[str]:
     body = "\n\n".join(blocks)
     body = body.replace("\\", "\\\\").replace('"""', '\\"\\"\\"')
     lines = body.split("\n")
-    if len(lines) == 1 and not lines[0].endswith('"') and len(indent) + len(lines[0]) + 6 <= 88:
+    if len(lines) == 1 and not lines[0].endswith('"'):
         return [f'{indent}"""{lines[0]}"""']
     out = [f'{indent}"""{lines[0]}']
     out += [(indent + ln) if ln else "" for ln in lines[1:]]
@@ -356,17 +356,30 @@ class Gen:
         orphans = [c for c in self.spec.commands if c.get("group") not in self.spec.groups]
         if orphans:
             raise ValueError("commands without a known group: " + ", ".join(c["address"] for c in orphans))
-        parts = [BANNER.rstrip("\n"), (TEMPLATES / "commands_header.py").read_text(encoding="utf-8").rstrip("\n")]
+        parts = [self.header("commands_header.py")]
         for gkey, g in self.spec.groups.items():
             cmds = [c for c in self.spec.commands if c.get("group") == gkey]
             if cmds:
                 parts.append(f"# {g['en']}")
                 parts += ["\n".join(self.command_class(c)) for c in cmds]
+        parts.append(self.board_lists())
         return "\n\n\n".join(parts).rstrip("\n") + "\n"
 
+    @staticmethod
+    def header(name: str) -> str:
+        """The banner and the hand-written start of a module (its docstring comes first)."""
+        return BANNER + (TEMPLATES / name).read_text(encoding="utf-8").rstrip("\n")
+
+    def board_lists(self) -> str:
+        """`STEP400_ONLY`: the commands the STEP800 does not have (STEP800 refuses them)."""
+        names = [self.cmd_class[c["address"]] for c in self.spec.commands if "STEP800" not in self.spec.boards_of(c)]
+        lines = ["# Commands that only the STEP400 has", "STEP400_ONLY: Tuple[Type[OSCCommand], ...] = ("]
+        lines += [f"    {n}," for n in names]
+        lines.append(")")
+        return "\n".join(lines)
+
     def responses_module(self) -> str:
-        parts = [BANNER.rstrip("\n"), (TEMPLATES / "responses_header.py").read_text(encoding="utf-8").rstrip("\n")]
-        parts.append("# Messages")
+        parts = [self.header("responses_header.py"), "# Messages"]
         parts += ["\n".join(self.message_class(m)) for m in self.spec.messages]
         return "\n\n\n".join(parts).rstrip("\n") + "\n"
 

@@ -13,9 +13,8 @@ shortcut to automatically register a callback to handle incoming
 responses from the device.
 """
 
-
 from dataclasses import asdict, dataclass, field
-from typing import Callable, Optional, Tuple
+from typing import Callable, Optional, Tuple, Type
 
 from pythonosc.osc_message import OscMessage
 from pythonosc.osc_message_builder import OscMessageBuilder
