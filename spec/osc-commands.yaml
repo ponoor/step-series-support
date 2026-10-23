@@ -25,11 +25,11 @@ timings:
 groups:
   system: {page: system-settings, en: System settings, ja: ボード全体の設定}
   driver: {page: motor-driver-settings, en: Motor driver settings, ja: モータドライバの設定}
-  alarm: {page: alarm-settings, en: Alarm settings, ja: アラーム}
+  alarm: {page: alarm-settings, en: Alarm settings, ja: アラームの設定}
   drive_mode: {page: voltage-and-current-mode-settings, en: Voltage and current mode settings, ja: 電圧モードと電流モード}
   speed_profile: {page: speed-profile, en: Speed profile, ja: スピードプロファイル}
   homing: {page: homing, en: Homing, ja: 原点復帰}
-  sensors: {page: home-and-limit-sensors, en: HOME and LIMIT sensors, ja: HOME/LIMITスイッチ}
+  sensors: {page: home-and-limit-sensors, en: HOME and LIMIT switches, ja: HOME/LIMITスイッチ}
   position: {page: position-management, en: Position management, ja: 座標}
   motion: {page: motor-control, en: Motor control, ja: モータの回転・停止}
   brake: {page: brake, en: Electromagnetic brake, ja: 電磁ブレーキ}
@@ -293,6 +293,11 @@ settings:
     per_motor: true
     default: false
     commands: [/enableStallReport]
+    description:
+      en: |-
+        Stall detection lets the driver detect, from the motor current, that the motor can no longer turn against the load. Find a threshold ([[/setStallThreshold]]) as close as possible to, and slightly above, the current actually flowing. A small loss of steps cannot be detected, but a large position error may be.
+      ja: |-
+        ストール検出は、モータが負荷に負けて回れなくなった状態を、ドライバが電流から検出する機能です。閾値（[[/setStallThreshold]]）は、実際に流れている電流にできるだけ近く、少し上になるように探って決めます。脱調（ステップのずれ）程度の小さなずれは検出できませんが、位置が大きくずれたときには検出できることがあります。
 
   - key: alarmAndReport.reportPositionInterval
     section: alarmAndReport
@@ -307,11 +312,11 @@ settings:
       en: |-
         The interval of the position report ([[/position]]) of each motor. 0 turns the report off.
 
-        The value is not range-checked when the configuration file is read (or written over USB serial): it is kept in a 16-bit variable, so a value outside 0-65535 wraps around (65536 becomes 0, which turns the report off; -1 becomes 65535). [[/setPositionReportInterval]] rejects a value above 65535 with `CommandIgnored`, and a negative value turns the report off.
+        The value is not range-checked when the configuration file is read (or written over USB serial). An out-of-range value wraps around: the value after the maximum is 0 (65536 becomes 0, which turns the report off; 65537 becomes 1; -1 becomes 65535). [[/setPositionReportInterval]] rejects a value above 65535 with `CommandIgnored`, and a negative value turns the report off.
       ja: |-
         各モータの位置を通知する間隔（[[/position]]）です。0 にすると通知を止めます。
 
-        設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。値は16ビットの変数に保持されるため、0〜65535 の範囲外の値は一周します（65536 は 0 になって通知が止まり、-1 は 65535 になります）。[[/setPositionReportInterval]] は 65535 を超える値を `CommandIgnored` で拒否し、負の値では通知を止めます。
+        設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。範囲外の値は、最大値の次を0として数え直した値になります（65536は0になって位置レポートが止まり、65537は1、-1は65535になります）。[[/setPositionReportInterval]] は 65535 を超える値を `CommandIgnored` で拒否し、負の値では通知を止めます。
 
   - key: alarmAndReport.reportPositionListInterval
     section: alarmAndReport
@@ -325,11 +330,11 @@ settings:
       en: |-
         The interval of the position list report ([[/positionList]]). 0 turns the report off. When it is greater than 0, the position report of each motor ([[/position]]) is turned off.
 
-        The value is not range-checked when the configuration file is read (or written over USB serial): it is kept in a 16-bit variable, so a value outside 0-65535 wraps around (65536 becomes 0, -1 becomes 65535). [[/setPositionListReportInterval]] rejects a value above 65535 with `CommandIgnored`.
+        The value is not range-checked when the configuration file is read (or written over USB serial). An out-of-range value wraps around: the value after the maximum is 0 (65536 becomes 0, 65537 becomes 1, and -1 becomes 65535). [[/setPositionListReportInterval]] rejects a value above 65535 with `CommandIgnored`.
       ja: |-
         位置のリスト通知（[[/positionList]]）の間隔です。0 にすると通知を止めます。0 より大きくすると、モータごとの位置通知（[[/position]]）は止まります。
 
-        設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。値は16ビットの変数に保持されるため、0〜65535 の範囲外の値は一周します（65536 は 0、-1 は 65535 になります）。[[/setPositionListReportInterval]] は 65535 を超える値を `CommandIgnored` で拒否します。
+        設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。範囲外の値は、最大値の次を0として数え直した値になります（65536は0、65537は1、-1は65535になります）。[[/setPositionListReportInterval]] は 65535 を超える値を `CommandIgnored` で拒否します。
 
   - key: alarmAndReport.OCThreshold
     section: alarmAndReport
@@ -503,11 +508,11 @@ settings:
       en: |-
         The time to wait for the brake to release or to engage. See [[/setBrakeTransitionDuration]].
 
-        The value is not range-checked when the configuration file is read (or written over USB serial): it is kept in a 16-bit variable, so a value outside 0-65535 wraps around (65536 becomes 0, -1 becomes 65535). [[/setBrakeTransitionDuration]] rejects such a value with `CommandIgnored`.
+        The value is not range-checked when the configuration file is read (or written over USB serial). An out-of-range value wraps around: the value after the maximum is 0 (65536 becomes 0, 65537 becomes 1, and -1 becomes 65535). [[/setBrakeTransitionDuration]] rejects such a value with `CommandIgnored`.
       ja: |-
         電磁ブレーキの解放や保持を待つ時間です。[[/setBrakeTransitionDuration]] を参照してください。
 
-        設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。値は16ビットの変数に保持されるため、0〜65535 の範囲外の値は一周します（65536 は 0、-1 は 65535 になります）。[[/setBrakeTransitionDuration]] はこのような値を `CommandIgnored` で拒否します。
+        設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。範囲外の値は、最大値の次を0として数え直した値になります（65536は0、65537は1、-1は65535になります）。[[/setBrakeTransitionDuration]] はこのような値を `CommandIgnored` で拒否します。
 
   # --- speedProfile ---
   - key: speedProfile.acc
@@ -927,7 +932,7 @@ commands:
         range: [0.0, 976.3]
         unit: step/s
         setting: voltageMode.lowSpeedOptimize
-        description: {en: Low speed optimization threshold, ja: Low speed optimization threshold}
+        description: {en: Low speed optimization threshold, ja: 低速最適化の閾値}
     timing: always
     description:
       en: |-
@@ -1277,22 +1282,22 @@ commands:
         type: int
         range: {STEP400: [0, 31], STEP800: [0, 15]}
         setting: alarmAndReport.OCThreshold
-        description: {en: Overcurrent detection threshold, ja: Overcurrent detection threshold}
+        description: {en: Overcurrent detection threshold, ja: 過電流検出の閾値}
     timing: always
     description:
       en: |-
         Sets the overcurrent threshold. The setting value range and corresponding currents are different between STEP400(PowerSTEP01) and STEP800(L6470).
 
-        A value above the range is not rejected: only the low bits are used (STEP400: 0x1F, STEP800: 0x0F), so the value wraps around (for example 16 becomes 0 on STEP800).
+        A value above the range is not rejected; it wraps around: the value after the maximum is 0 (on STEP800, 16 becomes 0 and 17 becomes 1).
       ja: |-
         過電流の閾値を設定します。STEP400とSTEP800では設定値の範囲と対応する電流が異なっています。
 
-        範囲を超える値は拒否されません。下位ビットだけが使われるため（STEP400: 0x1F、STEP800: 0x0F）、値は一周します（たとえば STEP800 で 16 は 0 になります）。
+        範囲を超える値は拒否されず、最大値の次を0として数え直した値になります（STEP800で16は0、17は1）。
     response: [/overCurrentThreshold]
     see_also: [/getOverCurrentThreshold, /enableOverCurrentReport]
     tables:
-      - title: Overcurrent detection threshold
-        columns: [OCD_TH, Overcurrent detection threshold]
+      - title: {en: Overcurrent detection threshold, ja: 過電流検出の閾値}
+        columns: [OCD_TH, {en: Overcurrent detection threshold, ja: 過電流検出の閾値}]
         rows:
           STEP400:
             - [0, 312.5mA]
@@ -1339,24 +1344,28 @@ commands:
         type: int
         range: {STEP400: [0, 31], STEP800: [0, 127]}
         setting: voltageMode.STALL_TH
-        description: {en: Stall detection threshold, ja: Stall detection threshold}
+        description: {en: Stall detection threshold, ja: ストール検出の閾値}
     timing: always
     description:
       en: |-
         Sets the threshold for stall detection. The setting value range and corresponding currents are different between STEP400(PowerSTEP01) and STEP800(L6470).
 
-        A value above the range is not rejected: only the low bits are used (STEP400: 0x1F, STEP800: 0x7F), so the value wraps around (for example 128 becomes 0 on STEP800).
+        Stall detection lets the driver detect, from the motor current, that the motor can no longer turn against the load. Find a threshold (`/setStallThreshold`) as close as possible to, and slightly above, the current actually flowing. A small loss of steps cannot be detected, but a large position error may be.
+
+        A value above the range is not rejected; it wraps around: the value after the maximum is 0 (on STEP800, 128 becomes 0 and 129 becomes 1).
       ja: |-
         ストール検出の閾値を設定します。STEP400とSTEP800で設定する値の範囲は異なります。
 
-        範囲を超える値は拒否されません。下位ビットだけが使われるため（STEP400: 0x1F、STEP800: 0x7F）、値は一周します（たとえば STEP800 で 128 は 0 になります）。
+        ストール検出は、モータが負荷に負けて回れなくなった状態を、ドライバが電流から検出する機能です。閾値（`/setStallThreshold`）は、実際に流れている電流にできるだけ近く、少し上になるように探って決めます。脱調（ステップのずれ）程度の小さなずれは検出できませんが、位置が大きくずれたときには検出できることがあります。
+
+        範囲を超える値は拒否されず、最大値の次を0として数え直した値になります（STEP800で128は0、129は1）。
     response: [/stallThreshold]
     changes:
       - {version: "2.2.0", en: "Also changes the saved STALL_TH (`/saveConfig`, `/resetMotorDriver`). Before, it changed the register only.", ja: "保存される STALL_TH（`/saveConfig`、`/resetMotorDriver`）も変更します。以前は、レジスタだけを変更していました。"}
     see_also: [/getStallThreshold, /enableStallReport]
     tables:
-      - title: Stall detection threshold
-        columns: [STALL_TH, Stall detection threshold]
+      - title: {en: Stall detection threshold, ja: ストール検出の閾値}
+        columns: [STALL_TH, {en: Stall detection threshold, ja: ストール検出の閾値}]
         rows:
           STEP400:
             - [0, 312.5mA]
@@ -1391,7 +1400,7 @@ commands:
           - {value: 0, en: Allow, ja: 許可}
     timing: always
     description:
-      en: Prohibits any motion commands towards the origin point when Home sensor is detected. The direction to the origin point can be configured through the configuration tool or by the `/setHomingDirection` command.
+      en: Prohibits any motion commands towards the origin point when Home switch is detected. The direction to the origin point can be configured through the configuration tool or by the `/setHomingDirection` command.
       ja: HOMEスイッチがオンの状態で、原点復帰方向へのモーションコマンドを禁止します。原点復帰方向は configTool や `/setHomingDirection`で設定できます。
     changes:
       - {version: "2.2.0", en: "The automatic hard stop at the home switch is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver).", ja: "ドライバが 無励磁（HiZ） のモータには、HOMEスイッチでの自動の即停止を送りません。電磁ブレーキが無効でも同じです（即停止は 無励磁 のドライバを励磁してしまうため）。"}
@@ -1402,7 +1411,7 @@ commands:
     args: [{use: motorID}]
     timing: always
     description:
-      en: Returns whether the motion command towards the origin point is prohibited when Home sensor is detected.
+      en: Returns whether the motion command towards the origin point is prohibited when Home switch is detected.
       ja: HOMEスイッチがオンの状態で、原点復帰方向へのモーションコマンドが禁止されているかどうかを返します。
     response: [/prohibitMotionOnHomeSw]
 
@@ -1418,7 +1427,7 @@ commands:
     boards: [STEP400]
     timing: always
     description:
-      en: Prohibits any motion commands towards the leaving direction from origin point, when the Limit sensor is detected. The direction to the origin point can be configured through the configuration tool or by the `/setHomingDirection` command.
+      en: Prohibits any motion commands towards the leaving direction from origin point, when the Limit switch is detected. The direction to the origin point can be configured through the configuration tool or by the `/setHomingDirection` command.
       ja: LIMITスイッチがオンの状態で、原点復帰方向の逆方向へのモーションコマンドを禁止します。原点復帰方向は configTool や `/setHomingDirection`で設定できます。
     see_also: [/getProhibitMotionOnLimitSw, /setHomingDirection]
 
@@ -1428,7 +1437,7 @@ commands:
     boards: [STEP400]
     timing: always
     description:
-      en: Returns whether the motion command towards reverse direction to the origin point is prohibited when Limit sensor is detected.
+      en: Returns whether the motion command towards reverse direction to the origin point is prohibited when Limit switch is detected.
       ja: LIMITスイッチがオンの状態で、原点復帰方向の逆方向へのモーションコマンドが禁止されているかどうかを返します。
     response: [/prohibitMotionOnLimitSw]
 
@@ -1949,9 +1958,13 @@ commands:
       en: |-
         Sets the acc, dec, and maxSpeed of the speed profile together.
 
+        The speed profile is the set of acceleration, deceleration and maximum speed held in the motor driver. It is not sent with each command: it applies to every motion after it is written ([[/run]], [[/goTo]] and so on). The minimum speed is set separately with [[/setMinSpeed]].
+
         ACC and DEC are rounded to the nearest register value, so the written value can differ by 1 LSB. MAX_SPEED alone is writable at any time, but nothing is written to a motor that replies with `MotorNotStopped`. A value outside the range is limited by the driver library. On STEP400, a maximum speed of 0 is written as 1 (the register value 0 is reserved).
       ja: |-
-        スピードプロファイルのacc, dec, maxSpeedをまとめて設定します。
+        スピードプロファイルの加速度（`acc`）、減速度（`dec`）、最大速度（`maxSpeed`）をまとめて設定します。
+
+        スピードプロファイルは、モータドライバに書き込んでおく加速度・減速度・最大速度の組です。コマンドごとに送るものではなく、書き込んだ後のすべての動作（[[/run]]、[[/goTo]]など）に使われます。最小速度は[[/setMinSpeed]]で別に設定します。
 
         ACC と DEC は最も近いレジスタ値に丸められるため、書き込まれる値は 1 LSB ずれることがあります。MAX_SPEED だけはいつでも書き込めますが、`MotorNotStopped` を返したモータには何も書き込まれません。範囲外の値は、ドライバライブラリによって制限されます。STEP400 では、最大速度 0 は 1 として書き込まれます（レジスタ値 0 は予約されています）。
     errors: [MotorNotStopped]
@@ -2314,9 +2327,9 @@ commands:
     timing: always
     description:
       en: |
-        Start the homing movement. Move towards origin direction, stop when the HOME switch is activated. Then the motor reverses the direction and move slowly, halts when the HOME sensor is not active anymore, then reset location to zero at the current point.
+        Start the homing movement. Move towards origin direction, stop when the HOME switch is activated. Then the motor reverses the direction and move slowly, halts when the HOME switch is not active anymore, then reset location to zero at the current point.
 
-        This is equivalent to the following actions of executing [[/goUntil]] command, and after the motor stops on HOME sensor activation, execute [[/releaseSw]] command.
+        This is equivalent to the following actions of executing [[/goUntil]] command, and after the motor stops on HOME switch activation, execute [[/releaseSw]] command.
 
         The `homingDirection` and the `homingSpeed` can be set by [[/setHomingDirection]] and [[/setHomingSpeed]] commands, as well as configuring from the configuration tool.
 
@@ -2383,7 +2396,7 @@ commands:
         range: [0.0, 15610.0]
         unit: step/s
         setting: driverSettings.homingSpeed
-        description: {en: homingSpeed, ja: homingSpeed}
+        description: {en: homing speed, ja: 原点復帰の速度}
     timing: always
     description:
       en: |-
@@ -2600,7 +2613,7 @@ commands:
         values:
           - {value: 0, en: HardStop interrupt (stop immediately), ja: HardStop interrupt （即停止する）}
           - {value: 1, en: User disposal (not stop), ja: User disposal （停止しない）}
-        description: {en: Switch mode, ja: Switch mode}
+        description: {en: Switch mode, ja: スイッチがオンになったときの動作}
     timing: hiz
     description:
       en: |-
@@ -2636,7 +2649,7 @@ commands:
         values:
           - {value: 0, en: HardStop interrupt (Immediate stop), ja: HardStop interrupt （即停止する）}
           - {value: 1, en: User disposal (Does not stop), ja: User disposal （停止しない）}
-        description: {en: Switch mode, ja: Switch mode}
+        description: {en: Switch mode, ja: スイッチがオンになったときの動作}
     boards: [STEP400]
     timing: always
     description:
@@ -2807,7 +2820,7 @@ commands:
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     changes:
       - {version: "2.2.0", en: "Judges its direction correctly when the home switch or the limit switch prohibits a motion ([[/setProhibitMotionOnHomeSw]], [[/setProhibitMotionOnLimitSw]]): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.", ja: "HOMEスイッチまたは LIMITスイッチが動作を禁止する場合（[[/setProhibitMotionOnHomeSw]]、[[/setProhibitMotionOnLimitSw]]）の方向を、正しく判定します。目標との 22 ビットの差の符号で決まり、ドライバが進む向き（最短経路）と同じです。以前は、目標が 2048 ステップ未満の距離にあると方向が逆になり（スイッチから離れる短い移動が `HomeSwActivating` / `LimitSwActivating` で拒否され、スイッチに向かう短い移動が開始されていました）、2^21 ステップを超えるとまた誤っていました。"}
-      - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched warning flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: "BUSY のモータでは、ラッチされたフラグを消さない GetParam で STATUS レジスタを読みます。以前は GetStatus で読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo` など）が失われることがありました。"}
+      - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: "BUSY のモータでは、ラッチされたフラグを消さない GetParam で STATUS レジスタを読みます。以前は GetStatus で読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo` など）が失われることがありました。"}
 
   - address: /goMark
     group: position
@@ -2819,7 +2832,7 @@ commands:
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     changes:
       - {version: "2.2.0", en: "Judges its direction correctly when the home switch or the limit switch prohibits a motion ([[/setProhibitMotionOnHomeSw]], [[/setProhibitMotionOnLimitSw]]): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.", ja: "HOMEスイッチまたは LIMITスイッチが動作を禁止する場合（[[/setProhibitMotionOnHomeSw]]、[[/setProhibitMotionOnLimitSw]]）の方向を、正しく判定します。目標との 22 ビットの差の符号で決まり、ドライバが進む向き（最短経路）と同じです。以前は、目標が 2048 ステップ未満の距離にあると方向が逆になり（スイッチから離れる短い移動が `HomeSwActivating` / `LimitSwActivating` で拒否され、スイッチに向かう短い移動が開始されていました）、2^21 ステップを超えるとまた誤っていました。"}
-      - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched warning flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: "BUSY のモータでは、ラッチされたフラグを消さない GetParam で STATUS レジスタを読みます。以前は GetStatus で読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo` など）が失われることがありました。"}
+      - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: "BUSY のモータでは、ラッチされたフラグを消さない GetParam で STATUS レジスタを読みます。以前は GetStatus で読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo` など）が失われることがありました。"}
     see_also: [/setMark]
 
   # ---------------------------------------------------------------------------
@@ -2897,7 +2910,7 @@ commands:
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     changes:
       - {version: "2.2.0", en: "Judges its direction correctly when the home switch or the limit switch prohibits a motion ([[/setProhibitMotionOnHomeSw]], [[/setProhibitMotionOnLimitSw]]): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.", ja: "HOMEスイッチまたは LIMITスイッチが動作を禁止する場合（[[/setProhibitMotionOnHomeSw]]、[[/setProhibitMotionOnLimitSw]]）の方向を、正しく判定します。目標との 22 ビットの差の符号で決まり、ドライバが進む向き（最短経路）と同じです。以前は、目標が 2048 ステップ未満の距離にあると方向が逆になり（スイッチから離れる短い移動が `HomeSwActivating` / `LimitSwActivating` で拒否され、スイッチに向かう短い移動が開始されていました）、2^21 ステップを超えるとまた誤っていました。"}
-      - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched warning flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: "BUSY のモータでは、ラッチされたフラグを消さない GetParam で STATUS レジスタを読みます。以前は GetStatus で読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo` など）が失われることがありました。"}
+      - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: "BUSY のモータでは、ラッチされたフラグを消さない GetParam で STATUS レジスタを読みます。以前は GetStatus で読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo` など）が失われることがありました。"}
     see_also: [/goToDir, /combine/goTo]
 
   - address: /goToDir
@@ -2923,7 +2936,7 @@ commands:
         範囲外の位置は拒否されません。4,194,303 を超える位置は、ドライバライブラリによって 4,194,303 に制限され、ドライバはこれを -1 として読みます。それ以外の位置は、下位 22 ビットだけが使われ、符号付きの数として読まれます。2,097,152 は -2,097,152 に、-2,097,153 は 2,097,151 になります。
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     changes:
-      - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched warning flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: "BUSY のモータでは、ラッチされたフラグを消さない GetParam で STATUS レジスタを読みます。以前は GetStatus で読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo` など）が失われることがありました。"}
+      - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: "BUSY のモータでは、ラッチされたフラグを消さない GetParam で STATUS レジスタを読みます。以前は GetStatus で読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo` など）が失われることがありました。"}
     see_also: [/goTo, /combine/goToDir]
 
   - address: /softStop
@@ -3350,7 +3363,7 @@ commands:
         0〜65535 の範囲外の値には `CommandIgnored` を返し、設定は変わりません。ブレーキは 5 ms ごとに処理されるため、[[/activate]] の後の解放は、設定した時間の 0〜5 ms 後になります。
     errors: [CommandIgnored]
     changes:
-      - {version: "2.2.0", en: "A value outside 0-65535 replies `/error/command CommandIgnored` and keeps the setting. Before, the value wrapped around.", ja: "0〜65535 の範囲外の値には `/error/command CommandIgnored` を返し、設定は変わりません。以前は、値が一周していました。"}
+      - {version: "2.2.0", en: "A value outside 0-65535 replies `/error/command CommandIgnored` and keeps the setting. Before, the value was taken as a 16-bit unsigned integer, so only its lower 16 bits were used (65536 became 0, -1 became 65535).", ja: "0〜65535の範囲外の値には`/error/command CommandIgnored`を返し、設定は変わりません。以前は、値が16ビットの符号なし整数として扱われ、下位16ビットだけが使われていました（65536は0、-1は65535になっていました）。"}
       - {version: "2.2.0", en: "The brake times are in 5 ms steps: the release after `/activate 1` comes 0-5 ms after `brakeTransitionDuration` (measured 99.8-105.4 ms for 100 ms; before 99.8-107.6 ms), and the engage after a stop or a HiZ is judged at the next status read.", ja: "ブレーキの時間は 5 ms 単位です。`/activate 1` の後の解放は、`brakeTransitionDuration` の 0〜5 ms 後になります（100 ms の設定で実測 99.8〜105.4 ms。以前は 99.8〜107.6 ms）。停止や 無励磁（HiZ） の後の保持は、次のSTATUSレジスタの読み出しで判定されます。"}
     see_also: [/getBrakeTransitionDuration]
 
@@ -3591,7 +3604,7 @@ messages:
         type: float
         range: [0.0, 976.3]
         unit: step/s
-        description: {en: Low speed optimization threshold, ja: Low speed optimization threshold}
+        description: {en: Low speed optimization threshold, ja: 低速最適化の閾値}
       - name: optimizationEnabled
         type: int
         values:
@@ -3637,7 +3650,7 @@ messages:
           - {value: 1, en: Acceleration, ja: 加速中}
           - {value: 2, en: Deceleration, ja: 減速中}
           - {value: 3, en: Constant speed, ja: 一定速運転中}
-        description: {en: Motor status, ja: Motor status}
+        description: {en: Motor status, ja: モータの状態}
 
   - address: /position
     args:
@@ -3703,20 +3716,20 @@ messages:
       - name: thermalStatus
         type: int
         range: [0, 3]
-        description: {en: Thermal status, ja: Thermal status}
+        description: {en: Thermal status, ja: 温度の状態}
     tables:
-      - title: Thermal status
-        columns: [thermalStatus, Thermal status, {en: Set condition, ja: 発生条件}, {en: Release condition, ja: 解除条件}]
+      - title: {en: Thermal status, ja: 温度の状態}
+        columns: [thermalStatus, {en: Thermal status, ja: 温度の状態}, {en: Set condition, ja: 発生条件}, {en: Release condition, ja: 解除条件}, {en: Description, ja: 説明}]
         rows:
           STEP400:
-            - [0, {en: Normal, ja: 通常}, "-", "-"]
-            - [1, Warning, 135℃, 125℃]
-            - [2, Bridge shutdown, 155℃, 145℃]
-            - [3, Device shutdown, 170℃, 130℃]
+            - [0, Normal, "-", "-", {en: Normal operation, ja: 通常}]
+            - [1, Warning, 135℃, 125℃, {en: Thermal warning. Operation is not limited., ja: 温度警告。動作は制限されません。}]
+            - [2, Bridge shutdown, 155℃, 145℃, {en: Thermal shutdown. The bridges are turned off., ja: 過熱遮断。ブリッジを止めます。}]
+            - [3, Device shutdown, 170℃, 130℃, {en: Thermal shutdown. The internal regulators are also turned off., ja: 過熱遮断。内部の電源も止めます。}]
           STEP800:
-            - [0, {en: Normal, ja: 通常}, "-", "-"]
-            - [1, Warning, 130℃, 130℃]
-            - [2, Bridge shutdown, 160℃, 130℃]
+            - [0, Normal, "-", "-", {en: Normal operation, ja: 通常}]
+            - [1, Warning, 130℃, 130℃, {en: Thermal warning. Operation is not limited., ja: 温度警告。動作は制限されません。}]
+            - [2, Bridge shutdown, 160℃, 130℃, {en: Thermal shutdown. The bridges are turned off., ja: 過熱遮断。ブリッジを止めます。}]
 
   - address: /overCurrent
     args:
@@ -3743,7 +3756,9 @@ messages:
     description:
       en: |-
         Sent at once when the stall condition starts (if no such report of the motor went out in the last 200 ms) and then, while it lasts, at most every 200 ms per motor. Detections within the 200 ms are not lost: they give one message at the end of the interval. Detections while the report is disabled ([[/enableStallReport]]) are not sent later.
-      ja: "ストールの状態が始まったときにすぐ送信し（直近 200 ms にそのモータの同種の通知がなかった場合）、状態が続く間はモータごとに最短 200 ms の間隔で送信します。200 ms の間の検出は失われず、その間隔の終わりに 1 つのメッセージとして送信されます。通知が無効の間（[[/enableStallReport]]）の検出は、後から送信されません。"
+
+        Stall detection lets the driver detect, from the motor current, that the motor can no longer turn against the load. Find a threshold ([[/setStallThreshold]]) as close as possible to, and slightly above, the current actually flowing. A small loss of steps cannot be detected, but a large position error may be.
+      ja: "ストールの状態が始まったときにすぐ送信し（直近 200 ms にそのモータの同種の通知がなかった場合）、状態が続く間はモータごとに最短 200 ms の間隔で送信します。200 ms の間の検出は失われず、その間隔の終わりに 1 つのメッセージとして送信されます。通知が無効の間（[[/enableStallReport]]）の検出は、後から送信されません。\n\nストール検出は、モータが負荷に負けて回れなくなった状態を、ドライバが電流から検出する機能です。閾値（[[/setStallThreshold]]）は、実際に流れている電流にできるだけ近く、少し上になるように探って決めます。脱調（ステップのずれ）程度の小さなずれは検出できませんが、位置が大きくずれたときには検出できることがあります。"
     changes:
       - {version: "2.2.0", en: "Sent at once when the condition starts (if no such report of the motor went out in the last 200 ms) and then, while it lasts, at most every 200 ms per motor. Before, it was sent at every status read while the condition lasted (every 10 ms). The message is unchanged.", ja: "状態が始まったときにすぐ送信し（直近 200 ms にそのモータの同種の通知がなかった場合）、状態が続く間はモータごとに最短 200 ms の間隔で送信します。以前は、状態が続く間、STATUSレジスタを読み出すたびに（10 ms ごとに）送信していました。メッセージ自体は変わりません。"}
 
@@ -3946,10 +3961,10 @@ messages:
       - name: homingStatus
         type: int
         range: [0, 4]
-        description: {en: Homing Status, ja: Homing Status}
+        description: {en: Homing status, ja: 原点復帰の状態}
     tables:
-      - title: Homing Status
-        columns: [homingStatus, Homing Status, {en: Description, ja: 説明}]
+      - title: {en: Homing status, ja: 原点復帰の状態}
+        columns: [homingStatus, {en: Homing status, ja: 原点復帰の状態}, {en: Description, ja: 説明}]
         rows:
           - [0, HOMING_UNDEFINED, {en: Not yet executing homing movement, ja: 原点復帰をまだしていない状態}]
           - [1, HOMING_GOUNTIL, {en: Executing `/goUntil`, ja: "`/goUntil`実行中"}]
@@ -3973,7 +3988,7 @@ messages:
         type: float
         range: [0.0, 15610.0]
         unit: step/s
-        description: {en: Homing Speed, ja: Homing Speed}
+        description: {en: homing speed, ja: 原点復帰の速度}
 
   - address: /goUntilTimeout
     args:
@@ -4196,11 +4211,11 @@ messages:
               - {version: "2.2.0", en: "A motor ID outside 0-255 is replied with the value sent. Before, 257 and 511 were read as 1 and 255.", ja: "0〜255 の範囲外のモータ ID は、送信された値のまま返されます。以前は、257 と 511 が 1 と 255 として読まれていました。"}
           - {value: BrakeEngaged, en: "A motion command was sent while the electromagnetic brake was active. Also sent for `/enableServoMode 1` and `/homing` while the brake is engaged, releasing or engaging (not while stopping or after `/free`).", ja: "電磁ブレーキが効いた状態のままモーションコマンドを送信した。ブレーキが保持されている間、解放中、保持への移行中の `/enableServoMode 1` と `/homing` でも送信される（停止処理中と `/free` の後は除く）。"}
           - value: HomeSwActivating
-            en: Movement from home sensor position towards the origin point. Also sent by `/goUntil` and `/goUntilRaw` when the home switch is already activated.
+            en: Movement from home switch position towards the origin point. Also sent by `/goUntil` and `/goUntilRaw` when the home switch is already activated.
             ja: "HOMEスイッチがオンの状態から原点復帰方向に移動しようとした。HOMEスイッチがすでにオンのときの `/goUntil` と `/goUntilRaw` でも送信される。"
             changes:
               - {version: "2.2.0", en: "Sent by `/goUntil` and `/goUntilRaw` when the home switch is already activated. It was sent as `HomeSwActivated` before.", ja: "`/goUntil` と `/goUntilRaw` が、HOMEスイッチがすでにオンのときに送信します。以前は `HomeSwActivated` として送信されていました。"}
-          - {value: LimitSwActivating, boards: [STEP400], en: Movement from limit sensor position towards the opposite direction from origin., ja: LIMITスイッチがオンの状態から原点復帰方向の逆向きに移動しようとした。}
+          - {value: LimitSwActivating, boards: [STEP400], en: Movement from limit switch position towards the opposite direction from origin., ja: LIMITスイッチがオンの状態から原点復帰方向の逆向きに移動しようとした。}
           - {value: GoUntilTimeout, en: Timeout while executing `/goUntil` command., ja: "`/goUntil`コマンド実行中にタイムアウトした。"}
           - {value: ReleaseSwTimeout, en: Timeout while executing `/releaseSw` command., ja: "`/releaseSw`コマンド実行中にタイムアウトした。"}
           - value: InServoMode

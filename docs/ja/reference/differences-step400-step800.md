@@ -67,9 +67,9 @@ lang: ja
 
 | コマンド | 説明 |
 | --- | --- |
-| [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | Overcurrent detection threshold |
-| [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | Stall detection threshold |
-| [`/thermalStatus`](automatically-sent-messages.md#thermalstatus) | Thermal status |
+| [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | 過電流検出の閾値 |
+| [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | ストール検出の閾値 |
+| [`/thermalStatus`](automatically-sent-messages.md#thermalstatus) | 温度の状態 |
 
 ## STEP400 のみの設定項目
 

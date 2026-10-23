@@ -46,7 +46,7 @@ lang: ja
 | [`/resetMotorDriver`](motor-driver-settings.md#resetmotordriver) | (int)motorID | ✓ | ✓ |  |
 | [`/getStatusList`](motor-driver-settings.md#getstatuslist) | - | ✓ | ✓ |  |
 
-## アラーム
+## アラームの設定
 
 | コマンド | アーギュメント | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |

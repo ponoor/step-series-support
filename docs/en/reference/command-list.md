@@ -128,7 +128,7 @@ All OSC commands in the order of the reference pages. Click a command to go to i
 | [`/setReleaseSwTimeout`](homing.md#setreleaseswtimeout) | (int)motorID (int)timeOut | ✓ | ✓ |  |
 | [`/getReleaseSwTimeout`](homing.md#getreleaseswtimeout) | (int)motorID | ✓ | ✓ |  |
 
-## HOME and LIMIT sensors
+## HOME and LIMIT switches
 
 | Command | Arguments | STEP400 | STEP800 | Since |
 | --- | --- | --- | --- | --- |
