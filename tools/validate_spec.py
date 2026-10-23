@@ -10,6 +10,12 @@ Checks
     settings.*.commands (-> commands), errors (-> values of /error/command)
   - duplicated addresses and setting keys
   - keys of board-specific values are boards defined in `boards`
+  - Japanese wording (spec/glossary_ja.yaml): words to avoid, and a space between an ASCII
+    letter/digit and a Japanese character. Checked in every `ja` text of the spec, in docs/ja/**/*.md
+    (not the pages in exclude_docs, and not the pages generated from the spec), in the Japanese
+    nav_translations of mkdocs.yml and in the Japanese fixed texts of tools/generate.py.
+    Inline code, code blocks, [[...]] links, URLs, HTML comments and generated blocks are left out
+    (code and links count as one ASCII word for the spacing check).
 Warnings (not failures): empty texts (missing Japanese etc.), values with en but no ja, messages without description.
 Exit code 1 if any check fails.
 """
@@ -17,27 +23,55 @@ Exit code 1 if any check fails.
 from __future__ import annotations
 
 import argparse
+import ast
 import json
+import re
 import sys
 from collections import Counter
 from pathlib import Path
 
+import yaml
 from jsonschema import Draft202012Validator
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from spec import SCHEMA_PATH, SPEC_PATH, Spec  # noqa: E402
+from spec import REPO_ROOT, SCHEMA_PATH, SPEC_PATH, Spec  # noqa: E402
+
+GLOSSARY_PATH = REPO_ROOT / "spec" / "glossary_ja.yaml"
+MKDOCS_PATH = REPO_ROOT / "mkdocs.yml"
+DOCS_JA = REPO_ROOT / "docs" / "ja"
+GENERATE_PATH = REPO_ROOT / "tools" / "generate.py"
+
+# A stripped piece (code, link, URL, placeholder) counts as one ASCII word for the spacing check.
+SENTINEL = "\ue000"
+_STRIP = [
+    (re.compile(r"<!--.*?-->", re.S), True),                       # comments, generated blocks (see below)
+    (re.compile(r"^(```|~~~).*?^\1[^\n]*$", re.S | re.M), True),     # code blocks
+    (re.compile(r"`[^`\n]*`"), False),                             # inline code
+    (re.compile(r"\[\[[^\]\n]*\]\]"), False),                      # [[/address]] links
+    (re.compile(r"https?://[^\s)>\]]+"), False),                   # URLs
+]
+GENERATED_BLOCK_RE = re.compile(r"<!-- generated:begin .*?<!-- generated:end [^\n]*-->", re.S)
+# ASCII letters and digits (and a stripped piece) next to a Japanese character with spaces between
+_JA = "\u3000-\u30ff\u3400-\u9fff\uff00-\uffef"
+_ASCII = f"A-Za-z0-9{SENTINEL}"
+SPACE_RE = re.compile(rf"(?:(?<=[{_ASCII}]) +(?=[{_JA}])|(?<=[{_JA}]) +(?=[{_ASCII}]))")
 
 
 class Report:
     def __init__(self):
         self.errors: list[str] = []
         self.warnings: list[str] = []
+        self.glossary_hits: Counter = Counter()  # Japanese wording errors, by word
 
     def error(self, msg: str):
         self.errors.append(msg)
 
     def warn(self, msg: str):
         self.warnings.append(msg)
+
+    def glossary(self, msg: str, key: str):
+        self.errors.append(msg)
+        self.glossary_hits[key] += 1
 
 
 def check_schema(spec: Spec, rep: Report):
@@ -185,10 +219,141 @@ def check_warnings(spec: Spec, rep: Report):
                     rep.warn(f"missing ja text: {s['key']}.{v['value']}")
 
 
+# ----------------------------------------------------------------------
+# Japanese wording
+
+
+def load_glossary(path: Path = GLOSSARY_PATH) -> dict:
+    return yaml.safe_load(path.read_text(encoding="utf-8"))
+
+
+def strip_markup(text: str, placeholder: str = SENTINEL) -> str:
+    """Replace what the wording checks skip. Line breaks are kept, so line numbers stay right."""
+    def blank(m, keep_one):
+        s = m.group(0)
+        return (placeholder if keep_one else "") + "\n" * s.count("\n")
+
+    text = GENERATED_BLOCK_RE.sub(lambda m: blank(m, False), text)
+    for rx, comment_like in _STRIP:
+        text = rx.sub(lambda m, c=comment_like: blank(m, not c), text)
+    return text
+
+
+def check_wording(text: str, glossary: dict) -> list[tuple[str, str, int]]:
+    """[(kind, detail, line)] for one text (line from 1). kind: 'avoid' (detail: the word) or 'space'."""
+    plain = strip_markup(text)
+    found: list[tuple[str, str, int]] = []
+    for term in glossary.get("terms", []):
+        allowed = [m.span() for pat in term.get("allow", []) for m in re.finditer(pat, plain)]
+        hits = [(m.span(), word) for word in term.get("avoid", []) for m in re.finditer(re.escape(word), plain)]
+        for (a, b), word in hits:
+            if any(x <= a and b <= y for x, y in allowed):
+                continue
+            if any((x, y) != (a, b) and x <= a and b <= y for (x, y), _ in hits):
+                continue  # inside a longer word of the same term (最大速さ / 速さ)
+            found.append(("avoid", word, plain.count("\n", 0, a) + 1))
+    if glossary.get("spacing", {}).get("no_space_between_ascii_and_ja"):
+        for m in SPACE_RE.finditer(plain):
+            ctx = plain[max(0, m.start() - 6):m.end() + 6].replace(SENTINEL, "`…`").replace("\n", " ")
+            found.append(("space", ctx, plain.count("\n", 0, m.start()) + 1))
+    return found
+
+
+def _is_excluded(rel: str, patterns: list[str]) -> bool:
+    for pat in patterns:
+        pat = pat.strip()
+        if not pat or pat.startswith("#"):
+            continue
+        if pat.startswith("/"):
+            pat = pat.lstrip("/")
+            if rel == pat.rstrip("/") or rel.startswith(pat.rstrip("/") + "/") or Path(rel).match(pat):
+                return True
+        elif Path(rel).match(pat) or any(Path(part).match(pat) for part in Path(rel).parts):
+            return True
+    return False
+
+
+def japanese_texts() -> list[tuple[str, str]]:
+    """(where, text) for the texts outside the spec that the wording checks read."""
+    out: list[tuple[str, str]] = []
+    mk = yaml.safe_load(MKDOCS_PATH.read_text(encoding="utf-8")) if MKDOCS_PATH.exists() else {}
+    patterns = str(mk.get("exclude_docs") or "").splitlines()
+
+    for md in sorted(DOCS_JA.rglob("*.md")):
+        rel = md.relative_to(REPO_ROOT / "docs").as_posix()
+        if _is_excluded(rel, patterns):
+            continue
+        text = md.read_text(encoding="utf-8")
+        if "This page is generated from spec/osc-commands.yaml" in text:
+            continue  # made from the spec; the `ja` texts are checked there
+        out.append((f"docs/{rel}", text))
+
+    for plugin in mk.get("plugins") or []:
+        if isinstance(plugin, dict) and "i18n" in plugin:
+            for lang in plugin["i18n"].get("languages") or []:
+                if lang.get("locale") == "ja":
+                    for k, v in (lang.get("nav_translations") or {}).items():
+                        out.append((f"mkdocs.yml nav_translations.{k}", str(v)))
+
+    out.extend(generate_py_texts())
+    return out
+
+
+def generate_py_texts(path: Path = GENERATE_PATH) -> list[tuple[str, str]]:
+    """Japanese string constants of tools/generate.py (docstrings excluded).
+
+    An f-string counts as one text with {} for each value."""
+    tree = ast.parse(path.read_text(encoding="utf-8"))
+    docstrings = set()
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.Module, ast.FunctionDef, ast.ClassDef, ast.AsyncFunctionDef)):
+            if node.body and isinstance(node.body[0], ast.Expr) and isinstance(node.body[0].value, ast.Constant):
+                docstrings.add(id(node.body[0].value))
+    ja = re.compile(rf"[{_JA}]")
+    out: list[tuple[str, str]] = []
+
+    def text_of(s: str) -> str:
+        return re.sub(r"\{[A-Za-z_]*\}", SENTINEL, s)  # "{boards} のみ" is "STEP400 のみ" when shown
+
+    def visit(node):
+        if isinstance(node, ast.JoinedStr):
+            s = "".join(v.value if isinstance(v, ast.Constant) else SENTINEL for v in node.values)
+            if ja.search(s):
+                out.append((f"tools/generate.py:{node.lineno}", text_of(s)))
+            return
+        if isinstance(node, ast.Constant) and isinstance(node.value, str) and id(node) not in docstrings:
+            if ja.search(node.value):
+                out.append((f"tools/generate.py:{node.lineno}", text_of(node.value)))
+            return
+        for child in ast.iter_child_nodes(node):
+            visit(child)
+
+    visit(tree)
+    return out
+
+
+def check_japanese_wording(spec: Spec, rep: Report):
+    glossary = load_glossary()
+
+    def report(where: str, text: str, line_of: bool):
+        for kind, detail, line in check_wording(text, glossary):
+            loc = f"{where}:{line}" if line_of else where
+            if kind == "avoid":
+                rep.glossary(f"wording: {loc}: avoid '{detail}'", detail)
+            else:
+                rep.glossary(f"spacing: {loc}: space between ASCII and Japanese: …{detail}…", "(空白)")
+
+    for where, lang, text in spec.iter_texts():
+        if lang == "ja":
+            report(where, text, False)
+    for where, text in japanese_texts():
+        report(where, text, where.startswith("docs/"))
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("path", nargs="?", default=str(SPEC_PATH))
-    ap.add_argument("-q", "--quiet", action="store_true", help="print warning counts only")
+    ap.add_argument("-q", "--quiet", action="store_true", help="print counts only (warnings, Japanese wording errors)")
     args = ap.parse_args()
 
     spec = Spec.load(args.path)
@@ -198,9 +363,14 @@ def main() -> int:
         check_board_keys(spec, rep)
         check_references(spec, rep)
     check_warnings(spec, rep)
+    check_japanese_wording(spec, rep)
 
     for e in rep.errors:
+        if args.quiet and e.startswith(("wording:", "spacing:")):
+            continue
         print(f"ERROR   {e}")
+    if args.quiet and rep.glossary_hits:
+        print("Japanese wording errors: " + ", ".join(f"{k}: {n}" for k, n in sorted(rep.glossary_hits.items())))
     if not args.quiet:
         for w in rep.warnings:
             print(f"warning {w}")

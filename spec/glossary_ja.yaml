@@ -1,0 +1,93 @@
+# 日本語の訳語表。tools/validate_spec.py が検査に使う。
+# use: 使う語。avoid: 使わない語（部分一致）。allow: avoid が出てもよい文脈（正規表現）。
+# 検査の対象と除外は tools/validate_spec.py の docstring を参照。
+terms:
+  - use: モータ
+    concept: モータ（長音なし）
+    avoid: [モーター]
+  - use: センサ
+    concept: センサ（長音なし）
+    avoid: [センサー]
+  - use: 解放
+    concept: ブレーキを外す。外した状態は「解放中」
+    avoid: [開放]
+  - use: 保持
+    concept: ブレーキを掛けること。モータの位置については「励磁して位置を保つ」
+    avoid: []
+  - use: 即停止
+    concept: 即座に止める停止（/hardStop）
+    avoid: [ハードストップ, 即時停止]
+  - use: 減速停止
+    concept: 減速してから止める停止（/softStop）
+    avoid: [ソフトストップ]
+  - use: 無励磁
+    concept: HiZ（文中で状態を言うとき。初出は「無励磁（HiZ）」）
+    avoid: [ハイインピーダンス]
+  - use: 最大速度
+    concept: 速度（向きは「回転方向」）
+    avoid: [最大速さ, 最小速さ, 速さ]
+  - use: スピードプロファイル
+    concept: 加速度・減速度・最大速度の組
+    avoid: [速度プロファイル]
+  - use: ストール
+    concept: stall
+    avoid: [脱調]
+    allow: ["脱調（ステップのずれ）"]
+  - use: 返信
+    concept: 問い合わせ（コマンド）への返事。問い合わせなしにボードが送るものは「通知」
+    avoid: [返答, 応答, 返送, 報告]
+    allow: ["ARPの応答"]
+  - use: 引数
+    concept: argument
+    avoid: [アーギュメント]
+  - use: 移行時間
+    concept: transition duration
+    avoid: [遷移時間]
+  - use: 設定ファイル
+    concept: configuration file
+    avoid: [コンフィギュレーションファイル]
+  - use: HOMEスイッチ
+    concept: HOME 端子につなぐもの（センサでも）
+    avoid: [HOMEセンサ, Homeセンサ, ホームセンサ]
+  - use: LIMITスイッチ
+    concept: LIMIT 端子につなぐもの（センサでも）
+    avoid: [LIMITセンサ, Limitセンサ, リミットセンサ]
+  - use: オン
+    concept: スイッチの状態（オン = 入力が Low）。オフはその反対
+    avoid: [作動している, 反応している, 押されている]
+  - use: マイクロステップ
+    concept: microstep
+    avoid: [マイクロステッピング]
+  - use: ボード
+    concept: STEP400・STEP800 の総称。「基板」は寸法・端子・部品の配置など物としての基板だけ
+    avoid: [本デバイス, 基板]
+    allow: ["本機能"]
+  - use: ボード
+    concept: ボード（「本機」は使わない）
+    avoid: [本機]
+    allow: ["本機能"]
+  - use: MCU
+    concept: microcontroller
+    avoid: [マイコン]
+  - use: CPU動作異常
+    concept: CPU のフォルト（HardFault はそのまま）
+    avoid: [CPU異常, CPUフォルト]
+  - use: 過熱遮断
+    concept: thermal / bridge / device shutdown
+    avoid: [温度の遮断]
+  - use: 温度警告
+    concept: thermal warning
+    avoid: []
+  - use: ステータス
+    concept: 「STATUSレジスタ」または「状態」と書く
+    avoid: [ステータス]
+  - use: ラッチされたフラグ
+    concept: latched flags
+    avoid: [警告フラグ]
+  - use: 一周する
+    concept: 範囲外の値は「最大値の次を0として数え直した値になる」と書く
+    avoid: [一周]
+spacing:
+  # 英数字（A-Z a-z 0-9）と日本語の文字（全角の記号・括弧を含む）の間に半角空白を入れない。
+  # インラインコードと [[...]] のリンクの前後も同じ。
+  no_space_between_ascii_and_ja: true
