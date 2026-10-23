@@ -22,18 +22,18 @@ lang: ja
 | キー | 名称 | 型 | 初期値 | 範囲 / 単位 | コマンド | 説明 |
 | --- | --- | --- | --- | --- | --- | --- |
 | <a id="network-myip"></a>`myIp` | My IP address | ip | 10.0.0.100 |  |  | IPアドレスを設定します。`ID adds to my IP`にチェックが入っている場合は、この数値にIDが加算されたものが実際のIPアドレスになります。例えば`10.0.0.100`に設定してIDスイッチが1になっている場合は、`10.0.0.101`が実際のアドレスになります。加算した数値が254を超えないようにしてください。 |
-| <a id="network-ismyipaddid"></a>`isMyIpAddId` | ID adds to my IP | bool | true |  |  | ID を加算したアドレスが .254 を超える場合（既定の 10.0.0.100 では ID が 155 以上のとき）は、ID を加算せず、設定したアドレスをそのまま使い、USBシリアルに警告を表示します。 |
+| <a id="network-ismyipaddid"></a>`isMyIpAddId` | ID adds to my IP | bool | true |  |  | ID を加算したアドレスが .254 を超える場合（既定の 10.0.0.100 では ID が 155 以上のとき）は、ID を加算せず、設定したアドレスをそのまま使い、USBシリアルにメッセージを表示します。 |
 | <a id="network-destip"></a>`destIp` | Destination IP | ip | 10.0.0.10 |  | [`/setDestIp`](../reference/system-settings.md#setdestip) |  |
 | <a id="network-dns"></a>`dns` | DNS | ip | 10.0.0.1 |  |  |  |
 | <a id="network-gateway"></a>`gateway` | Gateway | ip | 10.0.0.1 |  |  |  |
 | <a id="network-subnet"></a>`subnet` | Subnet mask | ip | 255.255.255.0 |  |  |  |
-| <a id="network-inport"></a>`inPort` | Incoming port | int | 50000 |  |  | 本デバイスがOSCを受信するポート番号です。 |
-| <a id="network-outport"></a>`outPort` | Outgoing port | int | 50100 |  |  | 本デバイスがOSCを送信するポート番号です。`ID adds to Outgoing port`にチェックが入っていると、この数値にIDが加算されます。 |
-| <a id="network-isoutportaddid"></a>`isOutPortAddId` | ID adds to Outgoing port | bool | true |  |  | ID を加算したポート番号が 65535 を超える場合は、ID を加算せず、設定したポート番号をそのまま使い、USBシリアルに警告を表示します。 |
+| <a id="network-inport"></a>`inPort` | Incoming port | int | 50000 |  |  | ボードがOSCを受信するポート番号です。 |
+| <a id="network-outport"></a>`outPort` | Outgoing port | int | 50100 |  |  | ボードがOSCを送信するポート番号です。`ID adds to Outgoing port`にチェックが入っていると、この数値にIDが加算されます。 |
+| <a id="network-isoutportaddid"></a>`isOutPortAddId` | ID adds to Outgoing port | bool | true |  |  | ID を加算したポート番号が 65535 を超える場合は、ID を加算せず、設定したポート番号をそのまま使い、USBシリアルにメッセージを表示します。 |
 | <a id="network-mac"></a>`mac` | MAC address | mac | STEP400: 60:95:CE:10:06:00 (ファームウェア) / 60:95:CE:10:02:00 (テンプレート); STEP800: 60:95:CE:10:06:00 (ファームウェア) / 60:95:CE:10:03:00 (テンプレート) |  |  | `Hex`チェックボックスで、16進数表示と10進数表示を切替できます。 |
 | <a id="network-ismacaddid"></a>`isMacAddId` | ID adds to MAC address | bool | true |  |  | このチェックボックスが入っていると、MACアドレスの最終バイトにIDが加算されます。 |
 | <a id="network-bootedmsgenable"></a>`bootedMsgEnable` | Booted message enable | bool | true |  |  | 起動時にイーサネットがリンクすると自動で送られる[`/booted`](../reference/automatically-sent-messages.md#booted)メッセージの有効無効を切り替えます。 |
-| <a id="network-cansendmsgbeforedestip"></a>`canSendMsgBeforeDestIp` | Allow OSC reply before /setDestIp | bool | false |  |  | 初期状態では`/setDestIp`を受信するまではOSCの返送を行わないようになっていますが、このチェックボックスが入っていると、起動してすぐからOSC返送するようにします。 |
+| <a id="network-cansendmsgbeforedestip"></a>`canSendMsgBeforeDestIp` | Allow OSC reply before /setDestIp | bool | false |  |  | 初期状態では`/setDestIp`を受信するまではOSCメッセージの送信を行わないようになっていますが、このチェックボックスが入っていると、起動してすぐからOSCメッセージを送信するようにします。 |
 | <a id="network-reporterror"></a>`reportError` | Report errors | bool | true |  | [`/reportError`](../reference/system-settings.md#reporterror) |  |
 
 ## alarmAndReport {#alarmandreport}
@@ -59,7 +59,7 @@ lang: ja
 
 | キー | 名称 | 型 | 初期値 | 範囲 / 単位 | コマンド | 説明 |
 | --- | --- | --- | --- | --- | --- | --- |
-| <a id="driversettings-homingatstartup"></a>`homingAtStartup` | Homing when the system starts (モータごと) | bool | false |  |  | このチェックボックスが入っていると、起動すると直ちに原点復帰動作を行います。  電磁ブレーキが有効なときは、[`/activate`](../reference/brake.md#activate) と同じようにブレーキを先に開放し、開放が終わってから原点復帰を始めます。 **v2.2.0**: 電磁ブレーキが有効なときは、[`/activate`](../reference/brake.md#activate) と同じようにブレーキを先に開放し、開放が終わってから原点復帰を始めます。以前は、ブレーキが保持されたままだったため原点復帰が失敗し、原点復帰のタイムアウトで HiZ のモータにハードストップが送られていました。 |
+| <a id="driversettings-homingatstartup"></a>`homingAtStartup` | Homing when the system starts (モータごと) | bool | false |  |  | このチェックボックスが入っていると、起動すると直ちに原点復帰動作を行います。  電磁ブレーキが有効なときは、[`/activate`](../reference/brake.md#activate) と同じようにブレーキを先に解放し、解放が終わってから原点復帰を始めます。 **v2.2.0**: 電磁ブレーキが有効なときは、[`/activate`](../reference/brake.md#activate) と同じようにブレーキを先に解放し、解放が終わってから原点復帰を始めます。以前は、ブレーキが保持されたままだったため原点復帰が失敗し、原点復帰のタイムアウトで 無励磁（HiZ） のモータに即停止が送られていました。 |
 | <a id="driversettings-homingdirection"></a>`homingDirection` | Homing Direction (モータごと) | int | 0 (Reverse) |  | [`/setHomingDirection`](../reference/homing.md#sethomingdirection) |  |
 | <a id="driversettings-homingspeed"></a>`homingSpeed` | Homing Speed (モータごと) | float | 50 | step/s | [`/setHomingSpeed`](../reference/homing.md#sethomingspeed) |  |
 | <a id="driversettings-homeswmode"></a>`homeSwMode` | Home switch won't cause HardStop (モータごと) | bool | true |  | [`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode) |  |
@@ -72,7 +72,7 @@ lang: ja
 | <a id="driversettings-iscurrentmode"></a>`isCurrentMode` | Current mode (モータごと) (STEP400 のみ) | bool | false |  | [`/setVoltageMode`](../reference/voltage-and-current-mode-settings.md#setvoltagemode), [`/setCurrentMode`](../reference/voltage-and-current-mode-settings.md#setcurrentmode) |  |
 | <a id="driversettings-slewrate"></a>`slewRate` | Slew rate (モータごと) | int | STEP400: 5 (980V/us); STEP800: 2 (400V/us) | 0-5 (STEP400), 0-2 (STEP800) |  | モータドライバから出力されるモータ制御電流のスリューレート（立ち上がりの鋭さ）をSTEP400では6段階、STEP800では3段階で指定します。  設定ファイルの範囲外の値は拒否されず、範囲内に制限されます（負の値は 0、大きい値は最大の値になります）。 |
 | <a id="driversettings-electromagnetbrakeenable"></a>`electromagnetBrakeEnable` | Electromagnetic brake enable (モータごと) | bool | false |  | [`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake) |  |
-| <a id="driversettings-braketransitionduration"></a>`brakeTransitionDuration` | Brake transition duration (モータごと) | int | 100 | 0-65535 ms | [`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration) | 電磁ブレーキの開放や保持を待つ時間です。[`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration) を参照してください。  設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。値は16ビットの変数に保持されるため、0〜65535 の範囲外の値は一周します（65536 は 0、-1 は 65535 になります）。[`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration) はこのような値を `CommandIgnored` で拒否します。 |
+| <a id="driversettings-braketransitionduration"></a>`brakeTransitionDuration` | Brake transition duration (モータごと) | int | 100 | 0-65535 ms | [`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration) | 電磁ブレーキの解放や保持を待つ時間です。[`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration) を参照してください。  設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。値は16ビットの変数に保持されるため、0〜65535 の範囲外の値は一周します（65536 は 0、-1 は 65535 になります）。[`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration) はこのような値を `CommandIgnored` で拒否します。 |
 
 ## speedProfile {#speedprofile}
 

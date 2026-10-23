@@ -243,15 +243,17 @@ def check_wording(text: str, glossary: dict) -> list[tuple[str, str, int]]:
     """[(kind, detail, line)] for one text (line from 1). kind: 'avoid' (detail: the word) or 'space'."""
     plain = strip_markup(text)
     found: list[tuple[str, str, int]] = []
+    # words are looked up with the spaces next to ASCII removed ("HOME センサ" is "HOMEセンサ"); line breaks stay
+    words = SPACE_RE.sub("", plain)
     for term in glossary.get("terms", []):
-        allowed = [m.span() for pat in term.get("allow", []) for m in re.finditer(pat, plain)]
-        hits = [(m.span(), word) for word in term.get("avoid", []) for m in re.finditer(re.escape(word), plain)]
+        allowed = [m.span() for pat in term.get("allow", []) for m in re.finditer(pat, words)]
+        hits = [(m.span(), word) for word in term.get("avoid", []) for m in re.finditer(re.escape(word), words)]
         for (a, b), word in hits:
             if any(x <= a and b <= y for x, y in allowed):
                 continue
             if any((x, y) != (a, b) and x <= a and b <= y for (x, y), _ in hits):
                 continue  # inside a longer word of the same term (最大速さ / 速さ)
-            found.append(("avoid", word, plain.count("\n", 0, a) + 1))
+            found.append(("avoid", word, words.count("\n", 0, a) + 1))
     if glossary.get("spacing", {}).get("no_space_between_ascii_and_ja"):
         for m in SPACE_RE.finditer(plain):
             ctx = plain[max(0, m.start() - 6):m.end() + 6].replace(SENTINEL, "`…`").replace("\n", " ")

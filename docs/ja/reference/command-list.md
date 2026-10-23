@@ -9,7 +9,7 @@ lang: ja
 
 すべての OSC コマンドを、リファレンスのページの順に並べています。コマンド名から詳細へ移動できます。
 
-## 基板全体の設定
+## ボード全体の設定
 
 | コマンド | アーギュメント | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
@@ -128,7 +128,7 @@ lang: ja
 | [`/setReleaseSwTimeout`](homing.md#setreleaseswtimeout) | (int)motorID (int)timeOut | ✓ | ✓ |  |
 | [`/getReleaseSwTimeout`](homing.md#getreleaseswtimeout) | (int)motorID | ✓ | ✓ |  |
 
-## HOME/LIMITセンサ
+## HOME/LIMITスイッチ
 
 | コマンド | アーギュメント | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
