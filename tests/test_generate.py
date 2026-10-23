@@ -209,7 +209,7 @@ class GenerateTest(unittest.TestCase):
         self.assertIn("**v9.9.9**: Changed text of a setting.", line)
         settings_ja = (self.docs / "ja" / "connections" / "configuration-items.md").read_text(encoding="utf-8")
         line = [l for l in settings_ja.splitlines() if "`homingAtStartup`" in l][0]
-        self.assertIn("v9.9.9 で追加。", line)
+        self.assertIn("v9.9.9で追加。", line)
         self.assertIn("Changed text of a setting.", line)    # no Japanese yet: English is used
 
     def test_coverage_check_reports_missing_markers(self):

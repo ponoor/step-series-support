@@ -88,22 +88,22 @@ LABELS = {
         "all": "all", "motors": "motors", "first": "Initial value of the firmware", "boards_only": "{boards} only",
     },
     "ja": {
-        "argument": "アーギュメント", "none": "なし", "type": "型", "range": "範囲", "description": "説明",
-        "value": "値", "meaning": "意味", "timing": "実行可能タイミング", "response": "返答",
+        "argument": "引数", "none": "なし", "type": "型", "range": "範囲", "description": "説明",
+        "value": "値", "meaning": "意味", "timing": "実行可能タイミング", "response": "返信",
         "errors": "エラー", "initial": "初期値", "changes": "変更", "see_also": "関連",
-        "only": "{boards} のみ。", "added": "v{v} で追加。", "all_motors": "全モータ",
+        "only": "{boards}のみ。", "added": "v{v}で追加。", "all_motors": "全モータ",
         "firmware": "ファームウェア", "template": "テンプレート", "when": "条件",
-        "command": "コマンド", "arguments": "アーギュメント", "since": "追加", "key": "キー", "label": "名称",
+        "command": "コマンド", "arguments": "引数", "since": "追加", "key": "キー", "label": "名称",
         "unit": "単位", "initial_col": "初期値", "commands_col": "コマンド", "per_motor": "モータごと",
-        "list_title": "コマンド一覧", "list_intro": "すべての OSC コマンドを、リファレンスのページの順に並べています。コマンド名から詳細へ移動できます。",
-        "diff_title": "STEP400 と STEP800 の違い",
-        "diff_only": "{boards} のみで使えるコマンド", "diff_msg_only": "{boards} のみが送信するメッセージ",
+        "list_title": "コマンド一覧", "list_intro": "すべてのOSCコマンドを、リファレンスのページの順に並べています。コマンド名から詳細へ移動できます。",
+        "diff_title": "STEP400とSTEP800の違い",
+        "diff_only": "{boards}のみで使えるコマンド", "diff_msg_only": "{boards}のみが送信するメッセージ",
         "diff_values": "ボードによって値が異なるコマンド", "diff_msg_values": "ボードによって値が異なるメッセージ",
-        "diff_settings": "ボードによって値が異なる設定項目", "diff_set_only": "{boards} のみの設定項目",
+        "diff_settings": "ボードによって値が異なる設定項目", "diff_set_only": "{boards}のみの設定項目",
         "diff_tables": "ボード別の表", "none_found": "なし。",
-        "settings_title": "設定項目一覧", "settings_intro": "設定ファイル（microSD カードの JSON）の項目です。初期値は、設定ファイルまたはそのキーがないときの値です。",
+        "settings_title": "設定項目一覧", "settings_intro": "設定ファイル（microSDカードのJSON）の項目です。初期値は、設定ファイルまたはそのキーがないときの値です。",
         "related": "関連するコマンド", "related_settings": "関連する設定項目",
-        "all": "全て", "motors": "モータ", "first": "ファームウェアの初期値", "boards_only": "{boards} のみ",
+        "all": "全て", "motors": "モータ", "first": "ファームウェアの初期値", "boards_only": "{boards}のみ",
     },
 }
 
@@ -740,7 +740,7 @@ def _routed_note(ctx: Ctx, c: dict) -> str:
         return ""
     on = ", ".join(extra)
     if ctx.lang == "ja":
-        return f" (ファームウェアは {on} でも受け付けますが、意味のある値は得られません)"
+        return f" (ファームウェアは{on}でも受け付けますが、意味のある値は得られません)"
     return f" (the firmware also accepts it on {on}, but the value is meaningless there)"
 
 

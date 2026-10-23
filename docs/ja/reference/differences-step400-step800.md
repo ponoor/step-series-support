@@ -3,13 +3,13 @@ title: STEP400 と STEP800 の違い
 lang: ja
 ---
 
-# STEP400 と STEP800 の違い
+# STEP400とSTEP800の違い
 
 <!-- This page is generated from spec/osc-commands.yaml by tools/generate.py. Do not edit it directly. (自動生成・直接編集しない) -->
 
-## STEP400 のみで使えるコマンド
+## STEP400のみで使えるコマンド
 
-- [`/getAdcVal`](motor-driver-settings.md#getadcval) (int)motorID (ファームウェアは STEP800 でも受け付けますが、意味のある値は得られません)
+- [`/getAdcVal`](motor-driver-settings.md#getadcval) (int)motorID (ファームウェアはSTEP800でも受け付けますが、意味のある値は得られません)
 - [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw) (int)motorID (bool)enable
 - [`/getProhibitMotionOnLimitSw`](alarm-settings.md#getprohibitmotiononlimitsw) (int)motorID
 - [`/setVoltageMode`](voltage-and-current-mode-settings.md#setvoltagemode) (int)motorID
@@ -28,7 +28,7 @@ lang: ja
 - [`/setLimitSwMode`](home-and-limit-sensors.md#setlimitswmode) (int)motorID (bool)SW_MODE
 - [`/getLimitSwMode`](home-and-limit-sensors.md#getlimitswmode) (int)motorID
 
-## STEP400 のみが送信するメッセージ
+## STEP400のみが送信するメッセージ
 
 - [`/prohibitMotionOnLimitSw`](automatically-sent-messages.md#prohibitmotiononlimitsw) (int)motorID (int)enable
 - [`/tval`](automatically-sent-messages.md#tval) (int)motorID (int)holdTVAL (int)runTVAL (int)accTVAL (int)decTVAL
@@ -37,17 +37,17 @@ lang: ja
 - [`/limitSw`](automatically-sent-messages.md#limitsw) (int)motorID (int)swState (int)direction
 - [`/limitSwMode`](automatically-sent-messages.md#limitswmode) (int)motorID (int)swMode
 
-## STEP800 のみで使えるコマンド
+## STEP800のみで使えるコマンド
 
 なし。
 
-## STEP800 のみが送信するメッセージ
+## STEP800のみが送信するメッセージ
 
 なし。
 
 ## ボードによって値が異なるコマンド
 
-| コマンド | アーギュメント | STEP400 | STEP800 |
+| コマンド | 引数 | STEP400 | STEP800 |
 | --- | --- | --- | --- |
 | [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH (範囲) | 0-31 | 0-15 |
 | [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH (初期値) | 15 | 7 (ファームウェア) / 15 (テンプレート) |
@@ -58,7 +58,7 @@ lang: ja
 
 ## ボードによって値が異なるメッセージ
 
-| コマンド | アーギュメント | STEP400 | STEP800 |
+| コマンド | 引数 | STEP400 | STEP800 |
 | --- | --- | --- | --- |
 | [`/overCurrentThreshold`](automatically-sent-messages.md#overcurrentthreshold) | overCurrentThreshold (範囲) | 312.5-10000 | 375-6000 |
 | [`/stallThreshold`](automatically-sent-messages.md#stallthreshold) | stallThreshold (範囲) | 312.5-10000 | 31.25-4000 |
@@ -71,7 +71,7 @@ lang: ja
 | [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | ストール検出の閾値 |
 | [`/thermalStatus`](automatically-sent-messages.md#thermalstatus) | 温度の状態 |
 
-## STEP400 のみの設定項目
+## STEP400のみの設定項目
 
 - [`alarmAndReport.reportLimitSwStatus`](../connections/configuration-items.md#alarmandreport-reportlimitswstatus)
 - [`driverSettings.limitSwMode`](../connections/configuration-items.md#driversettings-limitswmode)
@@ -85,7 +85,7 @@ lang: ja
 - [`currentMode.TON_MIN`](../connections/configuration-items.md#currentmode-ton_min)
 - [`currentMode.TOFF_MIN`](../connections/configuration-items.md#currentmode-toff_min)
 
-## STEP800 のみの設定項目
+## STEP800のみの設定項目
 
 なし。
 

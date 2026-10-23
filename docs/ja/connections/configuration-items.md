@@ -7,7 +7,7 @@ lang: ja
 
 <!-- This page is generated from spec/osc-commands.yaml by tools/generate.py. Do not edit it directly. (自動生成・直接編集しない) -->
 
-設定ファイル（microSD カードの JSON）の項目です。初期値は、設定ファイルまたはそのキーがないときの値です。
+設定ファイル（microSDカードのJSON）の項目です。初期値は、設定ファイルまたはそのキーがないときの値です。
 
 ## information {#information}
 
@@ -43,7 +43,7 @@ lang: ja
 | <a id="alarmandreport-reportbusy"></a>`reportBUSY` | Report BUSY (モータごと) | bool | false |  | [`/enableBusyReport`](../reference/motor-driver-settings.md#enablebusyreport) |  |
 | <a id="alarmandreport-reporthiz"></a>`reportHiZ` | Report HiZ (モータごと) | bool | false |  | [`/enableHizReport`](../reference/motor-driver-settings.md#enablehizreport) |  |
 | <a id="alarmandreport-reporthomeswstatus"></a>`reportHomeSwStatus` | Report HOME switch status (モータごと) | bool | false |  | [`/enableHomeSwReport`](../reference/home-and-limit-sensors.md#enablehomeswreport) |  |
-| <a id="alarmandreport-reportlimitswstatus"></a>`reportLimitSwStatus` | Report LIMIT switch status (モータごと) (STEP400 のみ) | bool | false |  | [`/enableLimitSwReport`](../reference/home-and-limit-sensors.md#enablelimitswreport) |  |
+| <a id="alarmandreport-reportlimitswstatus"></a>`reportLimitSwStatus` | Report LIMIT switch status (モータごと) (STEP400のみ) | bool | false |  | [`/enableLimitSwReport`](../reference/home-and-limit-sensors.md#enablelimitswreport) |  |
 | <a id="alarmandreport-reportdir"></a>`reportDir` | Report motor direction (モータごと) | bool | false |  | [`/enableDirReport`](../reference/motor-driver-settings.md#enabledirreport) |  |
 | <a id="alarmandreport-reportmotorstatus"></a>`reportMotorStatus` | Report Motor Status (モータごと) | bool | false |  | [`/enableMotorStatusReport`](../reference/motor-driver-settings.md#enablemotorstatusreport) |  |
 | <a id="alarmandreport-reportswevn"></a>`reportSwEvn` | Report HOME switch event (モータごと) | bool | false |  | [`/enableSwEventReport`](../reference/home-and-limit-sensors.md#enablesweventreport) |  |
@@ -64,12 +64,12 @@ lang: ja
 | <a id="driversettings-homingspeed"></a>`homingSpeed` | Homing Speed (モータごと) | float | 50 | step/s | [`/setHomingSpeed`](../reference/homing.md#sethomingspeed) |  |
 | <a id="driversettings-homeswmode"></a>`homeSwMode` | Home switch won't cause HardStop (モータごと) | bool | true |  | [`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode) |  |
 | <a id="driversettings-prohibitmotiononhomesw"></a>`prohibitMotionOnHomeSw` | Prohibit motions on HomeSw (モータごと) | bool | false |  | [`/setProhibitMotionOnHomeSw`](../reference/alarm-settings.md#setprohibitmotiononhomesw) |  |
-| <a id="driversettings-limitswmode"></a>`limitSwMode` | Limit switch won't cause HardStop (モータごと) (STEP400 のみ) | bool | true |  | [`/setLimitSwMode`](../reference/home-and-limit-sensors.md#setlimitswmode) |  |
-| <a id="driversettings-prohibitmotiononlimitsw"></a>`prohibitMotionOnLimitSw` | Prohibit motions on LimitSw (モータごと) (STEP400 のみ) | bool | false |  | [`/setProhibitMotionOnLimitSw`](../reference/alarm-settings.md#setprohibitmotiononlimitsw) |  |
+| <a id="driversettings-limitswmode"></a>`limitSwMode` | Limit switch won't cause HardStop (モータごと) (STEP400のみ) | bool | true |  | [`/setLimitSwMode`](../reference/home-and-limit-sensors.md#setlimitswmode) |  |
+| <a id="driversettings-prohibitmotiononlimitsw"></a>`prohibitMotionOnLimitSw` | Prohibit motions on LimitSw (モータごと) (STEP400のみ) | bool | false |  | [`/setProhibitMotionOnLimitSw`](../reference/alarm-settings.md#setprohibitmotiononlimitsw) |  |
 | <a id="driversettings-gountiltimeout"></a>`goUntilTimeout` | goUntil timeout duration (モータごと) | int | 10000 | ms | [`/setGoUntilTimeout`](../reference/homing.md#setgountiltimeout) |  |
 | <a id="driversettings-releaseswtimeout"></a>`releaseSwTimeout` | releaseSw timeout duration (モータごと) | int | 10000 | ms | [`/setReleaseSwTimeout`](../reference/homing.md#setreleaseswtimeout) |  |
 | <a id="driversettings-stepmode"></a>`stepMode` | Microstepping mode (モータごと) | int | 7 |  | [`/setMicrostepMode`](../reference/motor-driver-settings.md#setmicrostepmode) |  |
-| <a id="driversettings-iscurrentmode"></a>`isCurrentMode` | Current mode (モータごと) (STEP400 のみ) | bool | false |  | [`/setVoltageMode`](../reference/voltage-and-current-mode-settings.md#setvoltagemode), [`/setCurrentMode`](../reference/voltage-and-current-mode-settings.md#setcurrentmode) |  |
+| <a id="driversettings-iscurrentmode"></a>`isCurrentMode` | Current mode (モータごと) (STEP400のみ) | bool | false |  | [`/setVoltageMode`](../reference/voltage-and-current-mode-settings.md#setvoltagemode), [`/setCurrentMode`](../reference/voltage-and-current-mode-settings.md#setcurrentmode) |  |
 | <a id="driversettings-slewrate"></a>`slewRate` | Slew rate (モータごと) | int | STEP400: 5 (980V/us); STEP800: 2 (400V/us) | 0-5 (STEP400), 0-2 (STEP800) |  | モータドライバから出力されるモータ制御電流のスリューレート（立ち上がりの鋭さ）をSTEP400では6段階、STEP800では3段階で指定します。  設定ファイルの範囲外の値は拒否されず、範囲内に制限されます（負の値は0、大きい値は最大の値になります）。 |
 | <a id="driversettings-electromagnetbrakeenable"></a>`electromagnetBrakeEnable` | Electromagnetic brake enable (モータごと) | bool | false |  | [`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake) |  |
 | <a id="driversettings-braketransitionduration"></a>`brakeTransitionDuration` | Brake transition duration (モータごと) | int | 100 | 0-65535 ms | [`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration) | 電磁ブレーキの解放や保持を待つ時間です。[`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration)を参照してください。  設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。範囲外の値は、最大値の次を0として数え直した値になります（65536は0、65537は1、-1は65535になります）。[`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration)はこのような値を`CommandIgnored`で拒否します。 |
@@ -104,13 +104,13 @@ lang: ja
 
 | キー | 名称 | 型 | 初期値 | 範囲 / 単位 | コマンド | 説明 |
 | --- | --- | --- | --- | --- | --- | --- |
-| <a id="currentmode-tval_hold"></a>`TVAL_HOLD` | TVAL_HOLD (モータごと) (STEP400 のみ) | int | 0 |  | [`/setTval`](../reference/voltage-and-current-mode-settings.md#settval), [`/setHoldTval`](../reference/voltage-and-current-mode-settings.md#setholdtval) | 電磁ブレーキが有効なとき、モータが再び励磁されるたびに、TVAL_HOLDがTVAL_RUNの半分以上に引き上げられます。引き上げられた値は保存されている設定を置き換えるため（`/saveConfig`で保存されます）、[`/getTval`](../reference/voltage-and-current-mode-settings.md#gettval)でも返されます。 |
-| <a id="currentmode-tval_run"></a>`TVAL_RUN` | TVAL_RUN (モータごと) (STEP400 のみ) | int | 16 |  | [`/setTval`](../reference/voltage-and-current-mode-settings.md#settval), [`/setRunTval`](../reference/voltage-and-current-mode-settings.md#setruntval) |  |
-| <a id="currentmode-tval_acc"></a>`TVAL_ACC` | TVAL_ACC (モータごと) (STEP400 のみ) | int | 16 |  | [`/setTval`](../reference/voltage-and-current-mode-settings.md#settval), [`/setAccTval`](../reference/voltage-and-current-mode-settings.md#setacctval) |  |
-| <a id="currentmode-tval_dec"></a>`TVAL_DEC` | TVAL_DEC (モータごと) (STEP400 のみ) | int | 16 |  | [`/setTval`](../reference/voltage-and-current-mode-settings.md#settval), [`/setDecTval`](../reference/voltage-and-current-mode-settings.md#setdectval) |  |
-| <a id="currentmode-t_fast"></a>`T_FAST` | T_FAST (モータごと) (STEP400 のみ) | int | 25 |  | [`/setDecayModeParam`](../reference/voltage-and-current-mode-settings.md#setdecaymodeparam) |  |
-| <a id="currentmode-ton_min"></a>`TON_MIN` | TON_MIN (モータごと) (STEP400 のみ) | int | 41 |  | [`/setDecayModeParam`](../reference/voltage-and-current-mode-settings.md#setdecaymodeparam) |  |
-| <a id="currentmode-toff_min"></a>`TOFF_MIN` | TOFF_MIN (モータごと) (STEP400 のみ) | int | 41 |  | [`/setDecayModeParam`](../reference/voltage-and-current-mode-settings.md#setdecaymodeparam) |  |
+| <a id="currentmode-tval_hold"></a>`TVAL_HOLD` | TVAL_HOLD (モータごと) (STEP400のみ) | int | 0 |  | [`/setTval`](../reference/voltage-and-current-mode-settings.md#settval), [`/setHoldTval`](../reference/voltage-and-current-mode-settings.md#setholdtval) | 電磁ブレーキが有効なとき、モータが再び励磁されるたびに、TVAL_HOLDがTVAL_RUNの半分以上に引き上げられます。引き上げられた値は保存されている設定を置き換えるため（`/saveConfig`で保存されます）、[`/getTval`](../reference/voltage-and-current-mode-settings.md#gettval)でも返されます。 |
+| <a id="currentmode-tval_run"></a>`TVAL_RUN` | TVAL_RUN (モータごと) (STEP400のみ) | int | 16 |  | [`/setTval`](../reference/voltage-and-current-mode-settings.md#settval), [`/setRunTval`](../reference/voltage-and-current-mode-settings.md#setruntval) |  |
+| <a id="currentmode-tval_acc"></a>`TVAL_ACC` | TVAL_ACC (モータごと) (STEP400のみ) | int | 16 |  | [`/setTval`](../reference/voltage-and-current-mode-settings.md#settval), [`/setAccTval`](../reference/voltage-and-current-mode-settings.md#setacctval) |  |
+| <a id="currentmode-tval_dec"></a>`TVAL_DEC` | TVAL_DEC (モータごと) (STEP400のみ) | int | 16 |  | [`/setTval`](../reference/voltage-and-current-mode-settings.md#settval), [`/setDecTval`](../reference/voltage-and-current-mode-settings.md#setdectval) |  |
+| <a id="currentmode-t_fast"></a>`T_FAST` | T_FAST (モータごと) (STEP400のみ) | int | 25 |  | [`/setDecayModeParam`](../reference/voltage-and-current-mode-settings.md#setdecaymodeparam) |  |
+| <a id="currentmode-ton_min"></a>`TON_MIN` | TON_MIN (モータごと) (STEP400のみ) | int | 41 |  | [`/setDecayModeParam`](../reference/voltage-and-current-mode-settings.md#setdecaymodeparam) |  |
+| <a id="currentmode-toff_min"></a>`TOFF_MIN` | TOFF_MIN (モータごと) (STEP400のみ) | int | 41 |  | [`/setDecayModeParam`](../reference/voltage-and-current-mode-settings.md#setdecaymodeparam) |  |
 
 ## servoMode {#servomode}
 

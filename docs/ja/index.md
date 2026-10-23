@@ -1,9 +1,9 @@
 ---
-title: STEP シリーズ
+title: STEPシリーズ
 ---
 
 <!-- Frame page. New page. (R4) -->
 
-# STEP シリーズ
+# STEPシリーズ
 
 このページは枠です。内容はここに移されます。

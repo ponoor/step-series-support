@@ -7,11 +7,11 @@ lang: ja
 
 <!-- This page is generated from spec/osc-commands.yaml by tools/generate.py. Do not edit it directly. (自動生成・直接編集しない) -->
 
-すべての OSC コマンドを、リファレンスのページの順に並べています。コマンド名から詳細へ移動できます。
+すべてのOSCコマンドを、リファレンスのページの順に並べています。コマンド名から詳細へ移動できます。
 
 ## ボード全体の設定
 
-| コマンド | アーギュメント | STEP400 | STEP800 | 追加 |
+| コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
 | [`/setDestIp`](system-settings.md#setdestip) | - | ✓ | ✓ |  |
 | [`/getVersion`](system-settings.md#getversion) | - | ✓ | ✓ |  |
@@ -23,7 +23,7 @@ lang: ja
 
 ## モータドライバの設定
 
-| コマンド | アーギュメント | STEP400 | STEP800 | 追加 |
+| コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
 | [`/setMicrostepMode`](motor-driver-settings.md#setmicrostepmode) | (int)motorID (int)STEP_SEL | ✓ | ✓ |  |
 | [`/getMicrostepMode`](motor-driver-settings.md#getmicrostepmode) | (int)motorID | ✓ | ✓ |  |
@@ -48,7 +48,7 @@ lang: ja
 
 ## アラームの設定
 
-| コマンド | アーギュメント | STEP400 | STEP800 | 追加 |
+| コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
 | [`/enableUvloReport`](alarm-settings.md#enableuvloreport) | (int)motorID (bool)enable | ✓ | ✓ |  |
 | [`/getUvlo`](alarm-settings.md#getuvlo) | (int)motorID | ✓ | ✓ |  |
@@ -67,7 +67,7 @@ lang: ja
 
 ## 電圧モードと電流モード
 
-| コマンド | アーギュメント | STEP400 | STEP800 | 追加 |
+| コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
 | [`/setVoltageMode`](voltage-and-current-mode-settings.md#setvoltagemode) | (int)motorID | ✓ |  |  |
 | [`/setKval`](voltage-and-current-mode-settings.md#setkval) | (int)motorID (int)holdKVAL (int)runKVAL (int)accKVAL (int)decKVAL | ✓ | ✓ |  |
@@ -91,7 +91,7 @@ lang: ja
 
 ## スピードプロファイル
 
-| コマンド | アーギュメント | STEP400 | STEP800 | 追加 |
+| コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
 | [`/setSpeedProfile`](speed-profile.md#setspeedprofile) | (int)motorID (float)acc (float)dec (float)maxSpeed | ✓ | ✓ |  |
 | [`/getSpeedProfile`](speed-profile.md#getspeedprofile) | (int)motorID | ✓ | ✓ |  |
@@ -113,7 +113,7 @@ lang: ja
 
 ## 原点復帰
 
-| コマンド | アーギュメント | STEP400 | STEP800 | 追加 |
+| コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
 | [`/homing`](homing.md#homing) | (int)motorID | ✓ | ✓ |  |
 | [`/getHomingStatus`](homing.md#gethomingstatus) | (int)motorID | ✓ | ✓ |  |
@@ -130,7 +130,7 @@ lang: ja
 
 ## HOME/LIMITスイッチ
 
-| コマンド | アーギュメント | STEP400 | STEP800 | 追加 |
+| コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
 | [`/enableHomeSwReport`](home-and-limit-sensors.md#enablehomeswreport) | (int)motorID (bool)enable | ✓ | ✓ |  |
 | [`/enableSwEventReport`](home-and-limit-sensors.md#enablesweventreport) | (int)motorID (bool)enable | ✓ | ✓ |  |
@@ -144,7 +144,7 @@ lang: ja
 
 ## 座標
 
-| コマンド | アーギュメント | STEP400 | STEP800 | 追加 |
+| コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
 | [`/setPosition`](position-management.md#setposition) | (int)motorID (int)newPosition | ✓ | ✓ |  |
 | [`/getPosition`](position-management.md#getposition) | (int)motorID | ✓ | ✓ |  |
@@ -159,7 +159,7 @@ lang: ja
 
 ## モータの回転・停止
 
-| コマンド | アーギュメント | STEP400 | STEP800 | 追加 |
+| コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
 | [`/run`](motor-control.md#run) | (int)motorID (float)speed | ✓ | ✓ |  |
 | [`/move`](motor-control.md#move) | (int)motorID (int)step | ✓ | ✓ |  |
@@ -183,7 +183,7 @@ lang: ja
 
 ## 電磁ブレーキ
 
-| コマンド | アーギュメント | STEP400 | STEP800 | 追加 |
+| コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
 | [`/enableElectromagnetBrake`](brake.md#enableelectromagnetbrake) | (int)motorID (bool)enable | ✓ | ✓ |  |
 | [`/activate`](brake.md#activate) | (int)motorID (bool)state | ✓ | ✓ |  |
@@ -194,7 +194,7 @@ lang: ja
 
 ## サーボモード
 
-| コマンド | アーギュメント | STEP400 | STEP800 | 追加 |
+| コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
 | [`/enableServoMode`](servo-mode_reference.md#enableservomode) | (int)motorID (bool)enable | ✓ | ✓ |  |
 | [`/setServoParam`](servo-mode_reference.md#setservoparam) | (int)motorID (float)kP (float)kI (float)kD | ✓ | ✓ |  |
