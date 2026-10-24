@@ -1,0 +1,16 @@
+#!/bin/sh
+# Pre-commit check of the spec and the generated pages.
+# Turn on (once per clone):  git config core.hooksPath tools/hooks
+root=$(git rev-parse --show-toplevel) || exit 1
+cd "$root" || exit 1
+py=python3
+[ -x .venv/bin/python ] && py=.venv/bin/python
+
+if ! "$py" tools/validate_spec.py -q >/dev/null; then
+    echo "pre-commit: validate_spec.py failed. See the places with: python tools/validate_spec.py --ja" >&2
+    exit 1
+fi
+if ! "$py" tools/generate.py --check --defaults both >/dev/null; then
+    echo "pre-commit: the generated pages are out of date. Run: python tools/generate.py --defaults both, then git add the pages" >&2
+    exit 1
+fi
