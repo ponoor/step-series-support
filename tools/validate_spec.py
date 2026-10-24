@@ -12,7 +12,8 @@ Checks
   - keys of board-specific values are boards defined in `boards`
   - Japanese wording (spec/glossary_ja.yaml), in two levels:
       error   words that are never used (level omitted in the glossary), and a space between an ASCII
-              letter/digit and a Japanese character, or between two Japanese characters. Fails the check.
+              letter/digit and a Japanese character, between two Japanese characters, or between a number
+              and its unit (spacing.units) in a Japanese sentence. Fails the check.
       review  words that are right in some contexts (`level: review`). Listed for a person to read; never
               fails. A listed place that was read and judged fine goes to spec/glossary_ja_reviewed.yaml
               (where / term / text / note); it is not listed again while `text` is in the sentence, and
@@ -68,6 +69,16 @@ _JA = "\u3000-\u30ff\u3400-\u9fff\uff00-\uffef"
 _ASCII = f"A-Za-z0-9{SENTINEL}"
 SPACE_RE = re.compile(rf"(?:(?<=[{_ASCII}]) +(?=[{_JA}])|(?<=[{_JA}]) +(?=[{_ASCII}]))")
 JJ_SPACE_RE = re.compile(rf"(?<=[{_JA}]) +(?=[{_JA}])")      # between two Japanese characters
+_KANJI_KANA = re.compile("[\u3040-\u30ff\u3400-\u9fff]")
+
+
+def unit_space_re(units: list[str]):
+    """A space between a digit and a unit ("64 mA"), for the units of the glossary (spacing.units)."""
+    alt = "|".join(re.escape(u) for u in sorted(units, key=len, reverse=True))
+    # not after a fraction: "1/16 microstep" is the name of a value
+    return re.compile(rf"(?<!/\d)(?<!/\d\d)(?<!/\d\d\d)(?<=\d) +(?=(?:{alt})(?![A-Za-z0-9_]))")
+
+
 REVIEWED_PATH = REPO_ROOT / "spec" / "glossary_ja_reviewed.yaml"
 
 
@@ -292,6 +303,18 @@ def find_wording(text: str, glossary: dict) -> list[dict]:
                 ctx = plain[max(0, m.start() - 12):m.end() + 12].replace(SENTINEL, "`…`").replace("\n", " ")
                 found.append({"level": "error", "kind": "space", "word": "(空白)", "line": plain.count("\n", 0, m.start()) + 1,
                               "span": m.span(), "ctx": ctx, "words": plain, "term": None})
+    units = glossary.get("spacing", {}).get("units")
+    if units:
+        # inside a Japanese sentence (a line with kana or kanji) the unit follows the number without a space
+        offset = 0
+        for line in plain.split("\n"):
+            if _KANJI_KANA.search(line):
+                for m in unit_space_re(units).finditer(line):
+                    a = offset + m.start()
+                    ctx = plain[max(0, a - 12):a + 14].replace(SENTINEL, "`…`").replace("\n", " ")
+                    found.append({"level": "error", "kind": "space", "word": "(数字と単位)", "line": plain.count("\n", 0, a) + 1,
+                                  "span": (a, offset + m.end()), "ctx": ctx, "words": plain, "term": None})
+            offset += len(line) + 1
     return found
 
 
@@ -474,7 +497,7 @@ def check_japanese_wording(spec: Spec, rep: Report):
             if f["kind"] == "avoid":
                 rep.glossary(f"wording: {f['file']}: {f['where']}: avoid '{f['word']}': …{f['ctx']}…", f["word"])
             else:
-                rep.glossary(f"spacing: {f['file']}: {f['where']}: space between ASCII and Japanese, or two Japanese characters: …{f['ctx']}…", "(空白)")
+                rep.glossary(f"spacing: {f['file']}: {f['where']}: space between ASCII and Japanese, two Japanese characters, or a number and its unit: …{f['ctx']}…", "(空白)")
         else:
             rep.review.append(f)
     for s in stale:

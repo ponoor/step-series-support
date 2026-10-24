@@ -112,6 +112,51 @@ class LevelTest(unittest.TestCase):
         self.assertEqual(self.kinds("モータは無励磁です"), [])
 
 
+GLOSSARY_UNITS = {
+    "terms": [],
+    "spacing": {"no_space_between_ascii_and_ja": True,
+                "units": ["ms", "mA", "A", "V/us", "step/s", "LSB", "microstep", "%"]},
+}
+
+
+class UnitSpacingTest(unittest.TestCase):
+    def kinds(self, text):
+        return [(k, d) for k, d, _ in validate_spec.check_wording(text, GLOSSARY_UNITS)]
+
+    def test_japanese_sentence(self):
+        self.assertEqual([k for k, _ in self.kinds("処理を約41 ms止めます")], ["space"])
+        self.assertEqual([k for k, _ in self.kinds("0〜5 ms後と980 V/usと1 LSB")], ["space", "space", "space"])
+        self.assertEqual(self.kinds("処理を約41ms止めます"), [])
+
+    def test_range_unit(self):
+        self.assertEqual([k for k, _ in self.kinds("0〜65535 msの範囲")], ["space"])
+
+    def test_english_string_and_ja_without_japanese(self):
+        self.assertEqual(self.kinds("It takes 5 ms."), [])
+        self.assertEqual(self.kinds("5 ms"), [])
+
+    def test_only_the_japanese_line_of_a_paragraph(self):
+        self.assertEqual(len(self.kinds("English 5 ms\n\n日本語の5 ms")), 1)
+
+    def test_generated_range_column_is_not_read(self):
+        # "0-65535 ms" of the range / unit column is made by generate.py, in pages that are not checked
+        where = [w for w, _ in validate_spec.japanese_texts()]
+        self.assertFalse(any(w.endswith("connections/configuration-items.md") for w in where))
+
+    def test_code_and_links_are_skipped(self):
+        self.assertEqual(self.kinds("`5 ms`と[[/a 5 ms]]のこと"), [])
+
+    def test_a_word_between_letters_and_digits_is_not_a_unit_space(self):
+        self.assertEqual(self.kinds("TCC 375ns、ID 154、STEP400: 0x1Fの値"), [])
+        self.assertEqual(self.kinds("1 Amp"), [])
+
+    def test_value_name_with_a_fraction(self):
+        self.assertEqual(self.kinds("Full-stepから1/16 microstepまで"), [])
+
+    def test_percent(self):
+        self.assertEqual([k for k, _ in self.kinds("約4.9 %小さく")], ["space"])
+
+
 class ReviewedTest(unittest.TestCase):
     SPEC = Spec({"commands": [{"address": "/a", "description": {"en": "x", "ja": "モータの位置を保持する。ほかの文。"}}]})
 

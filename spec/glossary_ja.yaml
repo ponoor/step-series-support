@@ -116,3 +116,6 @@ spacing:
   # 英数字（A-Z a-z 0-9）と日本語の文字（全角の記号・括弧を含む）の間、および日本語の文字どうしの間に
   # 半角空白を入れない。インラインコードと [[...]] のリンクの前後も同じ。error。
   no_space_between_ascii_and_ja: true
+  # 日本語の文（かな・漢字を含む行）の中では、数字と単位の間にも半角空白を入れない（64mA、5ms）。error。
+  # 英語の文字列、日本語を含まない ja、表の「範囲 / 単位」の列は対象外。
+  units: [ms, s, us, "µs", ns, mA, A, mV, V, V/us, "V/µs", Hz, kHz, MHz, "%", "℃", "°C", mm, step, steps, step/s, step/s/s, microstep, LSB, bit, byte, bytes]
