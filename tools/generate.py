@@ -740,7 +740,7 @@ def _routed_note(ctx: Ctx, c: dict) -> str:
         return ""
     on = ", ".join(extra)
     if ctx.lang == "ja":
-        return f" (ファームウェアは{on}でも受け付けますが、意味のある値は得られません)"
+        return f"（ファームウェアは{on}でも受け付けますが、意味のある値は得られません）"
     return f" (the firmware also accepts it on {on}, but the value is meaningless there)"
 
 

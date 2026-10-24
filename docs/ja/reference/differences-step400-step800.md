@@ -9,7 +9,7 @@ lang: ja
 
 ## STEP400のみで使えるコマンド
 
-- [`/getAdcVal`](motor-driver-settings.md#getadcval) (int)motorID (ファームウェアはSTEP800でも受け付けますが、意味のある値は得られません)
+- [`/getAdcVal`](motor-driver-settings.md#getadcval) (int)motorID（ファームウェアはSTEP800でも受け付けますが、意味のある値は得られません）
 - [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw) (int)motorID (bool)enable
 - [`/getProhibitMotionOnLimitSw`](alarm-settings.md#getprohibitmotiononlimitsw) (int)motorID
 - [`/setVoltageMode`](voltage-and-current-mode-settings.md#setvoltagemode) (int)motorID

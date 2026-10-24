@@ -21,7 +21,7 @@ terms:
     concept: 減速してから止める停止（/softStop）
     avoid: [ソフトストップ]
   - use: 無励磁
-    concept: HiZ（文中で状態を言うとき。初出は「無励磁（HiZ）」）
+    concept: "HiZ（文中で状態を言うとき。「（HiZ）」は添えない。定義は「OSCコマンドリファレンス: 共通の決まり」と機能ガイドに書く）"
     avoid: [ハイインピーダンス]
   - use: 最大速度
     concept: 速度（向きは「回転方向」）
