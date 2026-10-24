@@ -103,7 +103,7 @@ LABELS = {
         "diff_tables": "ボード別の表", "none_found": "なし。",
         "settings_title": "設定項目一覧", "settings_intro": "設定ファイル（microSDカードのJSON）の項目です。初期値は、設定ファイルまたはそのキーがないときの値です。",
         "related": "関連するコマンド", "related_settings": "関連する設定項目",
-        "all": "全て", "motors": "モータ", "first": "ファームウェアの初期値", "boards_only": "{boards}のみ",
+        "all": "すべて", "motors": "モータ", "first": "ファームウェアの初期値", "boards_only": "{boards}のみ",
     },
 }
 

@@ -772,7 +772,7 @@ commands:
 
         To resolve the MAC address, the board sends one byte of UDP to port 9 (discard) of the destination; a Mac answers with ICMP port unreachable, which has no effect on the board. To check that the board is alive, use a command with a reply such as [[/getVersion]], not `/setDestIp`.
       ja: |-
-        モータの状態に変化があったときに通知するメッセージや、問い合わせへ返信するメッセージなどの送り先IPアドレス(`destIp`)を指定します。このメッセージを送信したIPアドレスを`destIp`に設定します。
+        モータの状態に変化があったときに通知するメッセージや、問い合わせへ返信するメッセージなどの送り先IPアドレス（`destIp`）を指定します。このメッセージを送信したIPアドレスを`destIp`に設定します。
 
         また、`destIp`が設定されるまでは、ボードからOSCメッセージの送信は行いませんので、一番最初にこのコマンドを送信してください。唯一の例外は[[/booted]]メッセージです。
 
@@ -889,7 +889,7 @@ commands:
       ja: |-
         マイクロステップのモードを切り替えます。
 
-        定電流制御モード (current mode) では、Full-stepから1/16 microstepまでしか使えません。
+        定電流制御モード（current mode）では、Full-stepから1/16 microstepまでしか使えません。
 
         モータは無励磁でなければなりません。励磁して位置を保っているモータは無励磁ではありません。先に[[/softHiZ]]か[[/hardHiZ]]を送ってください。そうでないときは`MotorNotHiZ`を返し、何も適用されません。STEP400の電流モードでは、1/16より細かいステップモードに`CommandIgnored`を返します。
 
@@ -917,7 +917,7 @@ commands:
     timing: stopped
     description:
       en: Enable/disable low speed optimization feature which compensate phase current distortion at a very low speed using a small driving voltage. When this optimization is enabled, speed profile minimum speed (`Min speed`) is force to zero. Only work with voltage mode. See data sheets for details.
-      ja: 低速回転時の相電流ひずみ補正 (Low speed optimization) の有効無効を切り替えます。この設定が有効になっていると、`Min Speed`は自動的に0になります。この補正は電圧モードでのみ利用可能です。詳しくは対応するデータシートの "Low speed optimization"を参照してください。
+      ja: 低速回転時の相電流ひずみ補正（Low speed optimization）の有効無効を切り替えます。この設定が有効になっていると、`Min Speed`は自動的に0になります。この補正は電圧モードでのみ利用可能です。詳しくは対応するデータシートの "Low speed optimization"を参照してください。
     errors: [MotorNotStopped]
     changes:
       - {version: "2.2.0", en: "The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and nothing is applied.", ja: "モータは停止中か無励磁でなければなりません。回転中のモータには`/error/command MotorNotStopped`を返し、何も適用されません。"}
@@ -1031,7 +1031,7 @@ commands:
     timing: always
     description:
       en: Following message will be sent automatically when there is conditional change in the operating status (MOT_STATUS) of the specified motor. The response message is same as the reply from the [[/getMotorStatus]] command.
-      ja: 指定したモータの動作状態(MOT_STATUS)に変化があったら自動でメッセージを送信する設定を行います。メッセージは[[/getMotorStatus]]の返信と同じです。
+      ja: 指定したモータの動作状態（MOT_STATUS）に変化があったら自動でメッセージを送信する設定を行います。メッセージは[[/getMotorStatus]]の返信と同じです。
     notifies: [/motorStatus]
 
   - address: /getMotorStatus
@@ -1040,7 +1040,7 @@ commands:
     timing: always
     description:
       en: Gets the operating status (MOT_STATUS) of the specified motor.
-      ja: 指定したモータの動作状態(MOT_STATUS)を取得します。
+      ja: 指定したモータの動作状態（MOT_STATUS）を取得します。
     response: [/motorStatus]
 
   - address: /setPositionReportInterval
@@ -1062,7 +1062,7 @@ commands:
 
         An interval above 65535 replies `CommandIgnored` and nothing is applied. A negative interval disables the report, as 0.
       ja: |-
-        指定したモータの現在位置 (`ABS_POS`) を指定間隔で自動送信します。0を指定すると無効化され、送信を停止します。
+        指定したモータの現在位置（`ABS_POS`）を指定間隔で自動送信します。0を指定すると無効化され、送信を停止します。
         いずれかのモータで有効化された場合、`/setPositionListReportInterval`は無効になり自動停止します。
 
         65535を超える間隔には`CommandIgnored`を返し、何も適用されません。負の間隔は、0と同じく通知を無効にします。
@@ -1091,7 +1091,7 @@ commands:
 
         An interval above 65535 replies `CommandIgnored` with the motor ID 255 and nothing is applied. A negative interval disables the report, as 0.
       ja: |-
-        全モータの現在位置 (`ABS_POS`) をひとつのリストにまとめたメッセージを指定間隔で自動送信します。0を指定すると無効化され、送信を停止します。
+        全モータの現在位置（`ABS_POS`）をひとつのリストにまとめたメッセージを指定間隔で自動送信します。0を指定すると無効化され、送信を停止します。
         このコマンドが有効化される際には`/setPositionReportInterval`はすべての軸で無効になり自動停止します。
 
         65535を超える間隔には、モータID 255で`CommandIgnored`を返し、何も適用されません。負の間隔は、0と同じく通知を無効にします。
@@ -1130,7 +1130,7 @@ commands:
 
         This command does not clear the latched flags; only the status poll of the firmware (every 5 ms) does.
       ja: |-
-        モータドライバ(PowerSTEP01/L6470)のSTATUSレジスタを取得します。STATUSレジスタにはモータやアラーム、スイッチの状態などが含まれます。
+        モータドライバ（PowerSTEP01/L6470）のSTATUSレジスタを取得します。STATUSレジスタにはモータやアラーム、スイッチの状態などが含まれます。
 
         レジスタに含まれる情報は、データシートを参照してください。このうち、一部の値はラッチされていて、STATUSレジスタを読み出すとリセットされます。ボードではファームウェアによって常時STATUSレジスタを繰り返し取得しているため、これらの値はすぐにリセットされてしまいます。これらの事象を個別に通知する設定が可能ですので、そちらを利用してください。
 
@@ -1167,7 +1167,7 @@ commands:
 
         The CONFIG register stores various settings for the motor driver. Please refer the datasheet of the PowerSTEP01/L6470 for detail.
       ja: |
-        モータドライバ(PowerSTEP01/L6470)のCONFIGレジスタを取得します。CONFIGレジスタにはモータやアラーム、スイッチの状態などが含まれます。
+        モータドライバ（PowerSTEP01/L6470）のCONFIGレジスタを取得します。CONFIGレジスタにはモータやアラーム、スイッチの状態などが含まれます。
 
         CONFIGレジスタにはモータドライバの各種設定が収められています。詳細についてはモータドライバのデータシートを参照してください。
     response: [/configRegister]
@@ -1182,7 +1182,7 @@ commands:
 
         With the electromagnetic brake enabled, the command is accepted only while the brake is engaged or after [[/free]] (the motor is HiZ); otherwise it replies `CommandIgnored`. When it is accepted (also with the brake disabled), it cancels pending motion and the servo mode. A command that is refused (`CommandIgnored`) cancels nothing.
       ja: |-
-        モータドライバ (PowerSTEP01/L6470) をリセットし、初期設定値を再度書き込みます。
+        モータドライバ（PowerSTEP01/L6470）をリセットし、初期設定値を再度書き込みます。
 
         電磁ブレーキが有効なときは、ブレーキが保持されている間か[[/free]]の後（モータが無励磁）だけ受け付けます。それ以外では`CommandIgnored`を返します。受け付けたときは（ブレーキが無効でも）、保留中の動作とサーボモードを取り消します。拒否されたコマンド（`CommandIgnored`）は、何も取り消しません。
     errors: [CommandIgnored]
@@ -1219,7 +1219,7 @@ commands:
         指定したモータドライバで電源電圧の低下（UVLO, Undervoltage Lockout）が発生した際に自動で通知メッセージを送信するかどうかを指定します。
         UVLOはモータドライバへ供給されている電圧がUVLO発生条件電圧を下回ったら通知の有無にかかわらず発生します。この状態ではモータを動かすことはできません。供給電圧がUVLO解除条件電圧を上回ったら解除されます。
 
-        これらの電圧はSTEP400(PowerSTEP01)とSTEP800(L6470)で異なっていますので、詳しくは対応するデータシートで確認してください。
+        これらの電圧はSTEP400（PowerSTEP01）とSTEP800（L6470）で異なっていますので、詳しくは対応するデータシートで確認してください。
     notifies: [/uvlo]
     see_also: [/getUvlo]
 
@@ -1240,7 +1240,7 @@ commands:
     timing: always
     description:
       en: Sends a notification message when a change in the temperature status (thermalStatus) of the specified motor driver is detected. On bridge shutdown or device shutdown, the motor state will automatically enter High Z state with or without notification.
-      ja: 指定したモータドライバの温度状態(thermalStatus)に変化があったら自動でメッセージを送信するかどうかを指定します。Bridge shutdown, Device shutdown状態では、通知の有無にかかわらずモータは無励磁状態になります。
+      ja: 指定したモータドライバの温度状態（thermalStatus）に変化があったら自動でメッセージを送信するかどうかを指定します。Bridge shutdown, Device shutdown状態では、通知の有無にかかわらずモータは無励磁状態になります。
     notifies: [/thermalStatus]
     see_also: [/getThermalStatus]
 
@@ -1270,7 +1270,7 @@ commands:
         Set to send a notification when the specified motor driver goes into an overcurrent state (OCD, Over Current Detection).
         When overcurrent is detected, the device automatically enters High Z state regardless of whether a notification being sent. The threshold can be set with [[/setOverCurrentThreshold]].
       ja: |
-        指定したモータドライバが過電流状態(OCD, Over Current Detection)になった場合に自動でメッセージを送信するかどうかを指定します。
+        指定したモータドライバが過電流状態（OCD, Over Current Detection）になった場合に自動でメッセージを送信するかどうかを指定します。
         過電流状態になった場合は、通知の有無にかかわらず自動で無励磁状態になります。閾値は[[/setOverCurrentThreshold]]で設定できます。
     notifies: [/overCurrent]
 
@@ -2089,7 +2089,7 @@ commands:
 
         The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value.
       ja: |-
-        スピードプロファイルの減速度 (deceleration) を設定します。
+        スピードプロファイルの減速度（deceleration）を設定します。
 
         最も近いレジスタ値に丸められるため、書き込まれる値は1LSBずれることがあります。範囲外の値は、ドライバライブラリによって制限されます。
 
@@ -2119,7 +2119,7 @@ commands:
 
         A value above the range is limited to 976.3 step/s by the driver library. A negative value below about -0.24 is not limited to 0: the driver library converts it to a huge unsigned number and limits that to the maximum, so it becomes 976.3 step/s.
       ja: |-
-        スピードプロファイルの最小速度を設定します。この値は[[/releaseSw]]時のモータ回転速度にも使用されます。Low speed optimization ([[/enableLowSpeedOptimize]])が有効になっている場合、minSpeedは強制的に0になります。
+        スピードプロファイルの最小速度を設定します。この値は[[/releaseSw]]時のモータ回転速度にも使用されます。Low speed optimization（[[/enableLowSpeedOptimize]]）が有効になっている場合、minSpeedは強制的に0になります。
 
         低速最適化が無効の間は、モータは停止中か無励磁でなければなりません。回転中のモータには`MotorNotStopped`を返し、元の値のままにします。有効の間は、保存される値だけが変わり、エラーは送信されません。
 
@@ -2568,7 +2568,7 @@ commands:
         Sets the following message to be sent automatically when the specified motor's HOME switch terminal state drops from HIGH level to LOW (Falling Edge).
         While the [[/enableHomeSwReport]] command observes the status by polling the STATUS register of motor driver IC from microcomputer's firmware, this `/enableSwEventReport` detects the event by driver IC's hardware, able to pick up the sensor detection shorter than 1ms.
       ja: |
-        指定したモータのHOME端子の状態がHIGHレベルからLOWレベルに遷移した際(Falling Edge)に自動でメッセージを送信する設定を行います。
+        指定したモータのHOME端子の状態がHIGHレベルからLOWレベルに遷移した際（Falling Edge）に自動でメッセージを送信する設定を行います。
         [[/enableHomeSwReport]]はMCUのファームウェア上から約1ms毎にモータドライバICのSTATUSレジスタをポーリングすることによって状態を監視していますが、この`/enableSwEventReport`のほうはドライバIC内でハードウェアによってイベントが検出されるため、1ms以下のごくわずかな時間だけスイッチがオンになった場合でももとり逃しません。
     notifies: [/swEvent]
 
@@ -2621,7 +2621,7 @@ commands:
 
         The outputs must be HiZ; otherwise `MotorNotHiZ` is replied and nothing is applied.
       ja: |-
-        HOME端子に入力があった際に即停止するかどうか(Switch mode)を指定します。
+        HOME端子に入力があった際に即停止するかどうか（Switch mode）を指定します。
 
         出力は無励磁でなければなりません。そうでないときは`MotorNotHiZ`を返し、何も適用されません。
     errors: [MotorNotHiZ]
@@ -2654,7 +2654,7 @@ commands:
     timing: always
     description:
       en: Sets the Switch mode whether to stop the motor immediately when the LIMIT switch terminal condition is changed.
-      ja: LIMIT端子に入力があった際に即停止するかどうか(Switch mode)を指定します。
+      ja: LIMIT端子に入力があった際に即停止するかどうか（Switch mode）を指定します。
     changes:
       - {version: "2.2.0", en: "The automatic hard stop at the limit switch (`SW_HARD_STOP`) is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver).", ja: "ドライバが無励磁のモータには、LIMITスイッチでの自動の即停止（`SW_HARD_STOP`）を送りません。電磁ブレーキが無効でも同じです（即停止は無励磁のドライバを励磁してしまうため）。"}
     see_also: [/getLimitSwMode]
@@ -2720,7 +2720,7 @@ commands:
         Returns the current position of all motors at once. `/getPosition 255` returns individual messages for each motor but this command returns single message with a position list.
         [[/setPositionListReportInterval]] can make the controller to send this list with a specified interval.
       ja: |
-        全モータの現在位置 (`ABS_POS`) を取得します。`/getPosition 255`を送信した場合は、モータの軸数分の個別のメッセージが返されますが、このコマンドは、すべてのモータの位置をリストにまとめた1個のメッセージが返されます。
+        全モータの現在位置（`ABS_POS`）を取得します。`/getPosition 255`を送信した場合は、モータの軸数分の個別のメッセージが返されますが、このコマンドは、すべてのモータの位置をリストにまとめた1個のメッセージが返されます。
 
         [[/setPositionListReportInterval]]コマンドで、指定間隔で自動送信させることもできます。
     response: [/positionList]
@@ -2763,7 +2763,7 @@ commands:
 
         A full step outside 0-3 or a microstep outside 0-127 replies `CommandIgnored` and nothing is applied.
       ja: |-
-        モータの電気的位置(electrical postion)を設定します。マイクロステップは0-127の128段階で表現されていますので、設定時は現在のマイクロステップと齟齬のない値を設定する必要があります。
+        モータの電気的位置（electrical position）を設定します。マイクロステップは0〜127の128段階で表現されていますので、設定時は現在のマイクロステップと齟齬のない値を設定する必要があります。
 
         モータが無励磁のときに使ってください。モータの状態に対するガードはありません。L6470は、モータが停止して励磁されているとき（データシートでは書き込める）も書き込みを拒否し、そのときは`CommandIgnored`が送信されます。
 
@@ -2779,7 +2779,7 @@ commands:
     timing: always
     description:
       en: Returns the current electrical position of the motor.
-      ja: モータの電気的位置 (electrical postion)を取得します。
+      ja: モータの電気的位置（electrical position）を取得します。
     response: [/elPos]
 
   - address: /setMark
@@ -2899,7 +2899,7 @@ commands:
 
         A position outside the range is not rejected. A position above 4,194,303 is limited to 4,194,303 by the driver library, which the driver reads as -1. Any other position is cut to its lower 22 bits and read as a signed number: 2,097,152 becomes -2,097,152 and -2,097,153 becomes 2,097,151.
       ja: |-
-        事前に設定したスピードプロファイルにしたがって、指定位置まで最短経路で移動します。指定位置まで移動し終わるまではBUSY状態になります。
+        事前に設定したスピードプロファイルに従って、指定位置まで最短経路で移動します。指定位置まで移動し終わるまではBUSY状態になります。
 
         ※ドライバ内部では -2,097,152と2,097,151は1周して隣り合った位置になっています。
 
@@ -2931,7 +2931,7 @@ commands:
 
         A position outside the range is not rejected. A position above 4,194,303 is limited to 4,194,303 by the driver library, which the driver reads as -1. Any other position is cut to its lower 22 bits and read as a signed number: 2,097,152 becomes -2,097,152 and -2,097,153 becomes 2,097,151.
       ja: |-
-        事前に設定したスピードプロファイルにしたがって、指定位置まで指定方向で移動します。指定位置まで移動し終わるまではBUSY状態になります。
+        事前に設定したスピードプロファイルに従って、指定位置まで指定方向で移動します。指定位置まで移動し終わるまではBUSY状態になります。
 
         範囲外の位置は拒否されません。4,194,303を超える位置は、ドライバライブラリによって4,194,303に制限され、ドライバはこれを -1として読みます。それ以外の位置は、下位22ビットだけが使われ、符号付きの数として読まれます。2,097,152は -2,097,152に、-2,097,153は2,097,151になります。
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
@@ -3264,7 +3264,7 @@ commands:
         The setting is changed only while the driver is HiZ, and the brake is disabled only while it is engaged or after [[/free]]; otherwise the command replies `CommandIgnored`. Sending the current value does nothing. After a change, the brake output is engaged and the brake state is engaged. The same rule applies to a configuration loaded over USB serial (a warning is printed for a motor that is not changed).
       ja: |
         電磁ブレーキモードを有効・無効にします。
-        電磁ブレーキモードが有効になると、電磁ブレーキを解放しないままモータを回すコマンドを送っても`BrakeEngaged` ([[/error/command]])エラーになります。
+        電磁ブレーキモードが有効になると、電磁ブレーキを解放しないままモータを回すコマンドを送っても`BrakeEngaged`（[[/error/command]]）エラーになります。
     errors: [CommandIgnored]
     changes:
       - {version: "2.2.0", en: "Changes the setting only while the driver is HiZ, and disables the brake only while it is engaged or after `/free`; otherwise `/error/command CommandIgnored`. Sending the current value does nothing. After a change the brake output is engaged and the state is engaged. Before, disabling a released brake engaged it on a turning motor, and enabling it on an energized motor left a state where `/activate 0` and `/hardHiZ` did nothing.", ja: "ドライバが無励磁のときだけ設定を変更し、ブレーキを無効にできるのは、ブレーキが保持されている間か`/free`の後だけです。それ以外では`/error/command CommandIgnored`を返します。現在の値を送っても何も起きません。変更後は、ブレーキ出力が保持され、状態も保持になります。以前は、解放中のブレーキを無効にすると、回転中のモータでブレーキが保持され、励磁中のモータで有効にすると、`/activate 0`と`/hardHiZ`が何もしない状態になっていました。"}
@@ -3364,7 +3364,7 @@ commands:
     errors: [CommandIgnored]
     changes:
       - {version: "2.2.0", en: "A value outside 0-65535 replies `/error/command CommandIgnored` and keeps the setting. Before, the value was taken as a 16-bit unsigned integer, so only its lower 16 bits were used (65536 became 0, -1 became 65535).", ja: "0〜65535の範囲外の値には`/error/command CommandIgnored`を返し、設定は変わりません。以前は、値が16ビットの符号なし整数として扱われ、下位16ビットだけが使われていました（65536は0、-1は65535になっていました）。"}
-      - {version: "2.2.0", en: "The brake times are in 5 ms steps: the release after `/activate 1` comes 0-5 ms after `brakeTransitionDuration` (measured 99.8-105.4 ms for 100 ms; before 99.8-107.6 ms), and the engage after a stop or a HiZ is judged at the next status read.", ja: "ブレーキの時間は5ms単位です。`/activate 1`の後の解放は、`brakeTransitionDuration`の0〜5ms後になります（100msの設定で実測99.8〜105.4ms。以前は99.8〜107.6ms）。停止や無励磁の後の保持は、次のSTATUSレジスタの読み出しで判定されます。"}
+      - {version: "2.2.0", en: "The brake times are in 5 ms steps: the release after `/activate 1` comes 0-5 ms after `brakeTransitionDuration` (measured 99.8-105.4 ms for 100 ms; before 99.8-107.6 ms), and the engage after a stop or a HiZ is judged at the next status read.", ja: "ブレーキの時間は5ms単位です。`/activate 1`の後の解放は、`brakeTransitionDuration`の0〜5ms後になります（100msの設定で実測99.8〜105.4ms。以前は99.8〜107.6ms）。停止や無励磁の後のブレーキの保持は、次のSTATUSレジスタの読み出しで判定されます。"}
     see_also: [/getBrakeTransitionDuration]
 
   - address: /getBrakeTransitionDuration
@@ -4154,7 +4154,7 @@ messages:
       ja: |-
         ボードが（再）起動した際に自動的にボードから送信されるメッセージです。何らかの理由でボードがリセットされたことを検出できます。
 
-        ファームウェアが起動して、Ethernetがリンク状態になった1秒後に送信されます。サブネット内のすべてのノード (`255.255.255.255`) へブロードキャストされます。
+        ファームウェアが起動して、Ethernetがリンク状態になった1秒後に送信されます。サブネット内のすべてのノード（`255.255.255.255`）へブロードキャストされます。
 
         Config Toolの設定を用いて、このメッセージを送信しないようにも設定できます。
 

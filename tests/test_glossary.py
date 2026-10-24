@@ -157,6 +157,41 @@ class UnitSpacingTest(unittest.TestCase):
         self.assertEqual([k for k, _ in self.kinds("約4.9 %小さく")], ["space"])
 
 
+GLOSSARY_PAREN = {"terms": [{"use": "従って", "avoid": ["にしたがって"]}, {"use": "すべて", "avoid": ["全て"]}],
+                  "spacing": {"no_space_between_ascii_and_ja": True, "fullwidth_parentheses": True}}
+
+
+class ParenthesesTest(unittest.TestCase):
+    def kinds(self, text):
+        return [(k, d) for k, d, _ in validate_spec.check_wording(text, GLOSSARY_PAREN)]
+
+    def test_halfwidth_parentheses_next_to_japanese(self):
+        self.assertEqual(len(self.kinds("動作状態(MOT_STATUS)を取得")), 1)
+        self.assertEqual(len(self.kinds("モータドライバ(PowerSTEP01/L6470)の")), 1)
+        self.assertEqual(len(self.kinds("(Falling Edge)に自動で")), 1)
+
+    def test_spaces_are_skipped_when_looking_for_the_neighbour(self):
+        self.assertEqual(len(self.kinds("定電流制御モード (current mode) では")), 1)
+
+    def test_fullwidth_and_english_are_fine(self):
+        self.assertEqual(self.kinds("動作状態（MOT_STATUS）を取得"), [])
+        self.assertEqual(self.kinds("see (the manual) for details"), [])
+
+    def test_inline_code_is_not_changed(self):
+        self.assertEqual(self.kinds("`f(x)`の値"), [])
+
+    def test_pair_is_found_with_a_code_span_inside(self):
+        self.assertEqual(len(self.kinds("現在位置(`ABS_POS`)を")), 1)
+
+    def test_japanese_parens_returns_the_pairs(self):
+        self.assertEqual(validate_spec.japanese_parens("状態(A)と b (c) d"), [(2, 4)])
+
+    def test_words(self):
+        self.assertEqual(self.kinds("プロファイルにしたがって"), [("avoid", "にしたがって")])
+        self.assertEqual(self.kinds("全ての値"), [("avoid", "全て")])
+        self.assertEqual(self.kinds("プロファイルに従って、すべての値"), [])
+
+
 class ReviewedTest(unittest.TestCase):
     SPEC = Spec({"commands": [{"address": "/a", "description": {"en": "x", "ja": "モータの位置を保持する。ほかの文。"}}]})
 

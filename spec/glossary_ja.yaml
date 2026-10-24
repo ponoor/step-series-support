@@ -80,6 +80,12 @@ terms:
   - use: 位置レポート
     concept: 機能名。「位置通知」とは書かない
     avoid: [位置通知]
+  - use: 従って
+    concept: 「従って」にそろえる
+    avoid: [にしたがって]
+  - use: すべて
+    concept: 「すべて」にそろえる
+    avoid: [全て]
   # ---- review
   - use: ボード
     level: review
@@ -118,4 +124,6 @@ spacing:
   no_space_between_ascii_and_ja: true
   # 日本語の文（かな・漢字を含む行）の中では、数字と単位の間にも半角空白を入れない（64mA、5ms）。error。
   # 英語の文字列、日本語を含まない ja、表の「範囲 / 単位」の列は対象外。
+  # 日本語の文字の隣にある半角の括弧 ( ) は全角（ ）にする。error。インラインコードの中は対象外。
+  fullwidth_parentheses: true
   units: [ms, s, us, "µs", ns, mA, A, mV, V, V/us, "V/µs", Hz, kHz, MHz, "%", "℃", "°C", mm, step, steps, step/s, step/s/s, microstep, LSB, bit, byte, bytes]

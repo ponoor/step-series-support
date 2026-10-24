@@ -13,7 +13,8 @@ Checks
   - Japanese wording (spec/glossary_ja.yaml), in two levels:
       error   words that are never used (level omitted in the glossary), and a space between an ASCII
               letter/digit and a Japanese character, between two Japanese characters, or between a number
-              and its unit (spacing.units) in a Japanese sentence. Fails the check.
+              and its unit (spacing.units) in a Japanese sentence, and half-width parentheses next to a
+              Japanese character (they must be （ ）). Fails the check.
       review  words that are right in some contexts (`level: review`). Listed for a person to read; never
               fails. A listed place that was read and judged fine goes to spec/glossary_ja_reviewed.yaml
               (where / term / text / note); it is not listed again while `text` is in the sentence, and
@@ -77,6 +78,32 @@ def unit_space_re(units: list[str]):
     alt = "|".join(re.escape(u) for u in sorted(units, key=len, reverse=True))
     # not after a fraction: "1/16 microstep" is the name of a value
     return re.compile(rf"(?<!/\d)(?<!/\d\d)(?<!/\d\d\d)(?<=\d) +(?=(?:{alt})(?![A-Za-z0-9_]))")
+
+
+def paren_pairs(text: str) -> list[tuple[int, int]]:
+    """Matched pairs (i, j) of half-width parentheses in `text`."""
+    stack: list[int] = []
+    pairs: list[tuple[int, int]] = []
+    for i, ch in enumerate(text):
+        if ch == "(":
+            stack.append(i)
+        elif ch == ")" and stack:
+            pairs.append((stack.pop(), i))
+    return pairs
+
+
+def japanese_parens(text: str) -> list[tuple[int, int]]:
+    """Pairs of half-width parentheses that must be full-width: a Japanese character (spaces skipped) is
+    next to the pair on either side, outside or inside."""
+    ja = re.compile(f"[{_JA}]")
+
+    def near(i: int, step: int) -> bool:
+        i += step
+        while 0 <= i < len(text) and text[i] == " ":
+            i += step
+        return 0 <= i < len(text) and bool(ja.match(text[i]))
+
+    return [(i, j) for i, j in paren_pairs(text) if near(i, -1) or near(i, 1) or near(j, -1) or near(j, 1)]
 
 
 REVIEWED_PATH = REPO_ROOT / "spec" / "glossary_ja_reviewed.yaml"
@@ -303,6 +330,11 @@ def find_wording(text: str, glossary: dict) -> list[dict]:
                 ctx = plain[max(0, m.start() - 12):m.end() + 12].replace(SENTINEL, "`…`").replace("\n", " ")
                 found.append({"level": "error", "kind": "space", "word": "(空白)", "line": plain.count("\n", 0, m.start()) + 1,
                               "span": m.span(), "ctx": ctx, "words": plain, "term": None})
+    if glossary.get("spacing", {}).get("fullwidth_parentheses"):
+        for i, j in japanese_parens(plain):
+            ctx = plain[max(0, i - 8):j + 8].replace(SENTINEL, "`…`").replace("\n", " ")
+            found.append({"level": "error", "kind": "space", "word": "(半角の括弧)", "line": plain.count("\n", 0, i) + 1,
+                          "span": (i, j + 1), "ctx": ctx, "words": plain, "term": None})
     units = glossary.get("spacing", {}).get("units")
     if units:
         # inside a Japanese sentence (a line with kana or kanji) the unit follows the number without a space
@@ -497,7 +529,7 @@ def check_japanese_wording(spec: Spec, rep: Report):
             if f["kind"] == "avoid":
                 rep.glossary(f"wording: {f['file']}: {f['where']}: avoid '{f['word']}': …{f['ctx']}…", f["word"])
             else:
-                rep.glossary(f"spacing: {f['file']}: {f['where']}: space between ASCII and Japanese, two Japanese characters, or a number and its unit: …{f['ctx']}…", "(空白)")
+                rep.glossary(f"spacing: {f['file']}: {f['where']}: space between ASCII and Japanese, two Japanese characters, a number and its unit, or half-width parentheses in a Japanese sentence: …{f['ctx']}…", "(空白)")
         else:
             rep.review.append(f)
     for s in stale:
