@@ -4,4 +4,27 @@
 #   term:  一覧の [ ] の中の語
 #   text:  その語を含む部分。この文字列が今の文に含まれる間だけ有効（含まれなくなると「古い」warning）
 #   note:  なぜよいか
-[]
+- where: "commands[/setMicrostepMode].changes[0].ja"
+  term: 無視
+  text: "ドライバが書き込みを無視する"
+  note: ドライバの挙動。エラーを送らない
+- where: "commands[/setMinSpeedRaw].changes[2].ja"
+  term: 無視
+  text: "ビット12は無視されます"
+  note: エラーを送らずに捨てる
+- where: "commands[/goUntilRaw].changes[0].ja"
+  term: 無視
+  text: "ドライバは上位ビットを無視していました"
+  note: ドライバの挙動
+- where: "messages[/error/osc].description.ja"
+  term: 無視
+  text: "超える引数は無視されます"
+  note: 余分な引数はエラーを送らずに捨てる
+- where: "messages[/brakeStatus].args[state].values[1].ja"
+  term: 保持
+  text: "保持。ブレーキ出力: 保持。"
+  note: ブレーキの状態の名前
+- where: "messages[/brakeStatus].args[state].values[4].ja"
+  term: 保持
+  text: "停止すると保持します"
+  note: ブレーキ
