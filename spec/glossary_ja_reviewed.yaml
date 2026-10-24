@@ -1,0 +1,7 @@
+# 確認済み（validate_spec.py の review を出さない）。文が変わると再び出る。
+# 確認の一覧（python tools/validate_spec.py --ja --review-only）に出たものを、人が「これでよい」と決めたら1件ずつ書く。
+#   where: 一覧に出る場所の表記をそのまま（例 commands[/homing].changes[1].ja）
+#   term:  一覧の [ ] の中の語
+#   text:  その語を含む部分。この文字列が今の文に含まれる間だけ有効（含まれなくなると「古い」warning）
+#   note:  なぜよいか
+[]

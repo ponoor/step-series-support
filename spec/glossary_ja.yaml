@@ -1,7 +1,12 @@
 # 日本語の訳語表。tools/validate_spec.py が検査に使う。
-# use: 使う語。avoid: 使わない語（部分一致）。allow: avoid が出てもよい文脈（正規表現）。
+# use: 使う語。avoid: 使わない語（部分一致）。avoid_regex: 正規表現で書く avoid。
+# allow: avoid が出てもよい文脈（正規表現）。
+# level: error（省略時。文脈によらず使わない。検査が失敗する）／review（文脈で正しいことがある。一覧に出すだけ）。
+# unless_sentence: 同じ文（。か改行で区切る）がこれに当たるときは出さない（正規表現）。
+# 確認して「これでよい」と決めた箇所は spec/glossary_ja_reviewed.yaml に書く。
 # 検査の対象と除外は tools/validate_spec.py の docstring を参照。
 terms:
+  # ---- error
   - use: モータ
     concept: モータ（長音なし）
     avoid: [モーター]
@@ -11,9 +16,6 @@ terms:
   - use: 解放
     concept: ブレーキを外す。外した状態は「解放中」
     avoid: [開放]
-  - use: 保持
-    concept: ブレーキを掛けること。モータの位置については「励磁して位置を保つ」
-    avoid: []
   - use: 即停止
     concept: 即座に止める停止（/hardStop）
     avoid: [ハードストップ, 即時停止]
@@ -29,14 +31,9 @@ terms:
   - use: スピードプロファイル
     concept: 加速度・減速度・最大速度の組
     avoid: [速度プロファイル]
-  - use: ストール
-    concept: stall
-    avoid: [脱調]
-    allow: ["脱調（ステップのずれ）"]
   - use: 返信
     concept: 問い合わせ（コマンド）への返事。問い合わせなしにボードが送るものは「通知」
-    avoid: [返答, 応答, 返送, 報告]
-    allow: ["ARPの応答"]
+    avoid: [返答, 返送]
   - use: 引数
     concept: argument
     avoid: [アーギュメント]
@@ -52,6 +49,9 @@ terms:
   - use: LIMITスイッチ
     concept: LIMIT 端子につなぐもの（センサでも）
     avoid: [LIMITセンサ, Limitセンサ, リミットセンサ]
+  - use: HOME端子
+    concept: 「HOMEスイッチ端子」とは書かない（スイッチの状態は「HOMEスイッチがオン」）
+    avoid: [HOMEスイッチ端子, LIMITスイッチ端子]
   - use: オン
     concept: スイッチの状態（オン = 入力が Low）。オフはその反対
     avoid: [作動している, 反応している, 押されている]
@@ -59,12 +59,8 @@ terms:
     concept: microstep
     avoid: [マイクロステッピング]
   - use: ボード
-    concept: STEP400・STEP800 の総称。「基板」は寸法・端子・部品の配置など物としての基板だけ
-    avoid: [本デバイス, 基板]
-    allow: ["本機能"]
-  - use: ボード
-    concept: ボード（「本機」は使わない）
-    avoid: [本機]
+    concept: STEP400・STEP800 の総称。「本デバイス」「本機」は使わない
+    avoid: [本デバイス, 本機]
     allow: ["本機能"]
   - use: MCU
     concept: microcontroller
@@ -75,19 +71,48 @@ terms:
   - use: 過熱遮断
     concept: thermal / bridge / device shutdown
     avoid: [温度の遮断]
-  - use: 温度警告
-    concept: thermal warning
-    avoid: []
-  - use: ステータス
+  - use: STATUSレジスタ
     concept: 「STATUSレジスタ」または「状態」と書く
     avoid: [ステータス]
   - use: ラッチされたフラグ
     concept: latched flags
     avoid: [警告フラグ]
+  - use: 位置レポート
+    concept: 機能名。「位置通知」とは書かない
+    avoid: [位置通知]
+  # ---- review
+  - use: ボード
+    level: review
+    concept: 「基板」は寸法・端子・部品の配置など、物としての基板の話だけ
+    avoid: [基板]
+  - use: 返信
+    level: review
+    concept: 返信（コマンドへの返事）／通知（問い合わせなしに送る）。ネットワークの「応答」は ARP などに限る
+    avoid: [応答, 報告]
+    allow: ["ARPの応答", "応答時間"]
   - use: 一周する
-    concept: 範囲外の値は「最大値の次を0として数え直した値になる」と書く
+    level: review
+    concept: 「範囲外の値は最大値の次を0として数え直した値になる」と書く。1回転の意味なら「1回転」
     avoid: [一周]
+  - use: ストール
+    level: review
+    concept: stall。「脱調」は但書の「脱調（ステップのずれ）」だけ
+    avoid: [脱調]
+    allow: ["脱調（ステップのずれ）"]
+  - use: 拒否
+    level: review
+    concept: エラーを送って受け付けないものは「拒否」。エラーを送らずに捨てるものだけ「無視」
+    avoid: [無視]
+  - use: 保持
+    level: review
+    concept: ブレーキにだけ使う。モータは「励磁して位置を保つ」
+    avoid: [保持]
+    unless_sentence: ["ブレーキ", "保持中", "保持状態", "保持への"]
+  - use: 無励磁
+    level: review
+    concept: 文中の HiZ。コード・アドレス・エラー名・値の名前の HiZ はそのまま
+    avoid_regex: ['(?<![A-Za-z0-9/_])HiZ(?![A-Za-z0-9_])']
 spacing:
-  # 英数字（A-Z a-z 0-9）と日本語の文字（全角の記号・括弧を含む）の間に半角空白を入れない。
-  # インラインコードと [[...]] のリンクの前後も同じ。
+  # 英数字（A-Z a-z 0-9）と日本語の文字（全角の記号・括弧を含む）の間、および日本語の文字どうしの間に
+  # 半角空白を入れない。インラインコードと [[...]] のリンクの前後も同じ。error。
   no_space_between_ascii_and_ja: true

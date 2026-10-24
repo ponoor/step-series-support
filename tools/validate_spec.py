@@ -10,12 +10,24 @@ Checks
     settings.*.commands (-> commands), errors (-> values of /error/command)
   - duplicated addresses and setting keys
   - keys of board-specific values are boards defined in `boards`
-  - Japanese wording (spec/glossary_ja.yaml): words to avoid, and a space between an ASCII
-    letter/digit and a Japanese character. Checked in every `ja` text of the spec, in docs/ja/**/*.md
-    (not the pages in exclude_docs, and not the pages generated from the spec), in the Japanese
-    nav_translations of mkdocs.yml and in the Japanese fixed texts of tools/generate.py.
-    Inline code, code blocks, [[...]] links, URLs, HTML comments and generated blocks are left out
-    (code and links count as one ASCII word for the spacing check).
+  - Japanese wording (spec/glossary_ja.yaml), in two levels:
+      error   words that are never used (level omitted in the glossary), and a space between an ASCII
+              letter/digit and a Japanese character, or between two Japanese characters. Fails the check.
+      review  words that are right in some contexts (`level: review`). Listed for a person to read; never
+              fails. A listed place that was read and judged fine goes to spec/glossary_ja_reviewed.yaml
+              (where / term / text / note); it is not listed again while `text` is in the sentence, and
+              a record whose `text` is gone gives the warning "reviewed record is stale".
+    Checked in every `ja` text of the spec, in docs/ja/**/*.md (not the pages in exclude_docs, and not
+    the pages generated from the spec), in the Japanese nav_translations of mkdocs.yml and in the
+    Japanese fixed texts of tools/generate.py. Inline code, code blocks, [[...]] links, URLs, HTML
+    comments and generated blocks are left out (code and links count as one ASCII word for spacing).
+
+    python tools/validate_spec.py --ja                  only the Japanese checks, one finding per line
+                                                        (YAML line, place, word, context)
+    python tools/validate_spec.py --ja --review-only    only the review findings
+
+The commit hook tools/hooks/pre-commit runs `validate_spec.py -q` and `generate.py --check`. To turn it on
+(once per clone):  git config core.hooksPath tools/hooks
 Warnings (not failures): empty texts (missing Japanese etc.), values with en but no ja, messages without description.
 Exit code 1 if any check fails.
 """
@@ -55,6 +67,8 @@ GENERATED_BLOCK_RE = re.compile(r"<!-- generated:begin .*?<!-- generated:end [^\
 _JA = "\u3000-\u30ff\u3400-\u9fff\uff00-\uffef"
 _ASCII = f"A-Za-z0-9{SENTINEL}"
 SPACE_RE = re.compile(rf"(?:(?<=[{_ASCII}]) +(?=[{_JA}])|(?<=[{_JA}]) +(?=[{_ASCII}]))")
+JJ_SPACE_RE = re.compile(rf"(?<=[{_JA}]) +(?=[{_JA}])")      # between two Japanese characters
+REVIEWED_PATH = REPO_ROOT / "spec" / "glossary_ja_reviewed.yaml"
 
 
 class Report:
@@ -62,6 +76,7 @@ class Report:
         self.errors: list[str] = []
         self.warnings: list[str] = []
         self.glossary_hits: Counter = Counter()  # Japanese wording errors, by word
+        self.review: list[dict] = []             # Japanese wording findings to read (never fail)
 
     def error(self, msg: str):
         self.errors.append(msg)
@@ -239,26 +254,55 @@ def strip_markup(text: str, placeholder: str = SENTINEL) -> str:
     return text
 
 
-def check_wording(text: str, glossary: dict) -> list[tuple[str, str, int]]:
-    """[(kind, detail, line)] for one text (line from 1). kind: 'avoid' (detail: the word) or 'space'."""
+def _sentence(words: str, a: int, b: int) -> str:
+    s = max(words.rfind("。", 0, a), words.rfind("\n", 0, a)) + 1
+    ends = [i for i in (words.find("。", b), words.find("\n", b)) if i >= 0]
+    return words[s:(min(ends) + 1 if ends else len(words))]
+
+
+def find_wording(text: str, glossary: dict) -> list[dict]:
+    """Findings of one text: {level: error|review, kind: avoid|space, word, line, span, ctx, words}.
+
+    `words` is the text without code and links and without the spaces next to ASCII (the string the spans refer to)."""
     plain = strip_markup(text)
-    found: list[tuple[str, str, int]] = []
+    found: list[dict] = []
     # words are looked up with the spaces next to ASCII removed ("HOME センサ" is "HOMEセンサ"); line breaks stay
     words = SPACE_RE.sub("", plain)
+
+    def ctx_of(a: int, b: int) -> str:
+        return words[max(0, a - 20):b + 20].replace(SENTINEL, "`…`").replace("\n", " ")
+
     for term in glossary.get("terms", []):
+        level = term.get("level", "error")
         allowed = [m.span() for pat in term.get("allow", []) for m in re.finditer(pat, words)]
         hits = [(m.span(), word) for word in term.get("avoid", []) for m in re.finditer(re.escape(word), words)]
+        hits += [(m.span(), m.group(0)) for pat in term.get("avoid_regex", []) for m in re.finditer(pat, words)]
         for (a, b), word in hits:
             if any(x <= a and b <= y for x, y in allowed):
                 continue
             if any((x, y) != (a, b) and x <= a and b <= y for (x, y), _ in hits):
                 continue  # inside a longer word of the same term (最大速さ / 速さ)
-            found.append(("avoid", word, words.count("\n", 0, a) + 1))
+            if any(re.search(pat, _sentence(words, a, b)) for pat in term.get("unless_sentence", [])):
+                continue
+            found.append({"level": level, "kind": "avoid", "word": word, "line": words.count("\n", 0, a) + 1,
+                          "span": (a, b), "ctx": ctx_of(a, b), "words": words, "term": term.get("use")})
     if glossary.get("spacing", {}).get("no_space_between_ascii_and_ja"):
-        for m in SPACE_RE.finditer(plain):
-            ctx = plain[max(0, m.start() - 6):m.end() + 6].replace(SENTINEL, "`…`").replace("\n", " ")
-            found.append(("space", ctx, plain.count("\n", 0, m.start()) + 1))
+        for rx in (SPACE_RE, JJ_SPACE_RE):
+            for m in rx.finditer(plain):
+                ctx = plain[max(0, m.start() - 12):m.end() + 12].replace(SENTINEL, "`…`").replace("\n", " ")
+                found.append({"level": "error", "kind": "space", "word": "(空白)", "line": plain.count("\n", 0, m.start()) + 1,
+                              "span": m.span(), "ctx": ctx, "words": plain, "term": None})
     return found
+
+
+def check_wording(text: str, glossary: dict) -> list[tuple[str, str, int]]:
+    """[(kind, detail, line)] for one text (line from 1). kind: 'avoid' (error level, detail: the word),
+    'review' (review level, detail: the word) or 'space'."""
+    out = []
+    for f in find_wording(text, glossary):
+        kind = "space" if f["kind"] == "space" else ("avoid" if f["level"] == "error" else "review")
+        out.append((kind, f["ctx"] if kind == "space" else f["word"], f["line"]))
+    return out
 
 
 def _is_excluded(rel: str, patterns: list[str]) -> bool:
@@ -334,31 +378,138 @@ def generate_py_texts(path: Path = GENERATE_PATH) -> list[tuple[str, str]]:
     return out
 
 
-def check_japanese_wording(spec: Spec, rep: Report):
-    glossary = load_glossary()
+def yaml_lines(path: Path) -> dict[str, int]:
+    """{where: first line of the `ja` text in the YAML file}, with `where` spelled as Spec.iter_texts does."""
+    lines: dict[str, int] = {}
 
-    def report(where: str, text: str, line_of: bool):
-        for kind, detail, line in check_wording(text, glossary):
-            loc = f"{where}:{line}" if line_of else where
-            if kind == "avoid":
-                rep.glossary(f"wording: {loc}: avoid '{detail}'", detail)
-            else:
-                rep.glossary(f"spacing: {loc}: space between ASCII and Japanese: …{detail}…", "(空白)")
+    def label(node, i):
+        if isinstance(node, yaml.MappingNode):
+            d = {k.value: v for k, v in node.value if isinstance(k, yaml.ScalarNode) and isinstance(v, yaml.ScalarNode)}
+            for key in ("address", "key", "name"):
+                if d.get(key) is not None and d[key].value != "":
+                    return d[key].value
+        return str(i)
+
+    def walk(node, where):
+        if isinstance(node, yaml.MappingNode):
+            for k, val in node.value:
+                key = k.value
+                if key == "ja" and isinstance(val, yaml.ScalarNode):
+                    lines[where] = val.start_mark.line + 1 + (1 if val.style in ("|", ">") else 0)
+                elif key != "en":
+                    walk(val, f"{where}.{key}" if where else str(key))
+        elif isinstance(node, yaml.SequenceNode):
+            for i, val in enumerate(node.value):
+                walk(val, f"{where}[{label(val, i)}]")
+
+    walk(yaml.compose(Path(path).read_text(encoding="utf-8")), "")
+    return lines
+
+
+def load_reviewed(path: Path = REVIEWED_PATH) -> list[dict]:
+    if not path.exists():
+        return []
+    return yaml.safe_load(path.read_text(encoding="utf-8")) or []
+
+
+def _norm(text: str) -> str:
+    return SPACE_RE.sub("", strip_markup(text))
+
+
+def japanese_findings(spec: Spec, glossary: dict | None = None, reviewed: list[dict] | None = None, files: bool = True):
+    """(findings, stale): findings are dicts {level, kind, word, ctx, file, where, ...}; level 'review' findings that
+    a reviewed record covers are left out. stale: messages for records whose text is no longer there."""
+    glossary = glossary or load_glossary()
+    reviewed = load_reviewed() if reviewed is None else reviewed
+    try:
+        rel = Path(spec.path).resolve().relative_to(REPO_ROOT).as_posix()
+    except (TypeError, ValueError):
+        rel = str(spec.path)
+    lines = yaml_lines(spec.path) if spec.path else {}
+    texts: dict[str, str] = {}
+    out: list[dict] = []
+
+    def add(file: str, where: str, text: str, line_base: int | None):
+        for f in find_wording(text, glossary):
+            f["file"] = f"{file}:{line_base + f['line'] - 1}" if line_base else file
+            f["where"] = where
+            out.append(f)
 
     for where, lang, text in spec.iter_texts():
-        if lang == "ja":
-            report(where, text, False)
-    for where, text in japanese_texts():
-        report(where, text, where.startswith("docs/"))
+        if lang != "ja" or where.endswith(".label"):
+            continue  # configuration item labels stay English
+        texts[f"{where}.ja"] = text
+        add(rel, f"{where}.ja", text, lines.get(where))
+    for where, text in (japanese_texts() if files else []):
+        texts[where] = text
+        if where.startswith("docs/"):
+            add(where, where, text, 1)
+        else:
+            for f in find_wording(text, glossary):
+                f["file"] = where
+                f["where"] = where
+                out.append(f)
+
+    stale: list[str] = []
+    covered_ids: set[int] = set()
+    for rec in reviewed:
+        where, term, want = rec.get("where"), rec.get("term"), rec.get("text", "")
+        have = _norm(texts[where]) if where in texts else None
+        want_n = _norm(want)
+        if have is None or want_n not in have:
+            stale.append(f"reviewed record is stale: {where} [{term}] {want!r}")
+            continue
+        spans = [(m.start(), m.end()) for m in re.finditer(re.escape(want_n), have)]
+        for i, f in enumerate(out):
+            if f["level"] == "review" and f["where"] == where and f.get("word") == term:
+                if any(a <= f["span"][0] and f["span"][1] <= b for a, b in spans):
+                    covered_ids.add(i)
+    return [f for i, f in enumerate(out) if i not in covered_ids], stale
+
+
+def check_japanese_wording(spec: Spec, rep: Report):
+    findings, stale = japanese_findings(spec)
+    for f in findings:
+        if f["level"] == "error":
+            if f["kind"] == "avoid":
+                rep.glossary(f"wording: {f['file']}: {f['where']}: avoid '{f['word']}': …{f['ctx']}…", f["word"])
+            else:
+                rep.glossary(f"spacing: {f['file']}: {f['where']}: space between ASCII and Japanese, or two Japanese characters: …{f['ctx']}…", "(空白)")
+        else:
+            rep.review.append(f)
+    for s in stale:
+        rep.warn(s)
+
+
+def print_findings(spec: Spec, review_only: bool) -> int:
+    findings, stale = japanese_findings(spec)
+    n_err = n_rev = 0
+    for f in findings:
+        if f["level"] == "error":
+            n_err += 1
+            if review_only:
+                continue
+        else:
+            n_rev += 1
+        print(f"{f['level']:<6} {f['file']:<42} {'' if f['file'].startswith(f['where']) else f['where']:<46} [{f['word']}] …{f['ctx']}…")
+    for s in stale:
+        print(f"warning {s}")
+    print()
+    print(f"error: {n_err}  review: {n_rev}  stale records: {len(stale)}")
+    return 1 if n_err else 0
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("path", nargs="?", default=str(SPEC_PATH))
     ap.add_argument("-q", "--quiet", action="store_true", help="print counts only (warnings, Japanese wording errors)")
+    ap.add_argument("--ja", action="store_true", help="only the Japanese wording checks, one finding per line")
+    ap.add_argument("--review-only", action="store_true", help="with --ja: only the findings to review")
     args = ap.parse_args()
 
     spec = Spec.load(args.path)
+    if args.ja:
+        return print_findings(spec, args.review_only)
     rep = Report()
     check_schema(spec, rep)
     if not rep.errors:
@@ -379,6 +530,8 @@ def main() -> int:
 
     kinds = Counter(w.split(":")[0] for w in rep.warnings)
     print()
+    if rep.review:
+        print(f"Japanese wording to review: {len(rep.review)} (python tools/validate_spec.py --ja --review-only)")
     print(f"commands: {len(spec.commands)}  messages: {len(spec.messages)}  settings: {len(spec.settings)}")
     print(f"errors: {len(rep.errors)}  warnings: {len(rep.warnings)}"
           + (" (" + ", ".join(f"{k}: {n}" for k, n in sorted(kinds.items())) + ")" if kinds else ""))

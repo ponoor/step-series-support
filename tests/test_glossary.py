@@ -11,12 +11,23 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "tools"))
 
 import validate_spec  # noqa: E402
+from spec import Spec  # noqa: E402
 
 GLOSSARY = {
     "terms": [
         {"use": "解放", "avoid": ["開放"]},
         {"use": "返信", "avoid": ["応答", "報告"], "allow": ["ARPの応答"]},
         {"use": "速度", "avoid": ["最大速さ", "速さ"]},
+    ],
+    "spacing": {"no_space_between_ascii_and_ja": True},
+}
+
+
+GLOSSARY_LEVELS = {
+    "terms": [
+        {"use": "解放", "avoid": ["開放"]},
+        {"use": "保持", "level": "review", "avoid": ["保持"], "unless_sentence": ["ブレーキ"]},
+        {"use": "無励磁", "level": "review", "avoid_regex": ["(?<![A-Za-z0-9/_])HiZ(?![A-Za-z0-9_])"]},
     ],
     "spacing": {"no_space_between_ascii_and_ja": True},
 }
@@ -77,11 +88,74 @@ class SpacingTest(unittest.TestCase):
         self.assertEqual(check("`USB シリアル`"), [])
 
 
+class LevelTest(unittest.TestCase):
+    def kinds(self, text):
+        return [(k, d) for k, d, _ in validate_spec.check_wording(text, GLOSSARY_LEVELS)]
+
+    def test_default_level_is_error(self):
+        self.assertEqual(self.kinds("ブレーキを開放"), [("avoid", "開放")])
+
+    def test_review_level(self):
+        self.assertEqual(self.kinds("モータの位置を保持する"), [("review", "保持")])
+
+    def test_unless_sentence(self):
+        self.assertEqual(self.kinds("ブレーキの保持。"), [])
+        self.assertEqual(self.kinds("ブレーキの状態。位置を保持する。"), [("review", "保持")])
+
+    def test_avoid_regex_skips_code_and_names(self):
+        self.assertEqual(self.kinds("モータがHiZになる"), [("review", "HiZ")])
+        self.assertEqual(self.kinds("`HiZ`とMotorNotHiZと/HiZ"), [])
+
+    def test_space_between_japanese_characters(self):
+        self.assertEqual([k for k, _ in self.kinds("モータは 無励磁 です")], ["space", "space"])
+        self.assertEqual([k for k, _ in self.kinds("設定値については 電圧モード を参照")], ["space", "space"])
+        self.assertEqual(self.kinds("モータは無励磁です"), [])
+
+
+class ReviewedTest(unittest.TestCase):
+    SPEC = Spec({"commands": [{"address": "/a", "description": {"en": "x", "ja": "モータの位置を保持する。ほかの文。"}}]})
+
+    def run_(self, reviewed):
+        return validate_spec.japanese_findings(self.SPEC, GLOSSARY_LEVELS, reviewed, files=False)
+
+    def test_listed_without_record(self):
+        findings, stale = self.run_([])
+        self.assertEqual([(f["level"], f["word"], f["where"]) for f in findings], [("review", "保持", "commands[/a].description.ja")])
+        self.assertEqual(stale, [])
+
+    def test_reviewed_record_hides_the_finding(self):
+        rec = {"where": "commands[/a].description.ja", "term": "保持", "text": "位置を保持する", "note": "ok"}
+        findings, stale = self.run_([rec])
+        self.assertEqual(findings, [])
+        self.assertEqual(stale, [])
+
+    def test_stale_record_is_reported_and_the_finding_comes_back(self):
+        rec = {"where": "commands[/a].description.ja", "term": "保持", "text": "位置を保つ", "note": "old"}
+        findings, stale = self.run_([rec])
+        self.assertEqual(len(findings), 1)
+        self.assertEqual(len(stale), 1)
+        self.assertIn("stale", stale[0])
+
+    def test_record_for_a_missing_place_is_stale(self):
+        rec = {"where": "commands[/gone].description.ja", "term": "保持", "text": "x", "note": ""}
+        self.assertEqual(len(self.run_([rec])[1]), 1)
+
+    def test_error_level_is_never_hidden_by_a_record(self):
+        spec = Spec({"commands": [{"address": "/a", "description": {"en": "x", "ja": "開放する"}}]})
+        rec = {"where": "commands[/a].description.ja", "term": "開放", "text": "開放する", "note": ""}
+        findings, _ = validate_spec.japanese_findings(spec, GLOSSARY_LEVELS, [rec], files=False)
+        self.assertEqual([f["level"] for f in findings], ["error"])
+
+
 class FilesTest(unittest.TestCase):
     def test_glossary_file_loads(self):
         g = validate_spec.load_glossary()
         self.assertTrue(g["terms"])
         self.assertTrue(g["spacing"]["no_space_between_ascii_and_ja"])
+        self.assertTrue({t.get("level", "error") for t in g["terms"]} <= {"error", "review"})
+
+    def test_reviewed_file_loads(self):
+        self.assertIsInstance(validate_spec.load_reviewed(), list)
 
     def test_generate_py_texts_expand_placeholders(self):
         texts = dict(validate_spec.generate_py_texts())
