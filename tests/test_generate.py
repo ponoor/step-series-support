@@ -218,6 +218,103 @@ class GenerateTest(unittest.TestCase):
         self.assertIn("/setDestIp: marker found 0 times", text)
 
 
+class MarkerCoverageTest(unittest.TestCase):
+    """Markers of the commands and of the messages (docs/en and docs/ja only)."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.docs = Path(self._tmp.name) / "docs"
+        self.required = generate.required_messages(SPEC)
+        for lang in generate.LANGS:
+            pages: dict[str, list[str]] = {}
+            for c in SPEC.commands:
+                pages.setdefault(SPEC.groups[c["group"]]["page"], []).append(f"<!-- osc: {c['address']} -->")
+            pages[generate.MESSAGES_PAGE] = [f"<!-- osc-message: {a} -->" for a in self.required]
+            for page, lines in pages.items():
+                path = self.docs / lang / "reference" / f"{page}.md"
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text("# page\n\n" + "\n\n".join(lines) + "\n", encoding="utf-8")
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def page(self, lang: str, name: str) -> Path:
+        return self.docs / lang / "reference" / f"{name}.md"
+
+    def test_required_messages(self):
+        self.assertIn("/booted", self.required)
+        for a in generate.STANDALONE_MESSAGES:
+            self.assertIn(a, self.required)
+        listed = {a for c in SPEC.commands for a in SPEC.response_messages(c)}
+        self.assertNotIn("/version", self.required)
+        self.assertIn("/version", listed)
+
+    def test_complete_set_has_no_problem(self):
+        self.assertEqual(generate.check_coverage(self.docs, SPEC), [])
+        code, text = run(self.docs, coverage=True)
+        self.assertEqual(code, 0, text)
+
+    def test_missing_command_and_required_message(self):
+        page = self.page("ja", "system-settings")
+        page.write_text(page.read_text(encoding="utf-8").replace("<!-- osc: /getVersion -->", ""), encoding="utf-8")
+        msgs = self.page("en", generate.MESSAGES_PAGE)
+        msgs.write_text(msgs.read_text(encoding="utf-8").replace("<!-- osc-message: /booted -->", ""), encoding="utf-8")
+        errors = generate.check_coverage(self.docs, SPEC)
+        self.assertEqual(sorted(errors), sorted([
+            "[ja] /getVersion: marker found 0 times (expected once in system-settings)",
+            "[en] /booted: marker found 0 times (expected once in automatically-sent-messages)",
+        ]))
+
+    def test_optional_message_is_allowed_once_on_the_messages_page_only(self):
+        msgs = self.page("en", generate.MESSAGES_PAGE)
+        base = msgs.read_text(encoding="utf-8")
+        msgs.write_text(base + "\n<!-- osc-message: /version -->\n", encoding="utf-8")
+        self.assertEqual(generate.check_coverage(self.docs, SPEC), [])
+        msgs.write_text(base + "\n<!-- osc-message: /version -->\n\n<!-- osc-message: /version -->\n", encoding="utf-8")
+        self.assertEqual(generate.check_coverage(self.docs, SPEC),
+                         ["[en] /version: marker found 2 times (expected at most once in automatically-sent-messages)"])
+        msgs.write_text(base, encoding="utf-8")
+        other = self.page("ja", "system-settings")
+        other.write_text(other.read_text(encoding="utf-8") + "\n<!-- osc-message: /version -->\n", encoding="utf-8")
+        self.assertEqual(generate.check_coverage(self.docs, SPEC),
+                         ["[ja] /version: marker in system-settings, expected the page of the messages (automatically-sent-messages)"])
+
+    def test_misplaced_and_duplicated_commands(self):
+        ss = self.page("en", "system-settings")
+        ss.write_text(ss.read_text(encoding="utf-8") + "\n<!-- osc: /getVersion -->\n", encoding="utf-8")
+        msgs = self.page("ja", generate.MESSAGES_PAGE)
+        msgs.write_text(msgs.read_text(encoding="utf-8").replace("<!-- osc-message: /booted -->", "<!-- osc-message: /booted -->\n\n<!-- osc: /getVersion -->"), encoding="utf-8")
+        errors = generate.check_coverage(self.docs, SPEC)
+        self.assertIn("[en] /getVersion: marker found 2 times (expected once in system-settings)", errors)
+        self.assertTrue(any(e.startswith("[ja] /getVersion: marker found 2 times") for e in errors), errors)
+
+    def test_other_directories_are_not_counted(self):
+        old = self.docs / "osc-command-references" / "system-settings_en.md"
+        old.parent.mkdir(parents=True)
+        old.write_text("<!-- osc: /getVersion -->\n", encoding="utf-8")
+        self.assertEqual(generate.check_coverage(self.docs, SPEC), [])
+
+    def test_usual_run_warns_with_numbers_and_keeps_the_exit_code(self):
+        empty = Path(self._tmp.name) / "empty"
+        (empty / "en" / "reference").mkdir(parents=True)
+        (empty / "en" / "reference" / "plain.md").write_text(PLAIN, encoding="utf-8")
+        code, text = run(empty)
+        self.assertEqual(code, 0)
+        n, m = len(SPEC.commands), len(self.required)
+        for lang in generate.LANGS:
+            self.assertIn(f"WARNING [{lang}] markers: commands 0/{n}, messages 0/{m} required; 0 misplaced, 0 duplicated "
+                          "(run with --coverage for the list)", text)
+        code, text = run(empty, check=True)
+        self.assertEqual(code, 0)                              # --check: nothing would change, the warning does not matter
+        self.assertNotIn("ERROR", text)
+        code, text = run(self.docs)
+        self.assertEqual(code, 0)
+        self.assertIn(f"commands {n}/{n}, messages {m}/{m} required; 0 misplaced, 0 duplicated", text)
+        code, text = run(empty, coverage=True)
+        self.assertEqual(code, 1)
+        self.assertNotIn("WARNING", text)
+
+
 class RealDocsTest(unittest.TestCase):
     def test_generated_pages_of_the_repository_are_up_to_date(self):
         """The committed generated pages equal what generate.py writes now."""

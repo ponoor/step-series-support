@@ -32,6 +32,10 @@ the English one; the number of such texts is printed.
 Initial values (`--defaults`): `firmware` shows the built-in value of the firmware, `template`
 the value of configGenerator/configTemplate_*.json, `both` (default) shows both when they differ.
 
+Markers are counted in docs/en/ and docs/ja/ only (the old pages are not counted; the expansion above looks at all of
+`docs/`). The usual run prints one WARNING line per language with the numbers and does not change the exit code;
+`--coverage` lists every missing, duplicated or misplaced marker as an error.
+
 Exit code 1 on an error (unknown address, broken `[[link]]`, changes with --check).
 """
 
@@ -58,6 +62,9 @@ SETTINGS_DIR = "connections"
 SETTINGS_PAGE = "configuration-items"
 # The Japanese file of a page that has another name than the English one (none now)
 JP_PAGE_NAMES: dict[str, str] = {}
+# Messages that are described on their own in the page of the messages, besides the ones that no command
+# lists in `response` / `notifies` (PLAN_osc_yaml_schema.md, chapter 5).
+STANDALONE_MESSAGES = ("/booted", "/error/osc", "/error/command")
 
 LANGS = ("en", "ja")                                      # docs/en/..., docs/ja/... (mkdocs-static-i18n, folder structure)
 SUFFIX = {"en": ".md", "ja": ".md"}
@@ -914,28 +921,90 @@ def run(docs: Path, spec: Spec, defaults: str = "both", check: bool = False,
         print(f"  {p.relative_to(docs)}", file=out)
     print(f"Japanese texts filled with English: {ja_missing} "
           f"({', '.join(f'{k} {v}' for k, v in sorted(counter.items())) or 'none'})", file=out)
+    if not coverage:
+        for line in marker_summary(docs, spec):
+            print(line, file=out)
     return 1 if (check and changed) else 0
 
 
-def check_coverage(docs: Path, spec: Spec) -> list[str]:
-    """Every command must have its marker once, in the page of its group (all pages, both languages)."""
-    errors = []
+def required_messages(spec: Spec) -> list[str]:
+    """Messages that need a marker: the ones that no command lists in `response` / `notifies`, and the standalone ones."""
+    listed: set[str] = set()
+    for c in spec.commands:
+        listed.update(Spec.response_messages(c))
+        listed.update(n if isinstance(n, str) else n["message"] for n in c.get("notifies", []) or [])
+    return [m["address"] for m in spec.messages if m["address"] not in listed or m["address"] in STANDALONE_MESSAGES]
+
+
+def scan_markers(docs: Path, kind: str, lang: str) -> dict[str, list[str]]:
+    """{address: [file stem, ...]} of the `kind` markers in docs/<lang>/ (the pages of other directories are not counted)."""
+    found: dict[str, list[str]] = {}
+    base = docs / lang
+    for path in sorted(base.rglob("*.md")) if base.is_dir() else []:
+        for m in MARKER_RE.finditer(path.read_text(encoding="utf-8")):
+            if m.group(1) == kind:
+                found.setdefault(m.group(2).strip(), []).append(path.stem)
+    return found
+
+
+def marker_report(docs: Path, spec: Spec) -> dict[str, dict]:
+    """Per language: the problems of the markers and the counts.
+
+    commands: each has `<!-- osc: /address -->` once, in the page of its group.
+    messages: each of required_messages() has `<!-- osc-message: /address -->` once, in the page of the messages;
+    any other message may have one marker, there. Unknown addresses are errors of the expansion, not counted here.
+    """
+    report = {}
     for lang in LANGS:
-        found: dict[str, list[str]] = {}
-        for path in docs.rglob("*.md"):
-            if lang_of(path.relative_to(docs)) != lang:
-                continue
-            for m in MARKER_RE.finditer(path.read_text(encoding="utf-8")):
-                if m.group(1) == "osc":
-                    found.setdefault(m.group(2).strip(), []).append(path.stem)
+        errors: list[str] = []
+        counts = {"commands_ok": 0, "commands": len(spec.commands), "messages_ok": 0, "misplaced": 0, "duplicated": 0}
+        required = required_messages(spec)
+        counts["messages"] = len(required)
+        found_cmd = scan_markers(docs, "osc", lang)
+        found_msg = scan_markers(docs, "osc-message", lang)
+
+        def judge(address: str, names: list[str], page: str, need: bool, key: str) -> bool:
+            expected = JP_PAGE_NAMES.get(page, page) if lang == "ja" else page
+            if not names:
+                if need:
+                    errors.append(f"[{lang}] {address}: marker found 0 times (expected once in {page})")
+                return False
+            if len(names) > 1:
+                counts["duplicated"] += 1
+                errors.append(f"[{lang}] {address}: marker found {len(names)} times "
+                              f"({'expected once' if need else 'expected at most once'} in {page})")
+                return False
+            if names[0] != expected:
+                counts["misplaced"] += 1
+                errors.append(f"[{lang}] {address}: marker in {names[0]}, expected {key} ({page})")
+                return False
+            return True
+
         for c in spec.commands:
-            names = found.get(c["address"], [])
             page = spec.groups[c["group"]]["page"]
-            if len(names) != 1:
-                errors.append(f"[{lang}] {c['address']}: marker found {len(names)} times (expected once in {page})")
-            elif names[0] != JP_PAGE_NAMES.get(page, page):
-                errors.append(f"[{lang}] {c['address']}: marker in {names[0]}, expected the page of group '{c['group']}' ({page})")
-    return errors
+            if judge(c["address"], found_cmd.get(c["address"], []), page, True, f"the page of group '{c['group']}'"):
+                counts["commands_ok"] += 1
+        for address in required:
+            if judge(address, found_msg.get(address, []), MESSAGES_PAGE, True, "the page of the messages"):
+                counts["messages_ok"] += 1
+        for address, names in found_msg.items():
+            if address not in required and spec.message(address) is not None:
+                judge(address, names, MESSAGES_PAGE, False, "the page of the messages")
+        report[lang] = {"errors": errors, **counts}
+    return report
+
+
+def check_coverage(docs: Path, spec: Spec) -> list[str]:
+    """The markers of the commands and of the required messages, as errors (both languages, docs/en and docs/ja only)."""
+    return [e for r in marker_report(docs, spec).values() for e in r["errors"]]
+
+
+def marker_summary(docs: Path, spec: Spec) -> list[str]:
+    """One WARNING line per language with the counts (the usual run; it never changes the exit code)."""
+    return [f"WARNING [{lang}] markers: commands {r['commands_ok']}/{r['commands']}, "
+            f"messages {r['messages_ok']}/{r['messages']} required; {r['misplaced']} misplaced, "
+            f"{r['duplicated']} duplicated (run with --coverage for the list)"
+            for lang, r in marker_report(docs, spec).items()]
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -946,7 +1015,8 @@ def main(argv: list[str] | None = None) -> int:
                     help="initial values to show (default: both)")
     ap.add_argument("--check", action="store_true", help="write nothing; exit 1 if a file would change")
     ap.add_argument("--coverage", action="store_true",
-                    help="also require every command to have its marker once in the page of its group")
+                    help="also require the markers: every command once in the page of its group, the messages with no other place "
+                         "(and the standalone ones) once in the page of the messages; list each problem as an error")
     args = ap.parse_args(argv)
     spec = Spec.load(args.spec)
     return run(Path(args.docs), spec, args.defaults, args.check, args.coverage)
