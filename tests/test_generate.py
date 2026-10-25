@@ -6,6 +6,7 @@ They use a small docs tree in a temporary directory and the real spec.
 """
 
 import io
+from collections import Counter
 import shutil
 import sys
 import tempfile
@@ -224,7 +225,7 @@ class MarkerCoverageTest(unittest.TestCase):
     def setUp(self):
         self._tmp = tempfile.TemporaryDirectory()
         self.docs = Path(self._tmp.name) / "docs"
-        self.required = generate.required_messages(SPEC)
+        self.required = generate.standalone_messages(SPEC)
         for lang in generate.LANGS:
             pages: dict[str, list[str]] = {}
             for c in SPEC.commands:
@@ -241,13 +242,21 @@ class MarkerCoverageTest(unittest.TestCase):
     def page(self, lang: str, name: str) -> Path:
         return self.docs / lang / "reference" / f"{name}.md"
 
-    def test_required_messages(self):
-        self.assertIn("/booted", self.required)
-        for a in generate.STANDALONE_MESSAGES:
-            self.assertIn(a, self.required)
+    def test_standalone_messages(self):
         listed = {a for c in SPEC.commands for a in SPEC.response_messages(c)}
-        self.assertNotIn("/version", self.required)
-        self.assertIn("/version", listed)
+        notified = {n if isinstance(n, str) else n["message"] for c in SPEC.commands for n in c.get("notifies", []) or []}
+        self.assertEqual(len(notified), 16)        # the 15 of the task and /homingStatus
+        for a in ("/booted", *generate.STANDALONE_MESSAGES):                 # 1 and 2
+            self.assertIn(a, self.required)
+        self.assertIn("/booted", self.required)
+        self.assertTrue(all(a in self.required for a in notified))           # 3
+        self.assertIn("/homingStatus", notified)
+        for a in ("/version", "/configName", "/brakeStatus"):
+            self.assertIn(a, listed)
+            self.assertNotIn(a, self.required)
+        expected = {m["address"] for m in SPEC.messages
+                    if m["address"] not in listed | notified} | set(generate.STANDALONE_MESSAGES) | notified
+        self.assertEqual(set(self.required), expected)
 
     def test_complete_set_has_no_problem(self):
         self.assertEqual(generate.check_coverage(self.docs, SPEC), [])
@@ -265,19 +274,25 @@ class MarkerCoverageTest(unittest.TestCase):
             "[en] /booted: marker found 0 times (expected once in automatically-sent-messages)",
         ]))
 
-    def test_optional_message_is_allowed_once_on_the_messages_page_only(self):
+    def test_marker_of_a_message_outside_the_set_is_an_error(self):
         msgs = self.page("en", generate.MESSAGES_PAGE)
         base = msgs.read_text(encoding="utf-8")
         msgs.write_text(base + "\n<!-- osc-message: /version -->\n", encoding="utf-8")
-        self.assertEqual(generate.check_coverage(self.docs, SPEC), [])
-        msgs.write_text(base + "\n<!-- osc-message: /version -->\n\n<!-- osc-message: /version -->\n", encoding="utf-8")
         self.assertEqual(generate.check_coverage(self.docs, SPEC),
-                         ["[en] /version: marker found 2 times (expected at most once in automatically-sent-messages)"])
+                         ["[en] /version: marker not allowed (not a standalone message; it is shown in the response of its commands)"])
         msgs.write_text(base, encoding="utf-8")
         other = self.page("ja", "system-settings")
         other.write_text(other.read_text(encoding="utf-8") + "\n<!-- osc-message: /version -->\n", encoding="utf-8")
+        self.assertEqual(len(generate.check_coverage(self.docs, SPEC)), 1)
+        self.assertIn("[ja] /version: marker not allowed", generate.check_coverage(self.docs, SPEC)[0])
+
+    def test_standalone_message_marker_in_another_page_is_misplaced(self):
+        other = self.page("ja", "system-settings")
+        msgs = self.page("ja", generate.MESSAGES_PAGE)
+        msgs.write_text(msgs.read_text(encoding="utf-8").replace("<!-- osc-message: /busy -->", ""), encoding="utf-8")
+        other.write_text(other.read_text(encoding="utf-8") + "\n<!-- osc-message: /busy -->\n", encoding="utf-8")
         self.assertEqual(generate.check_coverage(self.docs, SPEC),
-                         ["[ja] /version: marker in system-settings, expected the page of the messages (automatically-sent-messages)"])
+                         ["[ja] /busy: marker in system-settings, expected the page of the messages (automatically-sent-messages)"])
 
     def test_misplaced_and_duplicated_commands(self):
         ss = self.page("en", "system-settings")
@@ -313,6 +328,51 @@ class MarkerCoverageTest(unittest.TestCase):
         code, text = run(empty, coverage=True)
         self.assertEqual(code, 1)
         self.assertNotIn("WARNING", text)
+
+
+class ResponseTest(unittest.TestCase):
+    """Messages that are not standalone are shown in full in the response; links in argument descriptions."""
+
+    def expand(self, lang: str, marker: str) -> str:
+        with tempfile.TemporaryDirectory() as tmp:
+            docs = Path(tmp) / "docs"
+            page = docs / lang / "reference" / "system-settings.md"
+            page.parent.mkdir(parents=True)
+            page.write_text(f"# page\n\n{marker}\n", encoding="utf-8")
+            out = io.StringIO()
+            self.assertEqual(generate.run(docs, SPEC, out=out), 0, out.getvalue())
+            return page.read_text(encoding="utf-8")
+
+    def test_response_shows_description_tables_and_changes_of_a_message(self):
+        text = self.expand("en", "<!-- osc: /getConfigName -->")
+        resp = text[text.index("#### Response"):]
+        self.assertIn("###### Combinations of configFileOpenSucceeded", resp)   # table of the message
+        self.assertIn("##### Changes", resp)
+        self.assertNotIn("automatically-sent-messages", resp)
+        text = self.expand("ja", "<!-- osc: /getBrakeStatus -->")
+        resp = text[text.index("#### 返信"):]
+        self.assertIn("##### 説明", resp)
+
+    def test_standalone_message_in_a_response_is_a_link_only(self):
+        text = self.expand("en", "<!-- osc: /getHomingStatus -->")
+        resp = text[text.index("#### Response"):]
+        self.assertIn("automatically-sent-messages", resp)
+        self.assertNotIn("##### Description", resp)
+
+    def test_link_to_a_message_that_is_not_standalone_goes_to_its_command(self):
+        ctx = generate.Ctx(SPEC, "en", "both", Counter(), [])
+        first = generate.response_owner(SPEC, "/configName")
+        href = ctx.link_to("/configName", prefer="message")
+        self.assertTrue(href.endswith("#" + generate.anchor(first["address"])), href)
+        self.assertIn(SPEC.groups[first["group"]]["page"], href)
+        self.assertIn("automatically-sent-messages.md#busy", ctx.link_to("/busy", prefer="message"))
+
+    def test_links_in_argument_descriptions_and_values_are_expanded(self):
+        text = self.expand("en", "<!-- osc-message: /booted -->")
+        self.assertNotIn("[[", text)
+        text = self.expand("en", "<!-- osc: /saveConfig -->\n\n<!-- osc: /getConfigName -->")
+        self.assertNotIn("[[", text)
+        self.assertRegex(text, r"\[`/setConfigName`\]\([^)]*#setconfigname\)")
 
 
 class RealDocsTest(unittest.TestCase):

@@ -30,12 +30,12 @@ lang: en
 
 ## Messages sent by STEP400 only
 
-- [`/prohibitMotionOnLimitSw`](automatically-sent-messages.md#prohibitmotiononlimitsw) (int)motorID (int)enable
-- [`/tval`](automatically-sent-messages.md#tval) (int)motorID (int)holdTVAL (int)runTVAL (int)accTVAL (int)decTVAL
-- [`/tval_mA`](automatically-sent-messages.md#tval_ma) (int)motorID (float)holdTVAL_mA (float)runTVAL_mA (float)accTVAL_mA (float)decTVAL_mA
-- [`/decayModeParam`](automatically-sent-messages.md#decaymodeparam) (int)motorID (int)T_FAST (int)TON_MIN (int)TOFF_MIN
+- [`/prohibitMotionOnLimitSw`](alarm-settings.md#getprohibitmotiononlimitsw) (int)motorID (int)enable
+- [`/tval`](voltage-and-current-mode-settings.md#gettval) (int)motorID (int)holdTVAL (int)runTVAL (int)accTVAL (int)decTVAL
+- [`/tval_mA`](voltage-and-current-mode-settings.md#gettval_ma) (int)motorID (float)holdTVAL_mA (float)runTVAL_mA (float)accTVAL_mA (float)decTVAL_mA
+- [`/decayModeParam`](voltage-and-current-mode-settings.md#getdecaymodeparam) (int)motorID (int)T_FAST (int)TON_MIN (int)TOFF_MIN
 - [`/limitSw`](automatically-sent-messages.md#limitsw) (int)motorID (int)swState (int)direction
-- [`/limitSwMode`](automatically-sent-messages.md#limitswmode) (int)motorID (int)swMode
+- [`/limitSwMode`](home-and-limit-sensors.md#getlimitswmode) (int)motorID (int)swMode
 
 ## Commands available on STEP800 only
 
@@ -60,8 +60,8 @@ None.
 
 | Command | Argument | STEP400 | STEP800 |
 | --- | --- | --- | --- |
-| [`/overCurrentThreshold`](automatically-sent-messages.md#overcurrentthreshold) | overCurrentThreshold (Range) | 312.5-10000 | 375-6000 |
-| [`/stallThreshold`](automatically-sent-messages.md#stallthreshold) | stallThreshold (Range) | 312.5-10000 | 31.25-4000 |
+| [`/overCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | overCurrentThreshold (Range) | 312.5-10000 | 375-6000 |
+| [`/stallThreshold`](alarm-settings.md#setstallthreshold) | stallThreshold (Range) | 312.5-10000 | 31.25-4000 |
 
 ## Board-specific tables
 

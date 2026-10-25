@@ -2366,7 +2366,7 @@ commands:
         `/goUntil`と`/releaseSw`それぞれにタイムアウト時間が設定可能で、この時間内にスイッチの状態に変化がなかった場合はタイムアウトとして動作を中止します。この時間はぞれぞれ[[/setGoUntilTimeout]] [[/setReleaseSwTimeout]]で設定できます。
 
         原点復帰動作の状態変化に応じて下記の通知があります。
-    response: [/homingStatus]
+    notifies: [/homingStatus]
     errors: [CommandIgnored, BrakeEngaged, GoUntilTimeout, ReleaseSwTimeout, InServoMode]
     changes:
       - {version: "2.2.0", en: "While the brake is engaged, releasing or engaging (not while stopping or after `/free`), replies `/error/command BrakeEngaged` and does nothing. Before, it set the homing state although it did not start.", ja: "ブレーキが保持されている間、解放中、保持への移行中（停止処理中と`/free`の後は除く）は、`/error/command BrakeEngaged`を返し、何もしません。以前は、原点復帰が始まらないのに原点復帰の状態になっていました。"}

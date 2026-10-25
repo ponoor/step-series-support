@@ -63,7 +63,7 @@ SETTINGS_PAGE = "configuration-items"
 # The Japanese file of a page that has another name than the English one (none now)
 JP_PAGE_NAMES: dict[str, str] = {}
 # Messages that are described on their own in the page of the messages, besides the ones that no command
-# lists in `response` / `notifies` (PLAN_osc_yaml_schema.md, chapter 5).
+# lists in `response` / `notifies` and the ones that some command lists in `notifies` (standalone_messages()).
 STANDALONE_MESSAGES = ("/booted", "/error/osc", "/error/command")
 
 LANGS = ("en", "ja")                                      # docs/en/..., docs/ja/... (mkdocs-static-i18n, folder structure)
@@ -169,17 +169,24 @@ class Ctx:
         return Path(REF_DIR) / f"{name}{SUFFIX[self.lang]}"
 
     def link_to(self, address: str, prefer: str = "command") -> str | None:
-        """Relative link (file#anchor) to the heading of a command / message."""
+        """Relative link (file#anchor) to the heading of a command / message.
+
+        A message that is not standalone (standalone_messages()) is shown in the response of the first command
+        that lists it in `response`; the link goes to that command.
+        """
         spec = self.spec
         cmd, msg = spec.command(address), spec.message(address)
-        target = None
-        if prefer == "message" and msg is not None:
+        use_message = msg is not None and (prefer == "message" or cmd is None)
+        if use_message and address not in standalone_messages(spec):
+            owner = response_owner(spec, address)
+            if owner is not None:
+                cmd, use_message = owner, False
+                address = owner["address"]
+        if use_message:
             target = Path(REF_DIR) / f"{MESSAGES_PAGE}{SUFFIX[self.lang]}"
         elif cmd is not None:
             target = self.page_file(spec.groups[cmd["group"]]["page"])
-        elif msg is not None:
-            target = Path(REF_DIR) / f"{MESSAGES_PAGE}{SUFFIX[self.lang]}"
-        if target is None:
+        else:
             return None
         rel = Path(_relpath(target, self.rel_from)).as_posix()
         return f"{rel}#{anchor(address)}"
@@ -331,7 +338,7 @@ def render_values_tables(ctx: Ctx, a: dict, name: str) -> list[str]:
         rows = []
         for it in items:
             only = it.get("boards")
-            meaning = ctx.item_text(it, "value")
+            meaning = ctx.md(ctx.item_text(it, "value"))
             if only and set(only) != set(spec.board_names):
                 meaning = f"{meaning} ({L['boards_only'].format(boards=boards_text(spec, board_sorted(spec, only)))})"
             notes = inline_notes(ctx, it)
@@ -354,7 +361,7 @@ def render_args(ctx: Ctx, item: dict, in_message: bool = False) -> str:
         name = a.get("name", a.get("use", "?"))
         if a.get("repeat") == "motors":
             name = f"{name}1 ... {name}N"
-        desc = ctx.tx(a.get("description"), "arg")
+        desc = ctx.md(ctx.tx(a.get("description"), "arg"))
         if a.get("value") is not None:
             desc = (desc + " " if desc else "") + f"`{a['value']}`"
         if a.get("since"):
@@ -435,7 +442,7 @@ def setting_anchor(key: str) -> str:
 # ---------------------------------------------------------------------------
 # reference block of a command / message
 
-def render_tables(ctx: Ctx, item: dict) -> list[str]:
+def render_tables(ctx: Ctx, item: dict, level: int = 5) -> list[str]:
     spec = ctx.spec
     out = []
     for t in item.get("tables", []) or []:
@@ -445,8 +452,8 @@ def render_tables(ctx: Ctx, item: dict) -> list[str]:
         variants = [(None, rows)] if isinstance(rows, list) else [(b, rows[b]) for b in spec.board_names if b in rows]
         for board, rws in variants:
             head = title + (f" - {board}" if board else "")
-            body = table(cols, [[ctx.tx(c, "table") if not isinstance(c, (int, float, bool)) else fmt(c) for c in r] for r in rws])
-            out.append((f"##### {head}\n\n" if head else "") + body)
+            body = table(cols, [[ctx.md(ctx.tx(c, "table")) if not isinstance(c, (int, float, bool)) else fmt(c) for c in r] for r in rws])
+            out.append((f"{'#' * level} {head}\n\n" if head else "") + body)
     return out
 
 
@@ -478,14 +485,14 @@ def _notes(ctx: Ctx, item: dict) -> list[str]:
     return [" ".join(notes)] if notes else []
 
 
-def render_changes(ctx: Ctx, item: dict) -> str:
+def render_changes(ctx: Ctx, item: dict, level: int = 4) -> str:
     ch = item.get("changes")
     if not ch:
         return ""
     lines = []
     for c in ch:
         lines.append(f"- **v{c['version']}**: " + ctx.md(ctx.item_text(c, "change")).replace("\n", "\n  "))
-    return f"#### {ctx.L['changes']}\n\n" + "\n".join(lines)
+    return f"{'#' * level} {ctx.L['changes']}\n\n" + "\n".join(lines)
 
 
 def inline_notes(ctx: Ctx, item: dict) -> str:
@@ -541,16 +548,36 @@ def render_command_block(ctx: Ctx, addr: str) -> str:
 
 
 def _render_response(ctx: Ctx, maddr: str, when: Any) -> str:
+    """A message in the response of a command. A standalone message: link, form, arguments. Any other message
+    is described here in full (description, tables, changes one level below the message block)."""
     spec, L = ctx.spec, ctx.L
     msg = spec.message(maddr)
     head = ""
     if when:
         head = f"{L['when']}: {ctx.tx(when, 'when')}\n\n"
-    href = ctx.link_to(maddr, prefer="message")
+    standalone = maddr in standalone_messages(spec)
+    href = ctx.link_to(maddr, prefer="message") if standalone else None
     code = f"```\n{maddr} {arg_heading(spec, msg)}\n```".replace("  ", " ")
     link = f"[`{maddr}`]({href})\n\n" if href else ""
     note = " ".join(_notes(ctx, msg))
-    return head + link + (note + "\n\n" if note else "") + code + "\n\n" + render_args(ctx, msg, in_message=True)
+    out = head + link + (note + "\n\n" if note else "") + code + "\n\n" + render_args(ctx, msg, in_message=True)
+    if not standalone:
+        where, ctx.where = ctx.where, f"message {maddr} (in the response of {where_name(ctx.where)})"
+        extra = []
+        if msg.get("description"):
+            extra.append(f"##### {L['description']}\n\n" + ctx.md(ctx.tx(msg["description"], "description")))
+        extra += render_tables(ctx, msg, level=6)
+        ch = render_changes(ctx, msg, level=5)
+        if ch:
+            extra.append(ch)
+        ctx.where = where
+        if extra:
+            out += "\n\n" + "\n\n".join(extra)
+    return out
+
+
+def where_name(where: str) -> str:
+    return where.removeprefix("command ")
 
 
 def _error_line(ctx: Ctx, name: str) -> str:
@@ -927,13 +954,24 @@ def run(docs: Path, spec: Spec, defaults: str = "both", check: bool = False,
     return 1 if (check and changed) else 0
 
 
-def required_messages(spec: Spec) -> list[str]:
-    """Messages that need a marker: the ones that no command lists in `response` / `notifies`, and the standalone ones."""
+def standalone_messages(spec: Spec) -> list[str]:
+    """Messages described on their own in the page of the messages (decided from the YAML only):
+    the ones that no command lists in `response` / `notifies`, STANDALONE_MESSAGES, and the ones that
+    some command lists in `notifies`. The other messages are shown in the `response` of the commands."""
     listed: set[str] = set()
+    notified: set[str] = set()
     for c in spec.commands:
         listed.update(Spec.response_messages(c))
-        listed.update(n if isinstance(n, str) else n["message"] for n in c.get("notifies", []) or [])
-    return [m["address"] for m in spec.messages if m["address"] not in listed or m["address"] in STANDALONE_MESSAGES]
+        for n in c.get("notifies", []) or []:
+            notified.add(n if isinstance(n, str) else n["message"])
+    listed |= notified
+    return [m["address"] for m in spec.messages
+            if m["address"] not in listed or m["address"] in STANDALONE_MESSAGES or m["address"] in notified]
+
+
+def response_owner(spec: Spec, address: str) -> dict | None:
+    """The first command (YAML order) that lists the message in `response`."""
+    return next((c for c in spec.commands if address in Spec.response_messages(c)), None)
 
 
 def scan_markers(docs: Path, kind: str, lang: str) -> dict[str, list[str]]:
@@ -951,28 +989,27 @@ def marker_report(docs: Path, spec: Spec) -> dict[str, dict]:
     """Per language: the problems of the markers and the counts.
 
     commands: each has `<!-- osc: /address -->` once, in the page of its group.
-    messages: each of required_messages() has `<!-- osc-message: /address -->` once, in the page of the messages;
-    any other message may have one marker, there. Unknown addresses are errors of the expansion, not counted here.
+    messages: each of standalone_messages() has `<!-- osc-message: /address -->` once, in the page of the messages;
+    any other message must not have one (it is shown in the response of its commands).
+    Unknown addresses are errors of the expansion, not counted here.
     """
     report = {}
     for lang in LANGS:
         errors: list[str] = []
         counts = {"commands_ok": 0, "commands": len(spec.commands), "messages_ok": 0, "misplaced": 0, "duplicated": 0}
-        required = required_messages(spec)
+        required = standalone_messages(spec)
         counts["messages"] = len(required)
         found_cmd = scan_markers(docs, "osc", lang)
         found_msg = scan_markers(docs, "osc-message", lang)
 
-        def judge(address: str, names: list[str], page: str, need: bool, key: str) -> bool:
+        def judge(address: str, names: list[str], page: str, key: str) -> bool:
             expected = JP_PAGE_NAMES.get(page, page) if lang == "ja" else page
             if not names:
-                if need:
-                    errors.append(f"[{lang}] {address}: marker found 0 times (expected once in {page})")
+                errors.append(f"[{lang}] {address}: marker found 0 times (expected once in {page})")
                 return False
             if len(names) > 1:
                 counts["duplicated"] += 1
-                errors.append(f"[{lang}] {address}: marker found {len(names)} times "
-                              f"({'expected once' if need else 'expected at most once'} in {page})")
+                errors.append(f"[{lang}] {address}: marker found {len(names)} times (expected once in {page})")
                 return False
             if names[0] != expected:
                 counts["misplaced"] += 1
@@ -982,20 +1019,21 @@ def marker_report(docs: Path, spec: Spec) -> dict[str, dict]:
 
         for c in spec.commands:
             page = spec.groups[c["group"]]["page"]
-            if judge(c["address"], found_cmd.get(c["address"], []), page, True, f"the page of group '{c['group']}'"):
+            if judge(c["address"], found_cmd.get(c["address"], []), page, f"the page of group '{c['group']}'"):
                 counts["commands_ok"] += 1
         for address in required:
-            if judge(address, found_msg.get(address, []), MESSAGES_PAGE, True, "the page of the messages"):
+            if judge(address, found_msg.get(address, []), MESSAGES_PAGE, "the page of the messages"):
                 counts["messages_ok"] += 1
         for address, names in found_msg.items():
             if address not in required and spec.message(address) is not None:
-                judge(address, names, MESSAGES_PAGE, False, "the page of the messages")
+                errors.append(f"[{lang}] {address}: marker not allowed (not a standalone message; "
+                              "it is shown in the response of its commands)")
         report[lang] = {"errors": errors, **counts}
     return report
 
 
 def check_coverage(docs: Path, spec: Spec) -> list[str]:
-    """The markers of the commands and of the required messages, as errors (both languages, docs/en and docs/ja only)."""
+    """The markers of the commands and of the standalone messages, as errors (both languages, docs/en and docs/ja only)."""
     return [e for r in marker_report(docs, spec).values() for e in r["errors"]]
 
 
@@ -1015,8 +1053,9 @@ def main(argv: list[str] | None = None) -> int:
                     help="initial values to show (default: both)")
     ap.add_argument("--check", action="store_true", help="write nothing; exit 1 if a file would change")
     ap.add_argument("--coverage", action="store_true",
-                    help="also require the markers: every command once in the page of its group, the messages with no other place "
-                         "(and the standalone ones) once in the page of the messages; list each problem as an error")
+                    help="also require the markers: every command once in the page of its group, the standalone messages "
+                         "(see standalone_messages) once in the page of the messages, no marker for any other message; "
+                         "list each problem as an error")
     args = ap.parse_args(argv)
     spec = Spec.load(args.spec)
     return run(Path(args.docs), spec, args.defaults, args.check, args.coverage)
