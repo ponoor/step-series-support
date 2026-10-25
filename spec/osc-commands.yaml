@@ -841,13 +841,13 @@ commands:
       en: |-
         Saves the current running configuration to the microSD card as a JSON file. The file is the one read at start-up, or `/config.txt` if no file was read. The path can be changed with `F<path>` over USB serial.
 
-        The configuration is written to a hidden temporary file `.<name>.tmp` in the same folder first, and the saved file is replaced only after that has been written. A save that fails leaves the saved file as it was.
+        The configuration is written to a hidden temporary file `.<name>.tmp` in the same folder first, and the saved file is replaced only after that has been written. A save that fails while the temporary file is being written leaves the saved file as it was.
 
         The card is checked only at start-up. With no usable card at start-up (a card inserted afterwards, or an exFAT card) the reply is `No SD card`; with a card removed after start-up, a full card or a missing folder it is `SD open failed`. The saved configuration is applied at the next start-up.
       ja: |-
         現在動作中の設定を、JSONファイルとしてmicroSDカードに保存します。保存先は、起動時に読み込んだファイルです。ファイルを読み込まなかったときは`/config.txt`です。USBシリアルの`F<path>`で、保存先のパスを変えられます。
 
-        設定は、まず同じフォルダの隠しファイル`.<名前>.tmp`に書き込み、書き込みが終わってから、保存先のファイルを置き換えます。保存に失敗したときは、保存先のファイルは元のままです。
+        設定は、まず同じフォルダの隠しファイル`.<名前>.tmp`に書き込み、書き込みが終わってから、保存先のファイルを置き換えます。一時ファイルへの書き込みに失敗したときは、保存先のファイルは元のままです。
 
         カードは起動時にしか確認しません。起動時に使えるカードがなかったとき（起動後に挿したカード、exFATのカード）は`No SD card`を返し、起動後にカードを抜いたとき、カードがいっぱいのとき、フォルダがないときは`SD open failed`を返します。保存した設定は、次の起動時に適用されます。
     response:
@@ -856,7 +856,7 @@ commands:
       - message: /error/saveConfig
         when: {en: Failed, ja: 保存できなかったとき}
     changes:
-      - {version: "2.2.0", en: "The configuration is written to a hidden temporary file `.<name>.tmp` in the same folder, and the saved file is replaced only after the temporary file has been written and closed. A save that fails (the card or the folder is full, the folder does not exist, a write error) leaves the saved file as it was and replies `SD open failed`. Before, the old file was deleted first, so a failed save left no configuration file on the card. If the power is cut after the old file is deleted and before the new one is renamed, only the temporary file remains (there is no recovery at start-up). Its name starts with `.`, so it is not read as a configuration file (see [[/configName]]).", ja: "設定を同じフォルダの隠しファイル`.<名前>.tmp`に書き込み、一時ファイルの書き込みと閉じる処理が終わってから、保存先のファイルを置き換えます。保存に失敗したとき（カードやフォルダがいっぱい、フォルダがない、書き込みエラー）は、保存先のファイルは元のままで、`SD open failed`を返します。以前は、先に古いファイルを削除していたため、保存に失敗するとカードに設定ファイルが残りませんでした。古いファイルを削除してから新しいファイルの名前を変えるまでの間に電源が切れると、一時ファイルだけが残ります（起動時の回復はありません）。一時ファイルの名前は`.`で始まるため、設定ファイルとしては読み込まれません（[[/configName]]を参照）。"}
+      - {version: "2.2.0", en: "The configuration is written to a hidden temporary file `.<name>.tmp` in the same folder, and the saved file is replaced only after the temporary file has been written and closed. A save that fails (the card or the folder is full, the folder does not exist, a write error) leaves the saved file as it was and replies `SD open failed`. Before, the old file was deleted first, so a failed save left no configuration file on the card. If the power is cut after the old file is deleted and before the new one is renamed, or if the rename fails (`SD open failed`), only the temporary file remains (there is no recovery at start-up). Its name starts with `.`, so it is not read as a configuration file (see [[/configName]]).", ja: "設定を同じフォルダの隠しファイル`.<名前>.tmp`に書き込み、一時ファイルの書き込みと閉じる処理が終わってから、保存先のファイルを置き換えます。保存に失敗したとき（カードやフォルダがいっぱい、フォルダがない、書き込みエラー）は、保存先のファイルは元のままで、`SD open failed`を返します。以前は、先に古いファイルを削除していたため、保存に失敗するとカードに設定ファイルが残りませんでした。古いファイルを削除してから新しいファイルの名前を変えるまでの間に電源が切れたとき、または名前の変更に失敗したとき（`SD open failed`を返します）は、一時ファイルだけが残ります（起動時の回復はありません）。一時ファイルの名前は`.`で始まるため、設定ファイルとしては読み込まれません（[[/configName]]を参照）。"}
       - {version: "2.2.0", en: "Arduino IDE build: saving to an exFAT card (SDXC, 64 GB or more by default) deleted the file on the card and replied `SD open failed`. Now the Arduino IDE build is the same as the PlatformIO build: an exFAT card is not used (`No SD card`) and nothing on it is touched. Format the card as FAT16 or FAT32.", ja: "Arduino IDE版では、exFATのカード（既定ではSDXCの64GB以上）に保存すると、カード上のファイルが消え、`SD open failed`が返っていました。今は、PlatformIO版と同じように、exFATのカードは使われず（`No SD card`）、カードの中身には何もしません。カードはFAT16またはFAT32でフォーマットしてください。"}
     see_also: [/configName, /setConfigName]
 
@@ -3571,8 +3571,8 @@ messages:
         type: int
         range: [0, 1]
         description:
-          en: 1 if the microSD card could be used at start-up. 0 if there was no card, the card is not FAT16 or FAT32 (for example exFAT), or the board has no microSD support. The card is checked only at start-up.
-          ja: 起動時にmicroSDカードを使えたかどうかです。使えたときは1です。カードがないとき、FAT16またはFAT32でないカード（exFATなど）のとき、microSDカードに対応しないボードのときは0です。カードは起動時にしか確認しません。
+          en: 1 if the microSD card could be used at start-up. 0 if there was no card, the card is not FAT16 or FAT32 (for example exFAT). The card is checked only at start-up.
+          ja: 起動時にmicroSDカードを使えたかどうかです。使えたときは1です。カードがないとき、FAT16またはFAT32でないカード（exFATなど）のときは0です。カードは起動時にしか確認しません。
       - name: configFileOpenSucceeded
         type: int
         range: [0, 1]
@@ -3615,7 +3615,7 @@ messages:
       - name: errorText
         type: string
         values:
-          - {value: SD open failed, en: "The card was usable at start-up, but the file could not be written: the card was removed after start-up, the card or the folder is full, the folder does not exist, or a write error. The saved file stays as it was.", ja: "起動時にはカードを使えましたが、ファイルを書き込めませんでした。起動後にカードを抜いた、カードやフォルダがいっぱい、フォルダがない、書き込みエラー、のいずれかです。保存先のファイルは元のままです。"}
+          - {value: SD open failed, en: "The card was usable at start-up, but the file could not be written: the card was removed after start-up, the card or the folder is full, the folder does not exist, or a write error. If the temporary file could not be written, the saved file stays as it was.", ja: "起動時にはカードを使えましたが、ファイルを書き込めませんでした。起動後にカードを抜いた、カードやフォルダがいっぱい、フォルダがない、書き込みエラー、のいずれかです。一時ファイルへの書き込みに失敗したときは、保存先のファイルは元のままです。"}
           - {value: No SD card, en: "There was no usable card at start-up: no card, or a card that is not FAT16 or FAT32 (for example exFAT). A card inserted after start-up is not used until the board restarts.", ja: "起動時に使えるカードがありませんでした。カードがない、またはFAT16やFAT32でないカード（exFATなど）です。起動後に挿したカードは、ボードを再起動するまで使われません。"}
 
   - address: /microstepMode
