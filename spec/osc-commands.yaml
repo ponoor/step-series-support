@@ -798,8 +798,8 @@ commands:
     group: system
     timing: always
     description:
-      en: Returns the name of the configuration file read from the microSD card on system boot.
-      ja: 起動時にmicroSDカードから読み込まれた設定ファイルの名称を返します。
+      en: "Returns [[/configName]]: the configuration name, whether the microSD card could be used, whether a configuration file was opened and parsed, and the path of the file."
+      ja: "[[/configName]]を返します。設定名、microSDカードを使えたか、設定ファイルを開けたか・解析できたか、設定ファイルのパスが含まれます。"
     response: [/configName]
     see_also: [/setConfigName]
 
@@ -823,8 +823,14 @@ commands:
         description: {en: Configuration name string, ja: "設定名の文字列"}
     timing: always
     description:
-      en: Sets the configuration name stored in the device. This is a user-editable label for identifying configurations and is distinct from the on-disk filename.
-      ja: "ボードに保存される設定名を設定します。設定を見分けるためにユーザーが自由に編集できるラベルで、ディスク上のファイル名とは別のものです。"
+      en: |-
+        Sets the configuration name stored in the device. This is a user-editable label for identifying configurations and is distinct from the on-disk filename.
+
+        The name changes only in the board until it is saved with [[/saveConfig]]: [[/getConfigName]] returns the new name at once, but a restart before the save brings back the name in the configuration file.
+      ja: |-
+        ボードに保存される設定名を設定します。設定を見分けるためにユーザーが自由に編集できるラベルで、ディスク上のファイル名とは別のものです。
+
+        設定名は、[[/saveConfig]]で保存するまで、ボードの中だけで変わります。変更の後すぐに[[/getConfigName]]が新しい設定名を返しますが、保存する前に再起動すると、設定ファイルにある設定名に戻ります。
     see_also: [/getConfigName, /saveConfig]
 
   - address: /saveConfig
@@ -832,13 +838,27 @@ commands:
     since: "2.1.0"
     timing: always
     description:
-      en: Saves the current running configuration to the microSD card as a JSON file. The filename used is the one previously set, or the filename from which the configuration was originally loaded.
-      ja: "現在動作中の設定を、JSONファイルとしてmicroSDカードに保存します。ファイル名は、以前に設定されたもの、または設定を最初に読み込んだファイルの名前が使われます。"
+      en: |-
+        Saves the current running configuration to the microSD card as a JSON file. The file is the one read at start-up, or `/config.txt` if no file was read. The path can be changed with `F<path>` over USB serial.
+
+        The configuration is written to a hidden temporary file `.<name>.tmp` in the same folder first, and the saved file is replaced only after that has been written. A save that fails leaves the saved file as it was.
+
+        The card is checked only at start-up. With no usable card at start-up (a card inserted afterwards, or an exFAT card) the reply is `No SD card`; with a card removed after start-up, a full card or a missing folder it is `SD open failed`. The saved configuration is applied at the next start-up.
+      ja: |-
+        現在動作中の設定を、JSONファイルとしてmicroSDカードに保存します。保存先は、起動時に読み込んだファイルです。ファイルを読み込まなかったときは`/config.txt`です。USBシリアルの`F<path>`で、保存先のパスを変えられます。
+
+        設定は、まず同じフォルダの隠しファイル`.<名前>.tmp`に書き込み、書き込みが終わってから、保存先のファイルを置き換えます。保存に失敗したときは、保存先のファイルは元のままです。
+
+        カードは起動時にしか確認しません。起動時に使えるカードがなかったとき（起動後に挿したカード、exFATのカード）は`No SD card`を返し、起動後にカードを抜いたとき、カードがいっぱいのとき、フォルダがないときは`SD open failed`を返します。保存した設定は、次の起動時に適用されます。
     response:
       - message: /saveConfig
         when: {en: Saved, ja: 保存できたとき}
       - message: /error/saveConfig
         when: {en: Failed, ja: 保存できなかったとき}
+    changes:
+      - {version: "2.2.0", en: "The configuration is written to a hidden temporary file `.<name>.tmp` in the same folder, and the saved file is replaced only after the temporary file has been written and closed. A save that fails (the card or the folder is full, the folder does not exist, a write error) leaves the saved file as it was and replies `SD open failed`. Before, the old file was deleted first, so a failed save left no configuration file on the card. If the power is cut after the old file is deleted and before the new one is renamed, only the temporary file remains (there is no recovery at start-up). Its name starts with `.`, so it is not read as a configuration file (see [[/configName]]).", ja: "設定を同じフォルダの隠しファイル`.<名前>.tmp`に書き込み、一時ファイルの書き込みと閉じる処理が終わってから、保存先のファイルを置き換えます。保存に失敗したとき（カードやフォルダがいっぱい、フォルダがない、書き込みエラー）は、保存先のファイルは元のままで、`SD open failed`を返します。以前は、先に古いファイルを削除していたため、保存に失敗するとカードに設定ファイルが残りませんでした。古いファイルを削除してから新しいファイルの名前を変えるまでの間に電源が切れると、一時ファイルだけが残ります（起動時の回復はありません）。一時ファイルの名前は`.`で始まるため、設定ファイルとしては読み込まれません（[[/configName]]を参照）。"}
+      - {version: "2.2.0", en: "Arduino IDE build: saving to an exFAT card (SDXC, 64 GB or more by default) deleted the file on the card and replied `SD open failed`. Now the Arduino IDE build is the same as the PlatformIO build: an exFAT card is not used (`No SD card`) and nothing on it is touched. Format the card as FAT16 or FAT32.", ja: "Arduino IDE版では、exFATのカード（既定ではSDXCの64GB以上）に保存すると、カード上のファイルが消え、`SD open failed`が返っていました。今は、PlatformIO版と同じように、exFATのカードは使われず（`No SD card`）、カードの中身には何もしません。カードはFAT16またはFAT32でフォーマットしてください。"}
+    see_also: [/configName, /setConfigName]
 
   - address: /resetDevice
     group: system
@@ -3544,25 +3564,43 @@ messages:
     args:
       - name: configName
         type: string
-        description: {en: The name of the configuration, ja: コンフィギュレーションの名称。}
+        description:
+          en: The configuration name (`information.configName` of the configuration file that was read). It is `Default` when no file was read or the file has no name. [[/setConfigName]] changes it.
+          ja: "設定名です（読み込んだ設定ファイルの`information.configName`）。設定ファイルを読み込まなかったとき、またはファイルに設定名がないときは`Default`です。[[/setConfigName]]で変わります。"
       - name: sdInitializeSucceeded
         type: int
         range: [0, 1]
-        description: {en: If the reading from microSD card was successful., ja: microSDカードとの通信に成功したかどうか}
+        description:
+          en: 1 if the microSD card could be used at start-up. 0 if there was no card, the card is not FAT16 or FAT32 (for example exFAT), or the board has no microSD support. The card is checked only at start-up.
+          ja: 起動時にmicroSDカードを使えたかどうかです。使えたときは1です。カードがないとき、FAT16またはFAT32でないカード（exFATなど）のとき、microSDカードに対応しないボードのときは0です。カードは起動時にしか確認しません。
       - name: configFileOpenSucceeded
         type: int
         range: [0, 1]
-        description: {en: If the device could open the configuration file successfully., ja: 設定ファイルを開くことができたかどうか}
+        description:
+          en: 1 if `config.txt` could be opened or a valid `.json` file was read. 0 if neither (including a first `.json` file that is invalid). See the table below.
+          ja: "`config.txt`を開けたとき、または有効な`.json`ファイルを読み込めたときは1です。どちらでもないとき（最初の`.json`ファイルが無効なときを含む）は0です。下の表を参照してください。"
       - name: configFileParseSucceeded
         type: int
         range: [0, 1]
-        description: {en: If the config Json data could be parsed successfully., ja: 設定ファイルのJsonをパースできたかどうか}
+        description:
+          en: 1 if a configuration file was read and its values were applied (a `config.txt` that could be parsed as JSON, or a valid `.json` file, which has `information.configVersion`). 0 if the defaults are used.
+          ja: "設定ファイルを読み込んで、その値を適用したかどうかです。JSONとして解析できた`config.txt`、または有効な`.json`ファイル（`information.configVersion`がある）のときは1です。0のときは既定値で動作しています。"
       - name: configFilename
         type: string
         since: "2.1.0"
         description:
-          en: The filename of the configuration file on the microSD card (e.g., `config.txt` or `STEP400_venue-A.json`). This is the on-disk filename, distinct from `configName` which is the user-editable label.
-          ja: "microSDカード上の設定ファイルのファイル名です（例: `config.txt`、`STEP400_venue-A.json`）。ディスク上のファイル名で、ユーザーが編集できるラベルである`configName`とは別のものです。"
+          en: The path of the configuration file that was read, with a leading `/` (e.g., `/config.txt` or `/STEP400_venue-A.json`). When no file was read, it is `/config.txt`, where [[/saveConfig]] saves. `F<path>` over USB serial changes it. The path is at most 63 characters. This is the on-disk path, distinct from `configName` which is the user-editable label.
+          ja: "読み込んだ設定ファイルのパスです。先頭に`/`が付きます（例: `/config.txt`、`/STEP400_venue-A.json`）。ファイルを読み込まなかったときは、[[/saveConfig]]の保存先の`/config.txt`です。USBシリアルの`F<path>`で変わります。パスは63文字までです。ディスク上のパスで、ユーザーが編集できるラベルである`configName`とは別のものです。"
+    tables:
+      - title: {en: Combinations of configFileOpenSucceeded and configFileParseSucceeded, ja: configFileOpenSucceededとconfigFileParseSucceededの組み合わせ}
+        columns: [configFileOpenSucceeded, configFileParseSucceeded, {en: Meaning, ja: 意味}]
+        rows:
+          - [1, 1, {en: "A configuration file was read and its values were applied (`config.txt`, or else the first valid `.json` file).", ja: "設定ファイルを読み込んで、その値を適用しました（`config.txt`、なければ最初の有効な`.json`ファイル）。"}]
+          - [1, 0, {en: "`config.txt` could be opened but not parsed, and there was no valid `.json` file. The defaults are used.", ja: "`config.txt`を開けましたが解析できず、有効な`.json`ファイルもありませんでした。既定値で動作しています。"}]
+          - [0, 0, {en: "There was no `config.txt`, and there was no `.json` file or the first one is invalid (or the card could not be used). The defaults are used.", ja: "`config.txt`がなく、`.json`ファイルもないか、最初の`.json`ファイルが無効です（カードを使えなかったときも同じです）。既定値で動作しています。"}]
+    changes:
+      - {version: "2.2.0", en: "A file whose name starts with `.` (for example `._name.json`, which macOS writes next to each file it copies to the card) is no longer a candidate for the configuration file. Before, such a file could come first among the `.json` files and, being invalid, hid every valid `.json` file after it.", ja: "名前が`.`で始まるファイル（macOSがカードにコピーした各ファイルの隣に書く`._name.json`など）は、設定ファイルの候補になりません。以前は、そのようなファイルが`.json`ファイルの中で先に選ばれ、無効なため、後ろにある有効な`.json`ファイルがすべて使われませんでした。"}
+      - {version: "2.2.0", en: "The values of a configuration file that was not accepted are no longer applied: a first `.json` file that cannot be parsed or has no `information.configVersion` (it ends the search), and a `config.txt` that failed to parse in the middle. Now the defaults are used, as with no card. Before, the values of such a file were still used, even when it was reported as not loaded (`configName` showed its name).", ja: "受け付けなかった設定ファイルの値は、適用されなくなりました。対象は、解析できない、または`information.configVersion`がない最初の`.json`ファイル（そこで検索を終えます）と、途中で解析に失敗した`config.txt`です。今は、カードがないときと同じように既定値で動作します。以前は、受け付けなかったファイルの値も使われていました（`configName`にはそのファイルの設定名が表示されました）。"}
 
   - address: /saveConfig
     since: "2.1.0"
@@ -3577,8 +3615,8 @@ messages:
       - name: errorText
         type: string
         values:
-          - {value: SD open failed}
-          - {value: No SD card}
+          - {value: SD open failed, en: "The card was usable at start-up, but the file could not be written: the card was removed after start-up, the card or the folder is full, the folder does not exist, or a write error. The saved file stays as it was.", ja: "起動時にはカードを使えましたが、ファイルを書き込めませんでした。起動後にカードを抜いた、カードやフォルダがいっぱい、フォルダがない、書き込みエラー、のいずれかです。保存先のファイルは元のままです。"}
+          - {value: No SD card, en: "There was no usable card at start-up: no card, or a card that is not FAT16 or FAT32 (for example exFAT). A card inserted after start-up is not used until the board restarts.", ja: "起動時に使えるカードがありませんでした。カードがない、またはFAT16やFAT32でないカード（exFATなど）です。起動後に挿したカードは、ボードを再起動するまで使われません。"}
 
   - address: /microstepMode
     args:
