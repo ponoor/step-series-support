@@ -41,8 +41,11 @@ terms:
     concept: transition duration
     avoid: [遷移時間]
   - use: 設定ファイル
-    concept: configuration file
-    avoid: [コンフィギュレーションファイル]
+    concept: configuration file。configuration は「設定」「設定ファイル」「設定名」と書く
+    avoid: [コンフィギュレーション]
+  - use: JSON
+    concept: 大文字で書く（Json と書かない。ArduinoJson などの名前の一部、コード、ファイル名 *.json は対象外）
+    avoid_regex: ['(?<![A-Za-z0-9_.])Json(?![A-Za-z0-9_])']
   - use: HOMEスイッチ
     concept: HOME 端子につなぐもの（センサでも）
     avoid: [HOMEセンサ, Homeセンサ, ホームセンサ]
