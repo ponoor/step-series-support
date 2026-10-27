@@ -11,12 +11,17 @@ What it does (docs directory: --docs, default `docs/`)
 
        <!-- osc: /setMicrostepMode -->            reference block of a command
        <!-- osc-message: /booted -->              reference block of a message
-       <!-- osc-related: motion, position -->     list of the commands of these groups
-       <!-- osc-settings: speedProfile -->        list of the settings of these sections
+       <!-- osc-related: motion, /setKval -->     list of the commands of these groups and these commands
+       <!-- osc-settings: speedProfile, driverSettings.isCurrentMode -->
+                                                  list of the settings of these sections and these settings
 
    The generated text goes right below the marker, between
    `<!-- generated:begin ... -->` and `<!-- generated:end ... -->`. The marker itself stays,
-   so running the script again replaces the block with the same text (idempotent). A page without
+   so running the script again replaces the block with the same text (idempotent). The items of
+   the two lists are separated by commas. An item of `osc-related` is a group key or a command address
+   (it starts with `/`); an item of `osc-settings` is a section or a setting key (`section.key`). The
+   rows follow the order of the items (inside a group or a section, the order of the YAML); a command or a setting
+   that comes twice is listed once. A page without
    markers is never touched. A marker with an unknown address is an error and nothing is written.
    The language of a page comes from the `en` / `ja` directory in its path (docs/en/..., docs/ja/...)
    or from its name (`_en.md` / `_jp.md`, `.en.md` / `.ja.md`).
@@ -662,35 +667,51 @@ def first_sentence(text: str) -> str:
     return (m.group(1) if m else text)[:200]
 
 
-def render_related(ctx: Ctx, groups: list[str]) -> str:
+def _related_row(ctx: Ctx, c: dict) -> list[str]:
+    href = ctx.link_to(c["address"])
+    desc = first_sentence(ctx.tx(c.get("description"), "description"))
+    desc = SETTING_LINK_RE.sub(lambda m: f"`{m.group(1)}`", LINK_RE.sub(lambda m: f"`{m.group(1)}`", desc))
+    return [f"[`{c['address']}`]({href})", arg_heading(ctx.spec, c) or "-", desc]
+
+
+def render_related(ctx: Ctx, items: list[str]) -> str:
+    """Rows for groups (a key of `groups`) and single commands (an address that starts with `/`)."""
     spec, L = ctx.spec, ctx.L
-    for g in groups:
-        if g not in spec.groups:
-            raise GenerateError(f"unknown group '{g}'")
-    rows = []
-    for g in groups:
-        for c in spec.commands:
-            if c["group"] != g:
-                continue
-            href = ctx.link_to(c["address"])
-            desc = first_sentence(ctx.tx(c.get("description"), "description"))
-            desc = SETTING_LINK_RE.sub(lambda m: f"`{m.group(1)}`", LINK_RE.sub(lambda m: f"`{m.group(1)}`", desc))
-            rows.append([f"[`{c['address']}`]({href})", arg_heading(spec, c) or "-", desc])
+    picked: list[dict] = []
+    for item in items:
+        if item.startswith("/"):
+            c = spec.command(item)
+            if c is None:
+                raise GenerateError(f"unknown command address {item}")
+            found = [c]
+        elif item in spec.groups:
+            found = [c for c in spec.commands if c["group"] == item]
+        else:
+            raise GenerateError(f"unknown group '{item}'")
+        picked += [c for c in found if c not in picked]
+    rows = [_related_row(ctx, c) for c in picked]
     return f"**{L['related']}**\n\n" + table([L["command"], L["arguments"], L["description"]], rows) + "\n"
 
 
-def render_related_settings(ctx: Ctx, sections: list[str]) -> str:
+def render_related_settings(ctx: Ctx, items: list[str]) -> str:
+    """Rows for sections and single settings (`section.key`)."""
     spec, L = ctx.spec, ctx.L
-    known = {s["section"] for s in spec.settings}
-    for s in sections:
-        if s not in known:
-            raise GenerateError(f"unknown settings section '{s}'")
+    sections = {s["section"] for s in spec.settings}
+    by_key = {s["key"]: s for s in spec.settings}
+    picked: list[dict] = []
+    for item in items:
+        if item in sections:
+            found = [s for s in spec.settings if s["section"] == item]
+        elif item in by_key:
+            found = [by_key[item]]
+        else:
+            raise GenerateError(f"unknown settings section '{item}'")
+        picked += [s for s in found if s not in picked]
     rows = []
-    for s in spec.settings:
-        if s["section"] in sections:
-            href = f"{_relpath(Path(SETTINGS_DIR) / f'{SETTINGS_PAGE}{SUFFIX[ctx.lang]}', ctx.rel_from)}#{setting_anchor(s['key'])}"
-            rows.append([f"[`{s['key']}`]({href})", ctx.tx(s.get("label"), "label"),
-                         ", ".join(f"`{c}`" for c in s.get("commands", []))])
+    for s in picked:
+        href = f"{_relpath(Path(SETTINGS_DIR) / f'{SETTINGS_PAGE}{SUFFIX[ctx.lang]}', ctx.rel_from)}#{setting_anchor(s['key'])}"
+        rows.append([f"[`{s['key']}`]({href})", ctx.tx(s.get("label"), "label"),
+                     ", ".join(f"`{c}`" for c in s.get("commands", []))])
     return f"**{L['related_settings']}**\n\n" + table([L["key"], L["label"], L["commands_col"]], rows) + "\n"
 
 

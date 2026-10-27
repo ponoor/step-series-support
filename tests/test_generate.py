@@ -120,6 +120,38 @@ class GenerateTest(unittest.TestCase):
         self.assertIn("unknown message address /noSuchMessage", text)
         self.assertIn("unknown group 'nogroup'", text)
 
+    def _related_page(self, related: str, settings: str) -> str:
+        page = self.docs / "en" / "reference" / "plain.md"
+        page.write_text(f"<!-- osc-related: {related} -->\n\n<!-- osc-settings: {settings} -->\n", encoding="utf-8")
+        run(self.docs)
+        return page.read_text(encoding="utf-8")
+
+    def test_related_accepts_commands_and_settings_in_the_given_order_without_repeats(self):
+        text = self._related_page("/setKval, brake, /setKval, /getKval",
+                                  "driverSettings.brakeTransitionDuration, driverSettings.isCurrentMode, "
+                                  "driverSettings.brakeTransitionDuration")
+        self.assertEqual(text.count("[`/setKval`]"), 1)
+        self.assertLess(text.index("[`/setKval`]"), text.index("[`/activate`]"))
+        self.assertLess(text.index("[`/activate`]"), text.index("[`/getKval`]"))
+        self.assertEqual(text.count("[`driverSettings.brakeTransitionDuration`]"), 1)
+        self.assertLess(text.index("[`driverSettings.brakeTransitionDuration`]"),
+                        text.index("[`driverSettings.isCurrentMode`]"))
+        self.assertNotIn("[`driverSettings.homingAtStartup`]", text)     # only the two settings, not the section
+
+    def test_related_group_after_command_is_not_listed_twice(self):
+        text = self._related_page("/activate, brake", "speedProfile")
+        self.assertEqual(text.count("[`/activate`]"), 1)
+        self.assertLess(text.index("[`/activate`]"), text.index("[`/free`]"))
+
+    def test_unknown_related_command_and_setting_are_errors(self):
+        page = self.docs / "en" / "reference" / "plain.md"
+        page.write_text("<!-- osc-related: /noSuchCommand -->\n<!-- osc-settings: driverSettings.noSuch -->\n",
+                        encoding="utf-8")
+        code, text = run(self.docs)
+        self.assertEqual(code, 1)
+        self.assertIn("unknown command address /noSuchCommand", text)
+        self.assertIn("unknown settings section 'driverSettings.noSuch'", text)
+
     def test_stale_generated_block_is_replaced(self):
         run(self.docs)
         page = self.docs / "en" / "reference" / "system-settings.md"
