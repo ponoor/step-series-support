@@ -153,7 +153,7 @@ select{width:auto;min-width:80px}
 <div id="err-banner"></div>
 
 <div id="toolbar">
-  <h1>STEP Series Config Tool <span style="font-weight:400;color:var(--text-muted);font-size:12px">v2.0</span></h1>
+  <h1>STEP Series Config Tool <span id="tool-ver" style="font-weight:400;color:var(--text-muted);font-size:12px"></span></h1>
   <div class="sep"></div>
   <button id="btn-connect" class="primary">⬡ Connect</button>
   <button id="btn-read" disabled>↓ Read from Board</button>
@@ -276,6 +276,25 @@ select{width:auto;min-width:80px}
 
 <script>
 'use strict';
+
+// ── Versions ─────────────────────────────────────────────────────────────────
+// The tool has its own version, separate from the firmware (see README, Changelog).
+const TOOL_VERSION = '2.1.0';
+const MIN_FIRMWARE = '2.1.0';      // oldest firmware with the USB serial protocol the tool uses
+const TESTED_FIRMWARE = '2.2.0';   // firmware the tool was checked against
+
+// Notice for the firmware version read from the board ([major, minor, patch]), or '' if none.
+// Older than MIN_FIRMWARE, or newer than TESTED_FIRMWARE in major/minor: a notice, not a refusal.
+function firmwareNotice(fw) {
+  if (!Array.isArray(fw) || fw.length < 2 || !fw.every(Number.isInteger)) return '';
+  const cmp = (a, b) => (a[0] - b[0]) || (a[1] - b[1]);
+  const parse = v => v.split('.').map(Number);
+  if (cmp(fw, parse(MIN_FIRMWARE)) < 0)
+    return `This tool requires firmware v${MIN_FIRMWARE} or later (this board: v${fw.join('.')}).`;
+  if (cmp(fw, parse(TESTED_FIRMWARE)) > 0)
+    return `This tool was checked with firmware v${TESTED_FIRMWARE}. Some settings of firmware v${fw.join('.')} may not be shown.`;
+  return '';
+}
 
 // ── State ────────────────────────────────────────────────────────────────────
 let port = null, reader = null, writer = null;
@@ -429,8 +448,11 @@ async function cmdReadConfig() {
     lineQ = []; // drain any stale lines
     await send('G');
     const line = await nextLine(8000);
-    applyConfig(JSON.parse(line));
+    const cfg = JSON.parse(line);
+    applyConfig(cfg);
     setStatus('Config loaded from board');
+    const note = firmwareNotice(cfg.board?.firmwareVersion);
+    if (note) showErr(note);
   } catch (e) {
     showErr('Read failed: ' + e.message);
   }
@@ -1267,6 +1289,7 @@ document.getElementById('btn-download').addEventListener('click', () => download
     document.getElementById('no-serial').style.display = 'block';
     document.getElementById('btn-connect').disabled = true;
   }
+  document.getElementById('tool-ver').textContent = `v${TOOL_VERSION} · checked with firmware v${TESTED_FIRMWARE}`;
   renderNetwork();
   renderAllTables();
 })();

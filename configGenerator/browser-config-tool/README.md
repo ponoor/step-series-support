@@ -84,3 +84,24 @@ Baud rate is specified as 9600 for Web Serial API compliance. The SAMD21 native 
 - **MAC addresses**: stored as decimal integers in JSON. Use the "Show Hex" toggle for hex display.
 - **slewRate**: the stored value is an index (0–5) mapping to actual slew rates (114–980 V/µs), not the raw V/µs value.
 - Config changes require a reboot to take effect.
+
+## Changelog
+
+The version of the tool (`TOOL_VERSION` in `index.html`) is separate from the firmware version, because the tool is fixed and published at a different time. Major: the configuration file format changes. Minor: a feature is added. Patch: a fix only. The firmware it was checked with is `TESTED_FIRMWARE`; the oldest supported is `MIN_FIRMWARE`.
+
+### v2.1.0 (checked with firmware v2.2.0)
+
+- Show the tool version and the firmware version it was checked with; after reading a board, notice a firmware older than v2.1.0 or newer than the checked one.
+- STEP800 / STEP200 slew rate has the 3 steps of the L6470 (180 / 290 / 530 V/µs); the board is detected from `information.targetProduct` or the number of axes when a file is loaded.
+- STEP400 overcurrent threshold is 0–31 (it was 0–15, so 16–31 were lost on save); options show the current.
+- Stall threshold: 0–31 on STEP400/100 and 0–127 on STEP800/200, shown with the current; TON_MIN / TOFF_MIN are 0–127.
+- TVAL options are 0–64 with 78.125 mA steps (the firmware does not limit TVAL in a configuration file).
+- Empty, non-numeric and out-of-range values are refused before saving or downloading; `{` / `}` in the config name and configurations over 4095 bytes are refused.
+- Check the save file name (`F<path>`): leading `/`, `.json` / `.txt`, at most 63 bytes; ask before saving under a name the board does not read at start-up.
+- A downloaded file gets a valid `information.configVersion` and `targetProduct`.
+- README: source of truth, published URL, supported firmware, corrected board table.
+- Note beside Save to SD to stop the motors first; the `OCD` and `Stall` rows of the status are shown as "not reported" (v2.2.0 always sends false); the save errors `No SD card` and `SD open failed` explain the likely causes.
+
+### v2.0
+
+- First publication (firmware v2.1.0).
