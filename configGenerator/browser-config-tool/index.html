@@ -447,6 +447,36 @@ async function cmdReadStatus() {
   }
 }
 
+// The save file name sent with F (diagnosis.cpp receiveFilename()): starts with '/', ends with
+// .json or .txt, at most 63 bytes (MAX_CONFIG_FILENAME 64). At start-up the board reads only
+// /config.txt and the *.json files in the root folder (loadConfig.cpp), so a file saved under
+// another name is a valid save that is not loaded at the next start: that is a warning.
+function checkSdFilename(name) {
+  const errors = [], warnings = [];
+  const bytes = new TextEncoder().encode(name).length;
+  if (name[0] !== '/' || name.length < 2) errors.push('must start with "/"');
+  if (!/\.(json|txt)$/i.test(name)) errors.push('must end with .json or .txt');
+  if (bytes > 63) errors.push(`is ${bytes} bytes long; the board takes at most 63 (with the leading "/")`);
+  if (!errors.length) {
+    const rest = name.slice(1);
+    if (rest.includes('/')) warnings.push('is in a subfolder: the board reads only the root folder at start-up');
+    else if (rest.startsWith('.')) warnings.push('starts with ".": the board ignores such files at start-up');
+    else if (/\.txt$/i.test(rest) && rest.toLowerCase() !== 'config.txt')
+      warnings.push('is a .txt file other than /config.txt: the board does not read it at start-up (only /config.txt and the *.json files)');
+  }
+  return { errors, warnings };
+}
+
+function showFilenameState() {
+  const el = document.getElementById('sd-filename');
+  const fn = checkSdFilename(el.value.trim() || '/config.txt');
+  const bad = fn.errors.length > 0, warn = !bad && fn.warnings.length > 0;
+  el.style.borderColor = bad ? 'var(--err)' : warn ? 'var(--warn)' : 'var(--border)';
+  el.title = bad ? 'File name ' + fn.errors.join('; ')
+    : warn ? 'This name ' + fn.warnings.join('; ')
+    : 'SD card save filename. At start-up the board reads /config.txt first, then the first *.json in the root folder.';
+}
+
 async function cmdSaveConfig() {
   if (!writer) return;
   isSaving = true;
@@ -462,10 +492,21 @@ async function cmdSaveConfig() {
       setStatus('Save failed');
       return;
     }
+    const sdFilename = (document.getElementById('sd-filename')?.value?.trim()) || '/config.txt';
+    const fn = checkSdFilename(sdFilename);
+    if (fn.errors.length) {
+      showErr('File name ' + fn.errors.join('; '));
+      setStatus('Save failed');
+      return;
+    }
+    if (fn.warnings.length &&
+        !confirm(`"${sdFilename}" ${fn.warnings.join('; ')}.\n\nSave anyway?`)) {
+      setStatus('Save cancelled');
+      return;
+    }
     setStatus('Saving…');
 
     // Send target filename first so firmware saves to the right path
-    const sdFilename = (document.getElementById('sd-filename')?.value?.trim()) || '/config.txt';
     await send('F' + sdFilename + '\n');
     const fnLine = await nextLine(3000);
     const fnRes = JSON.parse(fnLine);
@@ -890,6 +931,7 @@ function applyConfig(cfg) {
     const el = document.getElementById('sd-filename');
     if (el) el.value = b.configFilename;
   }
+  showFilenameState();
 
   const info = cfg.information || {};
   document.getElementById('bi-cfgver').textContent =
@@ -1115,6 +1157,7 @@ document.getElementById('file-input').addEventListener('change', e => {
       // Suggest this filename for SD save (prepend '/' for SD path)
       const sdEl = document.getElementById('sd-filename');
       if (sdEl) sdEl.value = '/' + file.name;
+      showFilenameState();
     } catch(err) {
       showErr('JSON parse failed: ' + err.message);
     }
@@ -1208,6 +1251,7 @@ document.getElementById('btn-save').addEventListener('click', () => cmdSaveConfi
 document.getElementById('btn-reboot').addEventListener('click', async () => {
   if (confirm('Reboot the board now?\n\nUnsaved changes will be lost.')) await cmdReboot();
 });
+document.getElementById('sd-filename').addEventListener('input', showFilenameState);
 document.getElementById('btn-poll').addEventListener('click', () => togglePoll());
 document.getElementById('btn-load').addEventListener('click', () => document.getElementById('file-input').click());
 document.getElementById('btn-download').addEventListener('click', () => downloadConfig());
