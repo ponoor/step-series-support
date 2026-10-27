@@ -167,6 +167,8 @@ select{width:auto;min-width:80px}
   <input type="file" id="file-input" accept=".json,.txt" style="display:none">
 </div>
 
+<div id="save-note" style="font-size:12px;color:var(--text-muted);margin:-4px 2px 8px">Save to SD: the board stops processing for about 0.1–0.7 s while it saves. Stop the motors first.</div>
+
 <div id="status-bar">
   <div class="dot" id="conn-dot"></div>
   <span id="status-msg">Disconnected — use Load JSON for offline work, or Connect for serial access</span>
@@ -499,6 +501,13 @@ function showFilenameState() {
     : 'SD card save filename. At start-up the board reads /config.txt first, then the first *.json in the root folder.';
 }
 
+// Likely causes of the save errors (diagnosis.cpp saveCurrentConfigAsJson(); NOTES 3: the card is
+// read only at start-up, exFAT is treated as no card).
+const SAVE_ERROR_HINTS = {
+  'No SD card': 'Is a card inserted, and formatted as FAT16 or FAT32 (exFAT cannot be used)? The board reads the card only at start-up: restart it after inserting a card.',
+  'SD open failed': 'The card was removed after start-up, the card is full, or the folder of the file name does not exist.',
+};
+
 async function cmdSaveConfig() {
   if (!writer) return;
   isSaving = true;
@@ -545,7 +554,7 @@ async function cmdSaveConfig() {
       setStatus('✓ ' + res.message);
       if (confirm('Config saved.\n\nReboot now to apply changes?')) await cmdReboot();
     } else {
-      showErr('Save failed: ' + res.message);
+      showErr('Save failed: ' + res.message + (SAVE_ERROR_HINTS[res.message] ? ' — ' + SAVE_ERROR_HINTS[res.message] : ''));
       setStatus('Save failed');
     }
   } catch (e) {
@@ -1254,8 +1263,9 @@ function updateStatusPanel(s) {
     ['Motor Status', m => MSTATUS[m.motorStatus] ?? m.motorStatus],
     ['Thermal',   m => `<span class="badge ${TCLASS[m.thermalStatus??0]}">${TSTATUS[m.thermalStatus??0]}</span>`],
     ['UVLO',      m => m.uvlo  ? '<span class="badge b-err">UVLO</span>'  : '<span class="badge b-ok">OK</span>'],
-    ['OCD',       m => m.ocd   ? '<span class="badge b-err">OCD</span>'   : '<span class="badge b-ok">OK</span>'],
-    ['Stall',     m => m.stall ? '<span class="badge b-warn">STALL</span>': '<span class="badge b-ok">OK</span>'],
+    // Firmware v2.2.0 sends ocd and stall as a fixed false in 'T' (printStatusAsJson()): not a state.
+    ['OCD',       () => '<span class="badge b-off">not reported</span>'],
+    ['Stall',     () => '<span class="badge b-off">not reported</span>'],
     ['Home SW',   m => m.homeSwState ? '<span class="badge b-warn">ON</span>' : '<span class="badge b-off">OFF</span>'],
     ['Homing Status', m => m.homingStatus ?? '—'],
     ['Servo Mode',m => m.isServoMode ? '<span class="badge b-ok">ON</span>' : '<span class="badge b-off">OFF</span>'],
