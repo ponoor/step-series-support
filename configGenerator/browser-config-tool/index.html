@@ -653,7 +653,7 @@ function voltageRows() { return [
   {k:'ST_SLP',              l:'ST_SLP (0–255)',              t:'num', min:0, max:255, tip:'BEMF compensation slope coefficient at start. Affects compensation at low speed.'},
   {k:'FN_SLP_ACC',          l:'FN_SLP_ACC (0–255)',          t:'num', min:0, max:255, tip:'BEMF compensation slope coefficient during acceleration at high speed.'},
   {k:'FN_SLP_DEC',          l:'FN_SLP_DEC (0–255)',          t:'num', min:0, max:255, tip:'BEMF compensation slope coefficient during deceleration at high speed.'},
-  {k:'STALL_TH',            l:'Stall detection threshold (0–127)', t:'num', min:0, max:127, tip:'Stall detection threshold. Higher value = less sensitive to stall.'},
+  {k:'STALL_TH',            l:'Stall detection threshold', t:'sel', opts:isL6470() ? STALL_TH_L6470 : STALL_TH_PS01, dflt:isL6470() ? 127 : 31, tip:'Stall detection threshold, (value + 1) x step. PowerSTEP01 (STEP400/100): 312.5 mA steps, 0–31. L6470 (STEP800/200): 31.25 mA steps, 0–127. Higher value = less sensitive to stall.'},
   {k:'lowSpeedOptimizeEnable',l:'Low speed optimize enable', t:'chk', tip:'Enable low-speed optimization for smoother motor motion at very low speeds.'},
   {k:'lowSpeedOptimize',    l:'Low speed optimize value',   t:'num', min:0, step:0.01, tip:'Low-speed optimization coefficient. Only active when low speed optimize is enabled.'},
 ];}
@@ -671,8 +671,8 @@ function currentRows() { return [
   {k:'TVAL_ACC', l:'TVAL_ACC — acceleration current', t:'sel', opts:TVAL_OPTS, dflt:TVAL_DEFAULT, tip:'Target current during acceleration.'},
   {k:'TVAL_DEC', l:'TVAL_DEC — deceleration current', t:'sel', opts:TVAL_OPTS, dflt:TVAL_DEFAULT, tip:'Target current during deceleration.'},
   {k:'T_FAST',   l:'T_FAST (0–255)',    t:'num', min:0, max:255, tip:'Maximum fast decay time. Controls current decay during a step. See PowerSTEP01 datasheet for values.'},
-  {k:'TON_MIN',  l:'TON_MIN (0–255)',   t:'num', min:0, max:255, tip:'Minimum ON time for the current control PWM. See PowerSTEP01 datasheet for values.'},
-  {k:'TOFF_MIN', l:'TOFF_MIN (0–255)',  t:'num', min:0, max:255, tip:'Minimum OFF time for the current control PWM. See PowerSTEP01 datasheet for values.'},
+  {k:'TON_MIN',  l:'TON_MIN (0–127)',   t:'num', min:0, max:127, tip:'Minimum ON time for the current control PWM. See PowerSTEP01 datasheet for values.'},
+  {k:'TOFF_MIN', l:'TOFF_MIN (0–127)',  t:'num', min:0, max:127, tip:'Minimum OFF time for the current control PWM. See PowerSTEP01 datasheet for values.'},
 ];}
 
 function servoRows() { return [
