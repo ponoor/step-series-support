@@ -440,6 +440,19 @@ class SelfLinkTest(unittest.TestCase):
         self.assertRegex(text, r"\[`/setConfigName`\]\(system-settings\.md#setconfigname\)")
 
 
+class ReferencePagesTest(unittest.TestCase):
+    """The hand-written reference pages (docs/<lang>/reference/) agree with the YAML."""
+
+    def read(self, lang: str, name: str) -> str:
+        return (ROOT / "docs" / lang / "reference" / f"{name}.md").read_text(encoding="utf-8")
+
+    def test_every_timing_is_explained_in_the_common_rules(self):
+        for lang in generate.LANGS:
+            text = self.read(lang, "index")
+            for key, names in SPEC.timings.items():
+                self.assertIn(names[lang], text, f"[{lang}] timing '{key}' ({names[lang]}) is not in index.md")
+
+
 class RealDocsTest(unittest.TestCase):
     def test_generated_pages_of_the_repository_are_up_to_date(self):
         """The committed generated pages equal what generate.py writes now."""
