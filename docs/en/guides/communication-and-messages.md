@@ -10,7 +10,7 @@ This page explains how the board exchanges OSC (Open Sound Control) messages wit
 
 The board receives OSC messages as UDP packets. It sends two kinds of messages back: the **replies** to the commands that ask for something (such as [`/getVersion`](../reference/system-settings.md#getversion)), and the messages that it sends **by itself** when something happens or at a fixed interval (such as [`/busy`](../reference/automatically-sent-messages.md#busy) or [`/position`](../reference/automatically-sent-messages.md#position)). Both go to the **destination**, the IP address and port that the board keeps for this purpose.
 
-For how to set the IP address of the board, the port numbers and the DIP switch, see [Network and DIP switch](../connections/network-and-dip-switch.md). They are not repeated here.
+For how to set the IP address of the board, the port numbers and the DIP switch, see [Network and DIP switch](../connections/network-and-dip-switch.md#network-settings). They are not repeated here.
 
 ## The destination and `/setDestIp` {#setdestip}
 
@@ -80,7 +80,7 @@ With [`/reportError`](../reference/system-settings.md#reporterror) set to 0, the
 
 ## Diagnosis {#diagnosis}
 
-The USB serial port shows the MAC address of the destination and more about the connection. See [USB serial diagnosis](../maintenance/usb-serial-diagnosis.md).
+The USB serial port shows the MAC address of the destination and more about the connection. See [USB serial diagnosis](../maintenance/usb-serial-diagnosis.md#status-ethernet).
 
 ## Related commands and settings {#related}
 

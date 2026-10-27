@@ -24,7 +24,7 @@ title: 原点復帰と位置管理
 
 ## HOMEスイッチとLIMITスイッチ {#home-limit}
 
-STEP400とSTEP800の各軸には、センサやスイッチをつなげるHOME端子があり、センサ用の5V電源も供給されています。STEP400には、HOME端子に加えてLIMIT端子もあります。端子につないだセンサやスイッチを、HOMEスイッチ、LIMITスイッチと呼びます。ピン配置と、スイッチやセンサのつなぎ方は、[センサとスイッチ](../connections/sensors-and-switches.md)をご覧ください。
+STEP400とSTEP800の各軸には、センサやスイッチをつなげるHOME端子があり、センサ用の5V電源も供給されています。STEP400には、HOME端子に加えてLIMIT端子もあります。端子につないだセンサやスイッチを、HOMEスイッチ、LIMITスイッチと呼びます。ピン配置と、スイッチやセンサのつなぎ方は、[センサとスイッチ](../connections/sensors-and-switches.md#terminals)をご覧ください。
 
 ### HOME {#home}
 
@@ -36,7 +36,7 @@ HOME端子はモータドライバに直接つながっていて、ドライバ�
 
 スイッチがオンになったときに、モータを強制的に停止する設定ができます。また、モータの動作とは切り離して、単なる入力としても使えます。例えば押しボタンをつないで、押されたらOSCメッセージで通知する、という使い方もできます。
 
-入力がLowのときに、スイッチはオンです。原点位置で、センサの信号がHIGHからLOWになるように、機構とセンサを組み合わせてください（センサと配線は、[センサとスイッチ](../connections/sensors-and-switches.md)をご覧ください）。スイッチがオンになったときにボードが何をするかは、[`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode)と[`/setLimitSwMode`](../reference/home-and-limit-sensors.md#setlimitswmode)で設定します。
+入力がLowのときに、スイッチはオンです。原点位置で、センサの信号がHIGHからLOWになるように、機構とセンサを組み合わせてください（センサと配線は、[センサとスイッチ](../connections/sensors-and-switches.md#wiring)をご覧ください）。スイッチがオンになったときにボードが何をするかは、[`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode)と[`/setLimitSwMode`](../reference/home-and-limit-sensors.md#setlimitswmode)で設定します。
 
 ### 即停止モードと`SW_USER` {#sw-mode}
 

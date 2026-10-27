@@ -10,7 +10,7 @@ title: 通信とメッセージ
 
 ボードは、OSCメッセージをUDPのパケットとして受け取ります。ボードが送るメッセージには2種類あります。[`/getVersion`](../reference/system-settings.md#getversion)のように、問い合わせるコマンドへの**返信**と、何かが起きたときや一定の間隔で、ボードが**自分から**送るメッセージ（[`/busy`](../reference/automatically-sent-messages.md#busy)や[`/position`](../reference/automatically-sent-messages.md#position)など）です。どちらも、ボードが送信先として持っているIPアドレスとポートへ送られます。
 
-ボードのIPアドレス、ポート番号、DIPスイッチの設定は、[ネットワークとDIPスイッチ](../connections/network-and-dip-switch.md)をご覧ください。ここには書き写していません。
+ボードのIPアドレス、ポート番号、DIPスイッチの設定は、[ネットワークとDIPスイッチ](../connections/network-and-dip-switch.md#network-settings)をご覧ください。ここには書き写していません。
 
 ## 送信先と`/setDestIp` {#setdestip}
 
@@ -80,7 +80,7 @@ v2.2.0より前は、引数の不足や型違いは0として適用されてい�
 
 ## 診断 {#diagnosis}
 
-USBシリアルポートで、送信先のMACアドレスなど、接続の詳しい状態を確かめられます。[USBシリアル診断](../maintenance/usb-serial-diagnosis.md)をご覧ください。
+USBシリアルポートで、送信先のMACアドレスなど、接続の詳しい状態を確かめられます。[USBシリアル診断](../maintenance/usb-serial-diagnosis.md#status-ethernet)をご覧ください。
 
 ## 関連するコマンドと設定項目 {#related}
 

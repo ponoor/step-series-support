@@ -24,7 +24,7 @@ Photointerrupters are often used as home sensors. On the left, a piece of white 
 
 ## The HOME and LIMIT switches {#home-limit}
 
-Each axis of the STEP400 and the STEP800 has a HOME terminal where a sensor or a switch can be connected, with a 5 V power supply for the sensor. The STEP400 has a LIMIT terminal as well. A sensor on a terminal is called the HOME switch or the LIMIT switch. For the pin assignment and how to connect a switch or a sensor, see [Sensors and switches](../connections/sensors-and-switches.md).
+Each axis of the STEP400 and the STEP800 has a HOME terminal where a sensor or a switch can be connected, with a 5 V power supply for the sensor. The STEP400 has a LIMIT terminal as well. A sensor on a terminal is called the HOME switch or the LIMIT switch. For the pin assignment and how to connect a switch or a sensor, see [Sensors and switches](../connections/sensors-and-switches.md#terminals).
 
 ### HOME {#home}
 
@@ -36,7 +36,7 @@ Some applications need two sensors. A slider, for example, has a limited range o
 
 The motor can be set to stop forcibly when a switch is on. The switches can also be used as simple inputs, separate from the motor operation: for example, you can connect a push button and have the board send an OSC message when it is pressed.
 
-A switch is on when its input is LOW. The combination of the mechanism and the sensor must make the signal of the sensor go from HIGH to LOW at the home position (see [Sensors and switches](../connections/sensors-and-switches.md) for the sensors and the wiring). The commands [`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode) and [`/setLimitSwMode`](../reference/home-and-limit-sensors.md#setlimitswmode) set what the board does when the switch turns on.
+A switch is on when its input is LOW. The combination of the mechanism and the sensor must make the signal of the sensor go from HIGH to LOW at the home position (see [Sensors and switches](../connections/sensors-and-switches.md#wiring) for the sensors and the wiring). The commands [`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode) and [`/setLimitSwMode`](../reference/home-and-limit-sensors.md#setlimitswmode) set what the board does when the switch turns on.
 
 ### Hard stop mode and `SW_USER` {#sw-mode}
 

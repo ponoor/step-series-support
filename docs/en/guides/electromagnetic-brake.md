@@ -10,7 +10,7 @@ An electromagnetic brake locks the shaft of the motor when it is not powered. Th
 
 Some stepper motors have an electromagnetic brake built in. A stepper motor keeps a holding torque while it is stopped and energized. If the power is lost, the torque is lost, and a suspended load moves or falls. The brake locks the shaft when its power is off (or when you command it) and releases the shaft when it is powered. It is needed especially when a load is moved up and down.
 
-The board controls the brake output of each motor on its own. It supports the STEP400 with the EMB-STEP400 brake board and the brake outputs of the STEP800. For the wiring, see [Electromagnetic brake connection](../connections/electromagnetic-brake-wiring.md). For the specifications of the brake board, see [EMB-STEP400](../hardware/emb-step400.md).
+The board controls the brake output of each motor on its own. It supports the STEP400 with the EMB-STEP400 brake board and the brake outputs of the STEP800. For the wiring, see [Electromagnetic brake connection](../connections/electromagnetic-brake-wiring.md#overview). For the specifications of the brake board, see [EMB-STEP400](../hardware/emb-step400.md#specifications).
 
 ## Enabling the brake {#enable}
 
