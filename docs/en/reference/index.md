@@ -50,6 +50,8 @@ The board checks the arguments of a command before it applies the command. When 
 | A value outside the range of the command | `/error/command CommandIgnored` |
 | More than 16 arguments, or a packet larger than 512 bytes | `/error/osc OscSyntaxError` |
 
+Some commands do not reject a value outside the range but limit or truncate it and apply it. See the description of each command.
+
 Arguments beyond the ones a command needs are ignored. The errors are not sent while the error report is disabled ([`/reportError`](system-settings.md#reporterror)). See [Automatically sent messages](automatically-sent-messages.md) for the error messages.
 
 An integer and a floating-point number are converted into each other when they are received. A logical value is accepted as an integer, a float, or the OSC logical value True / False:
@@ -89,5 +91,5 @@ A motion command that does not meet the conditions is rejected with an error suc
 
 ## Points to keep in mind
 
-- The board sends no OSC message, except the broadcast [`/booted`](automatically-sent-messages.md#booted), until it receives [`/setDestIp`](system-settings.md#setdestip). The board can behave unexpectedly if it sends a large number of messages that do not reach the destination. (With the configuration tool you can make the board send without waiting for `/setDestIp`.)
+- The board sends no OSC message, except the broadcast [`/booted`](automatically-sent-messages.md#booted), until it receives [`/setDestIp`](system-settings.md#setdestip). The board can behave unexpectedly if it sends a large number of messages that do not reach the destination. (With the configuration tool you can make the board send without waiting for `/setDestIp`. See [`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip).)
 - The messages to the destination are also dropped while the board resolves the MAC address of the destination (up to a few seconds after `/setDestIp`). For details, see [Communication and messages](../guides/communication-and-messages.md).

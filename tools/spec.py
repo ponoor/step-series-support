@@ -24,6 +24,8 @@ SCHEMA_PATH = REPO_ROOT / "spec" / "osc-commands.schema.json"
 
 # `[[/address]]` in a description links to a command or message.
 LINK_RE = re.compile(r"\[\[(/[^\]\s]+)\]\]")
+# `[[network.destIp]]` links to a setting (the `key` of `settings`; it does not start with "/").
+SETTING_LINK_RE = re.compile(r"\[\[([A-Za-z_]\w*(?:\.\w+)+)\]\]")
 
 
 class Spec:
@@ -169,6 +171,10 @@ class Spec:
     @staticmethod
     def links(text: str) -> list[str]:
         return LINK_RE.findall(text)
+
+    @staticmethod
+    def setting_links(text: str) -> list[str]:
+        return SETTING_LINK_RE.findall(text)
 
 
 def anchor(address: str) -> str:

@@ -6,7 +6,7 @@
 Checks
   - the format, with spec/osc-commands.schema.json
   - references: group, timing, use, response / notifies (-> messages),
-    see_also and [[...]] links (-> commands / messages), setting (-> settings),
+    see_also and [[...]] links (-> commands / messages; `[[network.destIp]]` -> settings), setting (-> settings),
     settings.*.commands (-> commands), errors (-> values of /error/command)
   - duplicated addresses and setting keys
   - keys of board-specific values are boards defined in `boards`
@@ -243,10 +243,14 @@ def check_references(spec: Spec, rep: Report):
         if s.get("section") != s["key"].split(".")[0]:
             rep.error(f"setting {s['key']}: section '{s.get('section')}' does not match the key")
 
+    setting_keys = {s["key"] for s in spec.settings}
     for where, lang, text in spec.iter_texts():
         for link in spec.links(text):
             if link not in all_addrs:
                 rep.error(f"{where} ({lang}): link [[{link}]] is not in commands or messages")
+        for link in spec.setting_links(text):
+            if link not in setting_keys:
+                rep.error(f"{where} ({lang}): link [[{link}]] is not in settings")
 
 
 def check_warnings(spec: Spec, rep: Report):

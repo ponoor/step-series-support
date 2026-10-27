@@ -50,6 +50,8 @@ OSCコマンドのモータIDは、基板に印刷してある番号と一致し
 | コマンドの範囲外の値 | `/error/command CommandIgnored` |
 | 16個を超える引数、または512バイトを超えるパケット | `/error/osc OscSyntaxError` |
 
+範囲外の値を拒否せず、制限や切り捨てをして適用するコマンドもあります。各コマンドの説明をご覧ください。
+
 必要な数を超える引数は無視されます。エラーの送信を無効にしている間（[`/reportError`](system-settings.md#reporterror)）は、エラーは送信されません。エラーのメッセージは、[自動送信されるメッセージ](automatically-sent-messages.md)をご覧ください。
 
 整数と浮動小数点数は、受信時に相互に変換されます。論理値は、整数、浮動小数点数、OSCの論理値のTrue / Falseのどれでも受け付けます。
@@ -89,5 +91,5 @@ OSCコマンドのモータIDは、基板に印刷してある番号と一致し
 
 ## 留意点
 
-- ボードは、[`/setDestIp`](system-settings.md#setdestip)を受信するまで、ブロードキャストの[`/booted`](automatically-sent-messages.md#booted)を除いて、OSCメッセージを送信しません。宛先に届かないメッセージを大量に送ると、ボードの挙動がおかしくなることがあるためです（設定ツールで、`/setDestIp`を待たずに送信を始めるようにもできます）。
+- ボードは、[`/setDestIp`](system-settings.md#setdestip)を受信するまで、ブロードキャストの[`/booted`](automatically-sent-messages.md#booted)を除いて、OSCメッセージを送信しません。宛先に届かないメッセージを大量に送ると、ボードの挙動がおかしくなることがあるためです（設定ツールで、`/setDestIp`を待たずに送信を始めるようにもできます。[`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip)をご覧ください）。
 - ボードが宛先のMACアドレスを解決している間（`/setDestIp`の後の最大数秒）も、宛先へのメッセージは破棄されます。詳しくは、[通信とメッセージ](../guides/communication-and-messages.md)をご覧ください。

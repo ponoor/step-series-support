@@ -22,9 +22,7 @@ title: ボード全体の設定
 
 モータの状態に変化があったときに通知するメッセージや、問い合わせへ返信するメッセージなどの送り先IPアドレス（`destIp`）を指定します。このメッセージを送信したIPアドレスを`destIp`に設定します。
 
-また、`destIp`が設定されるまでは、ボードからOSCメッセージの送信は行いませんので、一番最初にこのコマンドを送信してください。唯一の例外は[`/booted`](automatically-sent-messages.md#booted)メッセージです。
-
-Config Toolの設定を用いて、`destIp`が設定されていなくてもOSCメッセージを送信できるように設定できます。
+`/setDestIp`を受信するまで、ボードは宛先へ何も送信しません（ブロードキャストの[`/booted`](automatically-sent-messages.md#booted)を除く）。最初にこのコマンドを送信してください。設定で[`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip)が有効なときは、起動時から[`network.destIp`](../connections/configuration-items.md#network-destip)へ送信します。
 
 MACアドレスの解決のために、宛先のUDPポート9（discard）に1バイトを送信します。MacはICMPのport unreachableを返しますが、ボードには影響しません。ボードが動作しているかを確認するには、`/setDestIp`ではなく、[`/getVersion`](system-settings.md#getversion)のように返信のあるコマンドを使ってください。
 

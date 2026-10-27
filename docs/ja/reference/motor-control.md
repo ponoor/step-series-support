@@ -375,7 +375,7 @@ title: モータの回転・停止
 [`/combine/hardHiZ`](motor-control.md#combine-hardhiz), [`/enableElectromagnetBrake`](brake.md#enableelectromagnetbrake)
 <!-- generated:end osc /hardHiZ -->
 
-## 複合コマンド
+## 連動コマンド
 
 <!-- osc: /combine/run -->
 <!-- generated:begin osc /combine/run -->

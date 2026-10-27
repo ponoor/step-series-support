@@ -49,7 +49,7 @@ from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from spec import LINK_RE, REPO_ROOT, SPEC_PATH, Spec, anchor  # noqa: E402
+from spec import LINK_RE, REPO_ROOT, SETTING_LINK_RE, SPEC_PATH, Spec, anchor  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Layout of the pages. Change here when the site structure changes.
@@ -223,7 +223,14 @@ class Ctx:
                 return f"`{addr}`"   # the block links to itself: code, not a link
             return f"[`{addr}`]({href})"
 
-        text = LINK_RE.sub(repl, text.strip("\n"))
+        def repl_setting(m: re.Match) -> str:
+            key = m.group(1)
+            if key not in {s["key"] for s in self.spec.settings}:
+                self.errors.append(f"{self.where}: broken link [[{key}]]")
+                return f"`{key}`"
+            return f"[`{key}`]({_settings_href(self, key)})"
+
+        text = SETTING_LINK_RE.sub(repl_setting, LINK_RE.sub(repl, text.strip("\n")))
         lines = text.split("\n")
         out = []
         for i, ln in enumerate(lines):
@@ -664,7 +671,7 @@ def render_related(ctx: Ctx, groups: list[str]) -> str:
                 continue
             href = ctx.link_to(c["address"])
             desc = first_sentence(ctx.tx(c.get("description"), "description"))
-            desc = LINK_RE.sub(lambda m: f"`{m.group(1)}`", desc)
+            desc = SETTING_LINK_RE.sub(lambda m: f"`{m.group(1)}`", LINK_RE.sub(lambda m: f"`{m.group(1)}`", desc))
             rows.append([f"[`{c['address']}`]({href})", arg_heading(spec, c) or "-", desc])
     return f"**{L['related']}**\n\n" + table([L["command"], L["arguments"], L["description"]], rows) + "\n"
 

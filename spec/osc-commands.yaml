@@ -766,17 +766,13 @@ commands:
         Sets the destination IP address (`destIp`) to where the device should send messages to, when it replies to a query or report internal state changes, etc.
         The board sets the `destIp` to the sender of this message.
 
-        Also, until `destIp` is set, no OSC (Open Sound Control) messages will be sent from the device, so send this command first. One single exception is the [[/booted]] message.
-
-        From the configuration tool, you can set the board to start sending out the OSC message without waiting the `destIp` to be set.
+        Until the board receives `/setDestIp`, it sends nothing to the destination (except the broadcast [[/booted]]), so send this command first. When [[network.canSendMsgBeforeDestIp]] is enabled in the configuration, it sends to [[network.destIp]] from the start.
 
         To resolve the MAC address, the board sends one byte of UDP to port 9 (discard) of the destination; a Mac answers with ICMP port unreachable, which has no effect on the board. To check that the board is alive, use a command with a reply such as [[/getVersion]], not `/setDestIp`.
       ja: |-
         モータの状態に変化があったときに通知するメッセージや、問い合わせへ返信するメッセージなどの送り先IPアドレス（`destIp`）を指定します。このメッセージを送信したIPアドレスを`destIp`に設定します。
 
-        また、`destIp`が設定されるまでは、ボードからOSCメッセージの送信は行いませんので、一番最初にこのコマンドを送信してください。唯一の例外は[[/booted]]メッセージです。
-
-        Config Toolの設定を用いて、`destIp`が設定されていなくてもOSCメッセージを送信できるように設定できます。
+        `/setDestIp`を受信するまで、ボードは宛先へ何も送信しません（ブロードキャストの[[/booted]]を除く）。最初にこのコマンドを送信してください。設定で[[network.canSendMsgBeforeDestIp]]が有効なときは、起動時から[[network.destIp]]へ送信します。
 
         MACアドレスの解決のために、宛先のUDPポート9（discard）に1バイトを送信します。MacはICMPのport unreachableを返しますが、ボードには影響しません。ボードが動作しているかを確認するには、`/setDestIp`ではなく、[[/getVersion]]のように返信のあるコマンドを使ってください。
     response: [/destIp]

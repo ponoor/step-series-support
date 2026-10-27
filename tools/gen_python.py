@@ -35,7 +35,7 @@ from typing import Any
 import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from spec import LINK_RE, Spec  # noqa: E402
+from spec import LINK_RE, SETTING_LINK_RE, Spec  # noqa: E402
 
 TOOLS = Path(__file__).resolve().parent
 COMPAT_PATH = TOOLS / "python_compat.yaml"
@@ -114,7 +114,7 @@ def md_to_rst(text: str, refs: dict[str, str]) -> str:
         ref = refs.get(m.group(1))
         return f":py:class:`~{ref}`" if ref else f"``{m.group(1)}``"
 
-    text = LINK_RE.sub(link, text)
+    text = SETTING_LINK_RE.sub(lambda m: f"``{m.group(1)}``", LINK_RE.sub(link, text))
     parts = re.split(r"(``[^`]*``|:py:class:`[^`]*`|`[^`]+`)", text)
     out = []
     for p in parts:

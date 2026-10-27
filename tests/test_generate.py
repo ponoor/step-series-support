@@ -440,6 +440,34 @@ class SelfLinkTest(unittest.TestCase):
         self.assertRegex(text, r"\[`/setConfigName`\]\(system-settings\.md#setconfigname\)")
 
 
+class SettingLinkTest(unittest.TestCase):
+    """`[[network.destIp]]` (a `key` of `settings`) is a link to the list of the configuration items."""
+
+    def ctx(self, lang: str) -> "generate.Ctx":
+        ctx = generate.Ctx(SPEC, lang, "both", Counter(), [])
+        ctx.where = "test"
+        return ctx
+
+    def test_a_setting_key_becomes_a_link(self):
+        for lang in ("en", "ja"):
+            ctx = self.ctx(lang)
+            text = ctx.md("See [[network.destIp]].")
+            self.assertIn("[`network.destIp`](../connections/configuration-items.md#network-destip)", text)
+            self.assertEqual(ctx.errors, [])
+
+    def test_an_unknown_key_is_an_error(self):
+        ctx = self.ctx("en")
+        self.assertIn("`network.nothing`", ctx.md("[[network.nothing]]"))
+        self.assertEqual(len(ctx.errors), 1)
+
+    def test_set_dest_ip_links_to_the_settings_in_both_languages(self):
+        for lang in ("en", "ja"):
+            text = (ROOT / "docs" / lang / "reference" / "system-settings.md").read_text(encoding="utf-8")
+            body = text.split("### `/setDestIp`", 1)[1].split("### `/", 1)[0]
+            self.assertIn("configuration-items.md#network-cansendmsgbeforedestip", body)
+            self.assertIn("configuration-items.md#network-destip", body)
+
+
 class ReferencePagesTest(unittest.TestCase):
     """The hand-written reference pages (docs/<lang>/reference/) agree with the YAML."""
 
