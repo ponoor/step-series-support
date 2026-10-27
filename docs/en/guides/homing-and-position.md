@@ -40,7 +40,7 @@ A switch is on when its input is LOW. The combination of the mechanism and the s
 
 ### Hard stop mode and `SW_USER` {#sw-mode}
 
-The setting of the HOME switch (and the LIMIT switch on the STEP400) is either `SW_HARD_STOP` or `SW_USER`; see [`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode) and [`/setLimitSwMode`](../reference/home-and-limit-sensors.md#setlimitswmode). With `SW_HARD_STOP` the motor makes a hard stop at the moment the switch turns on. It does not look at the direction of the motion: a motor that moves away from the switch is stopped as well. Use the collision prevention settings below to restrict the direction.
+The setting of the HOME switch (and the LIMIT switch on the STEP400) is either `SW_HARD_STOP` or `SW_USER`; see [`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode) and [`/setLimitSwMode`](../reference/home-and-limit-sensors.md#setlimitswmode). With `SW_HARD_STOP` the motor makes a hard stop at the moment the switch turns on. It does not look at the direction of the motion: a motor that moves away from the switch is stopped as well. Use the collision prevention settings below to restrict the direction. In the servo mode the firmware also judges the direction itself; see [Servo mode](servo-mode.md#limits).
 
 ### Collision prevention settings {#collision-prevention}
 
@@ -48,7 +48,7 @@ You can limit the direction in which the motor can turn while the HOME or LIMIT 
 
 For [`/goTo`](../reference/motor-control.md#goto), [`/goHome`](../reference/position-management.md#gohome), [`/goMark`](../reference/position-management.md#gomark) and [`/goToDir`](../reference/motor-control.md#gotodir) the direction of the motion is the direction of the way to the target that the driver takes (the shortest way, with wrap-around). Before v2.2.0 the board judged this direction wrongly for a target that was close, so a short move away from the switch was refused.
 
-`homingDirection` is set with [`/setHomingDirection`](../reference/homing.md#sethomingdirection) or with the configuration tool. It is also used for [`/homing`](../reference/homing.md#homing).
+`homingDirection` is set with [`/setHomingDirection`](../reference/homing.md#sethomingdirection) or with the [browser configuration tool](../connections/browser-config-tool.md). It is also used for [`/homing`](../reference/homing.md#homing).
 
 ![Homing direction](https://ponoor.com/cms/wp-content/uploads/2020/08/homingDirection-800x533.jpg)
 
@@ -65,6 +65,8 @@ First the motor moves toward the home sensor with [`/goUntil`](../reference/homi
 [`/releaseSw`](../reference/homing.md#releasesw) moves the motor slowly in the opposite direction from the current position, and stops it immediately when the sensor turns off. The position where the motor stops is the home position. Strictly speaking, `/goUntil` does not stop at the moment the sensor turns on; the motor decelerates first, so it stops a little away from the point where the sensor responded. The firmware does not correct this, because every environment is different.
 
 Both commands can be set to reset the current position to 0 at the moment the sensor turns on, with [`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode).
+
+A demonstration video of `/goUntil` and `/releaseSw`: [Homing demo (Vimeo)](https://vimeo.com/1239729741)
 
 ### `/homing` {#homing}
 
@@ -84,7 +86,7 @@ When [`driverSettings.homingAtStartup`](../connections/configuration-items.md#dr
 
 ## Rotary tables {#rotary-tables}
 
-In the rotary table on the right of the picture of the two homing sensors, the position at which the home sensor responds differs between clockwise and counterclockwise rotation, by the size of the hole. The board can notify both the change from HIGH to LOW and the change from LOW to HIGH of the home sensor with an OSC message. The message also contains the direction of the rotation, so you can align the home position if you write a sequence for each direction. Enable this notification with [`/enableHomeSwReport`](../reference/home-and-limit-sensors.md#enablehomeswreport).
+When the home sensor responds to a hole or to a part that has a width, the position at which the sensor responds differs between clockwise and counterclockwise rotation by that width. The board can notify both the change from HIGH to LOW and the change from LOW to HIGH of the home sensor with an OSC message. The message also contains the direction of the rotation, so you can align the home position if you write a sequence for each direction. Enable this notification with [`/enableHomeSwReport`](../reference/home-and-limit-sensors.md#enablehomeswreport).
 
 ## Position management {#position}
 

@@ -40,7 +40,7 @@ HOME端子はモータドライバに直接つながっていて、ドライバ�
 
 ### 即停止モードと`SW_USER` {#sw-mode}
 
-HOMEスイッチ（STEP400ではLIMITスイッチも）の設定は、`SW_HARD_STOP`か`SW_USER`のどちらかです。[`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode)と[`/setLimitSwMode`](../reference/home-and-limit-sensors.md#setlimitswmode)をご覧ください。`SW_HARD_STOP`では、スイッチがオンになった瞬間に、モータを即停止します。動作の向きは見ません。スイッチから離れる向きに動いているモータも止まります。向きを制限したいときは、次の衝突防止の設定を使ってください。
+HOMEスイッチ（STEP400ではLIMITスイッチも）の設定は、`SW_HARD_STOP`か`SW_USER`のどちらかです。[`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode)と[`/setLimitSwMode`](../reference/home-and-limit-sensors.md#setlimitswmode)をご覧ください。`SW_HARD_STOP`では、スイッチがオンになった瞬間に、モータを即停止します。動作の向きは見ません。スイッチから離れる向きに動いているモータも止まります。向きを制限したいときは、次の衝突防止の設定を使ってください。サーボモード中は、ファームウェアが向きも判定します。[サーボモード](servo-mode.md#limits)をご覧ください。
 
 ### 衝突防止の設定 {#collision-prevention}
 
@@ -48,7 +48,7 @@ HOMEスイッチやLIMITスイッチがオンのときに、モータが回転�
 
 [`/goTo`](../reference/motor-control.md#goto)、[`/goHome`](../reference/position-management.md#gohome)、[`/goMark`](../reference/position-management.md#gomark)、[`/goToDir`](../reference/motor-control.md#gotodir)では、動作の向きは、ドライバが目標までに通る向き（最短の向き。範囲の端を越えて回り込む場合も含みます）で判定します。v2.2.0より前は、目標が近いときにこの向きを誤って判定し、スイッチから離れる向きの短い移動が拒否されていました。
 
-`homingDirection`は、[`/setHomingDirection`](../reference/homing.md#sethomingdirection)か設定ツールで設定します。[`/homing`](../reference/homing.md#homing)でも使われます。
+`homingDirection`は、[`/setHomingDirection`](../reference/homing.md#sethomingdirection)か[ブラウザ設定ツール](../connections/browser-config-tool.md)で設定します。[`/homing`](../reference/homing.md#homing)でも使われます。
 
 ![原点復帰の方向](https://ponoor.com/cms/wp-content/uploads/2020/08/homingDirection-800x533.jpg)
 
@@ -65,6 +65,8 @@ HOMEスイッチやLIMITスイッチがオンのときに、モータが回転�
 [`/releaseSw`](../reference/homing.md#releasesw)は、現在位置から逆向きにゆっくり移動し、センサがオフになったところで即座に停止します。モータが停止した位置が原点です。ただし厳密には、`/goUntil`はセンサがオンになった瞬間に停止するのではなく、減速して停止します。このため、センサが反応した点から少しずれた位置で止まります。これはファームウェアでは補正しません。環境によって異なるためです。
 
 どちらのコマンドも、センサがオンになった瞬間に現在位置を0にリセットする設定にできます。[`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode)をご覧ください。
+
+`/goUntil`と`/releaseSw`のデモ動画: [原点復帰のデモ（Vimeo）](https://vimeo.com/1239729741)
 
 ### `/homing` {#homing}
 
@@ -84,7 +86,7 @@ HOMEスイッチやLIMITスイッチがオンのときに、モータが回転�
 
 ## 回転テーブルの場合 {#rotary-tables}
 
-原点センサの2つの構成の写真の右にある回転テーブルでは、時計回りの場合と反時計回りの場合で、原点センサが反応する位置が、穴のサイズ分だけずれます。ボードは、原点センサのHIGHからLOWへの変化と、LOWからHIGHへの変化の、どちらもOSCメッセージで通知できます。メッセージには回転方向も含まれているので、回転方向ごとに場合分けすれば、原点位置をそろえられます。この通知は[`/enableHomeSwReport`](../reference/home-and-limit-sensors.md#enablehomeswreport)で有効にします。
+原点センサが穴や幅のある部品に反応するときは、時計回りの場合と反時計回りの場合で、センサが反応する位置が、その幅の分だけずれます。ボードは、原点センサのHIGHからLOWへの変化と、LOWからHIGHへの変化の、どちらもOSCメッセージで通知できます。メッセージには回転方向も含まれているので、回転方向ごとに場合分けすれば、原点位置をそろえられます。この通知は[`/enableHomeSwReport`](../reference/home-and-limit-sensors.md#enablehomeswreport)で有効にします。
 
 ## 位置管理 {#position}
 
