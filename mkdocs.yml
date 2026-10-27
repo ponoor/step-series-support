@@ -1,4 +1,4 @@
-# MkDocs configuration (Material). Pages are frames until R4 moves the contents.
+# MkDocs configuration (Material). The reference pages are moved (R4-b); the other pages are frames until R4-c.
 # The old pages (docs/connections-and-settings, ...) are excluded with exclude_docs until they are moved.
 # site_url is a placeholder: all links are relative. The header design of ponoor.com goes into overrides/.
 site_name: STEP Series
@@ -47,6 +47,8 @@ markdown_extensions:
     permalink: true
 - pymdownx.details
 - pymdownx.superfences
+validation:
+  anchors: warn   # a link to a heading that does not exist stops the strict build
 exclude_docs: '/connections-and-settings/
 
   /emb-step400/

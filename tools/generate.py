@@ -34,7 +34,7 @@ the value of configGenerator/configTemplate_*.json, `both` (default) shows both 
 
 Markers are counted in docs/en/ and docs/ja/ only (the old pages are not counted; the expansion above looks at all of
 `docs/`). The usual run prints one WARNING line per language with the numbers and does not change the exit code;
-`--coverage` lists every missing, duplicated or misplaced marker as an error.
+`--coverage` (also in the commit hook) lists every missing, duplicated or misplaced marker as an error.
 
 Exit code 1 on an error (unknown address, broken `[[link]]`, changes with --check).
 """

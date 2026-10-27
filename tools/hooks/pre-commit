@@ -10,7 +10,7 @@ if ! "$py" tools/validate_spec.py -q >/dev/null; then
     echo "pre-commit: validate_spec.py failed. See the places with: python tools/validate_spec.py --ja" >&2
     exit 1
 fi
-if ! "$py" tools/generate.py --check --defaults both >/dev/null; then
-    echo "pre-commit: the generated pages are out of date. Run: python tools/generate.py --defaults both, then git add the pages" >&2
+if ! "$py" tools/generate.py --check --defaults both --coverage >/dev/null; then
+    echo "pre-commit: the generated pages are out of date, or a marker is missing, duplicated or misplaced. Run: python tools/generate.py --defaults both --coverage" >&2
     exit 1
 fi
