@@ -14,12 +14,15 @@ What it does (docs directory: --docs, default `docs/`)
        <!-- osc-related: motion, /setKval -->     list of the commands of these groups and these commands
        <!-- osc-settings: speedProfile, driverSettings.isCurrentMode -->
                                                   list of the settings of these sections and these settings
+       <!-- osc-settings-values: network -->       the same items as a table with their initial values and ranges
 
    The generated text goes right below the marker, between
    `<!-- generated:begin ... -->` and `<!-- generated:end ... -->`. The marker itself stays,
    so running the script again replaces the block with the same text (idempotent). The items of
    the two lists are separated by commas. An item of `osc-related` is a group key or a command address
-   (it starts with `/`); an item of `osc-settings` is a section or a setting key (`section.key`). The
+   (it starts with `/`); an item of `osc-settings` and `osc-settings-values` is a section or a setting key
+   (`section.key`). `osc-settings-values` makes the columns Key (a link to the configuration items), Name,
+   Initial value and Range / Unit with the same code as the page of the configuration items. The
    rows follow the order of the items (inside a group or a section, the order of the YAML); a command or a setting
    that comes twice is listed once. A page without
    markers is never touched. A marker with an unknown address is an error and nothing is written.
@@ -124,7 +127,7 @@ LABELS = {
 }
 
 MARKER_RE = re.compile(
-    r"^<!--\s*(osc|osc-message|osc-related|osc-settings)\s*:\s*(.+?)\s*-->[ \t]*(?:\n|\Z)"
+    r"^<!--\s*(osc|osc-message|osc-related|osc-settings-values|osc-settings)\s*:\s*(.+?)\s*-->[ \t]*(?:\n|\Z)"
     r"(?:<!-- generated:begin [^\n]*-->\n.*?<!-- generated:end [^\n]*-->(?:\n|\Z))?",
     re.M | re.S,
 )
@@ -697,9 +700,8 @@ def render_related(ctx: Ctx, items: list[str]) -> str:
     return f"**{L['related']}**\n\n" + table([L["command"], L["arguments"], L["description"]], rows) + "\n"
 
 
-def render_related_settings(ctx: Ctx, items: list[str]) -> str:
-    """Rows for sections and single settings (`section.key`)."""
-    spec, L = ctx.spec, ctx.L
+def _pick_settings(spec: Spec, items: list[str]) -> list[dict]:
+    """The settings of sections and single settings (`section.key`), in the order of the items, each once."""
     sections = {s["section"] for s in spec.settings}
     by_key = {s["key"]: s for s in spec.settings}
     picked: list[dict] = []
@@ -711,12 +713,30 @@ def render_related_settings(ctx: Ctx, items: list[str]) -> str:
         else:
             raise GenerateError(f"unknown settings section '{item}'")
         picked += [s for s in found if s not in picked]
-    rows = []
-    for s in picked:
-        href = f"{_relpath(Path(SETTINGS_DIR) / f'{SETTINGS_PAGE}{SUFFIX[ctx.lang]}', ctx.rel_from)}#{setting_anchor(s['key'])}"
-        rows.append([f"[`{s['key']}`]({href})", ctx.tx(s.get("label"), "label"),
-                     ", ".join(f"`{c}`" for c in s.get("commands", []))])
+    return picked
+
+
+def _settings_page_href(ctx: Ctx, s: dict) -> str:
+    return f"{_relpath(Path(SETTINGS_DIR) / f'{SETTINGS_PAGE}{SUFFIX[ctx.lang]}', ctx.rel_from)}#{setting_anchor(s['key'])}"
+
+
+def render_related_settings(ctx: Ctx, items: list[str]) -> str:
+    """Rows for sections and single settings (`section.key`)."""
+    L = ctx.L
+    rows = [[f"[`{s['key']}`]({_settings_page_href(ctx, s)})", ctx.tx(s.get("label"), "label"),
+             ", ".join(f"`{c}`" for c in s.get("commands", []))] for s in _pick_settings(ctx.spec, items)]
     return f"**{L['related_settings']}**\n\n" + table([L["key"], L["label"], L["commands_col"]], rows) + "\n"
+
+
+def render_settings_values(ctx: Ctx, items: list[str]) -> str:
+    """Key, name, initial value and range of sections and single settings (the cells of the page of the configuration items)."""
+    L = ctx.L
+    rows = []
+    for s in _pick_settings(ctx.spec, items):
+        ctx.where = f"setting {s['key']}"
+        rows.append([f"[`{s['key']}`]({_settings_page_href(ctx, s)})", _setting_label(ctx, s),
+                     _setting_initial(ctx, s), _setting_range(ctx, s)])
+    return table([L["key"], L["label"], L["initial_col"], f"{L['range']} / {L['unit']}"], rows) + "\n"
 
 
 # ---------------------------------------------------------------------------
@@ -751,6 +771,8 @@ def expand_text(text: str, ctx: Ctx, path: Path) -> str:
                 body = render_message_block(ctx, arg)
             elif kind == "osc-related":
                 body = render_related(ctx, [x.strip() for x in arg.split(",") if x.strip()])
+            elif kind == "osc-settings-values":
+                body = render_settings_values(ctx, [x.strip() for x in arg.split(",") if x.strip()])
             else:
                 body = render_related_settings(ctx, [x.strip() for x in arg.split(",") if x.strip()])
         except GenerateError as e:
@@ -914,14 +936,9 @@ def page_settings(ctx: Ctx) -> str:
             ctx.where = f"setting {s['key']}"
             key = s["key"].split(".", 1)[1]
             name = f"<a id=\"{setting_anchor(s['key'])}\"></a>`{key}`"
-            label = ctx.tx(s.get("label"), "label")
-            if s.get("per_motor"):
-                label += ctx.paren(L['per_motor']) if label else L["per_motor"]
-            only = s.get("boards")
-            if only and set(only) != set(spec.board_names):
-                label += ctx.paren(L['boards_only'].format(boards=boards_text(spec, board_sorted(spec, only))))
+            label = _setting_label(ctx, s)
             init = _setting_initial(ctx, s)
-            rng = range_text(ctx, {"range": s.get("range"), "unit": s.get("unit")}, True) if (s.get("range") or s.get("unit")) else ""
+            rng = _setting_range(ctx, s)
             cmds = ", ".join(f"[`{c}`]({ctx.link_to(c)})" for c in s.get("commands", []))
             desc = ctx.tx(s.get("description"), "description") if s.get("description") else ""
             desc = ctx.oneline(ctx.md(desc)) if desc else ""
@@ -931,6 +948,23 @@ def page_settings(ctx: Ctx) -> str:
             rows.append([name, label, s["type"], init, rng, cmds, desc])
         out += [table([L["key"], L["label"], L["type"], L["initial_col"], f"{L['range']} / {L['unit']}", L["commands_col"], L["description"]], rows), ""]
     return "\n".join(out)
+
+
+def _setting_label(ctx: Ctx, s: dict) -> str:
+    spec, L = ctx.spec, ctx.L
+    label = ctx.tx(s.get("label"), "label")
+    if s.get("per_motor"):
+        label += ctx.paren(L['per_motor']) if label else L["per_motor"]
+    only = s.get("boards")
+    if only and set(only) != set(spec.board_names):
+        label += ctx.paren(L['boards_only'].format(boards=boards_text(spec, board_sorted(spec, only))))
+    return label
+
+
+def _setting_range(ctx: Ctx, s: dict) -> str:
+    if not (s.get("range") or s.get("unit")):
+        return ""
+    return range_text(ctx, {"range": s.get("range"), "unit": s.get("unit")}, True)
 
 
 def _setting_initial(ctx: Ctx, s: dict) -> str:

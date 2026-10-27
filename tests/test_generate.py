@@ -502,6 +502,56 @@ class SettingLinkTest(unittest.TestCase):
             self.assertIn("configuration-items.md#network-destip", body)
 
 
+class SettingsValuesMarkerTest(unittest.TestCase):
+    """`<!-- osc-settings-values: ... -->` is a table of the settings with the cells of the configuration items page."""
+
+    def expand(self, lang: str, arg: str, rel_from: str = "connections"):
+        ctx = generate.Ctx(SPEC, lang, "both", Counter(), [])
+        ctx.rel_from = Path(rel_from)
+        text = generate.expand_text(f"<!-- osc-settings-values: {arg} -->\n", ctx, Path(f"{lang}/connections/x.md"))
+        return text, ctx.errors
+
+    def test_expands_the_columns_of_the_page_in_both_languages(self):
+        for lang, header in (("en", "| Key | Name | Initial value | Range / Unit |"),
+                             ("ja", "| キー | 名称 | 初期値 | 範囲 / 単位 |")):
+            text, errors = self.expand(lang, "network")
+            self.assertEqual(errors, [])
+            self.assertIn(header, text)
+            self.assertIn("[`network.myIp`](configuration-items.md#network-myip) |", text)
+            self.assertIn("| 10.0.0.100 |", text)
+            self.assertIn("generated:begin osc-settings-values network", text)
+
+    def test_cells_are_the_same_as_in_the_settings_page(self):
+        ctx = generate.Ctx(SPEC, "en", "both", Counter(), [])
+        page = generate.page_settings(ctx)
+        text, _ = self.expand("en", "network.mac")
+        row = [l for l in text.splitlines() if l.startswith("| [`network.mac`]")][0]
+        initial = row.split(" | ")[2]
+        self.assertIn(initial, page)
+        self.assertIn("(firmware)", initial)
+
+    def test_order_of_the_items_and_duplicates(self):
+        text, _ = self.expand("en", "network.outPort, network.myIp, network.outPort")
+        keys = re.findall(r"\[`(network\.\w+)`\]", text)
+        self.assertEqual(keys, ["network.outPort", "network.myIp"])
+
+    def test_unknown_key_is_an_error(self):
+        _, errors = self.expand("en", "network.nothing")
+        self.assertEqual(len(errors), 1)
+        self.assertIn("unknown settings section", errors[0])
+
+    def test_link_from_another_directory(self):
+        text, _ = self.expand("en", "network.myIp", rel_from="guides")
+        self.assertIn("(../connections/configuration-items.md#network-myip)", text)
+
+    def test_it_is_not_counted_as_a_command_marker(self):
+        with tempfile.TemporaryDirectory() as d:
+            page = Path(d) / "en" / "connections"
+            page.mkdir(parents=True)
+            (page / "x.md").write_text("<!-- osc-settings-values: network -->\n", encoding="utf-8")
+            self.assertEqual(generate.scan_markers(Path(d), "osc", "en"), {})
+
+
 class CurrentTest(unittest.TestCase):
     """`current_step_mA` of a setting: (value + 1) x step, shown next to the initial value."""
 
