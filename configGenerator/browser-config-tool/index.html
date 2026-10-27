@@ -1028,12 +1028,17 @@ function assembleConfig() {
   const cfgName = document.getElementById('bi-cfgname')?.value ?? '';
   if (/[{}]/.test(cfgName)) formProblems.push('Config Name: { and } cannot be used');
 
+  // A file needs information.configVersion to be accepted as *.json at start-up (loadConfig.cpp
+  // findFirstValidJson()); a board that started without a file reports [-1, 0] and targetProduct
+  // "---" (loadedConfigVersion, configTargetProduct), which a downloaded file must not keep.
+  // 1.2 is applicableConfigVersion of v2.1.0 / v2.2.0 (boardsDef.h).
   const info = loadedCfg.information || {};
   const cfg = {
     information: {
       configName: document.getElementById('bi-cfgname')?.value ?? info.configName ?? '',
-      targetProduct: info.targetProduct ?? '',
-      configVersion: info.configVersion,
+      targetProduct: ['STEP100','STEP200','STEP400','STEP800'].includes(info.targetProduct) ? info.targetProduct : boardKind(),
+      configVersion: (Array.isArray(info.configVersion) && info.configVersion.length === 2 && info.configVersion[0] > 0)
+        ? info.configVersion : [1, 2],
     },
     network: assembleNetwork(),
     alarmAndReport: assembleSec('alarm', alarmRows(), loadedCfg.alarmAndReport || {}),
