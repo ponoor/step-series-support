@@ -50,9 +50,9 @@ lang: ja
 | コマンド | 引数 | STEP400 | STEP800 |
 | --- | --- | --- | --- |
 | [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH（範囲） | 0-31 | 0-15 |
-| [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH（初期値） | 15 | 7（ファームウェア）、15（テンプレート） |
+| [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH（初期値） | 15（5A） | 7（3A）（ファームウェア）、15（6A）（テンプレート） |
 | [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | STALL_TH（範囲） | 0-31 | 0-127 |
-| [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | STALL_TH（初期値） | 31 | 127 |
+| [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | STALL_TH（初期値） | 31（10A） | 127（4A） |
 | [`/setSpeedProfile`](speed-profile.md#setspeedprofile) | dec（範囲） | 14.55-59590 | 14.55-59575 |
 | [`/setDec`](speed-profile.md#setdec) | dec（範囲） | 14.55-59590 | 14.55-59575 |
 

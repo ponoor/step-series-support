@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import copy
 import re
+from decimal import Decimal
 from pathlib import Path
 from typing import Any, Iterator
 
@@ -69,6 +70,16 @@ class Spec:
         if self.is_board_map(value):
             return value.get(board, missing)
         return value
+
+    def current_text(self, setting: dict | None, board: str, value: Any) -> str | None:
+        """The current a register value stands for, as in the tables of the commands (`312.5mA`, `5A`),
+        from `current_step_mA` of the setting: (value + 1) x step. None if the setting has no such field."""
+        if not setting or "current_step_mA" not in setting or isinstance(value, bool) or not isinstance(value, int):
+            return None
+        step = self.for_board(setting["current_step_mA"], board)
+        if step is None:
+            return None
+        return format_current(Decimal(str(step)) * (value + 1))
 
     def per_board(self, value: Any) -> dict[str, Any]:
         """{board: value} for every board (None where a board map has no entry)."""
@@ -175,6 +186,13 @@ class Spec:
     @staticmethod
     def setting_links(text: str) -> list[str]:
         return SETTING_LINK_RE.findall(text)
+
+
+def format_current(mA: Decimal) -> str:
+    """1 A or more in A, less in mA; only the digits that are needed (`312.5mA`, `5A`, `9.6875A`)."""
+    if mA >= 1000:
+        return f"{(mA / 1000).normalize():f}A"
+    return f"{mA.normalize():f}mA"
 
 
 def anchor(address: str) -> str:

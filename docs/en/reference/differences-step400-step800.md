@@ -50,9 +50,9 @@ None.
 | Command | Argument | STEP400 | STEP800 |
 | --- | --- | --- | --- |
 | [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH (Range) | 0-31 | 0-15 |
-| [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH (Initial value) | 15 | 7 (firmware) / 15 (template) |
+| [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH (Initial value) | 15 (5A) | 7 (3A) (firmware) / 15 (6A) (template) |
 | [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | STALL_TH (Range) | 0-31 | 0-127 |
-| [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | STALL_TH (Initial value) | 31 | 127 |
+| [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | STALL_TH (Initial value) | 31 (10A) | 127 (4A) |
 | [`/setSpeedProfile`](speed-profile.md#setspeedprofile) | dec (Range) | 14.55-59590 | 14.55-59575 |
 | [`/setDec`](speed-profile.md#setdec) | dec (Range) | 14.55-59590 | 14.55-59575 |
 

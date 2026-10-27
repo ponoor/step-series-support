@@ -265,7 +265,7 @@ A value above the range is not rejected; it wraps around: the value after the ma
 
 #### Initial value
 
-- `OCD_TH`: STEP400: 15; STEP800: 7 (firmware) / 15 (template) ([alarmAndReport.OCThreshold](../connections/configuration-items.md#alarmandreport-octhreshold))
+- `OCD_TH`: STEP400: 15 (5A); STEP800: 7 (3A) (firmware) / 15 (6A) (template) ([alarmAndReport.OCThreshold](../connections/configuration-items.md#alarmandreport-octhreshold))
 
 ##### Overcurrent detection threshold - STEP400
 
@@ -406,7 +406,7 @@ A value above the range is not rejected; it wraps around: the value after the ma
 
 #### Initial value
 
-- `STALL_TH`: STEP400: 31; STEP800: 127 ([voltageMode.STALL_TH](../connections/configuration-items.md#voltagemode-stall_th))
+- `STALL_TH`: STEP400: 31 (10A); STEP800: 127 (4A) ([voltageMode.STALL_TH](../connections/configuration-items.md#voltagemode-stall_th))
 
 ##### Stall detection threshold - STEP400
 

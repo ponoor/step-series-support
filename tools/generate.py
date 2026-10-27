@@ -442,11 +442,11 @@ def default_texts(ctx: Ctx, a: dict) -> dict[str, str] | None:
         base = spec.arg_default(a, b)
         if base is None:
             continue
-        shown = _with_meaning(ctx, a, base, setting)
+        shown = _with_meaning(ctx, a, base, setting, b)
         if setting is not None and "template" in setting and ctx.defaults != "firmware":
             t = spec.for_board(setting["template"], b, missing=base)
             if t is not None and t != base:
-                tshown = _with_meaning(ctx, a, t, setting)
+                tshown = _with_meaning(ctx, a, t, setting, b)
                 if ctx.defaults == "template":
                     shown = tshown
                 else:
@@ -456,10 +456,13 @@ def default_texts(ctx: Ctx, a: dict) -> dict[str, str] | None:
     return out or None
 
 
-def _with_meaning(ctx: Ctx, a: dict, v: Any, setting: dict | None) -> str:
+def _with_meaning(ctx: Ctx, a: dict, v: Any, setting: dict | None, board: str) -> str:
     spec = ctx.spec
     stype = (setting or {}).get("type", a.get("type", ""))
     text = ip_or_value(stype, v)
+    current = spec.current_text(setting, board, v)
+    if current:
+        return f"{text}{ctx.paren(current)}"
     for it in (a.get("values") or []) if not spec.is_board_map(a.get("values")) else []:
         if it["value"] == v or (isinstance(v, bool) and it["value"] == int(v)):
             name = it.get(ctx.lang) or it.get("en")
@@ -908,11 +911,11 @@ def _setting_initial(ctx: Ctx, s: dict) -> str:
         d = spec.for_board(s["default"], b)
         if d is None:
             continue
-        shown = _setting_value(ctx, s, d)
+        shown = _setting_value(ctx, s, d, b)
         if "template" in s and ctx.defaults != "firmware":
             t = spec.for_board(s["template"], b, missing=d)
             if t is not None and t != d:
-                ts = _setting_value(ctx, s, t)
+                ts = _setting_value(ctx, s, t, b)
                 shown = ts if ctx.defaults == "template" else (
                     f"{shown}{ctx.paren(L['firmware'])} / {ts}{ctx.paren(L['template'])}" if ctx.lang == "en"
                     else f"{shown}{ctx.paren(L['firmware'])}、{ts}{ctx.paren(L['template'])}")
@@ -924,9 +927,12 @@ def _setting_initial(ctx: Ctx, s: dict) -> str:
     return "; ".join(f"{b}: {t}" for b, t in texts.items())
 
 
-def _setting_value(ctx: Ctx, s: dict, v: Any) -> str:
+def _setting_value(ctx: Ctx, s: dict, v: Any, board: str) -> str:
     spec = ctx.spec
     text = ip_or_value(s["type"], v)
+    current = spec.current_text(s, board, v)
+    if current:
+        return f"{text}{ctx.paren(current)}"
     values = s.get("values")
     if values:
         # board-specific values: the caller does not know the board; look in every variant

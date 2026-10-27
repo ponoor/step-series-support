@@ -269,6 +269,10 @@
         },
         "range": {"$ref": "#/$defs/rangeValue"},
         "unit": {"type": "string"},
+        "current_step_mA": {
+          "description": "For a setting whose value stands for a current: the mA per step. The current of a value is (value + 1) x current_step_mA. A number, or board-specific numbers. Shown next to the initial value.",
+          "oneOf": [{"type": "number", "exclusiveMinimum": 0}, {"allOf": [{"$ref": "#/$defs/boardMap"}, {"additionalProperties": {"type": "number", "exclusiveMinimum": 0}}]}]
+        },
         "values": {"$ref": "#/$defs/values"},
         "commands": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/address"}},
         "aliases": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},

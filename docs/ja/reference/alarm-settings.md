@@ -265,7 +265,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 #### 初期値
 
-- `OCD_TH`: STEP400: 15；STEP800: 7（ファームウェア）、15（テンプレート）（[alarmAndReport.OCThreshold](../connections/configuration-items.md#alarmandreport-octhreshold)）
+- `OCD_TH`: STEP400: 15（5A）；STEP800: 7（3A）（ファームウェア）、15（6A）（テンプレート）（[alarmAndReport.OCThreshold](../connections/configuration-items.md#alarmandreport-octhreshold)）
 
 ##### 過電流検出の閾値 - STEP400
 
@@ -406,7 +406,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 #### 初期値
 
-- `STALL_TH`: STEP400: 31；STEP800: 127（[voltageMode.STALL_TH](../connections/configuration-items.md#voltagemode-stall_th)）
+- `STALL_TH`: STEP400: 31（10A）；STEP800: 127（4A）（[voltageMode.STALL_TH](../connections/configuration-items.md#voltagemode-stall_th)）
 
 ##### ストール検出の閾値 - STEP400
 

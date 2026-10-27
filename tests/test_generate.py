@@ -6,7 +6,9 @@ They use a small docs tree in a temporary directory and the real spec.
 """
 
 import io
+import re
 from collections import Counter
+from decimal import Decimal
 import shutil
 import sys
 import tempfile
@@ -466,6 +468,64 @@ class SettingLinkTest(unittest.TestCase):
             body = text.split("### `/setDestIp`", 1)[1].split("### `/", 1)[0]
             self.assertIn("configuration-items.md#network-cansendmsgbeforedestip", body)
             self.assertIn("configuration-items.md#network-destip", body)
+
+
+class CurrentTest(unittest.TestCase):
+    """`current_step_mA` of a setting: (value + 1) x step, shown next to the initial value."""
+
+    @staticmethod
+    def parse(text: str) -> tuple[Decimal, int, Decimal]:
+        """(value in the unit shown, digits after the point, mA per unit)"""
+        m = re.fullmatch(r"([\d,]+(?:\.(\d+))?)(mA|A)", text)
+        shown = Decimal(m.group(1).replace(",", ""))
+        return shown, len(m.group(2) or ""), Decimal(1000 if m.group(3) == "A" else 1)
+
+    def test_format(self):
+        from spec import format_current
+        for mA, expected in ((312.5, "312.5mA"), (5000, "5A"), (9687.5, "9.6875A"), (999, "999mA"),
+                              (1000, "1A"), (78.125, "78.125mA"), (1328.125, "1.328125A"), (31.25, "31.25mA")):
+            self.assertEqual(format_current(Decimal(str(mA))), expected)
+
+    def test_the_formula_reproduces_the_rows_of_the_tables(self):
+        """Every row (not "...") of the tables of the commands of a setting with `current_step_mA`.
+        A row that does not agree is listed in KNOWN_DIFFERENT (reported, not corrected here)."""
+        different = set()
+        checked = 0
+        for s in SPEC.settings:
+            if "current_step_mA" not in s:
+                continue
+            for addr in s["commands"]:
+                for t in SPEC.command(addr).get("tables", []):
+                    rows = t["rows"]
+                    per_board = rows if SPEC.is_board_map(rows) else {b: rows for b in SPEC.boards_of(s)}
+                    for board, rs in per_board.items():
+                        for value, text in (r for r in rs if r[0] != "..."):
+                            checked += 1
+                            shown, digits, unit = self.parse(text)
+                            got = Decimal(str(SPEC.for_board(s["current_step_mA"], board))) * (value + 1) / unit
+                            if round(got, digits) != shown:
+                                different.add((s["key"], addr, board, value, text))
+        self.assertGreater(checked, 20)
+        self.assertEqual({(k, v) for k, _, _, v, _ in different}, self.KNOWN_DIFFERENT)
+
+    # TVAL 127: the table says 9,984mA (128 x 78mA); 128 x 78.125mA is 10,000mA (10A).
+    KNOWN_DIFFERENT = {(f"currentMode.TVAL_{x}", 127) for x in ("HOLD", "RUN", "ACC", "DEC")}
+
+    def test_initial_values_show_the_current(self):
+        for lang, (a, b) in (("en", (" (", ")")), ("ja", ("（", "）"))):
+            ctx = SettingLinkTest.ctx(None, lang)
+            oc = SPEC.setting("alarmAndReport.OCThreshold")
+            self.assertEqual(generate._setting_value(ctx, oc, 15, "STEP400"), f"15{a}5A{b}")
+            self.assertEqual(generate._setting_value(ctx, oc, 15, "STEP800"), f"15{a}6A{b}")
+            stall = SPEC.setting("voltageMode.STALL_TH")
+            self.assertEqual(generate._setting_value(ctx, stall, 127, "STEP800"), f"127{a}4A{b}")
+            tval = SPEC.setting("currentMode.TVAL_RUN")
+            self.assertEqual(generate._setting_value(ctx, tval, 16, "STEP400"), f"16{a}1.328125A{b}")
+
+    def test_a_setting_without_the_field_shows_the_value_only(self):
+        ctx = SettingLinkTest.ctx(None, "en")
+        self.assertEqual(generate._setting_value(ctx, SPEC.setting("currentMode.T_FAST"), 20, "STEP400").split(" ")[0], "20")
+        self.assertIsNone(SPEC.current_text(SPEC.setting("currentMode.T_FAST"), "STEP400", 20))
 
 
 class ReferencePagesTest(unittest.TestCase):

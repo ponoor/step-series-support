@@ -343,6 +343,7 @@ settings:
     per_motor: true
     default: {STEP400: 15, STEP800: 7}
     template: {STEP800: 15}
+    current_step_mA: {STEP400: 312.5, STEP800: 375}
     commands: [/setOverCurrentThreshold]
 
   # --- driverSettings ---
@@ -638,6 +639,7 @@ settings:
     type: int
     per_motor: true
     default: {STEP400: 31, STEP800: 127}
+    current_step_mA: {STEP400: 312.5, STEP800: 31.25}
     commands: [/setStallThreshold]
 
   - key: voltageMode.lowSpeedOptimizeEnable
@@ -665,6 +667,7 @@ settings:
     per_motor: true
     boards: [STEP400]
     default: 0
+    current_step_mA: 78.125
     commands: [/setTval, /setHoldTval]
     description:
       en: With the electromagnetic brake enabled, TVAL_HOLD is raised to at least half of TVAL_RUN whenever the motor is energized again; the raised value replaces the stored setting (so `/saveConfig` saves it) and is returned by [[/getTval]].
@@ -677,6 +680,7 @@ settings:
     per_motor: true
     boards: [STEP400]
     default: 16
+    current_step_mA: 78.125
     commands: [/setTval, /setRunTval]
 
   - key: currentMode.TVAL_ACC
@@ -686,6 +690,7 @@ settings:
     per_motor: true
     boards: [STEP400]
     default: 16
+    current_step_mA: 78.125
     commands: [/setTval, /setAccTval]
 
   - key: currentMode.TVAL_DEC
@@ -695,6 +700,7 @@ settings:
     per_motor: true
     boards: [STEP400]
     default: 16
+    current_step_mA: 78.125
     commands: [/setTval, /setDecTval]
 
   - key: currentMode.T_FAST
