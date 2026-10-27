@@ -8,7 +8,7 @@ A stepper motor can be driven with a constant voltage (voltage mode) or with a c
 
 ## The difference between voltage control and current control {#difference}
 
-There are two types of stepping control methods: constant voltage control (**voltage mode**) and constant current control (**current mode**). Only the STEP400 can switch between voltage mode and current mode; the STEP800 works in voltage mode only. The difference between the modes is explained well in [this presentation PDF](https://www.st.com/content/dam/AME/2019/developers-conference-2019/presentations/STDevCon19_3.6_Using%20Powerstep01.pdf) by STMicroelectronics.
+There are two types of stepping control methods: constant voltage control (**voltage mode**) and constant current control (**current mode**). Only the STEP400 can switch between voltage mode and current mode; the STEP800 works in voltage mode only. The commands for the current mode, such as `/setCurrentMode` and `/setTval`, do not exist on the STEP800; see [Differences between STEP400 and STEP800](../reference/differences-step400-step800.md). The difference between the modes is explained well in [this presentation PDF](https://www.st.com/content/dam/AME/2019/developers-conference-2019/presentations/STDevCon19_3.6_Using%20Powerstep01.pdf) by STMicroelectronics.
 
 In short:
 

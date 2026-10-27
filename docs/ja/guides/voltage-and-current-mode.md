@@ -8,7 +8,7 @@ title: 電圧モードと電流モード
 
 ## 電圧制御と電流制御の違い {#difference}
 
-ステッピングモータの制御方式には、定電圧制御（**電圧モード**）と定電流制御（**電流モード**）の2種類があります。電圧モードと電流モードを切り替えて使えるのはSTEP400だけで、STEP800は電圧モードのみです。2つのモードの違いは、STMicroelectronics社の[プレゼンテーション資料](https://www.st.com/content/dam/AME/2019/developers-conference-2019/presentations/STDevCon19_3.6_Using%20Powerstep01.pdf)にわかりやすくまとめられています。
+ステッピングモータの制御方式には、定電圧制御（**電圧モード**）と定電流制御（**電流モード**）の2種類があります。電圧モードと電流モードを切り替えて使えるのはSTEP400だけで、STEP800は電圧モードのみです。`/setCurrentMode`や`/setTval`など電流モードのコマンドは、STEP800にはありません。詳しくは[STEP400とSTEP800の違い](../reference/differences-step400-step800.md)をご覧ください。2つのモードの違いは、STMicroelectronics社の[プレゼンテーション資料](https://www.st.com/content/dam/AME/2019/developers-conference-2019/presentations/STDevCon19_3.6_Using%20Powerstep01.pdf)にわかりやすくまとめられています。
 
 実際に使う側にとっての違いを簡単にまとめると、次のとおりです。
 
