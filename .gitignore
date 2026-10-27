@@ -13,3 +13,4 @@ PLAN_*.md
 REPORT_*.md
 .venv/
 /site/
+__pycache__/

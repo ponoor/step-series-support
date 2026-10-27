@@ -1756,7 +1756,7 @@ commands:
         電圧モードでは、保存される設定だけが変わります。[[/setCurrentMode]]でレジスタに書き込まれます。
     see_also: [/getTval, /getTval_mA, /setHoldTval, /setRunTval, /setAccTval, /setDecTval]
     tables:
-      - columns: [TVAL, {en: "Setting value[mA]", ja: "設定値[mA]"}]
+      - columns: [TVAL, {en: Current, ja: 電流}]
         rows:
           - [0, 78.125mA]
           - [1, 156.25mA]

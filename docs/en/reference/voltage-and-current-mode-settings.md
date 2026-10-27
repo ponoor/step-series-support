@@ -405,7 +405,7 @@ In the voltage mode only the stored setting changes; [`/setCurrentMode`](voltage
 - `accTVAL`: 16 (1.328A) ([currentMode.TVAL_ACC](../connections/configuration-items.md#currentmode-tval_acc))
 - `decTVAL`: 16 (1.328A) ([currentMode.TVAL_DEC](../connections/configuration-items.md#currentmode-tval_dec))
 
-| TVAL | Setting value[mA] |
+| TVAL | Current |
 | --- | --- |
 | 0 | 78.125mA |
 | 1 | 156.25mA |
