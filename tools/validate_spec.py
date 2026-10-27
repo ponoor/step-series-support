@@ -22,7 +22,10 @@ Checks
     Checked in every `ja` text of the spec, in docs/ja/**/*.md (not the pages in exclude_docs, and not
     the pages generated from the spec), in the Japanese nav_translations of mkdocs.yml and in the
     Japanese fixed texts of tools/generate.py. Inline code, code blocks, [[...]] links, URLs, HTML
-    comments and generated blocks are left out (code and links count as one ASCII word for spacing).
+    comments and generated blocks are left out (code and links count as one ASCII word for spacing);
+    the target of a Markdown link `[text](target)` is left out. A signed number (-1, +5) counts as ASCII for
+    the spacing; in a table row the unit check reads only the cells with Japanese (the range / unit column
+    is left out).
 
     python tools/validate_spec.py --ja                  only the Japanese checks, one finding per line
                                                         (YAML line, place, word, context)
@@ -63,12 +66,16 @@ _STRIP = [
     (re.compile(r"`[^`\n]*`"), False),                             # inline code
     (re.compile(r"\[\[[^\]\n]*\]\]"), False),                      # [[/address]] links
     (re.compile(r"https?://[^\s)>\]]+"), False),                   # URLs
+    (re.compile(r"(?<=\])\([^()\s]*\)"), True),                    # the target of a Markdown link: [text](target)
 ]
 GENERATED_BLOCK_RE = re.compile(r"<!-- generated:begin .*?<!-- generated:end [^\n]*-->", re.S)
 # ASCII letters and digits (and a stripped piece) next to a Japanese character with spaces between
 _JA = "\u3000-\u30ff\u3400-\u9fff\uff00-\uffef"
 _ASCII = f"A-Za-z0-9{SENTINEL}"
-SPACE_RE = re.compile(rf"(?:(?<=[{_ASCII}]) +(?=[{_JA}])|(?<=[{_JA}]) +(?=[{_ASCII}]))")
+# A signed number ("-1", "+5") is ASCII too: "を -1として" has a space between a Japanese character and "-1".
+# The sign counts only when a digit follows and no letter, digit or Japanese character is before it
+# (so a list marker "- 1" and a dash are not taken).
+SPACE_RE = re.compile(rf"(?:(?<=[{_ASCII}]) +(?=[{_JA}])|(?<=[{_JA}]) +(?=[{_ASCII}]|[-+]\d))")
 JJ_SPACE_RE = re.compile(rf"(?<=[{_JA}]) +(?=[{_JA}])")      # between two Japanese characters
 _KANJI_KANA = re.compile("[\u3040-\u30ff\u3400-\u9fff]")
 
@@ -339,13 +346,18 @@ def find_wording(text: str, glossary: dict) -> list[dict]:
     if units:
         # inside a Japanese sentence (a line with kana or kanji) the unit follows the number without a space
         offset = 0
+        unit_re = unit_space_re(units)
         for line in plain.split("\n"):
-            if _KANJI_KANA.search(line):
-                for m in unit_space_re(units).finditer(line):
-                    a = offset + m.start()
+            # a table row is checked cell by cell: a cell without Japanese (the range / unit column) is left out
+            cells = [(m.start(), m.group(0)) for m in re.finditer(r"[^|]+", line)] if line.lstrip().startswith("|") else [(0, line)]
+            for start, text in cells:
+                if not _KANJI_KANA.search(text):
+                    continue
+                for m in unit_re.finditer(text):
+                    a = offset + start + m.start()
                     ctx = plain[max(0, a - 12):a + 14].replace(SENTINEL, "`…`").replace("\n", " ")
                     found.append({"level": "error", "kind": "space", "word": "(数字と単位)", "line": plain.count("\n", 0, a) + 1,
-                                  "span": (a, offset + m.end()), "ctx": ctx, "words": plain, "term": None})
+                                  "span": (a, offset + start + m.end()), "ctx": ctx, "words": plain, "term": None})
             offset += len(line) + 1
     return found
 

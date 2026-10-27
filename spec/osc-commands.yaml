@@ -30,7 +30,7 @@ groups:
   speed_profile: {page: speed-profile, en: Speed profile, ja: スピードプロファイル}
   homing: {page: homing, en: Homing, ja: 原点復帰}
   sensors: {page: home-and-limit-sensors, en: HOME and LIMIT switches, ja: HOME/LIMITスイッチ}
-  position: {page: position-management, en: Position management, ja: 座標}
+  position: {page: position-management, en: Position management, ja: 位置管理}
   motion: {page: motor-control, en: Motor control, ja: モータの回転・停止}
   brake: {page: brake, en: Electromagnetic brake, ja: 電磁ブレーキ}
   servo: {page: servo-mode_reference, en: Servo mode, ja: サーボモード}
@@ -2363,7 +2363,7 @@ commands:
 
         原点復帰方向`homingDirection`と原点復帰の速度`homingSpeed`はそれぞれ[[/setHomingDirection]]と[[/setHomingSpeed]]で設定できるほか、configToolからも設定できます。
 
-        `/goUntil`と`/releaseSw`それぞれにタイムアウト時間が設定可能で、この時間内にスイッチの状態に変化がなかった場合はタイムアウトとして動作を中止します。この時間はぞれぞれ[[/setGoUntilTimeout]] [[/setReleaseSwTimeout]]で設定できます。
+        `/goUntil`と`/releaseSw`それぞれにタイムアウト時間が設定可能で、この時間内にスイッチの状態に変化がなかった場合はタイムアウトとして動作を中止します。この時間はそれぞれ[[/setGoUntilTimeout]]、[[/setReleaseSwTimeout]]で設定できます。
 
         原点復帰動作の状態変化に応じて下記の通知があります。
     notifies: [/homingStatus]
@@ -2921,9 +2921,9 @@ commands:
       ja: |-
         事前に設定したスピードプロファイルに従って、指定位置まで最短経路で移動します。指定位置まで移動し終わるまではBUSY状態になります。
 
-        ※ドライバ内部では -2,097,152と2,097,151は1周して隣り合った位置になっています。
+        ※ドライバ内部では-2,097,152と2,097,151は1周して隣り合った位置になっています。
 
-        範囲外の位置は拒否されません。4,194,303を超える位置は、ドライバライブラリによって4,194,303に制限され、ドライバはこれを -1として読みます。それ以外の位置は、下位22ビットだけが使われ、符号付きの数として読まれます。2,097,152は -2,097,152に、-2,097,153は2,097,151になります。
+        範囲外の位置は拒否されません。4,194,303を超える位置は、ドライバライブラリによって4,194,303に制限され、ドライバはこれを-1として読みます。それ以外の位置は、下位22ビットだけが使われ、符号付きの数として読まれます。2,097,152は-2,097,152に、-2,097,153は2,097,151になります。
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
@@ -2953,7 +2953,7 @@ commands:
       ja: |-
         事前に設定したスピードプロファイルに従って、指定位置まで指定方向で移動します。指定位置まで移動し終わるまではBUSY状態になります。
 
-        範囲外の位置は拒否されません。4,194,303を超える位置は、ドライバライブラリによって4,194,303に制限され、ドライバはこれを -1として読みます。それ以外の位置は、下位22ビットだけが使われ、符号付きの数として読まれます。2,097,152は -2,097,152に、-2,097,153は2,097,151になります。
+        範囲外の位置は拒否されません。4,194,303を超える位置は、ドライバライブラリによって4,194,303に制限され、ドライバはこれを-1として読みます。それ以外の位置は、下位22ビットだけが使われ、符号付きの数として読まれます。2,097,152は-2,097,152に、-2,097,153は2,097,151になります。
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     changes:
       - {version: "2.2.0", en: "On a busy motor, the STATUS register is read with GetParam, which does not clear the latched flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.", ja: "BUSYのモータでは、ラッチされたフラグを消さないGetParamでSTATUSレジスタを読みます。以前はGetStatusで読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo`など）が失われることがありました。"}
@@ -3105,7 +3105,7 @@ commands:
     description:
       en: |-
         Same as [[/goTo]] for two motors. A position outside the range is not rejected. A position above 4,194,303 is limited to 4,194,303 by the driver library, which the driver reads as -1. Any other position is cut to its lower 22 bits and read as a signed number: 2,097,152 becomes -2,097,152 and -2,097,153 becomes 2,097,151.
-      ja: "2つのモータに対する[[/goTo]]と同じです。範囲外の位置は拒否されません。4,194,303を超える位置は、ドライバライブラリによって4,194,303に制限され、ドライバはこれを -1として読みます。それ以外の位置は、下位22ビットだけが使われ、符号付きの数として読まれます。2,097,152は -2,097,152に、-2,097,153は2,097,151になります。"
+      ja: "2つのモータに対する[[/goTo]]と同じです。範囲外の位置は拒否されません。4,194,303を超える位置は、ドライバライブラリによって4,194,303に制限され、ドライバはこれを-1として読みます。それ以外の位置は、下位22ビットだけが使われ、符号付きの数として読まれます。2,097,152は-2,097,152に、-2,097,153は2,097,151になります。"
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
@@ -3130,7 +3130,7 @@ commands:
     description:
       en: |-
         Same as [[/goToDir]] for two motors. A position outside the range is not rejected. A position above 4,194,303 is limited to 4,194,303 by the driver library, which the driver reads as -1. Any other position is cut to its lower 22 bits and read as a signed number: 2,097,152 becomes -2,097,152 and -2,097,153 becomes 2,097,151.
-      ja: "2つのモータに対する[[/goToDir]]と同じです。範囲外の位置は拒否されません。4,194,303を超える位置は、ドライバライブラリによって4,194,303に制限され、ドライバはこれを -1として読みます。それ以外の位置は、下位22ビットだけが使われ、符号付きの数として読まれます。2,097,152は -2,097,152に、-2,097,153は2,097,151になります。"
+      ja: "2つのモータに対する[[/goToDir]]と同じです。範囲外の位置は拒否されません。4,194,303を超える位置は、ドライバライブラリによって4,194,303に制限され、ドライバはこれを-1として読みます。それ以外の位置は、下位22ビットだけが使われ、符号付きの数として読まれます。2,097,152は-2,097,152に、-2,097,153は2,097,151になります。"
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
     see_also: [/goToDir]
 
@@ -3403,7 +3403,7 @@ commands:
     timing: always
     description:
       en: Returns the state of the electromagnetic brake of the specified motor. The state is -1 for a motor with the brake disabled.
-      ja: "指定したモータの電磁ブレーキの状態を返します。ブレーキが無効なモータでは -1です。"
+      ja: "指定したモータの電磁ブレーキの状態を返します。ブレーキが無効なモータでは-1です。"
     response: [/brakeStatus]
     see_also: [/activate, /free, /enableElectromagnetBrake]
 

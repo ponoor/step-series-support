@@ -49,19 +49,19 @@ lang: ja
 
 | コマンド | 引数 | STEP400 | STEP800 |
 | --- | --- | --- | --- |
-| [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH (範囲) | 0-31 | 0-15 |
-| [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH (初期値) | 15 | 7 (ファームウェア) / 15 (テンプレート) |
-| [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | STALL_TH (範囲) | 0-31 | 0-127 |
-| [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | STALL_TH (初期値) | 31 | 127 |
-| [`/setSpeedProfile`](speed-profile.md#setspeedprofile) | dec (範囲) | 14.55-59590 | 14.55-59575 |
-| [`/setDec`](speed-profile.md#setdec) | dec (範囲) | 14.55-59590 | 14.55-59575 |
+| [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH（範囲） | 0-31 | 0-15 |
+| [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH（初期値） | 15 | 7（ファームウェア）、15（テンプレート） |
+| [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | STALL_TH（範囲） | 0-31 | 0-127 |
+| [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | STALL_TH（初期値） | 31 | 127 |
+| [`/setSpeedProfile`](speed-profile.md#setspeedprofile) | dec（範囲） | 14.55-59590 | 14.55-59575 |
+| [`/setDec`](speed-profile.md#setdec) | dec（範囲） | 14.55-59590 | 14.55-59575 |
 
 ## ボードによって値が異なるメッセージ
 
 | コマンド | 引数 | STEP400 | STEP800 |
 | --- | --- | --- | --- |
-| [`/overCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | overCurrentThreshold (範囲) | 312.5-10000 | 375-6000 |
-| [`/stallThreshold`](alarm-settings.md#setstallthreshold) | stallThreshold (範囲) | 312.5-10000 | 31.25-4000 |
+| [`/overCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | overCurrentThreshold（範囲） | 312.5-10000 | 375-6000 |
+| [`/stallThreshold`](alarm-settings.md#setstallthreshold) | stallThreshold（範囲） | 312.5-10000 | 31.25-4000 |
 
 ## ボード別の表
 

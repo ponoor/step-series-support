@@ -346,7 +346,8 @@ class ResponseTest(unittest.TestCase):
     def test_response_shows_description_tables_and_changes_of_a_message(self):
         text = self.expand("en", "<!-- osc: /getConfigName -->")
         resp = text[text.index("#### Response"):]
-        self.assertIn("###### Combinations of configFileOpenSucceeded", resp)   # table of the message
+        self.assertIn("##### Combinations of configFileOpenSucceeded", resp)    # table of the message
+        self.assertNotIn("######", resp)                                          # headings do not skip a level
         self.assertIn("##### Changes", resp)
         self.assertNotIn("automatically-sent-messages", resp)
         text = self.expand("ja", "<!-- osc: /getBrakeStatus -->")
@@ -373,6 +374,70 @@ class ResponseTest(unittest.TestCase):
         text = self.expand("en", "<!-- osc: /saveConfig -->\n\n<!-- osc: /getConfigName -->")
         self.assertNotIn("[[", text)
         self.assertRegex(text, r"\[`/setConfigName`\]\([^)]*#setconfigname\)")
+
+
+class JapaneseOutputTest(unittest.TestCase):
+    """The Japanese text that generate.py puts together follows the spacing rules of the glossary
+    (validate_spec.find_wording, the same function as the check of the hand-written pages)."""
+
+    @classmethod
+    def setUpClass(cls):
+        import validate_spec
+        cls.validate_spec = validate_spec
+        cls.spacing = {"spacing": validate_spec.load_glossary()["spacing"]}
+        cls.texts: dict[str, str] = {}
+        with tempfile.TemporaryDirectory() as tmp:
+            docs = Path(tmp) / "docs"
+            page = docs / "ja" / "reference" / "all.md"
+            page.parent.mkdir(parents=True)
+            marks = [f"<!-- osc: {c['address']} -->" for c in SPEC.commands]
+            marks += [f"<!-- osc-message: {a} -->" for a in generate.standalone_messages(SPEC)]
+            page.write_text("# all\n\n" + "\n\n".join(marks) + "\n", encoding="utf-8")
+            out = io.StringIO()
+            assert generate.run(docs, SPEC, out=out) == 0, out.getvalue()
+            for path in (docs / "ja").rglob("*.md"):
+                cls.texts[path.name] = path.read_text(encoding="utf-8")
+
+    def findings(self, name: str) -> list[str]:
+        import re
+        text = re.sub(r"<!--.*?-->", "", self.texts[name], flags=re.S)       # the markers and the generated notes
+        return [f"{name}: {f['word']}: ...{f['ctx']}..." for f in self.validate_spec.find_wording(text, self.spacing)]
+
+    def test_all_commands_and_standalone_messages(self):
+        self.assertEqual(self.findings("all.md"), [])
+
+    def test_generated_pages(self):
+        for name in ("command-list.md", "differences-step400-step800.md", "configuration-items.md"):
+            self.assertEqual(self.findings(name), [], name)
+
+    def test_forms(self):
+        text = self.texts["all.md"]
+        self.assertIn("1-4（STEP400）、1-8（STEP800）、255（全モータ）", text)
+        self.assertIn("（ファームウェア）、", text)
+        self.assertNotRegex(text, r"。 v\d")
+
+    def test_english_is_unchanged(self):
+        ctx = generate.Ctx(SPEC, "en", "both", Counter(), [])
+        self.assertEqual(ctx.paren("x"), " (x)")
+        self.assertEqual(ctx.join("a.", "b"), "a. b")
+        self.assertEqual(generate.cell("a  \nb"), "a   b")
+
+
+class SelfLinkTest(unittest.TestCase):
+    def expand(self, lang: str, marker: str) -> str:
+        return ResponseTest.expand(ResponseTest(), lang, marker)
+
+    def test_a_block_does_not_link_to_itself(self):
+        text = self.expand("en", "<!-- osc: /getConfigName -->")
+        self.assertNotIn("](system-settings.md#getconfigname)", text.split("### `/getConfigName`", 1)[1])
+        self.assertIn("`/configName`", text)
+        text = self.expand("ja", "<!-- osc: /getBrakeStatus -->")
+        self.assertNotIn("](brake.md#getbrakestatus)", text)
+        self.assertIn("`/getBrakeStatus`", text)
+
+    def test_a_link_to_another_block_stays_a_link(self):
+        text = self.expand("en", "<!-- osc: /getConfigName -->")
+        self.assertRegex(text, r"\[`/setConfigName`\]\(system-settings\.md#setconfigname\)")
 
 
 class RealDocsTest(unittest.TestCase):

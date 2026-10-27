@@ -142,7 +142,7 @@ lang: ja
 | [`/setLimitSwMode`](home-and-limit-sensors.md#setlimitswmode) | (int)motorID (bool)SW_MODE | ✓ |  |  |
 | [`/getLimitSwMode`](home-and-limit-sensors.md#getlimitswmode) | (int)motorID | ✓ |  |  |
 
-## 座標
+## 位置管理
 
 | コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |

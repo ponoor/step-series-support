@@ -227,6 +227,33 @@ class ReviewedTest(unittest.TestCase):
         self.assertEqual([f["level"] for f in findings], ["error"])
 
 
+class SignedNumberAndLinkTest(unittest.TestCase):
+    G = {"terms": [], "spacing": {"no_space_between_ascii_and_ja": True, "fullwidth_parentheses": True,
+                                   "units": ["ms", "mA"]}}
+
+    def kinds(self, text):
+        return [k for k, _, _ in validate_spec.check_wording(text, self.G)]
+
+    def test_space_before_a_signed_number(self):
+        self.assertEqual(self.kinds("ブレーキが無効なモータでは -1です。"), ["space"])
+        self.assertEqual(self.kinds("これを -1として読みます。"), ["space"])
+        self.assertEqual(self.kinds("値は +5です。"), ["space"])
+        self.assertEqual(self.kinds("ブレーキが無効なモータでは-1です。"), [])
+
+    def test_dash_and_list_marker_are_not_taken(self):
+        self.assertEqual(self.kinds("手順です\n- 1つ目\n- 2つ目"), [])
+        self.assertEqual(self.kinds("範囲 - 1つ目"), [])
+
+    def test_target_of_a_markdown_link_is_not_text(self):
+        self.assertEqual(self.kinds("詳しくは[機能ガイド](../guides/index.md)をご覧ください。"), [])
+        self.assertEqual(self.kinds("詳しくは[`/x`](a.md#x)をご覧ください。"), [])
+        self.assertEqual(self.kinds("詳しくは(ここ)をご覧ください。"), ["space"])
+
+    def test_unit_in_a_cell_without_japanese_is_left_out(self):
+        self.assertEqual(self.kinds("| a | 0-65535 ms | 送信間隔 |"), [])
+        self.assertEqual(self.kinds("| a | 0-65535 | 送信間隔は5 msです |"), ["space"])
+
+
 class FilesTest(unittest.TestCase):
     def test_glossary_file_loads(self):
         g = validate_spec.load_glossary()

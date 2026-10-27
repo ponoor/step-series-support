@@ -141,6 +141,7 @@ class Ctx:
         self.page_dir = REF_DIR        # directory (under docs/<lang>/) of the page being written
         self.rel_from = Path(REF_DIR)  # directory (under docs/<lang>/) links are relative to
         self.where = ""
+        self.block_anchor: str | None = None   # anchor of the command / message block being written (no link to itself)
 
     # -- texts ------------------------------------------------------------
     def tx(self, value: Any, kind: str = "text") -> str:
@@ -162,6 +163,25 @@ class Ctx:
     def item_text(self, item: dict, kind: str) -> str:
         """en / ja written next to other fields (values, changes)."""
         return self.tx({"en": item.get("en", ""), "ja": item.get("ja", "")}, kind)
+
+    # -- joining (Japanese: no space next to a Japanese character; full-width parentheses) -------
+    def paren(self, text: str) -> str:
+        """A parenthetical to append to a text: " (text)" in English, "（text）" in Japanese."""
+        return f" ({text})" if self.lang == "en" else f"（{text}）"
+
+    @property
+    def comma(self) -> str:
+        return ", " if self.lang == "en" else "、"
+
+    def join(self, *parts: str) -> str:
+        """The non-empty parts in a row: separated by a space in English; in Japanese by a space only where both
+        sides are not Japanese."""
+        return join_texts([p for p in parts if p], self.lang)
+
+    def oneline(self, text: str) -> str:
+        """A text on one line (table cell, list item). Line breaks become a space (English) or nothing between
+        Japanese characters (Japanese)."""
+        return join_lines(text, self.lang)
 
     # -- links ------------------------------------------------------------
     def page_file(self, page: str) -> Path:
@@ -199,6 +219,8 @@ class Ctx:
             if href is None:
                 self.errors.append(f"{self.where}: broken link [[{addr}]]")
                 return f"`{addr}`"
+            if self.block_anchor and href.endswith("#" + self.block_anchor):
+                return f"`{addr}`"   # the block links to itself: code, not a link
             return f"[`{addr}`]({href})"
 
         text = LINK_RE.sub(repl, text.strip("\n"))
@@ -210,6 +232,29 @@ class Ctx:
                 ln += "  "
             out.append(ln)
         return "\n".join(out)
+
+
+_JA_CHAR = "\u3000-\u30ff\u3400-\u9fff\uff00-\uffef"
+_JA_END = re.compile(f"[{_JA_CHAR}]$")
+_JA_START = re.compile(f"^[{_JA_CHAR}]")
+
+
+def join_texts(parts: list[str], lang: str) -> str:
+    """Join texts with a space (English). Japanese: no space next to a Japanese character (full-width
+    parentheses and punctuation included), so "。" + "v2.2.0で追加。" stays "。v2.2.0で追加。"."""
+    out = ""
+    for p in parts:
+        if out and (lang == "en" or not (_JA_END.search(out) or _JA_START.match(p))):
+            out += " "
+        out += p
+    return out
+
+
+def join_lines(text: str, lang: str) -> str:
+    """The lines of a text on one line (see Ctx.oneline)."""
+    if lang == "en":
+        return text.replace("\n", " ")
+    return join_texts([ln.strip() for ln in text.split("\n") if ln.strip()], lang)
 
 
 def _relpath(target: Path, start: Path) -> str:
@@ -238,7 +283,8 @@ def fmt(v: Any) -> str:
 
 
 def cell(text: Any) -> str:
-    return str(text).replace("|", "\\|").replace("\n", " ").strip()
+    text = re.sub(f"(?:(?<=[{_JA_CHAR}]) *\n *| *\n *(?=[{_JA_CHAR}]))", "", str(text))
+    return text.replace("|", "\\|").replace("\n", " ").strip()
 
 
 def table(header: list[str], rows: list[list[str]]) -> str:
@@ -296,15 +342,15 @@ def range_text(ctx: Ctx, a: dict, in_message: bool) -> str:
             if len(set(texts.values())) == 1 and len(texts) == len(spec.board_names):
                 parts.append(next(iter(texts.values())))
             else:
-                parts.append(", ".join(f"{t} ({b})" for b, t in texts.items()))
+                parts.append(ctx.comma.join(f"{t}{ctx.paren(b)}" for b, t in texts.items()))
         else:
             parts.append(_rng(rng))
     all_value = a.get("all")
     if not in_message and isinstance(all_value, int) and not isinstance(all_value, bool):
-        parts.append(f"{all_value} ({ctx.L['all_motors']})")
-    text = ", ".join(parts)
+        parts.append(f"{all_value}{ctx.paren(ctx.L['all_motors'])}")
+    text = ctx.comma.join(parts)
     if text and a.get("unit"):
-        text += f" {a['unit']}"
+        text = ctx.join(text, a["unit"])
     elif a.get("unit"):
         text = a["unit"]
     return text
@@ -340,10 +386,10 @@ def render_values_tables(ctx: Ctx, a: dict, name: str) -> list[str]:
             only = it.get("boards")
             meaning = ctx.md(ctx.item_text(it, "value"))
             if only and set(only) != set(spec.board_names):
-                meaning = f"{meaning} ({L['boards_only'].format(boards=boards_text(spec, board_sorted(spec, only)))})"
+                meaning += ctx.paren(L['boards_only'].format(boards=boards_text(spec, board_sorted(spec, only))))
             notes = inline_notes(ctx, it)
             if notes:
-                meaning = f"{meaning} {notes}"
+                meaning = ctx.join(meaning, notes)
             rows.append([fmt(it["value"]), meaning])
         title = f"`{name}`" + (f" - {board}" if board else "")
         out.append(f"{title}\n\n" + table([L["value"], L["meaning"]], rows))
@@ -363,9 +409,10 @@ def render_args(ctx: Ctx, item: dict, in_message: bool = False) -> str:
             name = f"{name}1 ... {name}N"
         desc = ctx.md(ctx.tx(a.get("description"), "arg"))
         if a.get("value") is not None:
-            desc = (desc + " " if desc else "") + f"`{a['value']}`"
+            desc = ctx.join(desc, f"`{a['value']}`")
         if a.get("since"):
-            desc = (desc + " " if desc else "") + f"({L['added'].format(v=a['since'])})"
+            added = ctx.paren(L['added'].format(v=a['since']))
+            desc = ctx.join(desc, added.lstrip()) if ctx.lang == "en" else desc + added
         rows.append([name, arg_type_name(a), range_text(ctx, a, in_message), desc])
         extra.extend(render_values_tables(ctx, a, a.get("name", name)))
     out = table([L["argument"], L["type"], L["range"], L["description"]], rows)
@@ -388,27 +435,29 @@ def default_texts(ctx: Ctx, a: dict) -> dict[str, str] | None:
         base = spec.arg_default(a, b)
         if base is None:
             continue
-        shown = _with_meaning(spec, a, base, setting)
+        shown = _with_meaning(ctx, a, base, setting)
         if setting is not None and "template" in setting and ctx.defaults != "firmware":
             t = spec.for_board(setting["template"], b, missing=base)
             if t is not None and t != base:
-                tshown = _with_meaning(spec, a, t, setting)
+                tshown = _with_meaning(ctx, a, t, setting)
                 if ctx.defaults == "template":
                     shown = tshown
                 else:
-                    shown = f"{shown} ({L['firmware']}) / {tshown} ({L['template']})"
+                    shown = (f"{shown}{ctx.paren(L['firmware'])} / {tshown}{ctx.paren(L['template'])}" if ctx.lang == "en"
+                             else f"{shown}{ctx.paren(L['firmware'])}、{tshown}{ctx.paren(L['template'])}")
         out[b] = shown
     return out or None
 
 
-def _with_meaning(spec: Spec, a: dict, v: Any, setting: dict | None) -> str:
+def _with_meaning(ctx: Ctx, a: dict, v: Any, setting: dict | None) -> str:
+    spec = ctx.spec
     stype = (setting or {}).get("type", a.get("type", ""))
     text = ip_or_value(stype, v)
     for it in (a.get("values") or []) if not spec.is_board_map(a.get("values")) else []:
         if it["value"] == v or (isinstance(v, bool) and it["value"] == int(v)):
-            en = it.get("en")
-            if en:
-                return f"{text} ({en})"
+            name = it.get(ctx.lang) or it.get("en")
+            if name:
+                return f"{text}{ctx.paren(name)}"
     return text
 
 
@@ -427,10 +476,10 @@ def render_initial(ctx: Ctx, item: dict) -> str:
         elif len(set(texts.values())) == 1 and len(texts) == 1:
             body = next(iter(texts.values()))
         else:
-            body = "; ".join(f"{b}: {t}" for b, t in texts.items())
+            body = ("; " if ctx.lang == "en" else "；").join(f"{b}: {t}" for b, t in texts.items())
         link = ""
         if "setting" in a:
-            link = f" ([{a['setting']}]({_settings_href(ctx, a['setting'])}))"
+            link = ctx.paren(f"[{a['setting']}]({_settings_href(ctx, a['setting'])})")
         lines.append(f"- `{name}`: {body}{link}")
     return "\n".join(lines)
 
@@ -462,6 +511,7 @@ def render_message_block(ctx: Ctx, addr: str) -> str:
     spec, L = ctx.spec, ctx.L
     msg = spec.message(addr)
     ctx.where = f"message {addr}"
+    ctx.block_anchor = anchor(addr)
     parts = [f"### `{addr}` {arg_heading(spec, msg)} {{#{anchor(addr)}}}".replace("  ", " ")]
     parts += _notes(ctx, msg)
     parts.append(f"#### {L['argument']}\n\n" + render_args(ctx, msg, in_message=True))
@@ -482,7 +532,7 @@ def _notes(ctx: Ctx, item: dict) -> list[str]:
         notes.append(L["only"].format(boards=boards_text(spec, board_sorted(spec, boards))))
     if item.get("since"):
         notes.append(L["added"].format(v=item["since"]))
-    return [" ".join(notes)] if notes else []
+    return [ctx.join(*notes)] if notes else []
 
 
 def render_changes(ctx: Ctx, item: dict, level: int = 4) -> str:
@@ -501,14 +551,15 @@ def inline_notes(ctx: Ctx, item: dict) -> str:
     if item.get("since"):
         parts.append(ctx.L["added"].format(v=item["since"]))
     for c in item.get("changes") or []:
-        parts.append(f"**v{c['version']}**: " + ctx.md(ctx.item_text(c, "change")).replace("\n", " "))
-    return " ".join(parts)
+        parts.append(f"**v{c['version']}**: " + ctx.oneline(ctx.md(ctx.item_text(c, "change"))))
+    return ctx.join(*parts)
 
 
 def render_command_block(ctx: Ctx, addr: str) -> str:
     spec, L = ctx.spec, ctx.L
     cmd = spec.command(addr)
     ctx.where = f"command {addr}"
+    ctx.block_anchor = anchor(addr)
     parts = [f"### `{addr}` {arg_heading(spec, cmd)} {{#{anchor(addr)}}}".replace("  ", " ")]
     parts += _notes(ctx, cmd)
     parts.append(f"#### {L['argument']}\n\n" + render_args(ctx, cmd))
@@ -559,14 +610,14 @@ def _render_response(ctx: Ctx, maddr: str, when: Any) -> str:
     href = ctx.link_to(maddr, prefer="message") if standalone else None
     code = f"```\n{maddr} {arg_heading(spec, msg)}\n```".replace("  ", " ")
     link = f"[`{maddr}`]({href})\n\n" if href else ""
-    note = " ".join(_notes(ctx, msg))
+    note = ctx.join(*_notes(ctx, msg))
     out = head + link + (note + "\n\n" if note else "") + code + "\n\n" + render_args(ctx, msg, in_message=True)
     if not standalone:
         where, ctx.where = ctx.where, f"message {maddr} (in the response of {where_name(ctx.where)})"
         extra = []
         if msg.get("description"):
             extra.append(f"##### {L['description']}\n\n" + ctx.md(ctx.tx(msg["description"], "description")))
-        extra += render_tables(ctx, msg, level=6)
+        extra += render_tables(ctx, msg, level=5)
         ch = render_changes(ctx, msg, level=5)
         if ch:
             extra.append(ch)
@@ -588,7 +639,7 @@ def _error_line(ctx: Ctx, name: str) -> str:
             text = ctx.item_text(v, "error")
             notes = inline_notes(ctx, v)
             if notes:
-                text = f"{text} {notes}".strip()
+                text = ctx.join(text, notes)
     return f"- `{name}`" + (f": {text}" if text else "")
 
 
@@ -797,14 +848,14 @@ def _board_value_rows(ctx: Ctx, items: list[dict], kind: str) -> list[list[str]]
             name = a.get("name", "?")
             link = f"[`{it['address']}`]({ctx.link_to(it['address'], prefer=kind)})"
             if "range" in a and spec.is_board_map(a["range"]):
-                rows.append([link, f"{name} ({ctx.L['range']})",
+                rows.append([link, f"{name}{ctx.paren(ctx.L['range'])}",
                              *[("-" if spec.for_board(a["range"], b) is None else _rng(spec.for_board(a["range"], b))) for b in boards]])
             if kind == "command":
                 texts = default_texts(ctx, a) if ("setting" in a or "default" in a) else None
                 if texts and len(set(texts.values())) > 1:
-                    rows.append([link, f"{name} ({ctx.L['initial']})", *[texts.get(b, "-") for b in boards]])
+                    rows.append([link, f"{name}{ctx.paren(ctx.L['initial'])}", *[texts.get(b, "-") for b in boards]])
             if a.get("values") and spec.is_board_map(a["values"]):
-                rows.append([link, f"{name} ({ctx.L['value']})",
+                rows.append([link, f"{name}{ctx.paren(ctx.L['value'])}",
                              *[", ".join(f"{fmt(v['value'])}: {ctx.item_text(v, 'value')}" for v in a["values"].get(b, [])) or "-" for b in boards]])
     return rows
 
@@ -824,18 +875,18 @@ def page_settings(ctx: Ctx) -> str:
             name = f"<a id=\"{setting_anchor(s['key'])}\"></a>`{key}`"
             label = ctx.tx(s.get("label"), "label")
             if s.get("per_motor"):
-                label += f" ({L['per_motor']})" if label else L["per_motor"]
+                label += ctx.paren(L['per_motor']) if label else L["per_motor"]
             only = s.get("boards")
             if only and set(only) != set(spec.board_names):
-                label += f" ({L['boards_only'].format(boards=boards_text(spec, board_sorted(spec, only)))})"
+                label += ctx.paren(L['boards_only'].format(boards=boards_text(spec, board_sorted(spec, only))))
             init = _setting_initial(ctx, s)
             rng = range_text(ctx, {"range": s.get("range"), "unit": s.get("unit")}, True) if (s.get("range") or s.get("unit")) else ""
             cmds = ", ".join(f"[`{c}`]({ctx.link_to(c)})" for c in s.get("commands", []))
             desc = ctx.tx(s.get("description"), "description") if s.get("description") else ""
-            desc = ctx.md(desc).replace("\n", " ") if desc else ""
+            desc = ctx.oneline(ctx.md(desc)) if desc else ""
             notes = inline_notes(ctx, s)
             if notes:
-                desc = f"{desc} {notes}".strip()
+                desc = ctx.join(desc, notes)
             rows.append([name, label, s["type"], init, rng, cmds, desc])
         out += [table([L["key"], L["label"], L["type"], L["initial_col"], f"{L['range']} / {L['unit']}", L["commands_col"], L["description"]], rows), ""]
     return "\n".join(out)
@@ -850,12 +901,14 @@ def _setting_initial(ctx: Ctx, s: dict) -> str:
         d = spec.for_board(s["default"], b)
         if d is None:
             continue
-        shown = _setting_value(spec, s, d)
+        shown = _setting_value(ctx, s, d)
         if "template" in s and ctx.defaults != "firmware":
             t = spec.for_board(s["template"], b, missing=d)
             if t is not None and t != d:
-                ts = _setting_value(spec, s, t)
-                shown = ts if ctx.defaults == "template" else f"{shown} ({L['firmware']}) / {ts} ({L['template']})"
+                ts = _setting_value(ctx, s, t)
+                shown = ts if ctx.defaults == "template" else (
+                    f"{shown}{ctx.paren(L['firmware'])} / {ts}{ctx.paren(L['template'])}" if ctx.lang == "en"
+                    else f"{shown}{ctx.paren(L['firmware'])}、{ts}{ctx.paren(L['template'])}")
         texts[b] = shown
     if not texts:
         return ""
@@ -864,7 +917,8 @@ def _setting_initial(ctx: Ctx, s: dict) -> str:
     return "; ".join(f"{b}: {t}" for b, t in texts.items())
 
 
-def _setting_value(spec: Spec, s: dict, v: Any) -> str:
+def _setting_value(ctx: Ctx, s: dict, v: Any) -> str:
+    spec = ctx.spec
     text = ip_or_value(s["type"], v)
     values = s.get("values")
     if values:
@@ -873,7 +927,7 @@ def _setting_value(spec: Spec, s: dict, v: Any) -> str:
         for lst in lists:
             for it in lst:
                 if it["value"] == v and it.get("en"):
-                    return f"{text} ({it['en']})"
+                    return f"{text}{ctx.paren(it.get(ctx.lang) or it['en'])}"
     return text
 
 

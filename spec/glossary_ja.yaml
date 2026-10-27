@@ -89,6 +89,9 @@ terms:
   - use: すべて
     concept: 「すべて」にそろえる
     avoid: [全て]
+  # ---- group names（avoid なし。YAML の groups の ja と、リファレンスのページの題をそろえる）
+  - use: 位置管理
+    concept: "グループ position の名称（英語は Position management）。文中の「座標」は座標の意味で使うので avoid にしない"
   # ---- review
   - use: ボード
     level: review
