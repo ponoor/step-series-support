@@ -12,8 +12,6 @@ The board receives OSC messages as UDP packets. It sends two kinds of messages b
 
 For how to set the IP address of the board, the port numbers and the DIP switch, see [Network and DIP switch](../connections/network-and-dip-switch.md). They are not repeated here.
 
-Send each command as a single OSC message. OSC bundles are not supported.
-
 ## The destination and `/setDestIp` {#setdestip}
 
 ### When to send `/setDestIp` {#when}
@@ -29,13 +27,13 @@ Without it, the board keeps sending to the MAC address of the old computer. Your
 
 ### Resolving the MAC address {#arp}
 
-When the destination is set (or changes) by a `/setDestIp` that is from a new address, or comes 1.5 s or more after the last packet from the destination (a `/setDestIp` sent every second as a heartbeat does not start it), the board has to find the MAC address of the destination. It sends one byte of UDP to port 9 (discard) of the broadcast address, then one byte to port 9 of the destination at once and every 150 ms, until the destination answers the ARP request or about 2 s have passed. The computer may answer each of these packets with an ICMP port unreachable message, which is harmless; it can show up in the log of a firewall.
+When the destination is set (or changes) by a `/setDestIp` that is from a new address, or comes 1.5 s or more after the last packet from the destination (a `/setDestIp` sent every second as a heartbeat does not start it), the board has to find the MAC address of the destination. It sends one byte of UDP to port 9 (discard) of the broadcast address, then one byte to port 9 of the destination at once and every 150 ms, until the destination answers the ARP request or a few seconds have passed. The computer may answer each of these packets with an ICMP port unreachable message, which is harmless; it can show up in the log of a firewall.
 
 The reply [`/destIp`](../reference/system-settings.md#setdestip) of the `/setDestIp` that starts this resolution is sent when the resolution is done. On a wired network it comes a few ms after the command; **when the computer is on Wi-Fi it can take up to a few seconds**. If [`/destIp`](../reference/system-settings.md#setdestip) does not come, send `/setDestIp` again.
 
 While the MAC address is being resolved (after such a `/setDestIp`, and after the link comes up again; also after the board starts, when it sends before `/setDestIp`), the messages to the destination are **dropped**, not sent later: no replies and no reports arrive. The broadcast `/booted` is still sent.
 
-The board cannot process OSC messages while it waits for a destination that does not answer. When the computer is connected by Wi-Fi, the processing stops for up to about 41 ms every 150 ms during the resolution. This disturbs the monitoring of the electromagnetic brake and the servo mode. **We recommend that you send `/setDestIp` while the motors are stopped.**
+While the board waits for a destination that does not answer the ARP request, it cannot process OSC messages: each probe that fails stops the processing for up to about 41 ms, and the probes come every 150 ms. A wired computer answers the first probe at once; a computer on Wi-Fi often needs several, so the processing stops repeatedly during the resolution. This disturbs the monitoring of the electromagnetic brake and the servo mode. **We recommend that you send `/setDestIp` while the motors are stopped.**
 
 A send to a destination that has never answered ARP (for example a wrong destination address) fails. The board then pauses all the sends to that destination for 1 s and drops the messages in that time; after that it tries again with the next message. A packet that arrives from the destination resumes the sends at once.
 
