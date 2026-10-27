@@ -12,7 +12,7 @@ The DIP switch sets the ID of the board. This page explains how the ID is used, 
 
 The DIP switch on the board sets the ID. The ID is used in the replies to the OSC (Open Sound Control) messages, and it is added to the IP address, the destination port and the MAC address (see below).
 
-The ID is a binary number of 8 digits, so it is from 0 to 255. A switch in the ON position counts as 1. On the STEP400, DIPSW1 is the lowest digit (1) and DIPSW8 is the highest digit (128). The STEP400 reads the 8 switches directly; the STEP800 reads them through a shift register. For how to set binary numbers with a DIP switch, see [Channel setting with DIP switches](https://www.soundhouse.co.jp/howto/light/dmx-dip/) (in Japanese).
+The ID is a binary number of 8 digits, so it is from 0 to 255. A switch that is slid to the ON side counts as 1: it connects the input to GND, and the board reads LOW. With the board turned so that the digits printed on the DIP switch can be read, DIPSW1 is on the left. DIPSW1 is the lowest digit (1) and DIPSW8 is the highest digit (128). For example, for ID 1, slide only the leftmost switch to the ON side. The STEP400 reads the 8 switches directly; the STEP800 reads them through a shift register. For how to set binary numbers with a DIP switch, see [Channel setting with DIP switches](https://www.soundhouse.co.jp/howto/light/dmx-dip/) (in Japanese).
 
 The board reads the DIP switch not only at the start. If you change the ID while the board is running, it sets up the network again with the new ID. The USB serial command `s` shows the ID that the board reads; see [Diagnosis via USB serial port](../maintenance/usb-serial-diagnosis.md#status).
 

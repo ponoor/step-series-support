@@ -96,7 +96,7 @@ The six pads form the connector J8 of the schematics. With the Ethernet connecto
 
 ## Brake output (J7) {#brake-output}
 
-The output for the electromagnetic brakes is the connector J7, a 6-pin (2 x 3) header. The pin numbers are those of the schematics; pin 1 and pin 2 are in the same row, pin 3 and pin 4 in the next row, and pin 5 and pin 6 in the last.
+The output for the electromagnetic brakes is the connector J7, a 6-pin (2 x 3) header. The pin numbers are printed on the board. With the board turned so that the printed text can be read, the upper row is 5, 3, 1 from the left, and the lower row is 6, 4, 2 from the left.
 
 | Pin | Signal |
 | --- | --- |
