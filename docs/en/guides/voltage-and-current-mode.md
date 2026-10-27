@@ -17,6 +17,8 @@ In short:
 
 ### Test with the STEP400 {#test}
 
+A demonstration video of the test: [Voltage mode and current mode test (Vimeo)](https://vimeo.com/1239730082)
+
 We tested both modes with a STEP400 and a motor with a microphone attached to its body, so that the smallest noises were captured. In voltage mode the motor ran quietly, but from around 800 steps/s it began to vibrate and it stalled at about 1,400 steps/s. In current mode the motor was noisy, but it ran faster than 11,000 steps/s before it began to vibrate and stalled.
 
 ## KVAL and TVAL {#kval-tval}
@@ -57,7 +59,7 @@ The outputs of the motor must be HiZ before the mode is switched. A motor that i
 1. `/hardHiZ 1`
 2. `/setCurrentMode 1`
 
-If the motor is not HiZ, the board replies `/error/command MotorNotHiZ` and does not change the mode (see [Command executable timing](../reference/index.md#command-executable-timing) in the common rules). The mode is also left unchanged, with `CommandIgnored`, when the driver does not take it.
+If the motor is not HiZ, the board replies `/error/command MotorNotHiZ` and does not change the mode (see [Command executable timing](../reference/index.md#command-executable-timing) in the common rules).
 
 Current mode supports microsteps only up to 1/16. When the motor is switched to current mode with a finer microstep setting, the microstep setting becomes 1/16, and [`/setMicrostepMode`](../reference/motor-driver-settings.md#setmicrostepmode) replies `CommandIgnored` for a finer setting while the motor is in current mode. When the microstep setting changes, the coordinate system changes too: one rotation of a 200-step motor is 200 × 128 = 25600 steps in 1/128 microstep mode, but 200 × 16 = 3200 steps in 1/16 microstep mode.
 
