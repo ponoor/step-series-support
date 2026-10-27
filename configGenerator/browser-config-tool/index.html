@@ -454,6 +454,14 @@ async function cmdSaveConfig() {
   try {
     const cfg = assembleConfig();
     if (!cfg) return;
+    // The board receives into a 4096-byte buffer (diagnosis.cpp receiveConfigJson(): "Buffer overflow").
+    const json = JSON.stringify(cfg);
+    const jsonBytes = new TextEncoder().encode(json).length;
+    if (jsonBytes > 4095) {
+      showErr('The configuration is too large to send over USB (' + jsonBytes + ' bytes, the board accepts 4095). Save it with Download JSON and copy it to the microSD card.');
+      setStatus('Save failed');
+      return;
+    }
     setStatus('Saving…');
 
     // Send target filename first so firmware saves to the right path
@@ -467,7 +475,7 @@ async function cmdSaveConfig() {
       return;
     }
 
-    await send(JSON.stringify(cfg));
+    await send(json);
     const line = await nextLine(15000);
     const res = JSON.parse(line);
     if (res.result === 'ok') {
@@ -616,7 +624,7 @@ function alarmRows() { return [
   {k:'reportOCD',             l:'Report overcurrent detection',    t:'chk', tip:'Send OSC notification when an overcurrent shutdown event occurs.'},
   {k:'reportStall',           l:'Report motor stall detection',    t:'chk', tip:'Send OSC notification when motor stalling is detected.'},
   {k:'OCThreshold',           l:'Overcurrent detection threshold', t:'sel', opts:getOcThreshOpts(), dflt:isL6470() ? 7 : 15, tip:'Current threshold that triggers the overcurrent protection shutdown, (value + 1) x step. PowerSTEP01 (STEP400/100): 312.5 mA steps, 0–31. L6470 (STEP800/200): 375 mA steps, 0–15.'},
-  {k:'reportPositionInterval',l:'Report position interval (ms)',   t:'num', min:0, max:65535, tip:'Interval in milliseconds at which each motor position is reported automatically. 0 = disabled.'},
+  {k:'reportPositionInterval',l:'Report position interval (ms)',   t:'num', int:true, min:0, max:65535, tip:'Interval in milliseconds at which each motor position is reported automatically. 0 = disabled.'},
 ];}
 
 function driverRows() { return [
@@ -627,13 +635,13 @@ function driverRows() { return [
   {k:'prohibitMotionOnHomeSw',   l:'Prohibit motion when HOME SW active',   t:'chk', tip:'Prevent motor motion when the HOME switch is triggered.'},
   {k:'limitSwMode',              l:'LIMIT switch mode',                      t:'chk', hide:!has.limitSw(), tip:'Unchecked = Latch mode (motor stops at switch). Checked = Position mode (records position at switch).'},
   {k:'prohibitMotionOnLimitSw',  l:'Prohibit motion when LIMIT SW active',  t:'chk', hide:!has.limitSw(), tip:'Prevent motor motion when the LIMIT switch is triggered.'},
-  {k:'goUntilTimeout',           l:'goUntil timeout (ms)',                   t:'num', min:0, max:4294967295, tip:'Maximum time allowed for a goUntil command before timeout. 0 = no timeout.'},
-  {k:'releaseSwTimeout',         l:'releaseSW timeout (ms)',                 t:'num', min:0, max:4294967295, tip:'Maximum time allowed for a releaseSW command before timeout. 0 = no timeout.'},
+  {k:'goUntilTimeout',           l:'goUntil timeout (ms)',                   t:'num', int:true, min:0, max:2147483647, tip:'Maximum time allowed for a goUntil command before timeout. 0 = no timeout.'},
+  {k:'releaseSwTimeout',         l:'releaseSW timeout (ms)',                 t:'num', int:true, min:0, max:2147483647, tip:'Maximum time allowed for a releaseSW command before timeout. 0 = no timeout.'},
   {k:'stepMode',                 l:'Step mode (microstep resolution)',       t:'sel', opts:STEP_MODES, tip:'Microstep resolution. Full step = coarsest, 1/128 = finest. Higher resolution = lower speed range at same step rate.'},
   {k:'isCurrentMode',            l:'Current mode enable (PowerSTEP01)',      t:'chk', hide:!has.isCurrentM(), tip:'Enable current control mode. Voltage mode (unchecked) is the default.'},
   {k:'slewRate',                 l:'Slew rate (output voltage rise speed)',  t:'sel', opts:isL6470() ? SLEW_RATES_L6470 : SLEW_RATES_PS01, dflt:isL6470() ? 2 : 5, hide:!has.slewRate(), tip:'Rate of output voltage change. Lower slew rate reduces EMI but limits max speed.'},
   {k:'electromagnetBrakeEnable', l:'Electromagnetic brake enable',           t:'chk', hide:!has.brake(), tip:'Enable control of an external electromagnetic brake.'},
-  {k:'brakeTransitionDuration',  l:'Brake transition duration (ms)',         t:'num', min:0, hide:!has.brake(), tip:'Time for the brake to transition between engaged and released states.'},
+  {k:'brakeTransitionDuration',  l:'Brake transition duration (ms)',         t:'num', int:true, min:0, max:65535, hide:!has.brake(), tip:'Time for the brake to transition between engaged and released states.'},
 ];}
 
 function speedRows() { return [
@@ -645,14 +653,14 @@ function speedRows() { return [
 ];}
 
 function voltageRows() { return [
-  {k:'KVAL_HOLD',           l:'KVAL_HOLD (0–255)',           t:'num', min:0, max:255, tip:'Motor voltage coefficient during hold (motor stopped, energised). Higher = more holding torque but more heat.'},
-  {k:'KVAL_RUN',            l:'KVAL_RUN (0–255)',            t:'num', min:0, max:255, tip:'Motor voltage coefficient during constant-speed running.'},
-  {k:'KVAL_ACC',            l:'KVAL_ACC (0–255)',            t:'num', min:0, max:255, tip:'Motor voltage coefficient during acceleration.'},
-  {k:'KVAL_DEC',            l:'KVAL_DEC (0–255)',            t:'num', min:0, max:255, tip:'Motor voltage coefficient during deceleration.'},
-  {k:'INT_SPEED',           l:'INT_SPEED (0–16383)',         t:'num', min:0, max:16383, tip:'Speed threshold at which BEMF compensation intersects. Tune for smooth back-EMF compensation.'},
-  {k:'ST_SLP',              l:'ST_SLP (0–255)',              t:'num', min:0, max:255, tip:'BEMF compensation slope coefficient at start. Affects compensation at low speed.'},
-  {k:'FN_SLP_ACC',          l:'FN_SLP_ACC (0–255)',          t:'num', min:0, max:255, tip:'BEMF compensation slope coefficient during acceleration at high speed.'},
-  {k:'FN_SLP_DEC',          l:'FN_SLP_DEC (0–255)',          t:'num', min:0, max:255, tip:'BEMF compensation slope coefficient during deceleration at high speed.'},
+  {k:'KVAL_HOLD',           l:'KVAL_HOLD (0–255)',           t:'num', int:true, min:0, max:255, tip:'Motor voltage coefficient during hold (motor stopped, energised). Higher = more holding torque but more heat.'},
+  {k:'KVAL_RUN',            l:'KVAL_RUN (0–255)',            t:'num', int:true, min:0, max:255, tip:'Motor voltage coefficient during constant-speed running.'},
+  {k:'KVAL_ACC',            l:'KVAL_ACC (0–255)',            t:'num', int:true, min:0, max:255, tip:'Motor voltage coefficient during acceleration.'},
+  {k:'KVAL_DEC',            l:'KVAL_DEC (0–255)',            t:'num', int:true, min:0, max:255, tip:'Motor voltage coefficient during deceleration.'},
+  {k:'INT_SPEED',           l:'INT_SPEED (0–16383)',         t:'num', int:true, min:0, max:16383, tip:'Speed threshold at which BEMF compensation intersects. Tune for smooth back-EMF compensation.'},
+  {k:'ST_SLP',              l:'ST_SLP (0–255)',              t:'num', int:true, min:0, max:255, tip:'BEMF compensation slope coefficient at start. Affects compensation at low speed.'},
+  {k:'FN_SLP_ACC',          l:'FN_SLP_ACC (0–255)',          t:'num', int:true, min:0, max:255, tip:'BEMF compensation slope coefficient during acceleration at high speed.'},
+  {k:'FN_SLP_DEC',          l:'FN_SLP_DEC (0–255)',          t:'num', int:true, min:0, max:255, tip:'BEMF compensation slope coefficient during deceleration at high speed.'},
   {k:'STALL_TH',            l:'Stall detection threshold', t:'sel', opts:isL6470() ? STALL_TH_L6470 : STALL_TH_PS01, dflt:isL6470() ? 127 : 31, tip:'Stall detection threshold, (value + 1) x step. PowerSTEP01 (STEP400/100): 312.5 mA steps, 0–31. L6470 (STEP800/200): 31.25 mA steps, 0–127. Higher value = less sensitive to stall.'},
   {k:'lowSpeedOptimizeEnable',l:'Low speed optimize enable', t:'chk', tip:'Enable low-speed optimization for smoother motor motion at very low speeds.'},
   {k:'lowSpeedOptimize',    l:'Low speed optimize value',   t:'num', min:0, step:0.01, tip:'Low-speed optimization coefficient. Only active when low speed optimize is enabled.'},
@@ -672,9 +680,9 @@ function currentRows() { return [
   {k:'TVAL_RUN', l:'TVAL_RUN — run current',          t:'sel', opts:TVAL_OPTS, dflt:TVAL_DEFAULT, tip:'Target current during constant-speed running.'},
   {k:'TVAL_ACC', l:'TVAL_ACC — acceleration current', t:'sel', opts:TVAL_OPTS, dflt:TVAL_DEFAULT, tip:'Target current during acceleration.'},
   {k:'TVAL_DEC', l:'TVAL_DEC — deceleration current', t:'sel', opts:TVAL_OPTS, dflt:TVAL_DEFAULT, tip:'Target current during deceleration.'},
-  {k:'T_FAST',   l:'T_FAST (0–255)',    t:'num', min:0, max:255, tip:'Maximum fast decay time. Controls current decay during a step. See PowerSTEP01 datasheet for values.'},
-  {k:'TON_MIN',  l:'TON_MIN (0–127)',   t:'num', min:0, max:127, tip:'Minimum ON time for the current control PWM. See PowerSTEP01 datasheet for values.'},
-  {k:'TOFF_MIN', l:'TOFF_MIN (0–127)',  t:'num', min:0, max:127, tip:'Minimum OFF time for the current control PWM. See PowerSTEP01 datasheet for values.'},
+  {k:'T_FAST',   l:'T_FAST (0–255)',    t:'num', int:true, min:0, max:255, tip:'Maximum fast decay time. Controls current decay during a step. See PowerSTEP01 datasheet for values.'},
+  {k:'TON_MIN',  l:'TON_MIN (0–127)',   t:'num', int:true, min:0, max:127, tip:'Minimum ON time for the current control PWM. See PowerSTEP01 datasheet for values.'},
+  {k:'TOFF_MIN', l:'TOFF_MIN (0–127)',  t:'num', int:true, min:0, max:127, tip:'Minimum OFF time for the current control PWM. See PowerSTEP01 datasheet for values.'},
 ];}
 
 function servoRows() { return [
@@ -971,6 +979,12 @@ function getFldVal(id, type) {
 // ── Config assembly (form → JSON) ─────────────────────────────────────────────
 function assembleConfig() {
   if (!loadedCfg) { showErr('Load a config first.'); return null; }
+  formProblems = [];
+
+  // The board finds the end of the JSON by counting { and } (diagnosis.cpp receiveConfigJson()),
+  // so a brace in the name would end the transfer early.
+  const cfgName = document.getElementById('bi-cfgname')?.value ?? '';
+  if (/[{}]/.test(cfgName)) formProblems.push('Config Name: { and } cannot be used');
 
   const info = loadedCfg.information || {};
   const cfg = {
@@ -988,12 +1002,36 @@ function assembleConfig() {
 
   // reportPositionListInterval scalar
   const rplEl = document.getElementById('f-rpl-interval');
-  if (rplEl) cfg.alarmAndReport.reportPositionListInterval = parseInt(rplEl.value, 10) || 0;
+  if (rplEl) cfg.alarmAndReport.reportPositionListInterval =
+    checkNumber('Report position list interval', rplEl.value, 0, 65535, true) ?? 0;
 
   if (has.currentMode()) cfg.currentMode = assembleSec('current', currentRows(), loadedCfg.currentMode || {});
   cfg.servoMode = assembleSec('servo', servoRows(), loadedCfg.servoMode || {});
 
+  if (formProblems.length) {
+    const more = formProblems.length > 4 ? ` … (${formProblems.length} problems)` : '';
+    showErr('Check the values: ' + formProblems.slice(0, 4).join('; ') + more);
+    return null;
+  }
   return cfg;
+}
+
+// Problems found while the form is read; assembleConfig() refuses to continue if there is any.
+// A number field that is empty, not a number or outside its range used to be written as 0 or
+// as the out-of-range value, and the firmware does not check most of the ranges (diagnosis.cpp
+// receiveConfigJson(), loadConfig.cpp: a value above the type wraps around, e.g. 256 → 0).
+let formProblems = [];
+
+function checkNumber(label, raw, min, max, int) {
+  const s = String(raw ?? '').trim();
+  const n = Number(s);
+  if (s === '' || !isFinite(n)) { formProblems.push(`${label}: not a number`); return null; }
+  if (int && !Number.isInteger(n)) { formProblems.push(`${label}: ${s} is not an integer`); return null; }
+  if ((min != null && n < min) || (max != null && n > max)) {
+    formProblems.push(`${label}: ${s} is out of range (${min ?? '−∞'} to ${max ?? '∞'})`);
+    return null;
+  }
+  return n;
 }
 
 function assembleSec(secId, rows, origData) {
@@ -1003,7 +1041,13 @@ function assembleSec(secId, rows, origData) {
     if (!dataHasKey(origData, r.k)) continue;
     const arr = [];
     for (let i = 0; i < numAxes; i++) {
-      let v = getFldVal(`f-${secId}-${r.k}-${i}`, r.t);
+      let v;
+      if (r.t === 'num') {
+        const n = checkNumber(`${r.l} (Motor ${i+1})`, document.getElementById(`f-${secId}-${r.k}-${i}`)?.value, r.min, r.max, r.int);
+        v = n ?? 0;
+      } else {
+        v = getFldVal(`f-${secId}-${r.k}-${i}`, r.t);
+      }
       if (r.outBool) v = !!v;   // e.g. homingDirection: write as boolean per config format
       arr.push(v);
     }
@@ -1014,16 +1058,26 @@ function assembleSec(secId, rows, origData) {
 
 function assembleNetwork() {
   const net = {};
+  const names = {myIp:'My IP address', destIp:'Destination IP', dns:'DNS server', gateway:'Gateway', subnet:'Subnet mask'};
   ['myIp','destIp','dns','gateway','subnet'].forEach(key => {
     net[key] = [0,1,2,3].map(i => {
       const el = document.getElementById(`net-${key}-${i}`);
-      return el ? (parseInt(el.value, 10) || 0) : 0;
+      return el ? (checkNumber(`${names[key]} (octet ${i+1})`, el.value, 0, 255, true) ?? 0) : 0;
     });
   });
-  net.mac = getMacBytes();
-  ['inPort','outPort'].forEach(k => {
+  net.mac = [0,1,2,3,4,5].map(i => {
+    const el = document.getElementById(`net-mac-${i}`);
+    if (!el) return 0;
+    const s = el.value.trim();
+    if (macHex ? !/^[0-9a-fA-F]{1,2}$/.test(s) : !/^[0-9]{1,3}$/.test(s)) {
+      formProblems.push(`MAC address (byte ${i+1}): "${s}" is not a ${macHex ? 'hexadecimal' : 'decimal'} byte`);
+      return 0;
+    }
+    return checkNumber(`MAC address (byte ${i+1})`, macHex ? parseInt(s, 16) : s, 0, 255, true) ?? 0;
+  });
+  [['inPort','Incoming OSC port'],['outPort','Outgoing OSC port']].forEach(([k, label]) => {
     const el = document.getElementById(`net-${k}`);
-    if (el) net[k] = parseInt(el.value, 10) || 0;
+    if (el) net[k] = checkNumber(label, el.value, 0, 65535, true) ?? 0;
   });
   ['isMyIpAddId','isOutPortAddId','isMacAddId','bootedMsgEnable','canSendMsgBeforeDestIp','reportError'].forEach(k => {
     const el = document.getElementById(`net-${k}`);
