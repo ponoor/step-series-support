@@ -33,8 +33,8 @@ The board does not need a card for the connection. It needs one to save.
 
 The settings are in panels that you can open and close: **Board Info**, **Network**, **Alarm & Report**, **Driver Settings**, **Speed Profile**, **Voltage Mode**, **Current Mode (PowerSTEP01)** and **Servo Mode**. The settings of each motor are shown in columns, one column for each motor. **Copy Motor 1 → All** copies the values of motor 1 to the other motors in the panel.
 
-- The panel **Current Mode** is shown only for the boards that have it (the STEP400), and the items of the LIMIT switch only for the STEP400. The brake items are shown for the boards that have the brake output (the STEP400 and the STEP800).
-- In **Board Info**, only the name of the configuration (at most 32 characters) can be edited. The product and the version of the configuration are read-only. The firmware version is the version of the board.
+- The tool shows an item only when the settings that it reads or loads have it: the panel **Current Mode** for the STEP400 (and the STEP100), the items of the LIMIT switch for the STEP400, and the brake items for the boards that have the brake output (the STEP400 and the STEP800).
+- In **Board Info**, only the name of the configuration (at most 32 characters) can be edited. The product and the version of the configuration are read-only. The firmware version is the version of the board. When the settings come from a file, the number of motors (Axes) can be chosen too; when they come from a board, it is fixed.
 - The thresholds of the overcurrent and the stall, and TVAL, are shown with their current. The steps differ between the STEP400 and the STEP800 (see [Alarms and protection](../guides/alarms-and-protection.md#thresholds)). TVAL can be chosen up to 64 (about 5 A).
 - The slew rate has 6 steps for the STEP400 and 3 steps for the STEP800.
 - A MAC address is shown in decimal. **Show Hex** switches the display to hexadecimal.
@@ -52,7 +52,7 @@ If the saving fails, the tool shows the reply of the board with the likely cause
 
 ### The file name {#file-name}
 
-The text field on the left of **Save to SD** is the name of the file that the board saves to. After **Read from Board**, it has the name of the file that the board read at the start, or `/config.txt`. **Load JSON** sets it to the name of the loaded file.
+The text field on the left of **Save to SD** is the name of the file that the board saves to. After **Read from Board**, it has the name of the file that the board reports (the file that it read at the start, or `/config.txt`). **Load JSON** sets it to the name of the loaded file.
 
 - The name must start with `/`, end with `.json` or `.txt`, and have at most 63 bytes. The field turns red when it does not follow these rules, and the tool refuses to save.
 - At the start the board reads only `/config.txt` and the first `*.json` of the root folder. If the name is in a subfolder, starts with `.`, or is a `.txt` other than `/config.txt`, the field turns yellow, and the tool asks "Save anyway?" before it saves. The file is saved, but the board does not read it at the next start. See [The name set by `F<path>`](microsd-card.md#f-path).
@@ -92,11 +92,11 @@ After the tool reads a board, it shows a notice when the firmware is older than 
 - `This tool requires firmware v2.1.0 or later (this board: vX.Y.Z).`
 - `This tool was checked with firmware v2.2.0. Some settings of firmware vX.Y.Z may not be shown.`
 
-The tool is not stopped by these notices.
+The tool compares only the major and minor numbers, so a patch version such as v2.2.1 gives no notice. The notice is shown in a banner for a few seconds. The tool is not stopped by these notices.
 
 ## Troubleshooting {#troubleshooting}
 
-### The Connect button is missing or disabled {#no-connect-button}
+### The Connect button is disabled {#no-connect-button}
 
 Your browser does not support the Web Serial API. Use Google Chrome or Microsoft Edge.
 

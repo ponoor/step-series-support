@@ -33,8 +33,8 @@ title: ブラウザ設定ツール
 
 設定は、開け閉めできるパネルに並んでいます。**Board Info**、**Network**、**Alarm & Report**、**Driver Settings**、**Speed Profile**、**Voltage Mode**、**Current Mode (PowerSTEP01)**、**Servo Mode**です。モータごとの設定は、モータ1つにつき1列で並びます。**Copy Motor 1 → All**は、モータ1の値を、パネルの中のほかのモータにコピーします。
 
-- **Current Mode**のパネルは、電流モードのあるボード（STEP400）だけに出ます。LIMITスイッチの項目はSTEP400だけです。ブレーキの項目は、ブレーキ出力のあるボード（STEP400とSTEP800）に出ます。
-- **Board Info**で編集できるのは、設定名（32文字まで）だけです。製品名と設定のバージョンは読み取り専用です。ファームウェアのバージョンは、ボードのバージョンです。
+- ツールは、読み込んだ設定にある項目だけを表示します。**Current Mode**のパネルはSTEP400（とSTEP100）、LIMITスイッチの項目はSTEP400、ブレーキの項目はブレーキ出力のあるボード（STEP400とSTEP800）に出ます。
+- **Board Info**で編集できるのは、設定名（32文字まで）だけです。製品名と設定のバージョンは読み取り専用です。ファームウェアのバージョンは、ボードのバージョンです。設定をファイルから読んだときは、モータの数（Axes）も選べます。ボードから読んだときは、固定です。
 - 過電流とストールの閾値とTVALは、電流を併記して表示します。刻みはSTEP400とSTEP800で異なります（[アラームと保護](../guides/alarms-and-protection.md#thresholds)をご覧ください）。TVALは64（約5A）まで選べます。
 - スルーレートは、STEP400では6段階、STEP800では3段階です。
 - MACアドレスは10進数で表示します。**Show Hex**で、16進数の表示に切り替えられます。
@@ -52,7 +52,7 @@ title: ブラウザ設定ツール
 
 ### ファイル名 {#file-name}
 
-**Save to SD**の左のテキスト欄が、ボードが保存するファイルの名前です。**Read from Board**のあとは、ボードが起動時に読んだファイルの名前になります。ファイルを読んでいないときは、`/config.txt`です。**Load JSON**を使うと、読み込んだファイルの名前になります。
+**Save to SD**の左のテキスト欄が、ボードが保存するファイルの名前です。**Read from Board**のあとは、ボードが知らせるファイル名（起動時に読んだファイル、または`/config.txt`）になります。**Load JSON**を使うと、読み込んだファイルの名前になります。
 
 - 名前は、`/`で始まり、`.json`か`.txt`で終わり、63バイトまでにする必要があります。この規則に合わないと、欄が赤くなり、ツールは保存を拒否します。
 - 起動時にボードが読むのは、`/config.txt`と、ルートフォルダの最初の`*.json`だけです。名前がサブフォルダの中、`.`で始まる、または`/config.txt`以外の`.txt`のときは、欄が黄色になり、保存する前に「Save anyway?」と尋ねます。ファイルは保存されますが、次の起動でボードはそれを読みません。[`F<path>`で決めた名前](microsd-card.md#f-path)をご覧ください。
@@ -92,11 +92,11 @@ title: ブラウザ設定ツール
 - `This tool requires firmware v2.1.0 or later (this board: vX.Y.Z).`
 - `This tool was checked with firmware v2.2.0. Some settings of firmware vX.Y.Z may not be shown.`
 
-これらの注意で、ツールが止まることはありません。
+ツールが比べるのはメジャーとマイナーの番号だけなので、v2.2.1のようなパッチのバージョンでは注意は出ません。注意は、バナーに数秒間表示されます。これらの注意で、ツールが止まることはありません。
 
 ## トラブルシューティング {#troubleshooting}
 
-### Connectボタンが出ない、または押せない {#no-connect-button}
+### Connectボタンが押せない {#no-connect-button}
 
 お使いのブラウザがWeb Serial APIに対応していません。Google ChromeまたはMicrosoft Edgeを使ってください。
 
