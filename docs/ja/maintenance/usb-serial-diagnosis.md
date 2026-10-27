@@ -138,18 +138,19 @@ SD config JSON parse succeeded : Yes
 -------------- Motor Driver --------------
 Motor driver SPI connection established : Yes
 Driver ID#1
-	ABS_POS: 0x0 (0step)
-	EL_POS: 0x0 (Fullstep:0, Microstep:0)
+	ABS_POS: 0x00 (0step)
+	EL_POS: 0x00 (Fullstep:0, Microstep:0)
 	...
-	OCD_TH: 0xF (5000.0mA)
+	OCD_TH: 0x0F (5000.0mA)
 	STALL_TH: 0x1F (10000.0mA)
 	...
-	STATUS: 0x7E03
+	STATUS: 0xE603
 	  High impedance state : Yes
 	  BUSY : No
 	  Motor direction : Reverse
 	  Motor status : Stopped
 	  UVLO (Undervoltage lock out) : No
+	  UVLO_ADC (ADCIN undervoltage) : No
 	  Thermal status : Normal
 	  OCD (Overcurrent detection) : No
 	  Stalled : No
@@ -221,5 +222,5 @@ Dest Ip : 10.0.0.10
 - **`T`**: `board`には、製品、MCU（`mcu`）、リセットの原因（`resetCause`と、MCUの`resetCauseRaw`）、ファームウェアのバージョン、IPアドレス、ID、リンク、送信先のMACアドレス（`destMac`、6つの数。ブロードキャストのあとは255が6つ）、`arpPending`（送信先のMACアドレスを解決中かどうか）、カードと設定の状態が入っています。`motors`の各要素には、位置、速度、状態、スイッチの状態などが入っています。`ocd`と`stall`は、常にfalseです。これらにはOSCメッセージを使ってください。`resetCause`の意味は[`/booted`](../reference/automatically-sent-messages.md#booted)にあります。
 - **`{...}`**: ボードは、設定を適用して、カードに書き、`{"result":"ok", ...}`またはエラーを返します。**送る前に、モータを止めてください。** 保存の間、ボードは何も処理しません（[設定の仕組み](../connections/how-settings-work.md#saving)をご覧ください）。効くときは[変更が効くとき](../connections/how-settings-work.md#when)をご覧ください。
 - **`F<path>`**: 規則と、起動時にボードが読まないファイル名は、[`F<path>`で決めた名前](../connections/microsd-card.md#f-path)をご覧ください。
-- **`R`**: 最初に`{"result":"ok","message":"Rebooting..."}`を返します。ボードは、少なくとも50ms待ち、回転しているモータを止めて、ブレーキを保持状態にし、移行時間（最大1s）を待ってから、再起動します。[再起動、ウォッチドッグ、CPU動作異常](../guides/electromagnetic-brake.md#restart)をご覧ください。
+- **`R`**: 最初に`{"result":"ok","message":"Rebooting..."}`を返します。ボードは、少なくとも50ms待ち、ブレーキが有効でブレーキが保持されていない、回転しているモータを止めて、そのブレーキを保持状態にし、移行時間（最大1s）を待ってから、再起動します。[再起動、ウォッチドッグ、CPU動作異常](../guides/electromagnetic-brake.md#restart)をご覧ください。
 - **`p`**: ループと処理の時間（最大、平均、回数。単位はマイクロ秒）と、送信と、送信先のMACアドレスの解決のカウンタ（`udpSendFailed`、`udpSendDropped`、`arpResolve`、`arpProbe`など）です。[MACアドレスの解決](../guides/communication-and-messages.md#arp)をご覧ください。

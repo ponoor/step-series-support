@@ -138,18 +138,19 @@ SD config JSON parse succeeded : Yes
 -------------- Motor Driver --------------
 Motor driver SPI connection established : Yes
 Driver ID#1
-	ABS_POS: 0x0 (0step)
-	EL_POS: 0x0 (Fullstep:0, Microstep:0)
+	ABS_POS: 0x00 (0step)
+	EL_POS: 0x00 (Fullstep:0, Microstep:0)
 	...
-	OCD_TH: 0xF (5000.0mA)
+	OCD_TH: 0x0F (5000.0mA)
 	STALL_TH: 0x1F (10000.0mA)
 	...
-	STATUS: 0x7E03
+	STATUS: 0xE603
 	  High impedance state : Yes
 	  BUSY : No
 	  Motor direction : Reverse
 	  Motor status : Stopped
 	  UVLO (Undervoltage lock out) : No
+	  UVLO_ADC (ADCIN undervoltage) : No
 	  Thermal status : Normal
 	  OCD (Overcurrent detection) : No
 	  Stalled : No
@@ -157,7 +158,7 @@ Driver ID#1
 ```
 
 - `Motor driver SPI connection established`: `No` means that the board cannot talk to the driver ICs. The motor power may be off.
-- The details of every driver are listed only when the connection works: the registers (position, speed, KVAL, thresholds, the alarm enable, the CONFIG register and its fields) and the STATUS register. The currents of `OCD_TH` and `STALL_TH` are calculated for the driver of the board. The driver ICs are listed for motors 1 to 4 (STEP400) or 1 to 8 (STEP800). On the STEP400 the line `UVLO_ADC` is shown too; on the STEP400 a pressed LIMIT switch pulls ADCIN to GND and makes it `Yes`.
+- The details of every driver are listed only when the connection works: the registers (position, speed, KVAL, thresholds, the alarm enable, the CONFIG register and its fields) and the STATUS register. The currents of `OCD_TH` and `STALL_TH` are calculated for the driver of the board. The driver ICs are listed for motors 1 to 4 (STEP400) or 1 to 8 (STEP800). On the STEP400 the line `UVLO_ADC` is shown too; a pressed LIMIT switch pulls ADCIN to GND and makes it `Yes`.
 - The STATUS flags are read without clearing the latched flags.
 
 ### Modes {#status-modes}
@@ -221,5 +222,5 @@ These commands are used by the [browser configuration tool](../connections/brows
 - **`T`**: `board` has the product, the MCU (`mcu`), the reset cause (`resetCause`, and `resetCauseRaw` of the MCU), the firmware version, the IP address, the ID, the link, the destination MAC address (`destMac`, 6 numbers; 255 x 6 after a broadcast), `arpPending` (the MAC address of the destination is being resolved), and the state of the card and the configuration. Each element of `motors` has the position, speed, state, switch states and so on. `ocd` and `stall` are always false; use the OSC messages for them. The meaning of `resetCause` is in [`/booted`](../reference/automatically-sent-messages.md#booted).
 - **`{...}`**: the board applies the settings, writes them to the card, and replies `{"result":"ok", ...}` or an error. **Stop the motors before you send it**: the board does not process anything while it saves (see [How the settings work](../connections/how-settings-work.md#saving)). When it takes effect: [When a change takes effect](../connections/how-settings-work.md#when).
 - **`F<path>`**: see [The name set by `F<path>`](../connections/microsd-card.md#f-path) for the rules, and for the file names that the board does not read at the start.
-- **`R`**: replies `{"result":"ok","message":"Rebooting..."}` first. The board waits at least 50 ms, stops the motors that are turning, engages the brakes and waits for the transition duration (at most 1 s), and then restarts. See [Restart, watchdog and CPU fault](../guides/electromagnetic-brake.md#restart).
+- **`R`**: replies `{"result":"ok","message":"Rebooting..."}` first. The board waits at least 50 ms, stops the turning motors that have the brake enabled and not engaged, engages their brakes and waits for the transition duration (at most 1 s), and then restarts. See [Restart, watchdog and CPU fault](../guides/electromagnetic-brake.md#restart).
 - **`p`**: the times of the loop and of the processing (maximum, average and count, in microseconds), and the counters of the sends and of the resolution of the MAC address of the destination (`udpSendFailed`, `udpSendDropped`, `arpResolve`, `arpProbe` and others). See [Resolving the MAC address](../guides/communication-and-messages.md#arp).

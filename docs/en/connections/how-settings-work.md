@@ -45,13 +45,13 @@ The values that the board reads from the card at the next start are the values i
 | Settings | When they take effect |
 | --- | --- |
 | The name of the configuration | At once |
-| The IP address, subnet mask, gateway, DNS, ports, MAC address and the switches that add the ID | At the next restart. The running values do not change |
+| The IP address, subnet mask, gateway, DNS, ports, MAC address and the switches that add the ID | At the next restart (or the next change of the ID). The running values do not change |
 | `destIp`, `canSendMsgBeforeDestIp` and `reportError`. (The usual way to set the destination is [`/setDestIp`](../reference/system-settings.md#setdestip).) | At once |
 | The report switches and the report intervals; homing (direction, speed, timeouts, prohibition of the motion); the settings of the LIMIT switch; the brake settings (see below); the servo mode (kP, kI, kD) | At once |
 | `bootedMsgEnable`; homing at start | At the next start |
-| The settings that the board writes to the driver: the speed profile, the voltage mode and the current mode (KVAL, TVAL, BEMF and others), the microstep mode, the slew rate, the HOME switch mode, the overcurrent and stall thresholds | At the next restart. The board writes them to the driver registers when it starts |
+| The settings that the board writes to the driver: the speed profile, the voltage mode and the current mode (KVAL, TVAL, BEMF and others), the minimum speed and the low speed optimization, the microstep mode, the slew rate, the HOME switch mode (the servo mode uses the new value at once), the overcurrent and stall thresholds | At the next restart. The board writes them to the driver registers when it starts; [`/resetMotorDriver`](../reference/motor-driver-settings.md#resetmotordriver) writes them again |
 
-For the brake, the setting `electromagnetBrakeEnable` is changed only when the driver is HiZ and the brake is engaged; otherwise the board prints a warning on the USB serial port and keeps the old value (the saved value is the one that did not change). Check by reading the settings again after you save.
+For the brake, the setting `electromagnetBrakeEnable` is switched on only when the driver is HiZ, and switched off only when the driver is HiZ and the brake is engaged (or after `/free`); otherwise the board prints a warning on the USB serial port and keeps the old value (the saved value is the one that did not change). Check by reading the settings again after you save.
 
 So after you save with the tool, **restart the board** to make all the values effective. The tool offers to restart it after the save.
 
