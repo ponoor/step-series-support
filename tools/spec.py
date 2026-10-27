@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import copy
 import re
-from decimal import Decimal
+from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 from typing import Any, Iterator
 
@@ -189,10 +189,10 @@ class Spec:
 
 
 def format_current(mA: Decimal) -> str:
-    """1 A or more in A, less in mA; only the digits that are needed (`312.5mA`, `5A`, `9.6875A`)."""
-    if mA >= 1000:
-        return f"{(mA / 1000).normalize():f}A"
-    return f"{mA.normalize():f}mA"
+    """1 A or more in A, less in mA; only the digits that are needed, at most 3 decimals
+    (`312.5mA`, `5A`, `3.969A` for 3.96875 A)."""
+    unit, value = ("A", mA / 1000) if mA >= 1000 else ("mA", mA)
+    return f"{value.quantize(Decimal('0.001'), rounding=ROUND_HALF_UP).normalize():f}{unit}"
 
 
 def anchor(address: str) -> str:

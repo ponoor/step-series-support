@@ -482,13 +482,13 @@ class CurrentTest(unittest.TestCase):
 
     def test_format(self):
         from spec import format_current
-        for mA, expected in ((312.5, "312.5mA"), (5000, "5A"), (9687.5, "9.6875A"), (999, "999mA"),
-                              (1000, "1A"), (78.125, "78.125mA"), (1328.125, "1.328125A"), (31.25, "31.25mA")):
+        for mA, expected in ((312.5, "312.5mA"), (5000, "5A"), (9687.5, "9.688A"), (999, "999mA"),
+                              (1000, "1A"), (78.125, "78.125mA"), (1328.125, "1.328A"), (31.25, "31.25mA"), (3968.75, "3.969A"), (5078.125, "5.078A")):
             self.assertEqual(format_current(Decimal(str(mA))), expected)
 
     def test_the_formula_reproduces_the_rows_of_the_tables(self):
         """Every row (not "...") of the tables of the commands of a setting with `current_step_mA`.
-        A row that does not agree is listed in KNOWN_DIFFERENT (reported, not corrected here)."""
+        The tables round to the digits they show."""
         different = set()
         checked = 0
         for s in SPEC.settings:
@@ -506,10 +506,7 @@ class CurrentTest(unittest.TestCase):
                             if round(got, digits) != shown:
                                 different.add((s["key"], addr, board, value, text))
         self.assertGreater(checked, 20)
-        self.assertEqual({(k, v) for k, _, _, v, _ in different}, self.KNOWN_DIFFERENT)
-
-    # TVAL 127: the table says 9,984mA (128 x 78mA); 128 x 78.125mA is 10,000mA (10A).
-    KNOWN_DIFFERENT = {(f"currentMode.TVAL_{x}", 127) for x in ("HOLD", "RUN", "ACC", "DEC")}
+        self.assertEqual(different, set())
 
     def test_initial_values_show_the_current(self):
         for lang, (a, b) in (("en", (" (", ")")), ("ja", ("（", "）"))):
@@ -520,7 +517,7 @@ class CurrentTest(unittest.TestCase):
             stall = SPEC.setting("voltageMode.STALL_TH")
             self.assertEqual(generate._setting_value(ctx, stall, 127, "STEP800"), f"127{a}4A{b}")
             tval = SPEC.setting("currentMode.TVAL_RUN")
-            self.assertEqual(generate._setting_value(ctx, tval, 16, "STEP400"), f"16{a}1.328125A{b}")
+            self.assertEqual(generate._setting_value(ctx, tval, 16, "STEP400"), f"16{a}1.328A{b}")
 
     def test_a_setting_without_the_field_shows_the_value_only(self):
         ctx = SettingLinkTest.ctx(None, "en")

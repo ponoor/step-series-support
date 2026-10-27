@@ -265,7 +265,7 @@ A value above the range is not rejected; it wraps around: the value after the ma
 
 #### Initial value
 
-- `OCD_TH`: STEP400: 15 (5A); STEP800: 7 (3A) (firmware) / 15 (6A) (template) ([alarmAndReport.OCThreshold](../connections/configuration-items.md#alarmandreport-octhreshold))
+- `OCD_TH`: STEP400: 15 (5A); STEP800: 7 (3A) ([alarmAndReport.OCThreshold](../connections/configuration-items.md#alarmandreport-octhreshold))
 
 ##### Overcurrent detection threshold - STEP400
 

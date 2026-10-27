@@ -50,7 +50,7 @@ None.
 | Command | Argument | STEP400 | STEP800 |
 | --- | --- | --- | --- |
 | [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH (Range) | 0-31 | 0-15 |
-| [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH (Initial value) | 15 (5A) | 7 (3A) (firmware) / 15 (6A) (template) |
+| [`/setOverCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | OCD_TH (Initial value) | 15 (5A) | 7 (3A) |
 | [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | STALL_TH (Range) | 0-31 | 0-127 |
 | [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | STALL_TH (Initial value) | 31 (10A) | 127 (4A) |
 | [`/setSpeedProfile`](speed-profile.md#setspeedprofile) | dec (Range) | 14.55-59590 | 14.55-59575 |
@@ -96,7 +96,6 @@ None.
 | [`information.targetProduct`](../connections/configuration-items.md#information-targetproduct) | template | STEP400 | STEP800 |
 | [`network.mac`](../connections/configuration-items.md#network-mac) | template | 60:95:CE:10:02:00 | 60:95:CE:10:03:00 |
 | [`alarmAndReport.OCThreshold`](../connections/configuration-items.md#alarmandreport-octhreshold) | default | 15 | 7 |
-| [`alarmAndReport.OCThreshold`](../connections/configuration-items.md#alarmandreport-octhreshold) | template | - | 15 |
 | [`driverSettings.slewRate`](../connections/configuration-items.md#driversettings-slewrate) | default | 5 | 2 |
 | [`driverSettings.slewRate`](../connections/configuration-items.md#driversettings-slewrate) | range | 0-5 | 0-2 |
 | [`voltageMode.STALL_TH`](../connections/configuration-items.md#voltagemode-stall_th) | default | 31 | 127 |

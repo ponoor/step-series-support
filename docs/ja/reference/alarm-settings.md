@@ -265,7 +265,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 #### 初期値
 
-- `OCD_TH`: STEP400: 15（5A）；STEP800: 7（3A）（ファームウェア）、15（6A）（テンプレート）（[alarmAndReport.OCThreshold](../connections/configuration-items.md#alarmandreport-octhreshold)）
+- `OCD_TH`: STEP400: 15（5A）；STEP800: 7（3A）（[alarmAndReport.OCThreshold](../connections/configuration-items.md#alarmandreport-octhreshold)）
 
 ##### 過電流検出の閾値 - STEP400
 

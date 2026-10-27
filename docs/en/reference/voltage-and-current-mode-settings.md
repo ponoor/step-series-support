@@ -401,16 +401,17 @@ In the voltage mode only the stored setting changes; [`/setCurrentMode`](voltage
 #### Initial value
 
 - `holdTVAL`: 0 (78.125mA) ([currentMode.TVAL_HOLD](../connections/configuration-items.md#currentmode-tval_hold))
-- `runTVAL`: 16 (1.328125A) ([currentMode.TVAL_RUN](../connections/configuration-items.md#currentmode-tval_run))
-- `accTVAL`: 16 (1.328125A) ([currentMode.TVAL_ACC](../connections/configuration-items.md#currentmode-tval_acc))
-- `decTVAL`: 16 (1.328125A) ([currentMode.TVAL_DEC](../connections/configuration-items.md#currentmode-tval_dec))
+- `runTVAL`: 16 (1.328A) ([currentMode.TVAL_RUN](../connections/configuration-items.md#currentmode-tval_run))
+- `accTVAL`: 16 (1.328A) ([currentMode.TVAL_ACC](../connections/configuration-items.md#currentmode-tval_acc))
+- `decTVAL`: 16 (1.328A) ([currentMode.TVAL_DEC](../connections/configuration-items.md#currentmode-tval_dec))
 
 | TVAL | Setting value[mA] |
 | --- | --- |
-| 0 | 78mA |
-| 1 | 156mA |
+| 0 | 78.125mA |
+| 1 | 156.25mA |
 | ... | ... |
-| 127 | 9,984mA |
+| 63 | 5A |
+| 64 | 5.078A |
 
 #### See also
 
@@ -654,7 +655,7 @@ In the voltage mode only the stored setting changes; [`/setCurrentMode`](voltage
 
 #### Initial value
 
-- `runTVAL`: 16 (1.328125A) ([currentMode.TVAL_RUN](../connections/configuration-items.md#currentmode-tval_run))
+- `runTVAL`: 16 (1.328A) ([currentMode.TVAL_RUN](../connections/configuration-items.md#currentmode-tval_run))
 
 #### See also
 
@@ -688,7 +689,7 @@ In the voltage mode only the stored setting changes; [`/setCurrentMode`](voltage
 
 #### Initial value
 
-- `accTVAL`: 16 (1.328125A) ([currentMode.TVAL_ACC](../connections/configuration-items.md#currentmode-tval_acc))
+- `accTVAL`: 16 (1.328A) ([currentMode.TVAL_ACC](../connections/configuration-items.md#currentmode-tval_acc))
 
 #### See also
 
@@ -722,7 +723,7 @@ In the voltage mode only the stored setting changes; [`/setCurrentMode`](voltage
 
 #### Initial value
 
-- `decTVAL`: 16 (1.328125A) ([currentMode.TVAL_DEC](../connections/configuration-items.md#currentmode-tval_dec))
+- `decTVAL`: 16 (1.328A) ([currentMode.TVAL_DEC](../connections/configuration-items.md#currentmode-tval_dec))
 
 #### See also
 

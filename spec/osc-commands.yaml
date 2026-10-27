@@ -342,7 +342,6 @@ settings:
     type: int
     per_motor: true
     default: {STEP400: 15, STEP800: 7}
-    template: {STEP800: 15}
     current_step_mA: {STEP400: 312.5, STEP800: 375}
     commands: [/setOverCurrentThreshold]
 
@@ -1759,10 +1758,11 @@ commands:
     tables:
       - columns: [TVAL, {en: "Setting value[mA]", ja: "設定値[mA]"}]
         rows:
-          - [0, 78mA]
-          - [1, 156mA]
+          - [0, 78.125mA]
+          - [1, 156.25mA]
           - ["...", "..."]
-          - [127, "9,984mA"]
+          - [63, 5A]
+          - [64, 5.078A]
 
   - address: /getTval
     group: drive_mode
