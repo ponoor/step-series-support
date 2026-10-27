@@ -33,7 +33,7 @@ title: サーボモード
 - サーボモード中は、[`/goUntil`](../reference/homing.md#gountil)、[`/goUntilRaw`](../reference/motor-control.md#gountilraw)、[`/releaseSw`](../reference/homing.md#releasesw)は、ほかの動作コマンドや[`/homing`](../reference/homing.md#homing)と同様に、`InServoMode`を返して何もしません。
 - **サーボモード中は、[`/setPosition`](../reference/position-management.md#setposition)と[`/resetPos`](../reference/position-management.md#resetpos)を使わないでください。** ボードはこれを防ぐ処理をしていません。
 - ドライバが自分でモータを無励磁にしたとき（過電流、過熱、電源電圧の低下）、サーボモードは解除され、`ServoModeCancelledOnHiZ`が送られます。モータを無励磁にするコマンドは、先にサーボモードを解除します。再開するには、もう一度`/enableServoMode 1`を送ります。現在位置が目標位置になります。[アラームと保護](alarms-and-protection.md#hiz-by-itself)をご覧ください。
-- STEP400では、HOMEスイッチとLIMITスイッチを別々に判定します。衝突防止の設定か、スイッチの即停止モードにしているとき、HOMEスイッチがオンなら`homingDirection`の向きの動作を、LIMITスイッチがオンなら逆向きの動作を止めます（[原点復帰と位置管理](homing-and-position.md#collision-prevention)をご覧ください）。
+- **サーボモード中は、ファームウェアが自分でスイッチを見ます**（ドライバの動作に加えてです）。更新のたびに、禁止された向きに動こうとするときは、速度を0にします。HOMEスイッチがオンの間は`homingDirection`の向きを、LIMITスイッチ（STEP400のみ）がオンの間は`homingDirection`と逆向きを止めます。動作が禁止されているスイッチ（[`/setProhibitMotionOnHomeSw`](../reference/alarm-settings.md#setprohibitmotiononhomesw)、[`/setProhibitMotionOnLimitSw`](../reference/alarm-settings.md#setprohibitmotiononlimitsw)）か、モードが即停止モードのスイッチが対象です。2つのスイッチは別々に判定するので、HOMEスイッチがオンでもLIMITスイッチの判定は隠れません。反対の向きの動作は止めないので、モータはスイッチから離れる向きに動けます。STEP800にはHOMEスイッチだけがあります。HOMEスイッチが即停止モードでオンになったときは、モータが動く向きによらず、すぐに即停止もします（[即停止モード](homing-and-position.md#sw-mode)をご覧ください）。
 
 ## 制御パラメータの種類 {#parameters}
 
