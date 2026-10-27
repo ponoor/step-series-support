@@ -588,23 +588,19 @@ function boardKind() {
 }
 function isL6470() { const b = boardKind(); return b === 'STEP800' || b === 'STEP200'; }
 
-// OC threshold values differ between PowerSTEP01 (STEP400/100) and L6470 (STEP800/200)
-// STEP400/100: 312.5mA steps × 16 (0–15), STEP800/200: 375mA steps × 16 (0–15)
-// We build both and choose based on board detection; default to STEP400 values.
-const OC_THRESH_STEP400 = [
-  {v:0,l:'312.5 mA'},{v:1,l:'625 mA'},{v:2,l:'937.5 mA'},{v:3,l:'1250 mA'},
-  {v:4,l:'1562.5 mA'},{v:5,l:'1875 mA'},{v:6,l:'2187.5 mA'},{v:7,l:'2500 mA'},
-  {v:8,l:'2812.5 mA'},{v:9,l:'3125 mA'},{v:10,l:'3437.5 mA'},{v:11,l:'3750 mA'},
-  {v:12,l:'4062.5 mA'},{v:13,l:'4375 mA'},{v:14,l:'4687.5 mA'},{v:15,l:'5000 mA'},
-];
-const OC_THRESH_STEP800 = [
-  {v:0,l:'375 mA'},{v:1,l:'750 mA'},{v:2,l:'1125 mA'},{v:3,l:'1500 mA'},
-  {v:4,l:'1875 mA'},{v:5,l:'2250 mA'},{v:6,l:'2625 mA'},{v:7,l:'3000 mA'},
-  {v:8,l:'3375 mA'},{v:9,l:'3750 mA'},{v:10,l:'4125 mA'},{v:11,l:'4500 mA'},
-  {v:12,l:'4875 mA'},{v:13,l:'5250 mA'},{v:14,l:'5625 mA'},{v:15,l:'6000 mA'},
-];
+// Current thresholds are (value + 1) x step (spec/osc-commands.yaml current_step_mA):
+//   overcurrent: PowerSTEP01 (STEP100/400) 312.5 mA, 0-31 (up to 10 A); L6470 (STEP200/800) 375 mA, 0-15 (up to 6 A)
+//   stall:       PowerSTEP01 312.5 mA, 0-31; L6470 31.25 mA, 0-127
+function fmtMa(x) { return String(Math.round(x * 1000) / 1000); }
+function mAOpts(count, stepMa) {
+  return Array.from({length:count}, (_, v) => ({v, l:`${fmtMa((v+1)*stepMa)} mA (${v})`}));
+}
+const OC_THRESH_PS01  = mAOpts(32, 312.5);
+const OC_THRESH_L6470 = mAOpts(16, 375);
+const STALL_TH_PS01   = mAOpts(32, 312.5);
+const STALL_TH_L6470  = mAOpts(128, 31.25);
 function getOcThreshOpts() {
-  return isL6470() ? OC_THRESH_STEP800 : OC_THRESH_STEP400;
+  return isL6470() ? OC_THRESH_L6470 : OC_THRESH_PS01;
 }
 
 function alarmRows() { return [
@@ -619,7 +615,7 @@ function alarmRows() { return [
   {k:'reportThermalStatus',   l:'Report thermal status',           t:'chk', tip:'Send OSC notification when the driver chip thermal status changes.'},
   {k:'reportOCD',             l:'Report overcurrent detection',    t:'chk', tip:'Send OSC notification when an overcurrent shutdown event occurs.'},
   {k:'reportStall',           l:'Report motor stall detection',    t:'chk', tip:'Send OSC notification when motor stalling is detected.'},
-  {k:'OCThreshold',           l:'Overcurrent detection threshold', t:'sel', opts:getOcThreshOpts(), tip:'Current threshold that triggers the overcurrent protection shutdown. Steps differ between PowerSTEP01 (STEP400/100) and L6470 (STEP800/200).'},
+  {k:'OCThreshold',           l:'Overcurrent detection threshold', t:'sel', opts:getOcThreshOpts(), dflt:isL6470() ? 7 : 15, tip:'Current threshold that triggers the overcurrent protection shutdown, (value + 1) x step. PowerSTEP01 (STEP400/100): 312.5 mA steps, 0–31. L6470 (STEP800/200): 375 mA steps, 0–15.'},
   {k:'reportPositionInterval',l:'Report position interval (ms)',   t:'num', min:0, max:65535, tip:'Interval in milliseconds at which each motor position is reported automatically. 0 = disabled.'},
 ];}
 
@@ -896,6 +892,7 @@ function applyConfig(cfg) {
 }
 
 function populateForm(cfg) {
+  adjustedValues = [];
   populateSection('alarm',   cfg.alarmAndReport || {}, alarmRows());
   populateSection('driver',  cfg.driverSettings  || {}, driverRows());
   populateSection('speed',   cfg.speedProfile    || {}, speedRows());
@@ -908,6 +905,11 @@ function populateForm(cfg) {
   if (rpl != null) {
     const el = document.getElementById('f-rpl-interval');
     if (el) el.value = rpl;
+  }
+
+  if (adjustedValues.length) {
+    const shown = adjustedValues.slice(0, 6).join(', ') + (adjustedValues.length > 6 ? ` … (${adjustedValues.length} values)` : '');
+    showErr('Values outside the selectable range were moved to the nearest option: ' + shown);
   }
 }
 
@@ -933,14 +935,25 @@ function populateSection(secId, data, rows) {
   }
 }
 
+// Values that a select cannot show (outside its options) are moved to the nearest option;
+// they are listed in the notice shown by populateForm().
+let adjustedValues = [];
+
 function setFldVal(id, val, type) {
   const el = document.getElementById(id);
   if (!el) return;
-  if (type === 'chk') { el.checked = !!val; }
-  else {
-    // Coerce boolean to int for select elements.
-    // Old config files may store homingDirection as true/false instead of 1/0.
-    el.value = (typeof val === 'boolean') ? (val ? 1 : 0) : val;
+  if (type === 'chk') { el.checked = !!val; return; }
+  // Coerce boolean to int for select elements.
+  // Old config files may store homingDirection as true/false instead of 1/0.
+  const v = (typeof val === 'boolean') ? (val ? 1 : 0) : val;
+  el.value = v;
+  if (el.tagName === 'SELECT' && el.selectedIndex < 0) {
+    const n = Number(v);
+    if (isNaN(n)) return;
+    const nums = Array.from(el.options, o => +o.value);
+    const to = Math.min(Math.max(Math.round(n), nums[0]), nums[nums.length - 1]);
+    el.value = to;
+    adjustedValues.push(`${id.replace(/^f-/, '')}: ${v} → ${to}`);
   }
 }
 
