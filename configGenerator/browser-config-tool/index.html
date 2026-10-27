@@ -570,8 +570,23 @@ const has = {
 const STEP_MODES = [{v:0,l:'0 – Full'},{v:1,l:'1 – Half'},{v:2,l:'2 – 1/4'},{v:3,l:'3 – 1/8'},
   {v:4,l:'4 – 1/16'},{v:5,l:'5 – 1/32'},{v:6,l:'6 – 1/64'},{v:7,l:'7 – 1/128'}];
 
-const SLEW_RATES = [{v:0,l:'0 – 114 V/µs'},{v:1,l:'1 – 220 V/µs'},{v:2,l:'2 – 400 V/µs'},
+// Slew rate index → V/µs. PowerSTEP01 (STEP100/400): 6 steps; L6470 (STEP200/800): 3 steps
+// (loadConfig.cpp slewRateVal[], the index is limited to 0–5 / 0–2).
+const SLEW_RATES_PS01 = [{v:0,l:'0 – 114 V/µs'},{v:1,l:'1 – 220 V/µs'},{v:2,l:'2 – 400 V/µs'},
   {v:3,l:'3 – 520 V/µs'},{v:4,l:'4 – 790 V/µs'},{v:5,l:'5 – 980 V/µs'}];
+const SLEW_RATES_L6470 = [{v:0,l:'0 – 180 V/µs'},{v:1,l:'1 – 290 V/µs'},{v:2,l:'2 – 530 V/µs'}];
+
+// Board of the loaded configuration: 'board.product' from the board, else
+// 'information.targetProduct' of a file, else guessed from the number of axes.
+function boardKind() {
+  const known = ['STEP100','STEP200','STEP400','STEP800'];
+  const p = loadedCfg?.board?.product;
+  if (known.includes(p)) return p;
+  const t = loadedCfg?.information?.targetProduct;
+  if (known.includes(t)) return t;
+  return {1:'STEP100', 2:'STEP200', 4:'STEP400', 8:'STEP800'}[numAxes] || 'STEP400';
+}
+function isL6470() { const b = boardKind(); return b === 'STEP800' || b === 'STEP200'; }
 
 // OC threshold values differ between PowerSTEP01 (STEP400/100) and L6470 (STEP800/200)
 // STEP400/100: 312.5mA steps × 16 (0–15), STEP800/200: 375mA steps × 16 (0–15)
@@ -589,9 +604,7 @@ const OC_THRESH_STEP800 = [
   {v:12,l:'4875 mA'},{v:13,l:'5250 mA'},{v:14,l:'5625 mA'},{v:15,l:'6000 mA'},
 ];
 function getOcThreshOpts() {
-  // Use 800-series values if board is L6470 (no currentMode), else 400-series
-  const product = loadedCfg?.board?.product || '';
-  return (product === 'STEP800' || product === 'STEP200') ? OC_THRESH_STEP800 : OC_THRESH_STEP400;
+  return isL6470() ? OC_THRESH_STEP800 : OC_THRESH_STEP400;
 }
 
 function alarmRows() { return [
@@ -622,7 +635,7 @@ function driverRows() { return [
   {k:'releaseSwTimeout',         l:'releaseSW timeout (ms)',                 t:'num', min:0, max:4294967295, tip:'Maximum time allowed for a releaseSW command before timeout. 0 = no timeout.'},
   {k:'stepMode',                 l:'Step mode (microstep resolution)',       t:'sel', opts:STEP_MODES, tip:'Microstep resolution. Full step = coarsest, 1/128 = finest. Higher resolution = lower speed range at same step rate.'},
   {k:'isCurrentMode',            l:'Current mode enable (PowerSTEP01)',      t:'chk', hide:!has.isCurrentM(), tip:'Enable current control mode. Voltage mode (unchecked) is the default.'},
-  {k:'slewRate',                 l:'Slew rate (output voltage rise speed)',  t:'sel', opts:SLEW_RATES, hide:!has.slewRate(), tip:'Rate of output voltage change. Lower slew rate reduces EMI but limits max speed.'},
+  {k:'slewRate',                 l:'Slew rate (output voltage rise speed)',  t:'sel', opts:isL6470() ? SLEW_RATES_L6470 : SLEW_RATES_PS01, dflt:isL6470() ? 2 : 5, hide:!has.slewRate(), tip:'Rate of output voltage change. Lower slew rate reduces EMI but limits max speed.'},
   {k:'electromagnetBrakeEnable', l:'Electromagnetic brake enable',           t:'chk', hide:!has.brake(), tip:'Enable control of an external electromagnetic brake.'},
   {k:'brakeTransitionDuration',  l:'Brake transition duration (ms)',         t:'num', min:0, hide:!has.brake(), tip:'Time for the brake to transition between engaged and released states.'},
 ];}
