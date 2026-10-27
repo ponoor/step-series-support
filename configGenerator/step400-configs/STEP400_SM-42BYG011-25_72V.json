@@ -179,7 +179,7 @@
             false,
             false
         ],
-        "goUnitlTimeout": [
+        "goUntilTimeout": [
             10000,
             10000,
             10000,
