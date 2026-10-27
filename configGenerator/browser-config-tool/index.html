@@ -658,15 +658,17 @@ function voltageRows() { return [
   {k:'lowSpeedOptimize',    l:'Low speed optimize value',   t:'num', min:0, step:0.01, tip:'Low-speed optimization coefficient. Only active when low speed optimize is enabled.'},
 ];}
 
-// TVAL register → peak current mapping for STEP400 (sense resistor = 0.1 Ω):
-//   V_ref step = 7.8 mV (per PowerSTEP01 datasheet Table 18)
-//   I_peak = (TVAL + 1) × 7.8 mV / 0.1 Ω = (TVAL + 1) × 78 mA
-// Range: TVAL 0 → 78 mA, TVAL 127 → 9984 mA
-const TVAL_OPTS = Array.from({length:128}, (_, v) => ({v, l:`${(v+1)*78} mA (${v})`}));
-const TVAL_DEFAULT = 16; // firmware default (17 × 78 = 1326 mA)
+// TVAL register → current mapping for STEP400 (PowerSTEP01): (TVAL + 1) x 78.125 mA
+// (TvalToCurrent() in oscListeners.cpp; spec/osc-commands.yaml currentMode.TVAL_* current_step_mA).
+// The OSC commands limit TVAL to 0-64 (TVAL_LIMIT_VAL, about 5.08 A, a safety limit of the firmware).
+// A configuration file is not limited by the firmware (utils.cpp writes the values to the driver as they are),
+// so the tool does not offer more than 64.
+const TVAL_LIMIT = 64;
+const TVAL_OPTS = mAOpts(TVAL_LIMIT + 1, 78.125);
+const TVAL_DEFAULT = 16; // firmware default of TVAL_RUN/ACC/DEC (17 x 78.125 = 1328.125 mA); TVAL_HOLD is 0
 
 function currentRows() { return [
-  {k:'TVAL_HOLD',l:'TVAL_HOLD — hold current',        t:'sel', opts:TVAL_OPTS, dflt:TVAL_DEFAULT, tip:'Target current when the motor is stopped but energised. Lower values reduce heat during idle.'},
+  {k:'TVAL_HOLD',l:'TVAL_HOLD — hold current',        t:'sel', opts:TVAL_OPTS, dflt:0, tip:'Target current when the motor is stopped but energised. Lower values reduce heat during idle.'},
   {k:'TVAL_RUN', l:'TVAL_RUN — run current',          t:'sel', opts:TVAL_OPTS, dflt:TVAL_DEFAULT, tip:'Target current during constant-speed running.'},
   {k:'TVAL_ACC', l:'TVAL_ACC — acceleration current', t:'sel', opts:TVAL_OPTS, dflt:TVAL_DEFAULT, tip:'Target current during acceleration.'},
   {k:'TVAL_DEC', l:'TVAL_DEC — deceleration current', t:'sel', opts:TVAL_OPTS, dflt:TVAL_DEFAULT, tip:'Target current during deceleration.'},
