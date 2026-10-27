@@ -23,7 +23,7 @@ STEP400のPowerSTEP01とSTEP800のL6470では、細かい点が異なります�
 
 ### UVLO: 電源電圧の低下 {#uvlo}
 
-ドライバの電源電圧が、遮断の閾値を下回ると、UVLOが起きます。ドライバはすべての出力をすぐに止めるため、モータは無励磁になり、この状態の間は動かせません。電圧が復帰の閾値を上回ると、状態は終わります。閾値はSTEP400とSTEP800で異なります。ドライバチップのデータシートをご覧ください。
+ドライバの電源電圧が、遮断の閾値を下回ると、UVLOが起きます。ドライバはすべての出力をすぐに止めるため、モータは無励磁になり、この状態の間は動かせません。電圧が復帰の閾値を上回ると、状態は終わります。そのあとは[再開](#resuming)をご覧ください。閾値はSTEP400とSTEP800で異なります。ドライバチップのデータシートをご覧ください。
 
 [`/enableUvloReport`](../reference/alarm-settings.md#enableuvloreport)で通知を有効にします（状態が変わると[`/uvlo`](../reference/automatically-sent-messages.md#uvlo)が送られます）。[`/getUvlo`](../reference/alarm-settings.md#getuvlo)で状態を読み出せます。
 
@@ -31,13 +31,13 @@ STEP400のPowerSTEP01とSTEP800のL6470では、細かい点が異なります�
 
 ドライバは自分の温度を監視しています。警告のレベルでは、フラグが立つだけで、動作は制限されません。遮断のレベルでは、出力が止まり、モータは無励磁になります。STEP400には遮断のレベルが2つ（ブリッジの遮断とデバイスの遮断）あり、STEP800には1つあります。温度は[`/thermalStatus`](../reference/automatically-sent-messages.md#thermalstatus)に載せています。
 
-[`/enableThermalStatusReport`](../reference/alarm-settings.md#enablethermalstatusreport)で通知を有効にし、[`/getThermalStatus`](../reference/alarm-settings.md#getthermalstatus)で状態を読み出します。通知の有無によらず、モータは無励磁になります。
+[`/enableThermalStatusReport`](../reference/alarm-settings.md#enablethermalstatusreport)で通知を有効にし、[`/getThermalStatus`](../reference/alarm-settings.md#getthermalstatus)で状態を読み出します。通知の有無によらず、モータは無励磁になります。遮断のあとは[再開](#resuming)をご覧ください。
 
 ### 過電流 {#overcurrent}
 
 ドライバは、パワートランジスタの電流を測っています。電流が閾値を超えると、ドライバは出力を止めます（ファームウェアはこの保護を有効にしています）。モータは無励磁になります。この保護は重要なものなので、無効にすることは想定していません。
 
-[`/setOverCurrentThreshold`](../reference/alarm-settings.md#setovercurrentthreshold)で閾値を設定し、[`/enableOverCurrentReport`](../reference/alarm-settings.md#enableovercurrentreport)で通知を有効にします。[`/overCurrent`](../reference/automatically-sent-messages.md#overcurrent)が送られます。過電流の原因がなくなったら、動作コマンドでモータをもう一度動かします。原因が残っていると、遮断を繰り返します。
+[`/setOverCurrentThreshold`](../reference/alarm-settings.md#setovercurrentthreshold)で閾値を設定し、[`/enableOverCurrentReport`](../reference/alarm-settings.md#enableovercurrentreport)で通知を有効にします。[`/overCurrent`](../reference/automatically-sent-messages.md#overcurrent)が送られます。原因がなくなったあとにモータをもう一度動かす方法は、[再開](#resuming)をご覧ください（電磁ブレーキのモータでは、先に`/activate 1`が必要です）。
 
 ### ストール {#stall}
 
@@ -61,7 +61,9 @@ STEP400のPowerSTEP01とSTEP800のL6470では、細かい点が異なります�
 
 エラーは[`/reportError`](../reference/system-settings.md#reporterror)に従います。モータを無励磁にするコマンド（`/softHiZ`、`/hardHiZ`、`/activate 0`、`/free`、`/resetMotorDriver`）は、先にサーボモードを解除し、`ServoModeCancelledOnHiZ`は送りません。
 
-サーボモードを再開するには、`/enableServoMode 1`を送ります。現在位置が目標位置になります。電磁ブレーキのモータでは、先に`/activate 1`が必要です。
+### 再開 {#resuming}
+
+原因（過電流、温度、電源電圧）がなくなっても、モータは無励磁のままです。動作コマンドで、もう一度動かします。電磁ブレーキを有効にしているモータでは、ボードがブレーキを保持状態にしているため、先に`/activate 1`が必要です（ブレーキが保持状態の間、動作コマンドは`BrakeEngaged`で拒否されます）。サーボモードを再開するには、`/enableServoMode 1`を送ります（ブレーキのモータでは`/activate 1`の後です）。現在位置が目標位置になります。原因が残っていると、ドライバはまた遮断します。
 
 ## 閾値と電流の換算 {#thresholds}
 

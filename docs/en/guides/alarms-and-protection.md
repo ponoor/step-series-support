@@ -23,7 +23,7 @@ The PowerSTEP01 of the STEP400 and the L6470 of the STEP800 differ in the detail
 
 ### UVLO: undervoltage lockout {#uvlo}
 
-UVLO happens when the supply voltage of the driver falls below the turn-off threshold. The driver turns off all the outputs at once, so the motor is HiZ and cannot be operated while the condition lasts. The condition ends when the voltage is above the turn-on threshold. The thresholds are different on the STEP400 and on the STEP800; see the datasheets of the driver chips.
+UVLO happens when the supply voltage of the driver falls below the turn-off threshold. The driver turns off all the outputs at once, so the motor is HiZ and cannot be operated while the condition lasts. The condition ends when the voltage is above the turn-on threshold; then see [Resuming](#resuming). The thresholds are different on the STEP400 and on the STEP800; see the datasheets of the driver chips.
 
 [`/enableUvloReport`](../reference/alarm-settings.md#enableuvloreport) turns the notification on (the message [`/uvlo`](../reference/automatically-sent-messages.md#uvlo) is sent when the state changes). [`/getUvlo`](../reference/alarm-settings.md#getuvlo) reads the state.
 
@@ -31,13 +31,13 @@ UVLO happens when the supply voltage of the driver falls below the turn-off thre
 
 The driver monitors its temperature. At the warning level, only a flag is set and the operation is not limited. At the shutdown level the outputs are turned off, so the motor is HiZ. The STEP400 has two shutdown levels (bridge shutdown and device shutdown); the STEP800 has one. The temperatures are listed at [`/thermalStatus`](../reference/automatically-sent-messages.md#thermalstatus).
 
-[`/enableThermalStatusReport`](../reference/alarm-settings.md#enablethermalstatusreport) turns the notification on, and [`/getThermalStatus`](../reference/alarm-settings.md#getthermalstatus) reads the state. The motor is HiZ with or without the notification.
+[`/enableThermalStatusReport`](../reference/alarm-settings.md#enablethermalstatusreport) turns the notification on, and [`/getThermalStatus`](../reference/alarm-settings.md#getthermalstatus) reads the state. The motor is HiZ with or without the notification. After a shutdown, see [Resuming](#resuming).
 
 ### Overcurrent {#overcurrent}
 
 The driver measures the current of the power transistors. When the current exceeds the threshold, the driver turns off the outputs (the firmware keeps this protection on), so the motor is HiZ. The protection is a critical one; it is not meant to be turned off.
 
-[`/setOverCurrentThreshold`](../reference/alarm-settings.md#setovercurrentthreshold) sets the threshold, [`/enableOverCurrentReport`](../reference/alarm-settings.md#enableovercurrentreport) turns the notification on, and [`/overCurrent`](../reference/automatically-sent-messages.md#overcurrent) is sent. After the cause of the overcurrent has gone, start the motor again with a motion command. If the cause remains, the shutdown repeats.
+[`/setOverCurrentThreshold`](../reference/alarm-settings.md#setovercurrentthreshold) sets the threshold, [`/enableOverCurrentReport`](../reference/alarm-settings.md#enableovercurrentreport) turns the notification on, and [`/overCurrent`](../reference/automatically-sent-messages.md#overcurrent) is sent. To start the motor again after the cause has gone, see [Resuming](#resuming) (a motor with the electromagnetic brake needs `/activate 1` first).
 
 ### Stall {#stall}
 
@@ -61,7 +61,9 @@ When the driver makes the motor HiZ because of an overcurrent shutdown, an overt
 
 The errors follow [`/reportError`](../reference/system-settings.md#reporterror). The commands that make a motor HiZ (`/softHiZ`, `/hardHiZ`, `/activate 0`, `/free`, `/resetMotorDriver`) cancel the servo mode first and do not send `ServoModeCancelledOnHiZ`.
 
-To resume the servo mode, send `/enableServoMode 1`; the current position becomes the target. A motor with the brake needs `/activate 1` first.
+### Resuming {#resuming}
+
+After the cause (the overcurrent, the temperature or the supply voltage) is gone, the motor is still HiZ. Start it again with a motion command. A motor with the electromagnetic brake enabled needs `/activate 1` first, because the board has engaged its brake (a motion command is rejected with `BrakeEngaged` while the brake is engaged). To resume the servo mode, send `/enableServoMode 1` (after `/activate 1` for a motor with the brake); the current position becomes the target. If the cause remains, the driver shuts down again.
 
 ## Thresholds and currents {#thresholds}
 
