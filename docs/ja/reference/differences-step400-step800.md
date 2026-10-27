@@ -9,6 +9,8 @@ lang: ja
 
 ## STEP400のみで使えるコマンド
 
+これらのコマンドは、もう一方のボードにはありません。もう一方のボードに送ると、ボードは[`/error/osc`](automatically-sent-messages.md#error-osc)で`MessageNotMatch`を返し、何も実行しません。[`/reportError`](system-settings.md#reporterror)を0にしているときは、返しません。もう一方のボードでも受け付けると記したコマンドは例外で、そのボードも受け付けます。
+
 - [`/getAdcVal`](motor-driver-settings.md#getadcval) (int)motorID（ファームウェアはSTEP800でも受け付けますが、意味のある値は得られません）
 - [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw) (int)motorID (bool)enable
 - [`/getProhibitMotionOnLimitSw`](alarm-settings.md#getprohibitmotiononlimitsw) (int)motorID

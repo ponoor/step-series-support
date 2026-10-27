@@ -9,6 +9,8 @@ lang: en
 
 ## Commands available on STEP400 only
 
+These commands do not exist on the other board. When one of them is sent to the other board, the board replies [`/error/osc`](automatically-sent-messages.md#error-osc) `MessageNotMatch` and executes nothing. The reply is not sent when [`/reportError`](system-settings.md#reporterror) is set to 0. A command marked as also accepted by the other board is the exception: that board accepts it.
+
 - [`/getAdcVal`](motor-driver-settings.md#getadcval) (int)motorID (the firmware also accepts it on STEP800, but the value is meaningless there)
 - [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw) (int)motorID (bool)enable
 - [`/getProhibitMotionOnLimitSw`](alarm-settings.md#getprohibitmotiononlimitsw) (int)motorID

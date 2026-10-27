@@ -591,3 +591,40 @@ class RealDocsTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DifferencePageRuleTest(unittest.TestCase):
+    """The rule for the commands of one board only, at the top of the sections of the difference page."""
+
+    def sections(self, lang: str) -> dict[str, str]:
+        ctx = generate.Ctx(SPEC, lang, "both", Counter(), [])
+        text = generate.page_diff(ctx)
+        parts = re.split(r"^## ", text, flags=re.M)[1:]
+        return {p.split("\n", 1)[0]: p.split("\n", 1)[1] for p in parts}
+
+    def only_sections(self, lang: str) -> tuple[str, str]:
+        sec = self.sections(lang)
+        key = "Commands available on {} only" if lang == "en" else "{}のみで使えるコマンド"
+        return sec[key.format("STEP400")], sec[key.format("STEP800")]
+
+    def test_the_rule_opens_the_section_that_has_commands(self):
+        s400, _ = self.only_sections("en")
+        first = s400.strip().split("\n")[0]
+        self.assertIn("do not exist on the other board", first)
+        self.assertIn("[`/error/osc`](automatically-sent-messages.md#error-osc) `MessageNotMatch`", first)
+        self.assertIn("executes nothing", first)
+        self.assertIn("(system-settings.md#reporterror)", first)
+        s400, _ = self.only_sections("ja")
+        first = s400.strip().split("\n")[0]
+        self.assertIn("もう一方のボードにはありません", first)
+        self.assertIn("(automatically-sent-messages.md#error-osc)で`MessageNotMatch`を返し", first)
+
+    def test_the_exception_of_the_routed_command_is_named(self):
+        for lang, word in (("en", "is the exception"), ("ja", "例外")):
+            s400, _ = self.only_sections(lang)
+            self.assertIn(word, s400.split("\n- ")[0])
+
+    def test_a_section_without_commands_has_no_rule(self):
+        for lang in ("en", "ja"):
+            _, s800 = self.only_sections(lang)
+            self.assertEqual(s800.strip(), "None." if lang == "en" else "なし。")

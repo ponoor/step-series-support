@@ -95,6 +95,8 @@ LABELS = {
         "diff_values": "Commands with board-specific values", "diff_msg_values": "Messages with board-specific values",
         "diff_settings": "Configuration items with board-specific values", "diff_set_only": "Configuration items of {boards} only",
         "diff_tables": "Board-specific tables", "none_found": "None.",
+        "diff_rule": "These commands do not exist on the other board. When one of them is sent to the other board, the board replies {error} `MessageNotMatch` and executes nothing. The reply is not sent when {report} is set to 0.",
+        "diff_rule_routed": "A command marked as also accepted by the other board is the exception: that board accepts it.",
         "settings_title": "Configuration items", "settings_intro": "Items of the configuration file (JSON on the microSD card). The initial value is the one used when the file or the key is missing.",
         "related": "Related commands", "related_settings": "Related configuration items",
         "all": "all", "motors": "motors", "first": "Initial value of the firmware", "boards_only": "{boards} only",
@@ -113,6 +115,8 @@ LABELS = {
         "diff_values": "ボードによって値が異なるコマンド", "diff_msg_values": "ボードによって値が異なるメッセージ",
         "diff_settings": "ボードによって値が異なる設定項目", "diff_set_only": "{boards}のみの設定項目",
         "diff_tables": "ボード別の表", "none_found": "なし。",
+        "diff_rule": "これらのコマンドは、もう一方のボードにはありません。もう一方のボードに送ると、ボードは{error}で`MessageNotMatch`を返し、何も実行しません。{report}を0にしているときは、返しません。",
+        "diff_rule_routed": "もう一方のボードでも受け付けると記したコマンドは例外で、そのボードも受け付けます。",
         "settings_title": "設定項目一覧", "settings_intro": "設定ファイル（microSDカードのJSON）の項目です。初期値は、設定ファイルまたはそのキーがないときの値です。",
         "related": "関連するコマンド", "related_settings": "関連する設定項目",
         "all": "すべて", "motors": "モータ", "first": "ファームウェアの初期値", "boards_only": "{boards}のみ",
@@ -804,6 +808,12 @@ def page_diff(ctx: Ctx) -> str:
     for b in boards:
         only = [c for c in spec.commands if b in spec.boards_of(c) and set(spec.boards_of(c)) != set(boards)]
         out += [f"## {L['diff_only'].format(boards=b)}", ""]
+        if only:
+            err = f"[`/error/osc`]({ctx.link_to('/error/osc', prefer='message')})"
+            rule = L["diff_rule"].format(error=err, report=cmd_link(spec.command("/reportError")))
+            if any(set(c.get("routed_on") or []) - set(spec.boards_of(c)) for c in only):
+                rule = ctx.join(rule, L["diff_rule_routed"])
+            out += [rule, ""]
         out += ["\n".join(f"- {cmd_link(c)} {arg_heading(spec, c)}".rstrip() + _routed_note(ctx, c) for c in only) or L["none_found"], ""]
         msgs = [m for m in spec.messages if m.get("boards") and b in m["boards"] and set(m["boards"]) != set(boards)]
         out += [f"## {L['diff_msg_only'].format(boards=b)}", ""]
