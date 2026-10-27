@@ -25,7 +25,7 @@ The board sets the `destIp` to the sender of this message.
 
 Until the board receives `/setDestIp`, it sends nothing to the destination (except the broadcast [`/booted`](automatically-sent-messages.md#booted)), so send this command first. When [`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip) is enabled in the configuration, it sends to [`network.destIp`](../connections/configuration-items.md#network-destip) from the start.
 
-To resolve the MAC address, the board sends one byte of UDP to port 9 (discard) of the destination; a Mac answers with ICMP port unreachable, which has no effect on the board. To check that the board is alive, use a command with a reply such as [`/getVersion`](system-settings.md#getversion), not `/setDestIp`.
+To resolve the MAC address, the board sends one byte of UDP to port 9 (discard) of the broadcast address and one byte to port 9 (discard) of the destination; a Mac answers with ICMP port unreachable, which has no effect on the board. To check that the board is alive, use a command with a reply such as [`/getVersion`](system-settings.md#getversion), not `/setDestIp`.
 
 #### Changes
 

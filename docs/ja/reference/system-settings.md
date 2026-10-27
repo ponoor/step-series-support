@@ -24,7 +24,7 @@ title: ボード全体の設定
 
 `/setDestIp`を受信するまで、ボードは宛先へ何も送信しません（ブロードキャストの[`/booted`](automatically-sent-messages.md#booted)を除く）。最初にこのコマンドを送信してください。設定で[`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip)が有効なときは、起動時から[`network.destIp`](../connections/configuration-items.md#network-destip)へ送信します。
 
-MACアドレスの解決のために、宛先のUDPポート9（discard）に1バイトを送信します。MacはICMPのport unreachableを返しますが、ボードには影響しません。ボードが動作しているかを確認するには、`/setDestIp`ではなく、[`/getVersion`](system-settings.md#getversion)のように返信のあるコマンドを使ってください。
+MACアドレスの解決のために、ブロードキャストアドレスと宛先のUDPポート9（discard）に、それぞれ1バイトを送信します。MacはICMPのport unreachableを返しますが、ボードには影響しません。ボードが動作しているかを確認するには、`/setDestIp`ではなく、[`/getVersion`](system-settings.md#getversion)のように返信のあるコマンドを使ってください。
 
 #### 変更
 

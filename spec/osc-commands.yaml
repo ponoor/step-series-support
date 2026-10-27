@@ -773,13 +773,13 @@ commands:
 
         Until the board receives `/setDestIp`, it sends nothing to the destination (except the broadcast [[/booted]]), so send this command first. When [[network.canSendMsgBeforeDestIp]] is enabled in the configuration, it sends to [[network.destIp]] from the start.
 
-        To resolve the MAC address, the board sends one byte of UDP to port 9 (discard) of the destination; a Mac answers with ICMP port unreachable, which has no effect on the board. To check that the board is alive, use a command with a reply such as [[/getVersion]], not `/setDestIp`.
+        To resolve the MAC address, the board sends one byte of UDP to port 9 (discard) of the broadcast address and one byte to port 9 (discard) of the destination; a Mac answers with ICMP port unreachable, which has no effect on the board. To check that the board is alive, use a command with a reply such as [[/getVersion]], not `/setDestIp`.
       ja: |-
         モータの状態に変化があったときに通知するメッセージや、問い合わせへ返信するメッセージなどの送り先IPアドレス（`destIp`）を指定します。このメッセージを送信したIPアドレスを`destIp`に設定します。
 
         `/setDestIp`を受信するまで、ボードは宛先へ何も送信しません（ブロードキャストの[[/booted]]を除く）。最初にこのコマンドを送信してください。設定で[[network.canSendMsgBeforeDestIp]]が有効なときは、起動時から[[network.destIp]]へ送信します。
 
-        MACアドレスの解決のために、宛先のUDPポート9（discard）に1バイトを送信します。MacはICMPのport unreachableを返しますが、ボードには影響しません。ボードが動作しているかを確認するには、`/setDestIp`ではなく、[[/getVersion]]のように返信のあるコマンドを使ってください。
+        MACアドレスの解決のために、ブロードキャストアドレスと宛先のUDPポート9（discard）に、それぞれ1バイトを送信します。MacはICMPのport unreachableを返しますが、ボードには影響しません。ボードが動作しているかを確認するには、`/setDestIp`ではなく、[[/getVersion]]のように返信のあるコマンドを使ってください。
     response: [/destIp]
     changes:
       - {version: "2.2.0", en: "When this `/setDestIp` starts the resolution of the MAC address of the destination, the reply `/destIp` is sent once it has been resolved, so it can come later than before (a few ms on a wired network, up to a few seconds on Wi-Fi). If it does not come, send `/setDestIp` again. A `/setDestIp` that starts no resolution (for example one sent every second as a heartbeat) is answered at once.", ja: "この`/setDestIp`が宛先のMACアドレスの解決を始めたときは、解決が終わってから返信の`/destIp`を送信します。そのため、以前より遅れて届くことがあります（有線では数ms、Wi-Fiでは最大数秒）。届かないときは、もう一度`/setDestIp`を送ってください。解決を始めない`/setDestIp`（たとえば死活監視として毎秒送るもの）には、すぐに返信します。"}
