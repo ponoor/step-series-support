@@ -27,7 +27,7 @@ title: スピードプロファイルと動作
 
 加速度と減速度は、ドライバのレジスタで表せる最も近い値に丸められます。[`/getSpeedProfile`](../reference/speed-profile.md#getspeedprofile)が返す値は、設定した値と少し異なることがあります。
 
-[`/setMinSpeed`](../reference/speed-profile.md#setminspeed)で、最小速度（minSpeed）も設定できます。実際の用途で使うことはほとんどありませんが、原点復帰の2段階目の[`/releaseSw`](../reference/homing.md#releasesw)（[原点復帰コマンド](homing-and-position.md#homing-commands)）では、この速度でモータが回ります。`/releaseSw`では、ドライバは少なくとも5step/sで回ります。低速最適化が有効なとき（最小速度が0になります）も同じです。
+[`/setMinSpeed`](../reference/speed-profile.md#setminspeed)で、最小速度（minSpeed）も設定できます。実際の用途で使うことはほとんどありませんが、原点復帰の2段階目の[`/releaseSw`](../reference/homing.md#releasesw)（[原点復帰コマンド](homing-and-position.md#homing-commands)）では、この速度でモータが回ります。最小速度が5step/s未満のときは、`/releaseSw`は5step/sで回ります。低速最適化が有効な間は、最小速度は0なので（レジスタには代わりに最適化の閾値が入っています）、`/releaseSw`は5step/sで回ります。
 
 ## モータ動作の種類 {#motions}
 

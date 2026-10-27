@@ -27,7 +27,7 @@ The same applies to the other settings that are written to the driver only when 
 
 The acceleration and deceleration are rounded to the nearest value that the driver can hold, so the value that [`/getSpeedProfile`](../reference/speed-profile.md#getspeedprofile) returns can differ slightly from the one you set.
 
-You can also set the minimum speed (minSpeed) with [`/setMinSpeed`](../reference/speed-profile.md#setminspeed). It is rarely used in an actual application, but the motor turns at this speed in [`/releaseSw`](../reference/homing.md#releasesw), the second step of the [homing](homing-and-position.md#homing-commands). The driver turns at 5 steps/s at least in `/releaseSw`, also when low speed optimization is enabled (the minimum speed is then 0).
+You can also set the minimum speed (minSpeed) with [`/setMinSpeed`](../reference/speed-profile.md#setminspeed). It is rarely used in an actual application, but the motor turns at this speed in [`/releaseSw`](../reference/homing.md#releasesw), the second step of the [homing](homing-and-position.md#homing-commands). If the minimum speed is below 5 steps/s, `/releaseSw` turns at 5 steps/s. While low speed optimization is enabled, the minimum speed is 0 (the register holds the threshold of the optimization instead), so `/releaseSw` turns at 5 steps/s.
 
 ## Types of motor motion {#motions}
 
