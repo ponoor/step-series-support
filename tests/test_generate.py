@@ -452,6 +452,18 @@ class ReferencePagesTest(unittest.TestCase):
             for key, names in SPEC.timings.items():
                 self.assertIn(names[lang], text, f"[{lang}] timing '{key}' ({names[lang]}) is not in index.md")
 
+    def test_titles_of_the_group_pages_are_the_names_of_the_groups(self):
+        import re
+        for lang in generate.LANGS:
+            for key, g in SPEC.groups.items():
+                text = self.read(lang, g["page"])
+                m = re.match(r"---\ntitle: (.+)\n(?:[a-z]+: .*\n)*---\n", text)
+                self.assertIsNotNone(m, f"[{lang}] {g['page']}: no title in the front matter")
+                self.assertEqual(m.group(1).strip().strip('"'), g[lang], f"[{lang}] {g['page']}: title")
+                h1 = re.search(r"^# (.+)$", text, re.M)
+                self.assertIsNotNone(h1, f"[{lang}] {g['page']}: no # heading")
+                self.assertEqual(h1.group(1).strip(), g[lang], f"[{lang}] {g['page']}: # heading")
+
 
 class RealDocsTest(unittest.TestCase):
     def test_generated_pages_of_the_repository_are_up_to_date(self):
