@@ -88,7 +88,7 @@ The firmware does nothing with these pins. To use them, you need to add to or ch
 
 ## Brake output (J2) {#brake-output}
 
-The output for the electromagnetic brakes is the connector J2.
+The output for the electromagnetic brakes is the connector J2, a 10-pin (2 x 5) box header. The pins are numbered as on a standard box header: seen from above with the key (the notch) at the bottom, the lower row is 1, 3, 5, 7, 9 and the upper row is 2, 4, 6, 8, 10, from the left. The outputs 1 to 8 are the outputs QA to QH of the shift register.
 
 | Pin | Signal |
 | --- | --- |
