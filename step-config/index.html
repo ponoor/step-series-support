@@ -430,7 +430,7 @@ function deliverLine(line) {
   // Only deliver JSON lines (starting with '{') to command handlers.
   // Boot messages (e.g. "myId:0", "eth ok") and diagnostic text are ignored.
   if (!line.startsWith('{')) {
-    console.log('[serial]', line);
+    console.log('[board]', line);
     return;
   }
   if (lineWaiters.length > 0) {
@@ -523,18 +523,37 @@ async function closeConn() {
 
 // The port to use after the device came back. The Port object that was lost cannot be opened again
 // (Chrome makes a new one when the device returns), so look for the one that is connected now:
-// the one of the last 'connect' event, else the only connected granted port, else ask.
+// the one of the last 'connect' event, else the only connected granted port. If there is none yet
+// (Reconnect was clicked before the board is back on USB), wait for the 'connect' event.
+// requestPort() is not used after waiting: it needs transient user activation (Web Serial spec,
+// requestPort() step 3: "does not have transient activation" -> SecurityError), which expires a few
+// seconds after the click (HTML Standard: "transient activation duration ... at most a few seconds";
+// Chrome: about 5 s), so only an immediate call (2 or more usable ports) may use it.
+const RECONNECT_WAIT_MS = 3000;
+let reconnectWake = null;
 async function pickReconnectPort() {
   const lost = lastPort;
+  const fromEvent = () => (reconnectCandidate && reconnectCandidate.connected !== false && reconnectCandidate !== lost) ? reconnectCandidate : null;
   let ports = [];
   try { ports = await withTimeout(navigator.serial.getPorts(), GETPORTS_MS, 'getPorts()'); }
   catch (e) { slog('reconnect: ' + e.message); }
   const usable = ports.filter(p => p.connected !== false);
   slog('reconnect: getPorts() -> ' + ports.length + ' port(s), ' + usable.length + ' connected; connect event: ' + (reconnectCandidate ? 'yes' : 'no'));
-  if (reconnectCandidate && reconnectCandidate.connected !== false && reconnectCandidate !== lost) return reconnectCandidate;
+  if (fromEvent()) return fromEvent();
   const fresh = usable.filter(p => p !== lost);
   if (fresh.length === 1) return fresh[0];
   if (fresh.length === 0 && usable.length === 1) return usable[0];
+  if (usable.length === 0) {
+    setStatus('Waiting for the board to come back…');
+    slog('reconnect: no connected port, waiting up to ' + RECONNECT_WAIT_MS + ' ms for a connect event');
+    await new Promise(res => {
+      const tid = setTimeout(() => { reconnectWake = null; res(); }, RECONNECT_WAIT_MS);
+      reconnectWake = () => { clearTimeout(tid); reconnectWake = null; res(); };
+    });
+    if (fromEvent()) return fromEvent();
+    slog('reconnect: the board did not come back');
+    throw new Error('the board is not connected. Plug in the USB cable and click Connect.');
+  }
   slog('reconnect: no single port to use, asking with requestPort()');
   return await navigator.serial.requestPort();
 }
@@ -565,6 +584,7 @@ if (navigator.serial) {
   navigator.serial.addEventListener('connect', e => {
     slog('navigator.serial connect event');
     if (e.target && e.target !== navigator.serial) reconnectCandidate = e.target;
+    if (reconnectWake) reconnectWake();
   });
   navigator.serial.addEventListener('disconnect', e => {
     slog('navigator.serial disconnect event' + (e.target === port ? ' (our port)' : ''));

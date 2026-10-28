@@ -147,3 +147,51 @@ def test_reconnect_warns_when_another_board_answers(env400):
     env.page.click('#dc-banner button.primary')
     env.wait_status('Config loaded from board')
     env.wait_err('Reconnected to a different board: STEP400 (before: STEP800)')
+
+
+def request_port_calls(env):
+    return sum(1 for e in env.page.evaluate('window.__serialShim.log') if e.get('ev') == 'requestPort')
+
+
+@pytest.mark.checklist('1.7')
+def test_reconnect_clicked_before_the_board_is_back_waits_for_it(env400):
+    env = env400.open().connect()
+    env.expect_unplug()
+    asked = request_port_calls(env)
+    env.backend.disconnect(stay_unplugged=True)
+    expect(banner(env)).to_be_visible()
+    env.page.click('#dc-banner button.primary')
+    env.wait_status('Waiting for the board to come back…')
+    time.sleep(1)
+    env.backend.plug()
+    env.page.evaluate('window.__serialShim.plugIn()')
+    env.wait_status('Config loaded from board')
+    assert connect_label(env) == '✕ Disconnect'
+    assert request_port_calls(env) == asked                # the picker was not used
+
+
+@pytest.mark.checklist('1.7')
+def test_reconnect_gives_up_after_3_s_without_asking_for_a_port(env400):
+    env = env400.open().connect()
+    env.expect_unplug()
+    asked = request_port_calls(env)
+    env.backend.disconnect(stay_unplugged=True)
+    expect(banner(env)).to_be_visible()
+    t = time.monotonic()
+    env.page.click('#dc-banner button.primary')
+    env.wait_status('Reconnect failed: the board is not connected. Plug in the USB cable and click Connect.', timeout=8000)
+    assert 2.5 < time.monotonic() - t < 6
+    assert request_port_calls(env) == asked                # requestPort() needs a fresh click: not called after waiting
+    assert connect_label(env) == '⬡ Connect'
+    assert env.page.locator('#btn-connect').is_enabled()
+    env.backend.plug()
+    env.page.click('#btn-connect')
+    env.wait_status('Config loaded from board')
+
+
+@pytest.mark.checklist('1.7')
+def test_board_text_is_marked_board_and_the_tools_own_lines_serial(env400):
+    env = env400.open().connect()
+    assert any(t == 'log' and x.startswith('[board]') for t, x in env.console_log)
+    assert not any(t == 'log' and x.startswith('[serial] Ethernet') for t, x in env.console_log)
+    assert any(t == 'log' and x.startswith('[serial] open:') for t, x in env.console_log)

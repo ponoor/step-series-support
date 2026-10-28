@@ -82,7 +82,7 @@ def test_pieces_arrive_as_sent_and_the_tool_assembles_lines(make_env, chunk):
         assert max(len(e['data']) for e in rx) == 1
     if chunk == 'whole':
         assert any(len(e['data']) > 2000 for e in rx)
-    assert any('[serial]' in x for t, x in env.console_log)       # the noise line was seen and ignored
+    assert any('[board]' in x for t, x in env.console_log)       # the noise line was seen and ignored
 
 
 def test_random_pieces_are_seeded(make_env):

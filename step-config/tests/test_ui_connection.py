@@ -407,7 +407,7 @@ def test_no_console_errors_in_a_normal_session(make_env):
     env.wait_status('Config loaded from board')
     assert env.unexpected_console_errors() == []
     # board noise lines are logged, not errors
-    assert any(t == 'log' and '[serial]' in x for t, x in env.console_log)
+    assert any(t == 'log' and '[board]' in x for t, x in env.console_log)
 
 
 # ------------------------------------------------------------------ Disconnect -> Connect

@@ -104,8 +104,8 @@ The version of the tool (`TOOL_VERSION` in `index.html`) is separate from the fi
 - The rejection of the serial streams after a lost connection is handled, so the console shows no `Uncaught (in promise)` error.
 - Closing the connection (Disconnect, a lost device, Reboot) gives each step 1 s at most and always resets the tool, so a pending Web Serial promise after unplugging in the middle of a save can no longer leave the tool stuck on "Disconnect".
 - A write to the port that does not finish within 3 s is treated as a lost connection.
-- Reconnect no longer reopens the Port object that was lost (Chrome makes a new one when the device comes back): it uses the port of the `connect` event, else the only connected granted port, else asks with the port picker; it times out and then shows `Reconnect failed: …`, and warns when a different board (another `board.product`) answers.
-- The console shows `[serial] …` lines with times for opening, closing and reconnecting, to find where it stops.
+- Reconnect no longer reopens the Port object that was lost (Chrome makes a new one when the device comes back): it uses the port of the `connect` event, else the only connected granted port, else asks with the port picker (several granted ports); if the board is not back on USB yet it waits up to 3 s for the `connect` event and then says `the board is not connected. Plug in the USB cable and click Connect.` (it does not call `requestPort()` after waiting: that needs a click within about 5 s); it times out and then shows `Reconnect failed: …`, and warns when a different board (another `board.product`) answers.
+- The console shows `[serial] …` lines with times for opening, closing and reconnecting, to find where it stops; text the board itself sends (not JSON) is shown as `[board] …`.
 - Dark mode: the Connect / Disconnect / Reboot buttons have dark text (contrast at least 4.5:1); the hover colour of the red buttons no longer hides their label.
 - A downloaded file gets a valid `information.configVersion` and `targetProduct`.
 - README: source of truth, published URL, supported firmware, corrected board table.

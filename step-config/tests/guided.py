@@ -109,7 +109,8 @@ GUIDE = {
                      'ツールが固まらず、Connect に戻れること。Reboot → Connect が使えること。'
                      '（段 3 では、Reconnect が効かず、保存中に抜くとツールが戻らなかった。今回の直し方の確認。）'),
         'console': D('Chrome のツールのタブで、開発者ツールのコンソールを開く（⌥⌘J。Console タブ）。'
-                     'うまくいかなかったとき、ここに出る「[serial]」で始まる行をあとで貼ってもらう。'),
+                     'うまくいかなかったとき、ここに出る「[serial]」で始まる行をあとで貼ってもらう。'
+                     '「[board]」で始まる行はボードが送った文なので、貼らなくてよい。'),
         'connect': D('ツールの Connect を押し（STEP400）、「Config loaded from board」と出るまで待つ。'),
         'pull': D('STEP400 の USB ケーブルを抜く（Ethernet はそのまま）。'),
         'q_banner': Q('ツールの上部', '黄色い「Serial connection lost」の帯が出たか。'),
@@ -301,7 +302,7 @@ class Guide:
 
     def paste_log(self, label):
         """うまくいかなかったとき、コンソールの [serial] の行を貼ってもらい、結果のファイルに残す。"""
-        self.say('\nうまくいかなかったようです。Chrome のコンソール（⌥⌘J）にある「[serial]」で始まる行を、'
+        self.say('\nうまくいかなかったようです。Chrome のコンソール（⌥⌘J）にある「[serial]」で始まる行を（「[board]」の行はボードの文なので要らない）、'
                  '全部コピーして、ここに貼り付けてください。貼り終わったら、空の行（Enter だけ）を送ります。'
                  '（貼らないときは、すぐ Enter）')
         lines = []
