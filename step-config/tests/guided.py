@@ -406,6 +406,9 @@ class Guide:
     def restore(self, prod):
         self.need_free(self.boards[prod])
         d = hp.restore(self.golden[prod])
+        if d:                           # 1 回で戻らなかった（10.3 の後に起きた）: もう 1 回やる
+            self.say(f'   戻した結果が基準と違った。もう 1 回戻す: {"; ".join(d)}')
+            d = hp.restore(self.golden[prod])
         b = self.boards[prod] = hp.find_boards()[prod]
         b.osc_set_dest()
         return d
@@ -822,7 +825,7 @@ def s_card_errors(g):
 
 def osc_errors(msgs):
     """/error/command などの OSC エラー。(文, 引数) の一覧。"""
-    return [(a, args) for a, args in msgs if a.startswith('/error')]
+    return [(a, args) for a, args, *_ in msgs if a.startswith('/error')]
 
 
 @step('brake', '10.3 モーターが回っている間に Reboot（モーターがつながり、電源が入っているとき）')
@@ -855,7 +858,7 @@ def s_brake(g):
                 b.osc_send('/activate', m, 1)
                 time.sleep(dur + 0.5)
                 rs = b.osc_query('/getBrakeStatus', m, timeout=1.0)
-                state = next((args[1] for a, args in rs if a == '/brakeStatus' and args and args[0] == m), None)
+                state = next((args[1] for a, args, *_ in rs if a == '/brakeStatus' and args and args[0] == m), None)
                 if state != 2:                        # 2 = RELEASED（brakeControl.h）
                     errs = osc_errors(rs)
                     g.say(f'   ブレーキが解放されなかった（/brakeStatus の状態 {state}; 2 が解放）。ボードのエラー: {errs}')
