@@ -239,3 +239,102 @@ def env400(make_env):
 def env800(make_env):
     return make_env('STEP800')
 
+
+# --------------------------------------------------------------------- real boards (pytest -m hw)
+class Hw:
+    """The two boards on the bench, a backup of each taken before the first change, and a place
+    for results. At the end of the session both boards are put back (restore)."""
+
+    def __init__(self, boards, backups):
+        self.boards = boards
+        self.backups = backups
+        self.results = {}
+        self.restores = {}
+
+    def rec(self, key, value):
+        self.results[key] = value
+
+    def restore(self, board):
+        import hw_protocol
+        d = hw_protocol.restore(self.backups[board.product])
+        board.refresh()
+        board.osc_set_dest()
+        self.restores[board.product] = d
+        return d
+
+
+@pytest.fixture(scope='session')
+def hw():
+    import hw_protocol
+    boards = hw_protocol.find_boards()
+    for p, b in boards.items():
+        assert b.G['board']['firmwareVersion'] == [2, 2, 0], p
+        assert b.T['board']['sdInitialized'] is True, p + ': no usable card'
+    assert boards['STEP400'].my_ip != boards['STEP800'].my_ip
+    # The reference state is the golden backup taken before the first change (out/golden_<product>.json);
+    # a new backup of the state found now is saved too. If a run was cut off and left a change, the
+    # board is put back to the golden state first.
+    backups = {}
+    for p, b in boards.items():
+        golden = OUT / f'golden_{p}.json'
+        if not golden.exists():
+            import shutil
+            shutil.copy(hw_protocol.backup(b), golden)
+        else:
+            hw_protocol.backup(b)
+        backups[p] = str(golden)
+    h = Hw(boards, backups)
+    for p, b in boards.items():
+        want = json.loads(open(backups[p]).read())['G']
+        d = hw_protocol.diff(hw_protocol._strip_volatile(want), hw_protocol._strip_volatile(b.G))
+        d = [x for x in d if 'canSendMsgBeforeDestIp' not in x]   # follows /setDestIp at run time
+        if d or b.G['board']['configFilename'] != want['board']['configFilename']:
+            h.results[f'found_changed_{p}'] = d
+            h.restore(b)
+        b.osc_set_dest()
+    yield h
+    errs = {}
+    for p, b in boards.items():
+        try:
+            errs[p] = h.restore(b)
+        except Exception as e:      # noqa: BLE001
+            errs[p] = [f'restore failed: {e!r}']
+    h.results['final_restore'] = errs
+    with open(OUT / 'hw_results.json', 'w') as f:
+        json.dump(h.results, f, indent=1, default=str)
+    assert all(not v for v in errs.values()), errs
+
+
+@pytest.fixture(params=['STEP400', 'STEP800'])
+def board(hw, request):
+    return hw.boards[request.param]
+
+
+@pytest.fixture
+def real(hw, make_env):
+    """Factory: the tool in a browser, connected through the serial bridge to a real board.
+    `env.dirty = True` makes the teardown put the board back (after the page let go of the port)."""
+    import hw_protocol
+    from serial_backend import SerialBridge
+    made = []
+
+    def make(product, scheme='light', viewport=(1500, 1000), settle=0.8):
+        b = hw.boards[product]
+        bridge = SerialBridge(b.device, resolver=lambda: b.find_again(25)['device'], settle=settle)
+        env = make_env(product, scheme=scheme, board=bridge, viewport=viewport)
+        env.hw, env.hws, env.dirty = b, hw, False
+        made.append(env)
+        return env
+
+    yield make
+    for env in made:
+        try:
+            env.page.context.close()
+        except Exception:
+            pass
+        end = time.time() + 8
+        while time.time() < end and hw_protocol.port_holders(env.hw.device):
+            time.sleep(0.1)
+        if env.dirty:
+            d = hw.restore(env.hw)
+            assert not d, d

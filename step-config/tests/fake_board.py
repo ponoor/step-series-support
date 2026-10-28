@@ -30,6 +30,8 @@ FIRMWARE_DEFAULT = (2, 2, 0)
 MAX_CONFIG_FILENAME = 64          # globals.h
 BUF_SIZE = 4096                   # receiveConfigJson()
 HERE = os.path.dirname(os.path.abspath(__file__))
+import pathlib
+REAL_DIR = pathlib.Path(HERE) / 'fixtures' / 'real'
 TEMPLATE_DIR = os.path.normpath(os.path.join(HERE, '..', '..', 'configGenerator'))
 
 # Section / key order of serializeConfigSectionsTo().
@@ -87,6 +89,17 @@ def default_config(product):
     if not p['brake']:
         d.pop('electromagnetBrakeEnable', None)
         d.pop('brakeTransitionDuration', None)
+    # the defaults of the firmware itself (G of a real board with no configuration file, taken at
+    # stage 2): they replace the template values where both have the key
+    real = REAL_DIR / f'{product}_no_config_file_backup.json'
+    if real.exists():
+        g = json.loads(real.read_text())['G']
+        for sec, vals in g.items():
+            if sec in ('board', 'information') or sec not in t:
+                continue
+            for k, v in vals.items():
+                if k in t[sec]:
+                    t[sec][k] = v
     # bool-typed keys are sent as true / false
     for sec in t.values():
         if isinstance(sec, dict):
@@ -173,7 +186,8 @@ class FakeBoard:
         self.reboot_brake_wait = 0.0    # up to 1 s with brakes
         # live state for `T`
         self.link_status = 1            # 0 unknown, 1 ON, 2 OFF
-        self.reset_cause = 1
+        self.reset_cause = 1            # ResetCause enum of resetCause.h: 1 power on, 5 software
+        self.reset_cause_raw = 1        # PM->RCAUSE: bit 0 POR, bit 6 SYST
         self.motors = [self._motor() for _ in range(self.n)]
         self.boot_count = 0
         self.up = True
@@ -347,8 +361,8 @@ class FakeBoard:
 
     def status_json(self):
         """printStatusAsJson(). `ocd` and `stall` are a fixed false in v2.2.0."""
-        board = {'product': self.product, 'mcu': 'SAMD21G18A', 'resetCause': self.reset_cause,
-                 'resetCauseRaw': 1, 'firmwareVersion': list(self.fw),
+        board = {'product': self.product, 'mcu': 'SAMD21', 'resetCause': self.reset_cause,
+                 'resetCauseRaw': self.reset_cause_raw, 'firmwareVersion': list(self.fw),
                  'myIp': list(self.running_my_ip), 'myId': self.my_id,
                  'linkStatus': self.link_status, 'destMac': [255] * 6, 'arpPending': False,
                  'sdInitialized': self.sd_initialized, 'configLoaded': self.config_file_parse,
@@ -583,6 +597,7 @@ class FakeBoard:
                 await io.drop_connection()
         await asyncio.sleep(self.boot_time)
         self._boot()
+        self.reset_cause, self.reset_cause_raw = 5, 64     # R: software reset
         self.up = True
         if io is not None:
             await io.set_plugged(True)

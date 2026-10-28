@@ -222,9 +222,16 @@ class SerialBackend:
 class SerialBridge:
     """Device that forwards to a real serial port with pyserial (also `loop://` for a pipe test)."""
 
-    def __init__(self, url, baudrate=9600):
+    def __init__(self, url, baudrate=9600, resolver=None, wait=20.0, settle=0.0):
+        """`resolver()` (optional) returns the device to open each time the page opens the port:
+        after a reboot or an unplug the name can change, so the same board is looked for again
+        (by its USB serial number, hw_protocol.Board.find_again) and never the other one. The page
+        waits (up to `wait` s) while the board is away."""
         import serial
         self.serial = serial
+        self.resolver = resolver
+        self.wait = wait
+        self.settle = settle      # s to wait after a port was found again (a person needs that long to click Connect)
         self.url = url
         self.baudrate = baudrate
         self.ser = None
@@ -242,7 +249,20 @@ class SerialBridge:
     def attach(self, io):
         self.io = io
         self._stop.clear()
-        self.ser = self.serial.serial_for_url(self.url, baudrate=self.baudrate, timeout=0.05)
+        if self.resolver is not None:
+            self.url = self.resolver()
+            time.sleep(self.settle)
+        end = time.monotonic() + self.wait
+        while True:
+            try:
+                self.ser = self.serial.serial_for_url(self.url, baudrate=self.baudrate, timeout=0.05)
+                break
+            except Exception:
+                if time.monotonic() > end:
+                    raise
+                time.sleep(0.05)
+                if self.resolver is not None:
+                    self.url = self.resolver()
         self._reader = threading.Thread(target=self._read_loop, daemon=True)
         self._reader.start()
 
@@ -272,6 +292,9 @@ class SerialBridge:
             try:
                 data = ser.read(max(ser.in_waiting, 1))
             except Exception:
+                # the port vanished (unplugged / the board rebooted): tell the page
+                if not self._stop.is_set() and self.io is not None:
+                    asyncio.run_coroutine_threadsafe(self.io.drop_connection(), self._loop)
                 break
             if data and self.io is not None:
                 asyncio.run_coroutine_threadsafe(self.io.write(data), self._loop)
