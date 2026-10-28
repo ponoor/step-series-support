@@ -204,19 +204,18 @@ def test_other_browsers_load_and_download_work(make_env, other_browser):
 
 
 @pytest.mark.checklist('11.1')
-def test_other_browsers_without_web_serial_show_the_banner(make_env, other_browser, request):
-    if other_browser.name_ == 'firefox':
-        request.applymarker(pytest.mark.xfail(strict=True, reason=(
-            '(d) checklist / (a) tool: Firefox 157 (Playwright build) has navigator.serial '
-            '(getPorts, requestPort), so the tool shows no banner and Connect stays enabled. '
-            'Needs a look in a real Firefox in stage 3 (what Connect does there)')))
-    env = make_env('STEP400', browser=other_browser, shim=False).open()
+def test_webkit_without_web_serial_shows_the_banner(make_env, webkit):
+    """Safari's engine has no Web Serial. (Firefox 151 and later has it: Playwright's Firefox 157
+    has navigator.serial, so the banner is not shown there; see test_firefox_smoke.py.)"""
+    env = make_env('STEP400', browser=webkit, shim=False).open()
     assert env.page.evaluate('navigator.serial') is None
     banner = env.page.locator('#no-serial')
     expect(banner).to_be_visible()
-    assert 'Web Serial API is not available' in banner.inner_text()
+    text = banner.inner_text()
+    assert 'Web Serial API is not available' in text
+    assert 'Chrome or Edge' in text and 'Firefox 151' in text and 'not been tested' in text
     assert env.page.locator('#btn-connect').is_disabled()
-    env.shot(f'{other_browser.name_}_no_web_serial')
+    env.shot('webkit_no_web_serial')
 
 
 @pytest.mark.checklist('11.2')

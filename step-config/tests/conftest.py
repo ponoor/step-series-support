@@ -56,6 +56,22 @@ def chromium(pw):
     b.close()
 
 
+@pytest.fixture(scope='session')
+def webkit(pw):
+    b = pw.webkit.launch()
+    b.name_ = 'webkit'
+    yield b
+    b.close()
+
+
+@pytest.fixture(scope='session')
+def firefox(pw):
+    b = pw.firefox.launch()
+    b.name_ = 'firefox'
+    yield b
+    b.close()
+
+
 @pytest.fixture(scope='session', params=['firefox', 'webkit'])
 def other_browser(pw, request):
     b = getattr(pw, request.param).launch()
@@ -222,3 +238,4 @@ def env400(make_env):
 @pytest.fixture
 def env800(make_env):
     return make_env('STEP800')
+

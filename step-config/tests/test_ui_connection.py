@@ -447,16 +447,43 @@ def test_disconnect_then_connect_while_status_is_shown(make_env):
     expect(env.page.locator('#rt-motors')).to_contain_text('4321', timeout=3000)
 
 
+COUNT_CANCELS = """() => { const c = reader.cancel.bind(reader); window.__cancels = 0;
+  reader.cancel = (...a) => { window.__cancels++; return c(...a); }; }"""
+
+
 @pytest.mark.checklist('1.7')
-@pytest.mark.xfail(strict=True, reason='(a) tool, not in the 1b list: closeConn() cancels the reader, the read '
-                   'loop sees done and calls handleDisconnect() while port is still set, so the "Serial '
-                   'connection lost" banner appears after the user clicks Disconnect')
 def test_disconnect_button_shows_no_lost_banner(env400):
     env = env400.open().connect()
+    env.page.evaluate(COUNT_CANCELS)
     env.page.click('#btn-connect')
     env.wait_status('Disconnected')
-    time.sleep(0.3)
+    time.sleep(0.5)
     assert env.page.locator('#dc-banner').is_hidden()
+    assert env.page.evaluate('window.__cancels') == 1       # closeConn() ran once
+    assert env.page.evaluate('closing') is False
+    assert poll_until(lambda: open_connections(env) == 0)
+
+
+@pytest.mark.checklist('1.7')
+def test_unplug_still_shows_the_banner_and_closes_once(env400):
+    env = env400.open().connect()
+    env.expect_unplug()
+    env.page.evaluate(COUNT_CANCELS)
+    env.backend.disconnect(stay_unplugged=False)
+    expect(env.page.locator('#dc-banner')).to_be_visible()
+    time.sleep(0.3)
+    assert env.page.evaluate('window.__cancels') == 1
+    assert env.page.evaluate('closing') is False
+
+
+@pytest.mark.checklist('1.7')
+def test_closeconn_called_twice_closes_once(env400):
+    env = env400.open().connect()
+    env.page.evaluate(COUNT_CANCELS)
+    env.page.evaluate('Promise.all([closeConn(), closeConn(), handleDisconnect()])')
+    assert env.page.evaluate('window.__cancels') == 1
+    assert env.page.locator('#dc-banner').is_hidden()
+    assert env.page.locator('#btn-connect').inner_text() == '⬡ Connect'
 
 
 @pytest.mark.checklist('1.7')

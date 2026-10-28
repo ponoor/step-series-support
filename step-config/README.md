@@ -11,8 +11,9 @@ A single-file browser-based configuration tool for STEP100/200/400/800 stepper m
 
 ## Requirements
 
-- **Chrome or Edge** (required for Web Serial API)
-- Firefox and Safari: offline file workflow only (serial features disabled)
+- **Chrome or Edge** (Web Serial API)
+- Firefox 151 or later has the Web Serial API and should work, but has not been tested with a board
+- Safari: no Web Serial API; offline file workflow only (Load JSON / Download JSON)
 
 ## Usage
 
@@ -96,6 +97,7 @@ The version of the tool (`TOOL_VERSION` in `index.html`) is separate from the fi
 - STEP400 overcurrent threshold is 0–31 (it was 0–15, so 16–31 were lost on save); options show the current.
 - Stall threshold: 0–31 on STEP400/100 and 0–127 on STEP800/200, shown with the current; TON_MIN / TOFF_MIN are 0–127.
 - TVAL options are 0–64 with 78.125 mA steps (the firmware does not limit TVAL in a configuration file).
+- Disconnect no longer shows the "Serial connection lost" banner; the "Web Serial API is not available" text names Chrome and Edge and says Firefox 151 or later should work but is untested.
 - Empty, non-numeric and out-of-range values are refused before saving or downloading; `{` / `}` in the config name and configurations over 4095 bytes are refused.
 - Check the save file name (`F<path>`): leading `/`, `.json` / `.txt`, at most 63 bytes; ask before saving under a name the board does not read at start-up.
 - A connection lost while a save, read, status request or reboot is waiting for the board ends that wait at once with an error (a save no longer blocks Start Status for 15 s); the save error says the board may or may not have saved.

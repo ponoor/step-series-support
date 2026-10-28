@@ -149,7 +149,7 @@ select{width:auto;min-width:80px}
 <body>
 <div id="app">
 
-<div id="no-serial">⚠ Web Serial API is not available (requires Chrome or Edge). Serial features disabled — Load JSON / Download JSON still work.</div>
+<div id="no-serial">⚠ Web Serial API is not available in this browser. Use Chrome or Edge (Firefox 151 or later should work too, but has not been tested). Serial features disabled — Load JSON / Download JSON still work.</div>
 <div id="dc-banner">
   <span>⚠ Serial connection lost.</span>
   <span class="dc-msg">You can unplug the USB cable, or reconnect to resume.</span>
@@ -315,6 +315,7 @@ let isPolling = false, isSaving = false;
 let pollTimer = null;
 let macHex = false; // display MAC as hex; JSON stores decimal
 let lastPort = null;        // retained across closeConn() so reconnect() can reuse it
+let closing = false; // closeConn() is running: the loop ending because of its reader.cancel() is not a lost device
 let intentionalClose = false; // suppresses the disconnect banner during cmdReboot()
 let netLayoutTimer = null;
 
@@ -415,6 +416,7 @@ async function send(str) {
 
 async function handleDisconnect() {
   if (!port) return;
+  if (closing) return; // closeConn() (Disconnect, Reboot, a lost device) is already closing the port
   if (intentionalClose) { failWaiters(); return; } // cmdReboot() is managing the close; suppress banner, stop waiting for its reply
   await closeConn();
   document.getElementById('dc-banner').classList.add('show');
@@ -437,19 +439,23 @@ function failWaiters() {
 }
 
 async function closeConn() {
-  stopPoll();
-  failWaiters();
-  try { await reader?.cancel(); } catch(e) {}
-  try { await inputDone; } catch(e) {}
-  // close() (not releaseLock()) signals EOF to TextEncoderStream, which closes
-  // enc.readable, which allows outputDone (the pipeTo Promise) to complete.
-  // releaseLock() alone leaves enc.readable open and outputDone hangs forever.
-  try { await writer?.close(); } catch(e) {}
-  try { await outputDone; } catch(e) {}
-  try { await port?.close(); } catch(e) {}
-  port = null; reader = null; writer = null; inputDone = null; outputDone = null;
-  rxBuf = ''; lineQ = []; lineWaiters = [];
-  setConnected(false);
+  if (closing) return;
+  closing = true;
+  try {
+    stopPoll();
+    failWaiters();
+    try { await reader?.cancel(); } catch(e) {}
+    try { await inputDone; } catch(e) {}
+    // close() (not releaseLock()) signals EOF to TextEncoderStream, which closes
+    // enc.readable, which allows outputDone (the pipeTo Promise) to complete.
+    // releaseLock() alone leaves enc.readable open and outputDone hangs forever.
+    try { await writer?.close(); } catch(e) {}
+    try { await outputDone; } catch(e) {}
+    try { await port?.close(); } catch(e) {}
+    port = null; reader = null; writer = null; inputDone = null; outputDone = null;
+    rxBuf = ''; lineQ = []; lineWaiters = [];
+    setConnected(false);
+  } finally { closing = false; }
 }
 
 async function reconnect() {
