@@ -16,6 +16,7 @@
   --ok: #1a7f37;
   --warn: #9a6700;
   --err: #cf222e;
+  --err-hover: #a40e26;
   --panel-hd: #e8e8e8;
   --input-bg: #ffffff;
   --mono: 'Courier New', Courier, monospace;
@@ -33,6 +34,7 @@
     --ok: #3fb950;
     --warn: #d29922;
     --err: #f85149;
+    --err-hover: #ff7b72;
     --panel-hd: #2d333b;
     --input-bg: #2d333b;
   }
@@ -51,7 +53,11 @@ button:disabled{opacity:.4;cursor:not-allowed}
 button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
 button.primary:hover:not(:disabled){background:var(--accent-hover);border-color:var(--accent-hover)}
 button.danger{background:var(--err);color:#fff;border-color:var(--err)}
-button.danger:hover:not(:disabled){opacity:.85}
+button.danger:hover:not(:disabled){background:var(--err-hover);border-color:var(--err-hover)}
+/* dark mode: white on the accent / error colours is below 4.5:1 */
+@media (prefers-color-scheme: dark) {
+  button.primary, button.danger { color: #0d1117; }
+}
 
 /* ── Status bar ── */
 #status-bar{display:flex;align-items:center;gap:10px;padding:5px 12px;background:var(--surface);border:1px solid var(--border);border-radius:6px;margin-bottom:8px;font-size:13px}
@@ -338,10 +344,14 @@ async function _openPort(statusMsg) {
 
   const dec = new TextDecoderStream();
   inputDone = port.readable.pipeTo(dec.writable);
+  // The pipes reject when the device is lost; closeConn() awaits them, but it may run later (or
+  // not at all while cmdReboot() is waiting), so handle the rejection here. inputDone itself stays.
+  inputDone.catch(() => {});
   reader = dec.readable.getReader();
 
   const enc = new TextEncoderStream();
   outputDone = enc.readable.pipeTo(port.writable);
+  outputDone.catch(() => {});
   writer = enc.writable.getWriter();
 
   runReadLoop();
@@ -376,7 +386,7 @@ function deliverLine(line) {
     return;
   }
   if (lineWaiters.length > 0) {
-    lineWaiters.shift()(line);
+    lineWaiters.shift().res(line);
   } else {
     lineQ.push(line);
   }
@@ -385,12 +395,16 @@ function deliverLine(line) {
 function nextLine(ms = 6000) {
   if (lineQ.length > 0) return Promise.resolve(lineQ.shift());
   return new Promise((res, rej) => {
+    const w = {
+      res: line => { clearTimeout(tid); res(line); },
+      rej: e => { clearTimeout(tid); rej(e); },
+    };
     const tid = setTimeout(() => {
-      const i = lineWaiters.indexOf(res);
+      const i = lineWaiters.indexOf(w);
       if (i >= 0) lineWaiters.splice(i, 1);
       rej(new Error('Serial response timeout'));
     }, ms);
-    lineWaiters.push(line => { clearTimeout(tid); res(line); });
+    lineWaiters.push(w);
   });
 }
 
@@ -401,7 +415,7 @@ async function send(str) {
 
 async function handleDisconnect() {
   if (!port) return;
-  if (intentionalClose) return; // cmdReboot() is managing the close; suppress banner
+  if (intentionalClose) { failWaiters(); return; } // cmdReboot() is managing the close; suppress banner, stop waiting for its reply
   await closeConn();
   document.getElementById('dc-banner').classList.add('show');
 }
@@ -410,8 +424,21 @@ function dismissDisconnect() {
   document.getElementById('dc-banner').classList.remove('show');
 }
 
+// End what is waiting for a line (a save, a read, a reboot reply) with an error now; dropping the
+// waiters would leave e.g. a save (isSaving) hanging until its own timeout.
+function failWaiters() {
+  const waiting = lineWaiters;
+  lineWaiters = [];
+  for (const w of waiting) {
+    const e = new Error('Serial connection closed');
+    e.closed = true;
+    w.rej(e);
+  }
+}
+
 async function closeConn() {
   stopPoll();
+  failWaiters();
   try { await reader?.cancel(); } catch(e) {}
   try { await inputDone; } catch(e) {}
   // close() (not releaseLock()) signals EOF to TextEncoderStream, which closes
@@ -511,6 +538,7 @@ const SAVE_ERROR_HINTS = {
 async function cmdSaveConfig() {
   if (!writer) return;
   isSaving = true;
+  let jsonSent = false;
   lineQ = []; // discard stale responses (e.g. {"result":"ok"} from a prior rebootBoard())
   try {
     const cfg = assembleConfig();
@@ -547,6 +575,7 @@ async function cmdSaveConfig() {
       return;
     }
 
+    jsonSent = true;
     await send(json);
     const line = await nextLine(15000);
     const res = JSON.parse(line);
@@ -558,7 +587,14 @@ async function cmdSaveConfig() {
       setStatus('Save failed');
     }
   } catch (e) {
-    showErr('Save error: ' + e.message);
+    if (e.closed) {
+      // Before the configuration was sent the board changed nothing but the file name; once it is
+      // sent, the board may have saved it or not (the answer is what was lost).
+      showErr(jsonSent
+        ? 'The connection was lost during the save: the board may or may not have saved the configuration, so reconnect and read it back to check.'
+        : 'The connection was lost before the configuration was sent: nothing was saved.');
+      setStatus('Save failed');
+    } else showErr('Save error: ' + e.message);
   } finally {
     isSaving = false;
   }

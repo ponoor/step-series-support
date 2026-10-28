@@ -98,6 +98,9 @@ The version of the tool (`TOOL_VERSION` in `index.html`) is separate from the fi
 - TVAL options are 0–64 with 78.125 mA steps (the firmware does not limit TVAL in a configuration file).
 - Empty, non-numeric and out-of-range values are refused before saving or downloading; `{` / `}` in the config name and configurations over 4095 bytes are refused.
 - Check the save file name (`F<path>`): leading `/`, `.json` / `.txt`, at most 63 bytes; ask before saving under a name the board does not read at start-up.
+- A connection lost while a save, read, status request or reboot is waiting for the board ends that wait at once with an error (a save no longer blocks Start Status for 15 s); the save error says the board may or may not have saved.
+- The rejection of the serial streams after a lost connection is handled, so the console shows no `Uncaught (in promise)` error.
+- Dark mode: the Connect / Disconnect / Reboot buttons have dark text (contrast at least 4.5:1); the hover colour of the red buttons no longer hides their label.
 - A downloaded file gets a valid `information.configVersion` and `targetProduct`.
 - README: source of truth, published URL, supported firmware, corrected board table.
 - Note beside Save to SD to stop the motors first; the `OCD` and `Stall` rows of the status are shown as "not reported" (v2.2.0 always sends false); the save errors `No SD card` and `SD open failed` explain the likely causes.
