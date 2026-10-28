@@ -314,21 +314,66 @@ let loadedCfg = null;
 let isPolling = false, isSaving = false;
 let pollTimer = null;
 let macHex = false; // display MAC as hex; JSON stores decimal
-let lastPort = null;        // retained across closeConn() so reconnect() can reuse it
+let lastPort = null;        // the port last connected; reconnect() looks for a usable port again, it does not reopen this object
+let lastProduct = null;     // board.product of the last config read; reconnect() warns when another board answers
+let expectProduct = null;   // set by reconnect() for the read it starts
+let reconnectCandidate = null; // port of the last 'connect' event of navigator.serial
 let closing = false; // closeConn() is running: the loop ending because of its reader.cancel() is not a lost device
 let intentionalClose = false; // suppresses the disconnect banner during cmdReboot()
 let netLayoutTimer = null;
 
 // ── Serial: connect / disconnect ─────────────────────────────────────────────
+// A lost device can leave a promise of Web Serial (read, write, close, open) pending for good, so
+// every await on the port has a time limit, and the state is reset whatever happens.
+const T0 = performance.now();
+const CLOSE_STEP_MS = 1000;   // each step of closeConn()
+const SEND_MS = 3000;         // writer.write()
+const OPEN_MS = 12000;        // port.open() + the first read of the configuration
+const GETPORTS_MS = 1500;
+function slog(msg) {
+  console.log('[serial] ' + msg + ' (+' + Math.round(performance.now() - T0) + ' ms)');
+}
+// Resolves with the result of p; rejects with its error, or with {timeout:true} after ms.
+function withTimeout(p, ms, what) {
+  let tid;
+  const t = new Promise((_, rej) => {
+    tid = setTimeout(() => { const e = new Error(what + ' did not finish in ' + ms + ' ms'); e.timeout = true; rej(e); }, ms);
+  });
+  return Promise.race([p, t]).finally(() => clearTimeout(tid));
+}
+// One step of closing: never throws and never takes longer than ms.
+async function step(what, p, ms = CLOSE_STEP_MS) {
+  const t = performance.now();
+  try {
+    await withTimeout(Promise.resolve(p), ms, what);
+    slog('close: ' + what + ' ok (' + Math.round(performance.now() - t) + ' ms)');
+  } catch (e) {
+    slog('close: ' + what + (e?.timeout ? ' TIMEOUT' : ' failed: ' + (e?.message ?? e)) + ' (' + Math.round(performance.now() - t) + ' ms)');
+  }
+}
+
 async function connectSerial() {
   try {
+    slog('connect: requestPort');
     port = await navigator.serial.requestPort();
     lastPort = port;
-    await _openPort('Connected — reading config…');
+    await openAndRead('Connected — reading config…');
   } catch (e) {
+    slog('connect failed: ' + e.message);
     setStatus('Connection failed: ' + e.message);
-    port = null; reader = null; writer = null;
+    resetConn();
   }
+}
+
+async function openAndRead(statusMsg) {
+  await withTimeout(_openPort(statusMsg), OPEN_MS, 'Opening the port');
+}
+
+// Forget the streams and the port, whatever state they are in.
+function resetConn() {
+  port = null; reader = null; writer = null; inputDone = null; outputDone = null;
+  rxBuf = ''; lineQ = []; lineWaiters = [];
+  setConnected(false);
 }
 
 // Open port, set up streams, start read loop, then read config.
@@ -338,10 +383,12 @@ async function _openPort(statusMsg) {
   // (e.g. port.close() failed silently after an unexpected disconnect),
   // force it closed before re-opening.
   if (port.readable !== null) {
-    try { await port.close(); } catch(_) {}
+    await step('stale port.close()', port.close());
   }
   // SAMD21 native USB CDC ignores baud rate; 9600 is for Web Serial API compliance only
+  slog('open: port.open()');
   await port.open({ baudRate: 9600 });
+  slog('open: port opened');
 
   const dec = new TextDecoderStream();
   inputDone = port.readable.pipeTo(dec.writable);
@@ -411,10 +458,21 @@ function nextLine(ms = 6000) {
 
 async function send(str) {
   if (!writer) throw new Error('Not connected');
-  await writer.write(str);
+  try {
+    await withTimeout(writer.write(str), SEND_MS, 'Writing to the port');
+  } catch (e) {
+    if (!e?.timeout) throw e;
+    // A write that never finishes means the device is gone (or stuck): treat it as lost.
+    slog('send: TIMEOUT, treating the connection as lost');
+    const lost = new Error('Serial connection closed');
+    lost.closed = true;
+    handleDisconnect();
+    throw lost;
+  }
 }
 
 async function handleDisconnect() {
+  slog('handleDisconnect (port ' + (port ? 'set' : 'null') + ', closing=' + closing + ', intentional=' + intentionalClose + ')');
   if (!port) return;
   if (closing) return; // closeConn() (Disconnect, Reboot, a lost device) is already closing the port
   if (intentionalClose) { failWaiters(); return; } // cmdReboot() is managing the close; suppress banner, stop waiting for its reply
@@ -441,40 +499,77 @@ function failWaiters() {
 async function closeConn() {
   if (closing) return;
   closing = true;
+  slog('closeConn: start');
   try {
     stopPoll();
     failWaiters();
-    try { await reader?.cancel(); } catch(e) {}
-    try { await inputDone; } catch(e) {}
+    const p = port, r = reader, w = writer, inD = inputDone, outD = outputDone;
+    // Each step has a time limit (a lost device can leave any of them pending); the state is reset below
+    // in any case, so Connect / Reconnect always work afterwards.
+    await step('reader.cancel()', r?.cancel());
+    await step('inputDone', inD);
     // close() (not releaseLock()) signals EOF to TextEncoderStream, which closes
     // enc.readable, which allows outputDone (the pipeTo Promise) to complete.
     // releaseLock() alone leaves enc.readable open and outputDone hangs forever.
-    try { await writer?.close(); } catch(e) {}
-    try { await outputDone; } catch(e) {}
-    try { await port?.close(); } catch(e) {}
-    port = null; reader = null; writer = null; inputDone = null; outputDone = null;
-    rxBuf = ''; lineQ = []; lineWaiters = [];
-    setConnected(false);
-  } finally { closing = false; }
+    await step('writer.close()', w?.close());
+    await step('outputDone', outD);
+    await step('port.close()', p?.close());
+  } finally {
+    resetConn();
+    closing = false;
+    slog('closeConn: done');
+  }
+}
+
+// The port to use after the device came back. The Port object that was lost cannot be opened again
+// (Chrome makes a new one when the device returns), so look for the one that is connected now:
+// the one of the last 'connect' event, else the only connected granted port, else ask.
+async function pickReconnectPort() {
+  const lost = lastPort;
+  let ports = [];
+  try { ports = await withTimeout(navigator.serial.getPorts(), GETPORTS_MS, 'getPorts()'); }
+  catch (e) { slog('reconnect: ' + e.message); }
+  const usable = ports.filter(p => p.connected !== false);
+  slog('reconnect: getPorts() -> ' + ports.length + ' port(s), ' + usable.length + ' connected; connect event: ' + (reconnectCandidate ? 'yes' : 'no'));
+  if (reconnectCandidate && reconnectCandidate.connected !== false && reconnectCandidate !== lost) return reconnectCandidate;
+  const fresh = usable.filter(p => p !== lost);
+  if (fresh.length === 1) return fresh[0];
+  if (fresh.length === 0 && usable.length === 1) return usable[0];
+  slog('reconnect: no single port to use, asking with requestPort()');
+  return await navigator.serial.requestPort();
 }
 
 async function reconnect() {
   document.getElementById('dc-banner').classList.remove('show');
-  if (lastPort) {
-    // Reuse the previously-granted port without showing the port picker again
-    port = lastPort;
-    try {
-      try { await port.close(); } catch(_) {} // clear any stale open state
-      setStatus('Reconnecting…');
-      await _openPort('Reconnected — reading config…');
-    } catch(e) {
-      setStatus('Reconnect failed: ' + e.message);
-      port = null; reader = null; writer = null;
-      lastPort = null; // next attempt will show port picker
-    }
-  } else {
-    await connectSerial();
+  slog('reconnect: start');
+  setStatus('Reconnecting…');
+  expectProduct = lastProduct;
+  try {
+    port = await pickReconnectPort();
+    lastPort = port;
+    reconnectCandidate = null;
+    await openAndRead('Reconnected — reading config…');
+    slog('reconnect: done');
+  } catch (e) {
+    slog('reconnect failed: ' + e.message);
+    setStatus('Reconnect failed: ' + e.message);
+    resetConn();
+  } finally {
+    expectProduct = null;
   }
+}
+
+// A device that comes back is a new Port object; remember it for reconnect(). A device that goes
+// away is handled like a read error, in case the read does not report it.
+if (navigator.serial) {
+  navigator.serial.addEventListener('connect', e => {
+    slog('navigator.serial connect event');
+    if (e.target && e.target !== navigator.serial) reconnectCandidate = e.target;
+  });
+  navigator.serial.addEventListener('disconnect', e => {
+    slog('navigator.serial disconnect event' + (e.target === port ? ' (our port)' : ''));
+    if (port && e.target === port) handleDisconnect();
+  });
 }
 
 // ── Serial: commands ─────────────────────────────────────────────────────────
@@ -488,6 +583,10 @@ async function cmdReadConfig() {
     setStatus('Config loaded from board');
     const note = firmwareNotice(cfg.board?.firmwareVersion);
     if (note) showErr(note);
+    const product = cfg.board?.product;
+    if (expectProduct && product && product !== expectProduct)
+      showErr('Reconnected to a different board: ' + product + ' (before: ' + expectProduct + '). If this is not the board you wanted, click Disconnect and then Connect.');
+    if (product) lastProduct = product;
   } catch (e) {
     showErr('Read failed: ' + e.message);
   }

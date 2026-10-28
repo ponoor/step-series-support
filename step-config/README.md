@@ -102,6 +102,10 @@ The version of the tool (`TOOL_VERSION` in `index.html`) is separate from the fi
 - Check the save file name (`F<path>`): leading `/`, `.json` / `.txt`, at most 63 bytes; ask before saving under a name the board does not read at start-up.
 - A connection lost while a save, read, status request or reboot is waiting for the board ends that wait at once with an error (a save no longer blocks Start Status for 15 s); the save error says the board may or may not have saved.
 - The rejection of the serial streams after a lost connection is handled, so the console shows no `Uncaught (in promise)` error.
+- Closing the connection (Disconnect, a lost device, Reboot) gives each step 1 s at most and always resets the tool, so a pending Web Serial promise after unplugging in the middle of a save can no longer leave the tool stuck on "Disconnect".
+- A write to the port that does not finish within 3 s is treated as a lost connection.
+- Reconnect no longer reopens the Port object that was lost (Chrome makes a new one when the device comes back): it uses the port of the `connect` event, else the only connected granted port, else asks with the port picker; it times out and then shows `Reconnect failed: …`, and warns when a different board (another `board.product`) answers.
+- The console shows `[serial] …` lines with times for opening, closing and reconnecting, to find where it stops.
 - Dark mode: the Connect / Disconnect / Reboot buttons have dark text (contrast at least 4.5:1); the hover colour of the red buttons no longer hides their label.
 - A downloaded file gets a valid `information.configVersion` and `targetProduct`.
 - README: source of truth, published URL, supported firmware, corrected board table.
