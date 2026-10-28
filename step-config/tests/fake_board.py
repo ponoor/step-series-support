@@ -293,9 +293,12 @@ class FakeBoard:
             if not isinstance(new_sec, dict):
                 continue
             for k, cur in cur_sec.items():
-                if k not in new_sec and not (k == 'goUntilTimeout' and 'goUnitlTimeout' in new_sec):
+                # loadConfig.cpp reads the legacy spelling goUnitlTimeout when goUntilTimeout is
+                # missing; receiveConfigJson() reads goUntilTimeout only.
+                legacy = boot and k == 'goUntilTimeout' and k not in new_sec and 'goUnitlTimeout' in new_sec
+                if k not in new_sec and not legacy:
                     continue
-                new = new_sec[k] if k in new_sec else new_sec['goUnitlTimeout']
+                new = new_sec['goUnitlTimeout'] if legacy else new_sec[k]
                 if isinstance(cur, list):
                     if not isinstance(new, list):
                         continue

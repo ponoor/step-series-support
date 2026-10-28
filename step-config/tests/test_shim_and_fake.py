@@ -317,3 +317,64 @@ def test_fake_boot_lines_and_write_fixtures(tmp_path):
     b.write_fixtures(tmp_path)
     assert json.loads((tmp_path / 'STEP800_G.json').read_text())['board']['product'] == 'STEP800'
     assert json.loads((tmp_path / 'STEP800_T.json').read_text())['board']['product'] == 'STEP800'
+
+
+def test_fake_legacy_spelling_only_when_the_file_is_read_at_start_up():
+    """loadConfig.cpp reads goUnitlTimeout when goUntilTimeout is missing; receiveConfigJson() does not."""
+    d = tmpl('STEP400')
+    d['driverSettings']['goUnitlTimeout'] = [111, 222, 333, 444]
+    del d['driverSettings']['goUntilTimeout']
+    b = FakeBoard('STEP400', card=make_card(files={'/config.txt': d}))
+    assert b.cfg['driverSettings']['goUntilTimeout'] == [111, 222, 333, 444]
+    b._apply_sections({'driverSettings': {'goUnitlTimeout': [1, 2, 3, 4]}})
+    assert b.cfg['driverSettings']['goUntilTimeout'] == [111, 222, 333, 444]
+
+
+def test_fake_step800_default_overcurrent_is_7_after_the_template_fix():
+    b = FakeBoard('STEP800')
+    assert b.cfg['alarmAndReport']['OCThreshold'] == [7] * 8
+
+
+def test_shim_close_with_locked_writer_fails_and_reader_cancel_keeps_the_writable(env400):
+    env = env400.open()
+    r = js(env, """async () => {
+      const out = [];
+      const port = await navigator.serial.requestPort();
+      await port.open({baudRate: 9600});
+      const w = port.writable.getWriter();                       // locked writable
+      try { await port.close(); out.push('closed'); } catch (e) { out.push(e.name); }
+      w.releaseLock();
+      const rd = port.readable.getReader();
+      await rd.cancel();                                         // the readable ends, nothing else
+      out.push([port.readable, port.writable !== null]);
+      try { await port.open({baudRate: 9600}); out.push('reopened'); } catch (e) { out.push(e.name); }
+      await port.close();                                        // writable unlocked now
+      out.push([port.readable, port.writable]);
+      await port.open({baudRate: 9600});                         // works after a real close
+      out.push('open again');
+      await port.close();
+      return out;
+    }""")
+    assert r == ['TypeError', [None, True], 'InvalidStateError', [None, None], 'open again']
+    assert poll_until_conn_closed(env)
+
+
+def poll_until_conn_closed(env):
+    from testlib import poll_until
+    return poll_until(lambda: env.backend._ws is None)
+
+
+def test_shim_writable_close_ends_only_the_writable(env400):
+    env = env400.open()
+    r = js(env, """async () => {
+      const port = await navigator.serial.requestPort();
+      await port.open({baudRate: 9600});
+      const w = port.writable.getWriter();
+      await w.close();
+      w.releaseLock();
+      const out = [port.writable, port.readable instanceof ReadableStream];
+      await port.readable.cancel().catch(() => {});
+      await port.close();
+      return out;
+    }""")
+    assert r == [None, True]

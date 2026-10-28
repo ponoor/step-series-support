@@ -28,6 +28,7 @@
       this._writable = null;
       this._rctl = null;
       this._opening = false;
+      this._open = false;       // the port is open, whatever state its streams are in
       this.onconnect = null;
       this.ondisconnect = null;
     }
@@ -38,7 +39,7 @@
     async open(options) {
       if (!options || typeof options.baudRate !== 'number')
         throw new TypeError("Failed to execute 'open' on 'SerialPort': required member baudRate is undefined.");
-      if (this._opening || this._readable !== null)
+      if (this._opening || this._open)
         throw dom('InvalidStateError', "Failed to execute 'open' on 'SerialPort': The port is already open.");
       this._opening = true;
       try {
@@ -49,9 +50,11 @@
           ws.onerror = () => reject(dom('NetworkError', "Failed to open serial port."));
         });
         this._ws = ws;
+        this._open = true;
         this._readable = new ReadableStream({
           start: (ctl) => { this._rctl = ctl; },
-          cancel: () => { this._dropStreams(); },
+          // cancel / close / error end the readable only; the writable and the port stay
+          cancel: () => { this._readable = null; this._rctl = null; },
         });
         this._writable = new WritableStream({
           write: (chunk) => {
@@ -59,6 +62,8 @@
               throw dom('NetworkError', 'The device has been lost.');
             this._ws.send(chunk);
           },
+          close: () => { this._writable = null; },
+          abort: () => { this._writable = null; },
         });
         ws.onmessage = (ev) => {
           if (typeof ev.data === 'string') { this._control(JSON.parse(ev.data)); return; }
@@ -72,13 +77,17 @@
     }
 
     async close() {
-      if (this._readable === null && this._writable === null) return;
+      if (!this._open) return;
       if (this._readable && this._readable.locked)
         throw new TypeError("Failed to execute 'close' on 'SerialPort': Cannot cancel a locked stream.");
       if (this._writable && this._writable.locked)
         throw new TypeError("Failed to execute 'close' on 'SerialPort': Cannot abort a locked stream.");
       const ws = this._ws;
-      this._dropStreams();
+      this._ws = null;
+      this._readable = null;
+      this._writable = null;
+      this._rctl = null;
+      this._open = false;
       if (ws) { try { ws.close(); } catch (_) {} }
       window.__serialShim.log.push({ ev: 'close' });
     }
@@ -91,8 +100,9 @@
     // Device lost (cable pulled, board reset). Called from the WebSocket or from the backend.
     _lost() {
       const ws = this._ws;
-      const wasOpen = this._readable !== null;
+      const wasOpen = this._open;
       this._ws = null;
+      this._open = false;
       if (this._rctl) { try { this._rctl.error(dom('NetworkError', 'The device has been lost.')); } catch (_) {} }
       this._readable = null;
       this._writable = null;
@@ -103,13 +113,6 @@
         this.dispatchEvent(new Event('disconnect'));
         serial.dispatchEvent(new Event('disconnect'));   // (Chrome: bubbles from the port; target differs)
       }
-    }
-
-    _dropStreams() {
-      this._readable = null;
-      this._writable = null;
-      this._rctl = null;
-      this._ws = null;
     }
   }
 

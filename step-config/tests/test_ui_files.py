@@ -53,7 +53,7 @@ def test_load_step800_template(offline):
 @pytest.mark.checklist('9.2')
 def test_load_step400_template_with_old_spelling(offline, tmp_path):
     d = tmpl('STEP400')
-    assert 'goUnitlTimeout' in d['driverSettings']                     # the template still has the typo
+    d['driverSettings']['goUnitlTimeout'] = d['driverSettings'].pop('goUntilTimeout')   # an old file
     d['driverSettings']['goUnitlTimeout'] = [11111, 22222, 33333, 44444]
     p = write_json(tmp_path, 'typo.json', d)
     env = offline
@@ -63,6 +63,15 @@ def test_load_step400_template_with_old_spelling(offline, tmp_path):
     assert len(env.header_cells('#driver-tbl')) == 5
     assert [env.val(f'#f-driver-goUntilTimeout-{i}') for i in range(4)] == ['11111', '22222', '33333', '44444']
     assert env.options('#f-alarm-OCThreshold-0')[1][1] == '625 mA (1)'       # 312.5 mA steps
+
+
+@pytest.mark.checklist('9.2')
+def test_load_step400_template_new_spelling(offline):
+    env = offline
+    env.load_file(TEMPLATES / 'configTemplate_step400.json')
+    env.wait_status('Loaded from file: configTemplate_step400.json')
+    assert len(env.header_cells('#driver-tbl')) == 5
+    assert [env.val(f'#f-driver-goUntilTimeout-{i}') for i in range(4)] == ['10000'] * 4
 
 
 @pytest.mark.checklist('9.3')

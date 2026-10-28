@@ -410,3 +410,52 @@ def test_no_console_errors_in_a_normal_session(make_env):
     assert env.unexpected_console_errors() == []
     # board noise lines are logged, not errors
     assert any(t == 'log' and '[serial]' in x for t, x in env.console_log)
+
+
+# ------------------------------------------------------------------ Disconnect -> Connect
+def open_connections(env):
+    return [e for e in env.backend.entries if e['dir'] == 'ev' and e.text == 'open'].__len__() - \
+           [e for e in env.backend.entries if e['dir'] == 'ev' and e.text == 'close'].__len__()
+
+
+@pytest.mark.checklist('1.1', '1.6')
+def test_disconnect_then_connect_three_times(make_env):
+    env = make_env('STEP400', card=make_card('STEP400')).open().connect()
+    for i in range(3):
+        env.page.click('#btn-connect')                       # Disconnect
+        env.wait_status('Disconnected')
+        assert env.page.locator('#btn-connect').inner_text() == '⬡ Connect'
+        assert poll_until(lambda: open_connections(env) == 0), 'the connection stayed open'
+        env.page.click('#btn-connect')                       # Connect
+        env.wait_status('Config loaded from board')
+        assert poll_until(lambda: open_connections(env) == 1)
+        env.page.click('#btn-read')
+        env.wait_status('Config loaded from board')
+    assert env.backend.connections == 4
+
+
+def test_disconnect_then_connect_while_status_is_shown(make_env):
+    env = make_env('STEP400', card=make_card('STEP400')).open().connect()
+    env.page.click('#btn-poll')
+    expect(env.page.locator('#rt-board')).to_contain_text('STEP400')
+    env.page.click('#btn-connect')
+    env.wait_status('Disconnected')
+    assert env.page.locator('#btn-poll').inner_text() == '▶ Start Status'
+    assert poll_until(lambda: open_connections(env) == 0)
+    env.page.click('#btn-connect')
+    env.wait_status('Config loaded from board')
+    env.page.click('#btn-poll')
+    env.board.motors[1]['position'] = 4321
+    expect(env.page.locator('#rt-motors')).to_contain_text('4321', timeout=3000)
+
+
+@pytest.mark.checklist('1.7')
+@pytest.mark.xfail(strict=True, reason='(a) tool, not in the 1b list: closeConn() cancels the reader, the read '
+                   'loop sees done and calls handleDisconnect() while port is still set, so the "Serial '
+                   'connection lost" banner appears after the user clicks Disconnect')
+def test_disconnect_button_shows_no_lost_banner(env400):
+    env = env400.open().connect()
+    env.page.click('#btn-connect')
+    env.wait_status('Disconnected')
+    time.sleep(0.3)
+    assert env.page.locator('#dc-banner').is_hidden()
