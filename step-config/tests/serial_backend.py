@@ -184,12 +184,12 @@ class SerialBackend:
         except Exception:
             pass
 
-    async def _drop(self):
+    async def _drop(self, replug=False):
         ws = self._ws
         if ws is not None:
             self._record('ev', 'device-drop')
             try:
-                await ws.send(json.dumps({'type': 'disconnect'}))
+                await ws.send(json.dumps({'type': 'disconnect', 'replug': replug}))
                 await ws.close()
             except Exception:
                 pass
@@ -207,7 +207,7 @@ class SerialBackend:
             if stay_unplugged:
                 self.plugged = False
                 self._record('ev', 'plugged=False')
-            await self._drop()
+            await self._drop(replug=not stay_unplugged)
         self.call(go())
 
     def plug(self):

@@ -42,6 +42,7 @@ def test_shim_lost_device_errors_the_read_and_nulls_the_streams(env400):
     env.expect_unplug()
     js(env, """async () => {
       const port = await navigator.serial.requestPort();
+      window.__p = port;
       await port.open({baudRate: 9600});
       window.__r = port.readable.getReader();
       window.__res = null;
@@ -54,11 +55,18 @@ def test_shim_lost_device_errors_the_read_and_nulls_the_streams(env400):
     env.page.wait_for_function('window.__res !== null')
     assert js(env, 'window.__res') == ['NetworkError']
     assert js(env, 'window.__events') == ['port', 'serial']
-    assert js(env, 'navigator.serial.getPorts().then(p => [p[0].readable, p[0].writable])') == [None, None]
-    # unplugged: open() fails like a missing device; plugged again: works
-    err = js(env, "navigator.serial.getPorts().then(p => p[0].open({baudRate: 9600}).then(() => 'opened', e => e.name))")
-    assert err == 'NetworkError'
+    assert js(env, 'window.__p.readable === null && window.__p.writable === null') is True
+    # away: nothing listed, the dead object cannot be opened (NetworkError) or closed (InvalidStateError)
+    assert js(env, 'navigator.serial.getPorts().then(p => p.length)') == 0
+    assert js(env, 'window.__p.connected') is False
+    assert js(env, "window.__p.open({baudRate: 9600}).then(() => 'opened', e => e.name)") == 'NetworkError'
+    assert js(env, "window.__p.close().then(() => 'closed', e => e.name)") == 'InvalidStateError'
+    # plugged again: a NEW object, listed by getPorts(), announced by a connect event
     env.backend.plug()
+    js(env, "window.__connects = []; navigator.serial.addEventListener('connect', e => window.__connects.push(e.target === window.__serialShim.port))")
+    js(env, '__serialShim.plugIn()')
+    assert js(env, 'window.__connects') == [True]
+    assert js(env, 'navigator.serial.getPorts().then(p => p.length === 1 && p[0] !== window.__p && p[0].connected)') is True
     ok = js(env, "navigator.serial.getPorts().then(p => p[0].open({baudRate: 9600}).then(() => 'opened', e => e.name))")
     assert ok == 'opened'
 
