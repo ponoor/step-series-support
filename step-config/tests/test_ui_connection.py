@@ -1,4 +1,5 @@
 """Checklist sections 0, 1, 2, 10 and 11.3: opening, connecting, reading, status, reboot."""
+import asyncio
 import json
 import time
 
@@ -168,9 +169,6 @@ def test_unplug_leaves_no_page_error(env400):
 
 
 @pytest.mark.checklist('1.7')
-@pytest.mark.xfail(strict=True, reason='(a) tool: isSaving stays true after an unplug during a save '
-                   '(closeConn() drops the waiter of nextLine(), so only its 15 s timeout ends the '
-                   'save); Start Status does nothing until then')
 def test_unplug_during_save_status_recovers(make_env):
     env = make_env('STEP400', delay_save=0.7).open().connect()
     env.expect_unplug()
@@ -180,6 +178,9 @@ def test_unplug_during_save_status_recovers(make_env):
     poll_until(lambda: '{' in env.backend.sent(m))
     env.backend.disconnect(stay_unplugged=False)
     expect(env.page.locator('#dc-banner')).to_be_visible()
+    env.wait_err('The connection was lost during the save: the board may or may not have saved the configuration, so reconnect and read it back to check.')
+    assert env.status() == 'Save failed'
+    assert env.page.evaluate('isSaving') is False
     env.page.click('#dc-banner button.primary')
     env.wait_status('Config loaded from board')
     env.page.click('#btn-poll')
@@ -377,10 +378,7 @@ def test_reboot_while_polling(make_env):
 def test_reboot_reply_never_comes(make_env):
     """If the reply to R is lost the tool waits 3 s and closes anyway."""
     env = make_env('STEP400').open().connect()
-    # Observation (tool, minor): the board resets while the tool waits for the reply, the
-    # read loop ends with intentionalClose set, nothing handles the rejected pipeTo() promise
-    # until closeConn() runs 3 s later -> a pageerror in the console. The result is correct.
-    env.expect_unplug()
+    env.allow_console_error('WebSocket connection')
 
     async def silent(text):
         return None
@@ -459,3 +457,71 @@ def test_disconnect_button_shows_no_lost_banner(env400):
     env.wait_status('Disconnected')
     time.sleep(0.3)
     assert env.page.locator('#dc-banner').is_hidden()
+
+
+@pytest.mark.checklist('1.7')
+def test_unplug_before_the_json_is_sent_says_nothing_was_saved(make_env):
+    env = make_env('STEP400', delay_F=0.6).open().connect()
+    env.expect_unplug()
+    env.dialogs.answers = [False]
+    m = env.backend.mark()
+    env.page.click('#btn-save')
+    poll_until(lambda: env.backend.sent(m).startswith('F'))
+    env.backend.disconnect(stay_unplugged=False)
+    env.wait_err('The connection was lost before the configuration was sent: nothing was saved.')
+    assert '{' not in env.backend.sent(m)
+    assert env.page.evaluate('isSaving') is False
+
+
+@pytest.mark.parametrize('cmd', ['read', 'status', 'reboot'])
+def test_unplug_ends_a_waiting_read_status_or_reboot_at_once(make_env, cmd):
+    """G, T and R waits end with the unplug (not after their own timeouts of 8 / 3 / 3 s)."""
+    env = make_env('STEP400', delay_G=3.0, delay_T=3.0, reboot_min_wait=3.0).open()
+    env.expect_unplug()
+    env.board.delay_G = 0.02
+    env.connect()
+    if cmd == 'read':
+        env.board.delay_G = 3.0
+        env.page.click('#btn-read')
+    elif cmd == 'status':
+        env.page.click('#btn-poll')
+    else:
+        env.board._out = lambda text: asyncio.sleep(0)     # no reply to R
+        env.dialogs.answers = [True]
+        env.page.click('#btn-reboot')
+    time.sleep(0.4)
+    t0 = time.time()
+    env.backend.disconnect(stay_unplugged=False)
+    if cmd == 'reboot':
+        env.wait_status('Board rebooted', timeout=2000)
+    else:
+        expect(env.page.locator('#dc-banner')).to_be_visible()
+        if cmd == 'read':
+            env.wait_err('Read failed', timeout=1500)
+    assert time.time() - t0 < 2.0
+    assert env.page.evaluate('lineWaiters.length') == 0
+
+
+@pytest.mark.checklist('11.3')
+@pytest.mark.parametrize('how', ['unplug', 'disconnect', 'reboot', 'unplug_polling', 'reboot_reply_lost'])
+def test_no_page_error_on_unplug_disconnect_or_reboot(make_env, how):
+    env = make_env('STEP400', boot_time=0.3).open().connect()
+    if how == 'unplug':
+        env.backend.disconnect(stay_unplugged=False)
+        expect(env.page.locator('#dc-banner')).to_be_visible()
+    elif how == 'unplug_polling':
+        env.page.click('#btn-poll')
+        expect(env.page.locator('#rt-board')).to_contain_text('STEP400')
+        env.backend.disconnect(stay_unplugged=False)
+        expect(env.page.locator('#dc-banner')).to_be_visible()
+    elif how == 'disconnect':
+        env.page.click('#btn-connect')
+        env.wait_status('Disconnected')
+    else:
+        if how == 'reboot_reply_lost':
+            env.board._out = lambda text: asyncio.sleep(0)
+        env.dialogs.answers = [True]
+        env.page.click('#btn-reboot')
+        env.wait_status('Board rebooted', timeout=6000)
+    time.sleep(0.8)
+    assert env.console_errors == []

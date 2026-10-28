@@ -246,16 +246,49 @@ def test_dark_mode_is_readable(make_env, product):
     assert page.evaluate("matchMedia('(prefers-color-scheme: dark)').matches")
 
 
+BUTTON_JS = """(sel) => {
+  const e = document.querySelector(sel);
+  const n = s => s.match(/[\\d.]+/g).slice(0, 3).map(Number);
+  const cs = getComputedStyle(e);
+  const bgOf = el => { while (el) { const c = getComputedStyle(el).backgroundColor; if (!c.endsWith(', 0)') && c !== 'transparent') return n(c); el = el.parentElement; } return [255, 255, 255]; };
+  const o = +cs.opacity, fg = n(cs.color), bg = n(cs.backgroundColor), under = bgOf(e.parentElement);
+  const mix = (c, u) => c.map((v, i) => v * o + u[i] * (1 - o));
+  return [mix(fg, under), mix(bg, under), o];
+}"""
+
+
+def button_contrast(env, sel):
+    fg, bg, _ = env.page.evaluate(BUTTON_JS, sel)
+    return contrast(fg, bg)
+
+
 @pytest.mark.checklist('11.2')
-@pytest.mark.xfail(strict=True, reason='(a) tool, cosmetic: in dark mode the Connect button (primary) is '
-                   'white on #58a6ff (2.5:1) and Disconnect (danger) white on #f85149 (3.4:1), below 4.5:1')
-def test_dark_mode_connect_button_contrast(make_env):
-    env = make_env('STEP400', scheme='dark').open()
-    js = """() => { const e = document.querySelector('#btn-connect'); const cs = getComputedStyle(e);
-        const n = s => s.match(/[\\d.]+/g).slice(0, 3).map(Number); return [n(cs.color), n(cs.backgroundColor)]; }"""
-    fg, bg = env.page.evaluate(js)
-    c1 = contrast(fg, bg)
+@pytest.mark.parametrize('scheme', ['light', 'dark'])
+def test_connect_and_disconnect_buttons_contrast_all_states(make_env, scheme):
+    """Primary (Connect) and danger (Disconnect, Reboot) buttons: normal, hover, disabled."""
+    env = make_env('STEP400', scheme=scheme).open()
+    got = {}
+    got['connect normal'] = button_contrast(env, '#btn-connect')
+    env.page.hover('#btn-connect')
+    got['connect hover'] = button_contrast(env, '#btn-connect')
+    env.page.mouse.move(0, 0)
+    env.page.evaluate("document.querySelector('#btn-connect').disabled = true")
+    got['connect disabled'] = button_contrast(env, '#btn-connect')
+    got['reboot disabled'] = button_contrast(env, '#btn-reboot')
+    env.page.evaluate("document.querySelector('#btn-connect').disabled = false")
     env.connect()
-    fg, bg = env.page.evaluate(js)
-    c2 = contrast(fg, bg)
-    assert min(c1, c2) >= 4.5, (round(c1, 2), round(c2, 2))
+    env.page.mouse.move(0, 0)
+    got['disconnect normal'] = button_contrast(env, '#btn-connect')
+    env.page.hover('#btn-connect')
+    got['disconnect hover'] = button_contrast(env, '#btn-connect')
+    env.page.mouse.move(0, 0)
+    got['reboot normal'] = button_contrast(env, '#btn-reboot')
+    env.page.hover('#btn-reboot')
+    got['reboot hover'] = button_contrast(env, '#btn-reboot')
+    print(scheme, {k: round(v, 2) for k, v in got.items()})
+    enabled = {k: v for k, v in got.items() if 'disabled' not in k}
+    assert all(v >= 4.5 for v in enabled.values()), {k: round(v, 2) for k, v in enabled.items()}
+    # Disabled buttons are drawn at opacity .4 (unchanged, in both themes): below 4.5:1 by design
+    # (WCAG exempts disabled controls). Only checked to stay readable at all.
+    disabled = {k: v for k, v in got.items() if 'disabled' in k}
+    assert all(v >= 1.5 for v in disabled.values()), {k: round(v, 2) for k, v in disabled.items()}
