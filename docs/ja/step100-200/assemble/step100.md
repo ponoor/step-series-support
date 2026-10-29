@@ -8,7 +8,7 @@ X-NUCLEO-IHM03A1を、Ethernetシールドに重ねられるように改造す�
 
 ## STEP100（X-NUCLEO-IHM03A1） {#step100}
 
-IHM03A1とEthernetシールドでは、使うピンが次のように重なりますので、IHM03A1側でピンを変更します。
+この表は初期のビルドの場合です。`MZERO_WITH_ZERO_BOOTLOADER`を定義すると、SD CSはD2になります（[スケッチの書き込み](../upload-the-sketch.md#m0)）。IHM03A1とEthernetシールドでは、使うピンが次のように重なりますので、IHM03A1側でピンを変更します。
 
 | Arduino | (Ethernet) | 初期状態 | 変更後 | ファームウェア | 備考 |
 | --- | --- | --- | --- | --- | --- |

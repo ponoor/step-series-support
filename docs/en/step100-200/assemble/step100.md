@@ -8,7 +8,7 @@ How to modify the X-NUCLEO-IHM03A1 so that it can be stacked on the Ethernet shi
 
 ## STEP100 (X-NUCLEO-IHM03A1) {#step100}
 
-Some pins that the IHM03A1 uses overlap with the pins of the Ethernet shield, so the pin assignment of the IHM03A1 must be modified.
+The table is for the default build; with `MZERO_WITH_ZERO_BOOTLOADER` the SD CS pin is D2 ([Upload the Arduino sketch](../upload-the-sketch.md#m0)). Some pins that the IHM03A1 uses overlap with the pins of the Ethernet shield, so the pin assignment of the IHM03A1 must be modified.
 
 | Arduino | (Ethernet) | Default | Modified | Firmware | Note |
 | --- | --- | --- | --- | --- | --- |

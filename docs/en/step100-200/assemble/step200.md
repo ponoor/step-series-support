@@ -43,7 +43,7 @@ In this photo, I had a hard time reattaching the removed resistor to SB12, and i
 
 ### 2: SD CS and L6470 STBY/RST {#stby-rst}
 
-As with the STEP100, the CS pin of the microSD card and the STBY/RST pin of the L6470 are both assigned to D4, so cut the leg of that pin on the IHM02A1. The STBY/RST pin is required to start the L6470, so assign it to another pin with a jump wire. You can use any pin that is not in use; this page uses D8. Connect D4 and D8 with a jump wire on the pin socket of the X-NUCLEO board.
+As with the STEP100, the CS pin of the microSD card and the STBY/RST pin of the L6470 are both assigned to D4, so cut the leg of that pin on the IHM02A1. The STBY/RST pin is required to start the L6470, so assign it to another pin with a jump wire. The firmware expects it on D8 (`PIN_DRIVER_RESET` in `boardsDef.h`), so use D8; another pin needs a change of `boardsDef.h`. Connect D4 and D8 with a jump wire on the pin socket of the X-NUCLEO board.
 
 ![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643345928788.png)  
 The X-NUCLEO board stacked on the Arduino and the Ethernet shield. D4 of the X-NUCLEO board is now reassigned to D8.

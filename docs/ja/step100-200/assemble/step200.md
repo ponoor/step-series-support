@@ -43,7 +43,7 @@ X-NUCLEO-IHM02A1を、Ethernetシールドに重ねられるように改造す�
 
 ### 2: SD CSとL6470のSTBY/RST {#stby-rst}
 
-STEP100の場合と同様に、microSDカードのCSピンとL6470のSTBY/RSTピンが、同じD4に割り当てられていますので、IHM02A1のほうで脚をカットします。ただし、カットしたSTBY/RSTピンはL6470の起動に必要ですので、ジャンパーワイヤで別のピンに割り当て直します。使っていないピンであればどこでもよいのですが、ここではD8を使います。X-NUCLEOボードのピンソケットで、D4とD8をつなぎます。
+STEP100の場合と同様に、microSDカードのCSピンとL6470のSTBY/RSTピンが、同じD4に割り当てられていますので、IHM02A1のほうで脚をカットします。ただし、カットしたSTBY/RSTピンはL6470の起動に必要ですので、ジャンパーワイヤで別のピンに割り当て直します。ファームウェアはこのピンがD8にあるものとして動きます（`boardsDef.h`の`PIN_DRIVER_RESET`）ので、D8を使ってください。ほかのピンにするには、`boardsDef.h`の変更が必要です。X-NUCLEOボードのピンソケットで、D4とD8をつなぎます。
 
 ![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643345928788.png)  
 ArduinoとEthernetシールドに重ねた様子です。これで、X-NUCLEOボードのD4がD8に割り当て直されました。
