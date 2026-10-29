@@ -110,7 +110,7 @@ After the tool reads a board, it shows a notice when the firmware is older than 
 - `This tool requires firmware v2.1.0 or later (this board: vX.Y.Z).`
 - `This tool was checked with firmware v2.2.0. Some settings of firmware vX.Y.Z may not be shown.`
 
-The tool compares only the major and minor numbers, so a patch version such as v2.2.1 gives no notice. The notice is shown in a banner for a few seconds. The tool is not stopped by these notices.
+The tool compares only the major and minor numbers, so a patch version such as v2.2.1 gives no notice. The notice is shown in a banner for about 9 s. The tool is not stopped by these notices.
 
 ## Troubleshooting {#troubleshooting}
 

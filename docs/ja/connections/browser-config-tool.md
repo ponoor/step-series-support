@@ -110,7 +110,7 @@ title: ブラウザ設定ツール
 - `This tool requires firmware v2.1.0 or later (this board: vX.Y.Z).`
 - `This tool was checked with firmware v2.2.0. Some settings of firmware vX.Y.Z may not be shown.`
 
-ツールが比べるのはメジャーとマイナーの番号だけなので、v2.2.1のようなパッチのバージョンでは注意は出ません。注意は、バナーに数秒間表示されます。これらの注意で、ツールが止まることはありません。
+ツールが比べるのはメジャーとマイナーの番号だけなので、v2.2.1のようなパッチのバージョンでは注意は出ません。注意は、バナーに約9s表示されます。これらの注意で、ツールが止まることはありません。
 
 ## トラブルシューティング {#troubleshooting}
 
