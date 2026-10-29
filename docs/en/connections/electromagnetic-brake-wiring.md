@@ -25,7 +25,7 @@ To use a brake, enable it for the motor with [`electromagnetBrakeEnable`](config
 
 ### Power for the brake {#brake-power}
 
-Supply the voltage that the electromagnetic brake needs to the EMB-STEP400. Many brakes use 24 V; check the datasheet of your motor. **Use the same power supply as for the motor** (see [Usage notes](../guides/electromagnetic-brake.md#usage) for the reason).
+Supply the voltage that the electromagnetic brake needs to the EMB-STEP400. Many brakes use 24 V; check the datasheet of your motor. **Take the power from the same supply as the motor, or from a supply that is cut together with the motor power**; the voltage can differ from the motor's (see [Usage notes](../guides/electromagnetic-brake.md#usage) for the reason).
 
 The board has two power terminals, a DC barrel jack and a Euro-style terminal block. They are connected in parallel on the board, so **never supply power to both at the same time.**
 
@@ -62,17 +62,17 @@ The brake output (J2) of the STEP800 has one signal for each of the 8 motors, 3.
 The output is not under the control of the firmware from the power-on or the reset until the firmware starts. Take this into account in the driving circuit, because a load that hangs on the motor can fall. The firmware cannot prevent this; see [When the load is not held](../guides/electromagnetic-brake.md#unsupported).
 
 - **STEP400**: the pins of the output are in a high impedance state until the firmware starts (nothing is connected to them). Pull down the input of the driving circuit, so that the brake engages while the output floats. The EMB-STEP400 does this with a resistor on each input.
-- **STEP800**: the shift register is not defined at power-on, and all the outputs can be on the releasing side. It is about 250 ms after the power is applied, mostly the time of the bootloader. After a reset (the reset button or a drop of the supply voltage), the outputs also keep the released state for about 0.5 s until the firmware starts.
+- **STEP800**: the shift register is not defined at power-on, and all the outputs can be on the releasing side. The outputs stay released until the firmware starts, and **this can be longer than the typical 250 ms**; see [When the load is not held](../guides/electromagnetic-brake.md#unsupported) for the times, including a measurement of about 2 s at 24 V.
 
 Countermeasures for the STEP800:
 
 - Supply the power of the brake after the board has sent [`/booted`](../reference/automatically-sent-messages.md#booted).
-- Or make the driving circuit so that it does not release the brake for a while after the power is applied.
+- Or make the driving circuit so that it does not release the brake for a fixed time after the power is applied. Make the time long enough for the longest time in the guide.
 
 ## Notes {#notes}
 
 - **Disconnect the electromagnetic brake while you write the firmware.** While the firmware is written, the firmware does not run, and the brake output of the STEP800 can be on the releasing side. See [Compiling the firmware](../maintenance/compile-the-arduino-sketch.md#uploading).
-- **Use the same power supply for the brake and the motor.** See [Usage notes](../guides/electromagnetic-brake.md#usage).
+- **Do not let the motor power be cut before the brake power.** Take the brake power from the same supply as the motor, or from a supply that is cut together with it. See [Usage notes](../guides/electromagnetic-brake.md#usage).
 - Restart, watchdog and CPU fault: the board engages the brakes before it restarts. See [Restart, watchdog and CPU fault](../guides/electromagnetic-brake.md#restart).
 
 ## Related commands and settings {#related}

@@ -107,7 +107,7 @@ When the USB cable is pulled out while the Ethernet cable is connected, the STEP
 
 The firmware cannot prevent these times in which the load is not held:
 
-- **Power-on of the STEP800**: all the brakes stay released for about 250 ms after the power is applied, mostly the time of the bootloader. This depends on the hardware, not on the firmware.
+- **Power-on of the STEP800**: all the brakes stay released for about 250 ms after the power is applied, mostly the time of the bootloader. **Depending on the power supply and the conditions, it can be longer: with 24 V, the brakes stayed released for about 2 s in a measurement.** This depends on the hardware, not on the firmware.
 - **The reset button and a drop of the supply voltage**: the drivers are in standby and the brakes (STEP800) stay released for about 0.5 s, until the firmware starts.
 - On the STEP400 with the EMB-STEP400, the brakes engage at once also at a reset (the brake board pulls them down).
 - Even when the brake is engaged electrically first, the shaft is held only after the brake has locked mechanically, which takes tens of ms.
@@ -116,7 +116,7 @@ If you hang a load on the motor, take these times into account.
 
 ## Usage notes {#usage}
 
-- **Use the same power supply for the brake and for the motor.** If only the supply of the motor is cut, the holding force is lost before the undervoltage lockout acts, and the load falls.
+- **Take the power of the brake from the same power supply as the motor, or from a supply that is cut together with the power of the motor.** Do not let only the power of the motor be cut first: the holding force is then lost before the undervoltage lockout acts, and the load falls. The brake and the motor can use different voltages (for example, a 48 V motor and a 24 V brake); in that case, make the brake supply follow the motor supply.
 - **Do homing again after a restart, and after the motor has been HiZ.** The position is not reliable: after the motor is energized again, the first release of the brake can shift the shaft. See [Homing and position management](homing-and-position.md).
 - **`/free` is for maintenance.** It releases the motor and keeps the brake released, so a load that hangs on the motor falls. Be very careful with this command; make the load safe before you send it.
 - The motor turns only when the brake is released: see the motion start condition above.

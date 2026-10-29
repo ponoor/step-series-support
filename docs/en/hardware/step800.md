@@ -96,7 +96,7 @@ The output for the electromagnetic brakes is the connector J2, a 10-pin (2 x 5) 
 | 9 | 3.3V |
 | 10 | GND |
 
-The outputs are the digital outputs of a shift register (74HC595), a 3.3 V logic signal. **HIGH releases the brake and LOW engages it.** The state of the shift register is not defined at power-on, so all the outputs can be on the releasing side until the firmware starts (about 250 ms). For the wiring and for what to do at power-on, see [Electromagnetic brake wiring](../connections/electromagnetic-brake-wiring.md).
+The outputs are the digital outputs of a shift register (74HC595), a 3.3 V logic signal. **HIGH releases the brake and LOW engages it.** The state of the shift register is not defined at power-on, so all the outputs can be on the releasing side until the firmware starts (for the time, see [When the load is not held](../guides/electromagnetic-brake.md#unsupported)). For the wiring and for what to do at power-on, see [Electromagnetic brake wiring](../connections/electromagnetic-brake-wiring.md).
 
 ## SPI assignment {#spi}
 
