@@ -61,7 +61,8 @@ ACアダプタをDCジャックにつなぎます。プラグは、外径5.5mm�
 
 DIPスイッチを1にします。一番左のスイッチだけをON側にスライドさせ、ほかはOFF側にします。DIPスイッチに印刷された数字が読める向きにしたとき、一番左が最も下の桁です。[DIPスイッチの設定](../connections/network-and-dip-switch.md#dip-switch)をご覧ください。
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/10/step400-dipSw.jpg)
+![](https://ponoor.com/cms/wp-content/uploads/2020/10/step400-dipSw.jpg)  
+DIPスイッチを1にした状態です（STEP400）。
 
 DIPスイッチが1で、初期設定のとき、ボードのネットワーク設定は次のとおりです。IDは、ボードのIPアドレスと送信ポートに加算されます。
 
@@ -139,7 +140,7 @@ PCを替えたときやネットワークを変えたときは、`/setDestIp`を
 
 ## KVALの調整 {#kval}
 
-電圧モードでのモータの駆動電圧は、電源電圧に対する割合として、KVALで設定します。低すぎても高すぎても、モータはきれいに回りません。KVALは、停止中、一定速度、加速中、減速中の4つの値に分かれています。[KVALとTVAL](../guides/voltage-and-current-mode.md#kval-tval)をご覧ください。初期値と範囲は、[`/setKval`](../reference/voltage-and-current-mode-settings.md#setkval)のリファレンスにあります。
+電圧モードでのモータの駆動電圧は、電源電圧に対する割合として、KVALで設定します。KVALが0なら電圧がかからず（モータは回りません）、最大値ならほぼ電源電圧がそのままかかります。低すぎても高すぎても、モータはきれいに回りません。KVALは、停止中、一定速度、加速中、減速中の4つの値に分かれています。[KVALとTVAL](../guides/voltage-and-current-mode.md#kval-tval)をご覧ください。初期値と範囲は、[`/setKval`](../reference/voltage-and-current-mode-settings.md#setkval)のリファレンスにあります。
 
 もう一度、モータを回します。
 

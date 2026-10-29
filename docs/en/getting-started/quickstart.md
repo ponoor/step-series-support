@@ -61,7 +61,8 @@ This page uses the default settings, so leave the microSD card slot empty. When 
 
 Set the DIP switch to 1: slide only the leftmost switch to the ON side, and the others to the OFF side. With the board turned so that the digits printed on the DIP switch can be read, the leftmost switch is the lowest digit. See [DIP switch settings](../connections/network-and-dip-switch.md#dip-switch).
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/10/step400-dipSw.jpg)
+![](https://ponoor.com/cms/wp-content/uploads/2020/10/step400-dipSw.jpg)  
+The DIP switch set to 1 (STEP400).
 
 With the DIP switch at 1 and the initial settings, the network settings of the board are as follows. The ID is added to the IP address of the board and to the sending port.
 
@@ -139,7 +140,7 @@ The motor may turn roughly: with a lot of vibration and noise. This is because t
 
 ## Adjusting KVAL {#kval}
 
-The drive voltage of the motor in voltage mode is set with KVAL, as a fraction of the supply voltage. Too low or too high a value makes the motor turn roughly. KVAL has four values, for holding, running, accelerating and decelerating; see [KVAL and TVAL](../guides/voltage-and-current-mode.md#kval-tval). The initial values and the range are in the [`/setKval`](../reference/voltage-and-current-mode-settings.md#setkval) reference.
+The drive voltage of the motor in voltage mode is set with KVAL, as a fraction of the supply voltage: a KVAL of 0 applies no voltage (the motor cannot move) and the largest value applies almost the whole supply voltage. Too low or too high a value makes the motor turn roughly. KVAL has four values, for holding, running, accelerating and decelerating; see [KVAL and TVAL](../guides/voltage-and-current-mode.md#kval-tval). The initial values and the range are in the [`/setKval`](../reference/voltage-and-current-mode-settings.md#setkval) reference.
 
 Turn the motor again:
 
