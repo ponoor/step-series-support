@@ -24,7 +24,7 @@ The board reads the card only when it starts. It reads the file in this order, a
 
 The details are in [The file that the board reads](microsd-card.md#files). From v2.2.0, a file that is not accepted is not applied at all: the board uses the default values, as when there is no card.
 
-To know what the board read, send [`/getConfigName`](../reference/system-settings.md#getconfigname) (the reply `/configName` has the name of the configuration, whether the card and the file were read, and the file name), or look at the USB serial output ([Diagnosis via USB serial port](../maintenance/usb-serial-diagnosis.md)).
+To know what the board read, send [`/getConfigName`](../reference/system-settings.md#getconfigname) (the reply `/configName` has the name of the configuration, whether the card and the file were read, and the path of the file, which starts with `/`), or look at the USB serial output ([Diagnosis via USB serial port](../maintenance/usb-serial-diagnosis.md)).
 
 ## Running values and saved values {#saved-values}
 

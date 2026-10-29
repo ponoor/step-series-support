@@ -639,6 +639,33 @@ class RealDocsTest(unittest.TestCase):
         self.assertEqual(code, 0, text)
 
 
+class SettingsValuesInRangeTest(unittest.TestCase):
+    """The `values` of a configuration item are in the "Range / Unit" cell, per board."""
+
+    def page(self, lang: str) -> str:
+        return generate.page_settings(generate.Ctx(SPEC, lang, "both", Counter(), []))
+
+    def test_slew_rate_values_per_board_in_both_languages(self):
+        for lang in ("en", "ja"):
+            row = [l for l in self.page(lang).splitlines() if "`slewRate`" in l][0]
+            self.assertIn("STEP400: 0: 114V/us, 1: 220V/us, 2: 400V/us, 3: 520V/us, 4: 790V/us, 5: 980V/us", row)
+            self.assertIn("STEP800: 0: 180V/us, 1: 290V/us, 2: 530V/us", row)
+
+    def test_initial_value_of_a_board_uses_the_values_of_that_board(self):
+        row = [l for l in self.page("en").splitlines() if "`slewRate`" in l][0]
+        self.assertIn("STEP800: 2 (530V/us)", row)
+
+    def test_values_of_all_boards_are_one_list(self):
+        row = [l for l in self.page("en").splitlines() if "`homingDirection`" in l][0]
+        self.assertIn("1: Forward, 0: Reverse", row)
+
+    def test_settings_values_marker_has_the_same_cell(self):
+        ctx = generate.Ctx(SPEC, "en", "both", Counter(), [])
+        ctx.rel_from = Path("connections")
+        text = generate.expand_text("<!-- osc-settings-values: driverSettings.slewRate -->\n", ctx, Path("en/connections/x.md"))
+        self.assertIn("STEP800: 0: 180V/us, 1: 290V/us, 2: 530V/us", text)
+
+
 if __name__ == "__main__":
     unittest.main()
 

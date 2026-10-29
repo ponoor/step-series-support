@@ -74,8 +74,8 @@ settings:
     default: [0, 0]
     template: [1, 2]
     description:
-      en: Version number of the Config Tool. Unable to modify.
-      ja: Config Toolsのバージョン番号で、変更できません。
+      en: Version of the configuration file format. A `.json` file without it is not accepted (`config.txt` is accepted without it). Unable to modify.
+      ja: 設定ファイルの形式のバージョンです。これがない`.json`ファイルは受け付けられません（`config.txt`は、これがなくても受け付けられます）。変更できません。
 
   - key: information.targetProduct
     section: information
@@ -194,8 +194,14 @@ settings:
     type: bool
     default: false
     description:
-      en: In initial state, the controller does not send OSC response until receiving `/setDestIp`. However if this check box is checked, the controller will sends out OSC message immediately after boot up.
-      ja: 初期状態では`/setDestIp`を受信するまではOSCメッセージの送信を行わないようになっていますが、このチェックボックスが入っていると、起動してすぐからOSCメッセージを送信するようにします。
+      en: |-
+        In initial state, the controller does not send OSC response until receiving `/setDestIp`. However if this check box is checked, the controller will sends out OSC message immediately after boot up.
+
+        Known issue in v2.2.0: the running board keeps "`/setDestIp` has been received" in the same value as this setting. After `/setDestIp` was received, saving the configuration ([[/saveConfig]], or saving with the browser configuration tool) writes `true` to the card. When the browser configuration tool writes `false`, the running value also becomes `false`, and the board sends no reply until `/setDestIp` is sent again. Workaround: send `/setDestIp` again after saving, and check the value in the saved file.
+      ja: |-
+        初期状態では`/setDestIp`を受信するまではOSCメッセージの送信を行わないようになっていますが、このチェックボックスが入っていると、起動してすぐからOSCメッセージを送信するようにします。
+
+        v2.2.0の既知の問題: 動作中のボードは、「`/setDestIp`を受信したか」をこの設定と同じ値で持っています。`/setDestIp`を受信した後に設定を保存する（[[/saveConfig]]、またはブラウザ設定ツールでの保存）と、カードに`true`が書かれます。ブラウザ設定ツールで`false`を書き込むと、動作中の値も`false`に戻り、`/setDestIp`を送り直すまで、ボードは返信を送りません。回避策: 保存の後に`/setDestIp`を送り直し、保存したファイルの値を確かめてください。
 
   - key: network.reportError
     section: network

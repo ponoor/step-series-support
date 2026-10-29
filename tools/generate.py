@@ -961,10 +961,27 @@ def _setting_label(ctx: Ctx, s: dict) -> str:
     return label
 
 
+def _values_text(ctx: Ctx, values: list[dict]) -> str:
+    """`0: 114V/us, 1: 220V/us` (the same form as the values of an argument in the difference page)."""
+    return ", ".join(f"{fmt(v['value'])}: {ctx.item_text(v, 'value')}" for v in values)
+
+
 def _setting_range(ctx: Ctx, s: dict) -> str:
-    if not (s.get("range") or s.get("unit")):
-        return ""
-    return range_text(ctx, {"range": s.get("range"), "unit": s.get("unit")}, True)
+    """Range, unit and the values of a configuration item (the `changes` of a value are not shown)."""
+    spec = ctx.spec
+    text = range_text(ctx, {"range": s.get("range"), "unit": s.get("unit")}, True) if (s.get("range") or s.get("unit")) else ""
+    values = s.get("values")
+    if not values:
+        return text
+    if spec.is_board_map(values):
+        texts = {b: _values_text(ctx, values[b]) for b in spec.board_names if b in values}
+        if len(set(texts.values())) == 1 and len(texts) == len(spec.board_names):
+            vtext = next(iter(texts.values()))
+        else:
+            vtext = "; ".join(f"{b}: {t}" for b, t in texts.items())
+    else:
+        vtext = _values_text(ctx, values)
+    return f"{text}<br>{vtext}" if text else vtext
 
 
 def _setting_initial(ctx: Ctx, s: dict) -> str:
@@ -1000,12 +1017,9 @@ def _setting_value(ctx: Ctx, s: dict, v: Any, board: str) -> str:
         return f"{text}{ctx.paren(current)}"
     values = s.get("values")
     if values:
-        # board-specific values: the caller does not know the board; look in every variant
-        lists = list(values.values()) if spec.is_board_map(values) else [values]
-        for lst in lists:
-            for it in lst:
-                if it["value"] == v and it.get("en"):
-                    return f"{text}{ctx.paren(it.get(ctx.lang) or it['en'])}"
+        for it in values_for_board(spec, values, board):
+            if it["value"] == v and it.get("en"):
+                return f"{text}{ctx.paren(it.get(ctx.lang) or it['en'])}"
     return text
 
 

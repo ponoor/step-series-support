@@ -14,7 +14,7 @@ lang: ja
 | キー | 名称 | 型 | 初期値 | 範囲 / 単位 | コマンド | 説明 |
 | --- | --- | --- | --- | --- | --- | --- |
 | <a id="information-configname"></a>`configName` | Configuration name | string | Default（ファームウェア）、""（テンプレート） |  | [`/setConfigName`](../reference/system-settings.md#setconfigname) | 設定ファイルの名称で、自由に設定できます。 |
-| <a id="information-configversion"></a>`configVersion` | Configuration version | version | 0.0（ファームウェア）、1.2（テンプレート） |  |  | Config Toolsのバージョン番号で、変更できません。 |
+| <a id="information-configversion"></a>`configVersion` | Configuration version | version | 0.0（ファームウェア）、1.2（テンプレート） |  |  | 設定ファイルの形式のバージョンです。これがない`.json`ファイルは受け付けられません（`config.txt`は、これがなくても受け付けられます）。変更できません。 |
 | <a id="information-targetproduct"></a>`targetProduct` | Target product | string | STEP400: ---（ファームウェア）、STEP400（テンプレート）; STEP800: ---（ファームウェア）、STEP800（テンプレート） |  |  | 設定ファイルの対象機種名で、変更できません。 |
 
 ## network {#network}
@@ -33,7 +33,7 @@ lang: ja
 | <a id="network-mac"></a>`mac` | MAC address | mac | STEP400: 60:95:CE:10:06:00（ファームウェア）、60:95:CE:10:02:00（テンプレート）; STEP800: 60:95:CE:10:06:00（ファームウェア）、60:95:CE:10:03:00（テンプレート） |  |  | `Hex`チェックボックスで、16進数表示と10進数表示を切替できます。 |
 | <a id="network-ismacaddid"></a>`isMacAddId` | ID adds to MAC address | bool | true |  |  | このチェックボックスが入っていると、MACアドレスの最終バイトにIDが加算されます。 |
 | <a id="network-bootedmsgenable"></a>`bootedMsgEnable` | Booted message enable | bool | true |  |  | 起動時にイーサネットがリンクすると自動で送られる[`/booted`](../reference/automatically-sent-messages.md#booted)メッセージの有効無効を切り替えます。 |
-| <a id="network-cansendmsgbeforedestip"></a>`canSendMsgBeforeDestIp` | Allow OSC reply before /setDestIp | bool | false |  |  | 初期状態では`/setDestIp`を受信するまではOSCメッセージの送信を行わないようになっていますが、このチェックボックスが入っていると、起動してすぐからOSCメッセージを送信するようにします。 |
+| <a id="network-cansendmsgbeforedestip"></a>`canSendMsgBeforeDestIp` | Allow OSC reply before /setDestIp | bool | false |  |  | 初期状態では`/setDestIp`を受信するまではOSCメッセージの送信を行わないようになっていますが、このチェックボックスが入っていると、起動してすぐからOSCメッセージを送信するようにします。v2.2.0の既知の問題: 動作中のボードは、「`/setDestIp`を受信したか」をこの設定と同じ値で持っています。`/setDestIp`を受信した後に設定を保存する（[`/saveConfig`](../reference/system-settings.md#saveconfig)、またはブラウザ設定ツールでの保存）と、カードに`true`が書かれます。ブラウザ設定ツールで`false`を書き込むと、動作中の値も`false`に戻り、`/setDestIp`を送り直すまで、ボードは返信を送りません。回避策: 保存の後に`/setDestIp`を送り直し、保存したファイルの値を確かめてください。 |
 | <a id="network-reporterror"></a>`reportError` | Report errors | bool | true |  | [`/reportError`](../reference/system-settings.md#reporterror) |  |
 
 ## alarmAndReport {#alarmandreport}
@@ -60,7 +60,7 @@ lang: ja
 | キー | 名称 | 型 | 初期値 | 範囲 / 単位 | コマンド | 説明 |
 | --- | --- | --- | --- | --- | --- | --- |
 | <a id="driversettings-homingatstartup"></a>`homingAtStartup` | Homing when the system starts（モータごと） | bool | false |  |  | このチェックボックスが入っていると、起動すると直ちに原点復帰動作を行います。電磁ブレーキが有効なときは、[`/activate`](../reference/brake.md#activate)と同じようにブレーキを先に解放し、解放が終わってから原点復帰を始めます。**v2.2.0**: 電磁ブレーキが有効なときは、[`/activate`](../reference/brake.md#activate)と同じようにブレーキを先に解放し、解放が終わってから原点復帰を始めます。以前は、ブレーキが保持されたままだったため原点復帰が失敗し、原点復帰のタイムアウトで無励磁のモータに即停止が送られていました。 |
-| <a id="driversettings-homingdirection"></a>`homingDirection` | Homing Direction（モータごと） | int | 0（逆転方向） |  | [`/setHomingDirection`](../reference/homing.md#sethomingdirection) |  |
+| <a id="driversettings-homingdirection"></a>`homingDirection` | Homing Direction（モータごと） | int | 0（逆転方向） | 1: 正転方向, 0: 逆転方向 | [`/setHomingDirection`](../reference/homing.md#sethomingdirection) |  |
 | <a id="driversettings-homingspeed"></a>`homingSpeed` | Homing Speed（モータごと） | float | 50 | step/s | [`/setHomingSpeed`](../reference/homing.md#sethomingspeed) |  |
 | <a id="driversettings-homeswmode"></a>`homeSwMode` | Home switch won't cause HardStop（モータごと） | bool | true |  | [`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode) |  |
 | <a id="driversettings-prohibitmotiononhomesw"></a>`prohibitMotionOnHomeSw` | Prohibit motions on HomeSw（モータごと） | bool | false |  | [`/setProhibitMotionOnHomeSw`](../reference/alarm-settings.md#setprohibitmotiononhomesw) |  |
@@ -70,7 +70,7 @@ lang: ja
 | <a id="driversettings-releaseswtimeout"></a>`releaseSwTimeout` | releaseSw timeout duration（モータごと） | int | 10000 | ms | [`/setReleaseSwTimeout`](../reference/homing.md#setreleaseswtimeout) |  |
 | <a id="driversettings-stepmode"></a>`stepMode` | Microstepping mode（モータごと） | int | 7 |  | [`/setMicrostepMode`](../reference/motor-driver-settings.md#setmicrostepmode) |  |
 | <a id="driversettings-iscurrentmode"></a>`isCurrentMode` | Current mode（モータごと）（STEP400のみ） | bool | false |  | [`/setVoltageMode`](../reference/voltage-and-current-mode-settings.md#setvoltagemode), [`/setCurrentMode`](../reference/voltage-and-current-mode-settings.md#setcurrentmode) |  |
-| <a id="driversettings-slewrate"></a>`slewRate` | Slew rate（モータごと） | int | STEP400: 5（980V/us）; STEP800: 2（400V/us） | 0-5（STEP400）、0-2（STEP800） |  | モータドライバから出力されるモータ制御電流のスリューレート（立ち上がりの鋭さ）をSTEP400では6段階、STEP800では3段階で指定します。設定ファイルの範囲外の値は拒否されず、範囲内に制限されます（負の値は0、大きい値は最大の値になります）。 |
+| <a id="driversettings-slewrate"></a>`slewRate` | Slew rate（モータごと） | int | STEP400: 5（980V/us）; STEP800: 2（530V/us） | 0-5（STEP400）、0-2（STEP800）<br>STEP400: 0: 114V/us, 1: 220V/us, 2: 400V/us, 3: 520V/us, 4: 790V/us, 5: 980V/us; STEP800: 0: 180V/us, 1: 290V/us, 2: 530V/us |  | モータドライバから出力されるモータ制御電流のスリューレート（立ち上がりの鋭さ）をSTEP400では6段階、STEP800では3段階で指定します。設定ファイルの範囲外の値は拒否されず、範囲内に制限されます（負の値は0、大きい値は最大の値になります）。 |
 | <a id="driversettings-electromagnetbrakeenable"></a>`electromagnetBrakeEnable` | Electromagnetic brake enable（モータごと） | bool | false |  | [`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake) |  |
 | <a id="driversettings-braketransitionduration"></a>`brakeTransitionDuration` | Brake transition duration（モータごと） | int | 100 | 0-65535 ms | [`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration) | 電磁ブレーキの解放や保持を待つ時間です。[`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration)を参照してください。設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。範囲外の値は、最大値の次を0として数え直した値になります（65536は0、65537は1、-1は65535になります）。[`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration)はこのような値を`CommandIgnored`で拒否します。 |
 

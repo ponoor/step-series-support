@@ -24,7 +24,7 @@ title: 設定の仕組み
 
 詳しくは[ボードが読むファイル](microsd-card.md#files)をご覧ください。v2.2.0からは、受け付けなかったファイルの値は、まったく適用しません。カードがないときと同じように、初期値を使います。
 
-ボードが何を読んだかは、[`/getConfigName`](../reference/system-settings.md#getconfigname)を送ると分かります。返信の`/configName`には、設定名、カードとファイルを読めたか、ファイル名が入っています。USBシリアルの出力でも確かめられます（[USBシリアル診断](../maintenance/usb-serial-diagnosis.md)）。
+ボードが何を読んだかは、[`/getConfigName`](../reference/system-settings.md#getconfigname)を送ると分かります。返信の`/configName`には、設定名、カードとファイルを読めたか、ファイルのパス（先頭に`/`が付きます）が入っています。USBシリアルの出力でも確かめられます（[USBシリアル診断](../maintenance/usb-serial-diagnosis.md)）。
 
 ## 動いている値と保存された値 {#saved-values}
 
