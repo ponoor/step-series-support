@@ -17,12 +17,24 @@ title: トラブルシューティング
 - **IPアドレス、サブネット、ポートが違う。** ボードとPCは、同じネットワークにある必要があります。DIPスイッチのIDは、IPアドレスと送信ポートに加算されるので、PCは、IDを加算したポートで受信する必要があります。結果が範囲を超えるときは、ボードはIDを加算せず、USBシリアルに警告を表示します。[ネットワークとDIPスイッチ](../connections/network-and-dip-switch.md#adding-id)をご覧ください。
 - **PCのファイアウォールがメッセージを止めている。**
 - USBで`s`を送り、`Ethernet link status`、`isDestIpSet`、`Destination Ip`を確認してください（[Ethernet](usb-serial-diagnosis.md#status-ethernet)）。
+- **ボードを再起動した直後である**（観察）。再起動の約0.1s後に送った`/setDestIp`は、無視されることがあります。少し待ってから送り直してください。再起動の後の最初のOSCコマンドには、ボードがMACアドレスを解決している間、返信がないことがあります（[MACアドレスの解決](../guides/communication-and-messages.md#arp)をご覧ください）。もう一度送ってください。
+- **ボードが設定を保存している。** ボードが保存している間（約0.1sから0.7s）に届いたOSCメッセージは失われます。[保存の間](../connections/how-settings-work.md#saving)をご覧ください。
+- **設定を保存した。** 次の項目をご覧ください。
 
 ### PCを替えたら返信が届かなくなった（ファームウェアv2.1.0まで） {#pc-replaced}
 
 v2.1.0までのファームウェアでは、同じIPアドレスの別のPC（または別のネットワークアダプタ）に替えると、ボードは古いPCのMACアドレスに送り続けます。コマンドは効きますが、返信もレポートも届かず、`/setDestIp`を送っても直りません。ボードを再起動するか、別のIPアドレスから先に`/setDestIp`を送ってから、元のIPアドレスで送り直してください。
 
 v2.2.0では、新しいPCから`/setDestIp`を送ります。古いPCの最後のパケットから、1.5s以上あけてください。[`/setDestIp`を送るとき](../guides/communication-and-messages.md#when)をご覧ください。
+
+### 設定を保存したら返信が止まった、または最初から送ってくる {#after-save}
+
+v2.2.0では、設定`canSendMsgBeforeDestIp`は、「`/setDestIp`を受信したか」と同じ値です。
+
+- `/setDestIp`を受信したあとに設定を保存する（`/saveConfig`、またはブラウザ設定ツールの**Save to SD**）と、保存したファイルに`true`が書かれます。次の起動から、ボードは`/setDestIp`を受信する前からメッセージを送ります。
+- ツールで`false`を書き込むと、動作中の値も`false`に戻り、`/setDestIp`を送り直すまで、ボードは返信を送りません。
+
+保存したあとは`/setDestIp`を送り直し、保存したファイルの値を確かめてください。[`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip)と[動作中の値と保存した値](../connections/how-settings-work.md#saved-values)をご覧ください。
 
 ## 設定とカード {#settings}
 

@@ -36,6 +36,8 @@ title: 設定の仕組み
 
 ボードが次の起動で読む値は、保存したファイルの値です。保存したあとに変えた値は入っていません。
 
+**v2.2.0の既知の問題:** 設定`canSendMsgBeforeDestIp`は、「`/setDestIp`を受信したか」と同じ値を共有しています。`/setDestIp`のあとに[`/saveConfig`](../reference/system-settings.md#saveconfig)やツールで保存すると、ファイルに`true`が書かれます。ツールで`false`を書き込んだあとは`/setDestIp`を送り直し、保存したファイルを確かめてください。[`network.canSendMsgBeforeDestIp`](configuration-items.md#network-cansendmsgbeforedestip)をご覧ください。
+
 ## 変更が効くとき {#when}
 
 **OSCコマンド**は、すぐに効きます。コマンドによっては、モータが無励磁のときだけなど、使える状態が決まっています。各コマンドの条件は[リファレンス](../reference/index.md)にあります。

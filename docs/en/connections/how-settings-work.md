@@ -36,6 +36,8 @@ The board keeps the settings in its memory while it runs. A value that you chang
 
 The values that the board reads from the card at the next start are the values in the saved file. What you changed after the save is not in it.
 
+**Known issue in v2.2.0:** the setting `canSendMsgBeforeDestIp` shares its value with "`/setDestIp` has been received". If you save with [`/saveConfig`](../reference/system-settings.md#saveconfig) or the tool after `/setDestIp`, the file gets `true`. Send `/setDestIp` again after writing `false` with the tool, and check the saved file. See [`network.canSendMsgBeforeDestIp`](configuration-items.md#network-cansendmsgbeforedestip).
+
 ## When a change takes effect {#when}
 
 **OSC commands** take effect at once. Some commands can be used only in some states, for example only when the motor is HiZ. The condition of each command is in the [reference](../reference/index.md).

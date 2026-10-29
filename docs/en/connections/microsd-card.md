@@ -52,6 +52,8 @@ To see what the board read, use [`/getConfigName`](../reference/system-settings.
 
 The board writes the settings to a hidden temporary file `.<name>.tmp` in the same folder, and replaces the saved file with it only after it has been written and closed. If the writing fails, the saved file stays as it was.
 
+**Known issue in v2.2.0:** if the board started without a configuration file (no card, or no valid file) and you save, the board has no version and product to write. The file gets `information.configVersion` `[-1, 0]` and `information.targetProduct` `"---"`. The values are saved, and the board reads the file at the next start, but the diagnosis shows the configuration version -1.0 and "Config and product match" as false. To get a file with the right version and product, make it with the [browser configuration tool](browser-config-tool.md) (**Download JSON**). The saving also writes `canSendMsgBeforeDestIp` wrongly in some cases; see [`network.canSendMsgBeforeDestIp`](configuration-items.md#network-cansendmsgbeforedestip).
+
 The saving stops the processing of the board for a short time. Stop the motors before you save; see [While the board saves](how-settings-work.md#saving).
 
 ### Errors {#errors}
@@ -67,9 +69,14 @@ The OSC command `/saveConfig` replies `/error/saveConfig` with the same texts. I
 
 With the USB serial command `F<path>` you can change the file that the board saves to, until the next restart. The board accepts any name that starts with `/`, ends with `.json` or `.txt`, and has at most 63 characters.
 
+The board does not refuse a longer name: **a name of 64 bytes or more is cut to 63 bytes without an error** (v2.2.0), and the file is saved under the cut name.
+
 **At the start the board reads only `config.txt` and the `*.json` files in the root folder.** A configuration that you save as `/foo.txt` or in a subfolder is not read at the next start. The browser configuration tool warns you in this case.
 
 ## Making a configuration file {#making}
+
+!!! warning "The firmware does not check the range of some values of a file"
+    The range check is made when you send an OSC command, and by the [browser configuration tool](browser-config-tool.md). **When the board reads a configuration file, it does not check the range of some values.** The most important is **TVAL**: the OSC commands limit it to 64 (about 5 A), but in a file it is not limited. A value up to 127 is written to the driver as it is, and a large current (about 10 A for 127 on the STEP400) can flow in the motor and the driver. The overcurrent threshold and the stall threshold are not checked either, so a value out of the range gives a different threshold from what you intend. Keep every value in the range of [Configuration items](configuration-items.md). The same applies to the settings sent with the USB serial command `{`.
 
 - With the [browser configuration tool](browser-config-tool.md): read the settings from the board over USB, or start from a file, edit the values, and save to the card or download the file.
 - From the examples: configuration files for some motors are in the [configGenerator folder](https://github.com/ponoor/step-series-support/tree/main/configGenerator) of the repository; see [Example parameter values for example steppers](example-parameters.md).
