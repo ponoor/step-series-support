@@ -14,7 +14,7 @@ title: ブラウザ設定ツール
 
 ## 必要なもの {#requirements}
 
-- Google ChromeまたはMicrosoft Edge（Web Serial APIが必要です）。FirefoxとSafariでは、シリアルの機能は使えず、**Load JSON**と**Download JSON**だけが使えます。
+- Google ChromeまたはMicrosoft Edge（Web Serial APIが必要です）。Firefox 151以降にはWeb Serial APIがあり、動くはずですが、ボードでは確かめていません。SafariにはWeb Serial APIがありません。ツールはバナーを表示し、**Load JSON**と**Download JSON**だけが使えます。
 - パソコンとボードをつなぐUSBケーブル（充電専用ではなく、データ通信ができるもの）。
 - ボードのファームウェアがv2.1.0以降であること。
 - カードに保存するときは、ボードに入れたmicroSDカード。[microSDカードでの設定](microsd-card.md)をご覧ください。
@@ -29,6 +29,14 @@ title: ブラウザ設定ツール
 
 接続にカードは要りません。保存するときに必要です。
 
+### USBケーブルを抜いたとき {#disconnected}
+
+ツールは、"Serial connection lost"のバナーを表示します。USBケーブルを挿し直してから、**Reconnect**をクリックします。ツールは、ボードが戻るのを最大3s待ち（"Waiting for the board to come back…"）、設定を読み直して表示します。つながらないときは、**Connect**をクリックしてください。前と違うボードにつながったときは、ツールが知らせます。
+
+保存している途中でケーブルを抜いたときは、ボードが設定を保存したかどうか、ツールには分かりません。つなぎ直して、**Read from Board**で設定を確かめてください。
+
+**Disconnect**では、このバナーは出ません。
+
 ## 設定の読み込みと編集 {#editing}
 
 設定は、開け閉めできるパネルに並んでいます。**Board Info**、**Network**、**Alarm & Report**、**Driver Settings**、**Speed Profile**、**Voltage Mode**、**Current Mode (PowerSTEP01)**、**Servo Mode**です。モータごとの設定は、モータ1つにつき1列で並びます。**Copy Motor 1 → All**は、モータ1の値を、パネルの中のほかのモータにコピーします。
@@ -38,7 +46,11 @@ title: ブラウザ設定ツール
 - 過電流とストールの閾値とTVALは、電流を併記して表示します。刻みはSTEP400とSTEP800で異なります（[アラームと保護](../guides/alarms-and-protection.md#thresholds)をご覧ください）。TVALは64（約5A）まで選べます。
 - スルーレートは、STEP400では6段階、STEP800では3段階です。
 - MACアドレスは10進数で表示します。**Show Hex**で、16進数の表示に切り替えられます。
+- **Read from Board**が表示するのは、ボードのメモリにある設定です。**Save to SD**が書く値と同じです（[動作中の値と保存した値](how-settings-work.md#saved-values)をご覧ください）。保存した値と、起動してからOSCコマンドで変えた分が含まれます。IPアドレス、ポート、MACアドレスは、設定された値で、ボードがいま使っているアドレスではありません。動作中の状態（位置、速度など）は含まれません。**Start Status**かOSCメッセージを使ってください。
 - ツールは、空の値、数値でない値、範囲外の値を受け付けず、保存とダウンロードを拒否します。設定名に`{`か`}`があるときと、設定が大きすぎて送れないとき（4095バイトを超えるとき）も拒否します。最後の場合は、**Download JSON**で保存して、ファイルをカードにコピーしてください。
+
+!!! note "手で書いた設定ファイル"
+    ツールは、範囲外の値を送りません。手で書いたファイルは違います。ファイルの値には、ファームウェアが範囲を検査しないものがあります。手でファイルを書く前に、[警告](microsd-card.md#making)をご覧ください。
 
 ツールで値を変えても、動いているボードは変わりません。値は、保存するときに適用されます。保存したあとも、IPアドレス、ポート、MACアドレス、ボードがドライバに書く設定は、再起動しないと効きません。[変更が効くとき](how-settings-work.md#when)をご覧ください。
 
@@ -46,7 +58,11 @@ title: ブラウザ設定ツール
 
 ### Save to SD {#save-to-sd}
 
-**Save to SD**は、値をボードに送ります。ボードは、値をメモリに適用して、カードに書きます（[`/saveConfig`](../reference/system-settings.md#saveconfig)と同じ処理です）。**保存の間、ボードは約0.1sから0.7sの間、処理を止めます。先にモータを止めてください。** ツールは、ボタンの横にこの注意を表示します。
+**Save to SD**は、値をボードに送ります。ボードは、値をメモリに適用して、カードに書きます（[`/saveConfig`](../reference/system-settings.md#saveconfig)と同じ処理です）。**保存の間、ボードは約0.1sから0.7sの間、処理を止めます。先にモータを止めてください。** ツールは、ボタンの横にこの注意を表示します。この間に届いたOSCメッセージは失われます。
+
+### `canSendMsgBeforeDestIp`の既知の問題 {#known-issue}
+
+ファームウェアv2.2.0では、ツールで保存すると、設定[`network.canSendMsgBeforeDestIp`](configuration-items.md#network-cansendmsgbeforedestip)が変わることがあります。OSCを使っていて`/setDestIp`を送ってあると、保存したファイルに`true`が書かれます。また、ツールが`false`を書き込むと、ボードは`/setDestIp`をもう一度受け取るまで、返信を送りません。保存したあとは、`/setDestIp`を送り直してください。詳しくは[設定項目](configuration-items.md#network-cansendmsgbeforedestip)をご覧ください。
 
 保存に失敗したときは、ツールが、ボードの返信を、考えられる原因とともに表示します。`No SD card`と`SD open failed`の原因は、[エラー](microsd-card.md#errors)にあります。
 
@@ -61,7 +77,9 @@ title: ブラウザ設定ツール
 
 ### 保存のあと {#after-saving}
 
-保存に成功すると、ツールは、ボードをいま再起動するかどうかを尋ねます。再起動を選ぶと、ボードが再起動し、ツールは接続を閉じます。**Connect**をもう一度クリックしてください。あとから**Reboot**で再起動することもできます。保存していない変更は消えます。
+保存に成功すると、ツールは、ボードをいま再起動するかどうかを尋ねます。再起動を選ぶと、ボードが再起動し、ツールは接続を閉じます。**Connect**をもう一度クリックしてください。ボードは、再起動してから約1.5sでUSBに戻ります（実測）。あとから**Reboot**で再起動することもできます。保存していない変更は消えます。
+
+回転中のモータがあれば、ボードは、モータを止めてブレーキを掛けてから再起動します（[再起動、ウォッチドッグ、CPU動作異常](../guides/electromagnetic-brake.md#restart)をご覧ください）。それでも、先にモータを止めてください。
 
 ### Download JSON {#download}
 
@@ -82,7 +100,7 @@ title: ブラウザ設定ツール
 
 **Start Status**をクリックすると、**Real-time Status**に、ボードとモータの状態が表示されます。クリックしてから、ツールは1秒ごとにボードに問い合わせます（自動では始まりません）。製品、IPアドレス、Ethernetのリンク、カード、設定、そして、モータごとに、位置、速度、BUSYかどうか、無励磁かどうか、回転方向、モータの状態、過熱の状態、UVLO、HOMEスイッチ、原点復帰の状態、サーボモードが表示されます。
 
-- **OCD**と**Stall**は"not reported"と表示されます。USBシリアルの状態の出力には、これらが含まれないためです。OSCメッセージの`/overCurrent`と`/stall`を使ってください（[アラームと保護](../guides/alarms-and-protection.md#timing)）。
+- **OCD**と**Stall**は"not reported"と表示されます。ファームウェアv2.2.0では、USBシリアルの状態の出力が、これらについて常にfalseを送るため、ツールは状態として表示しません。OSCメッセージの`/overCurrent`と`/stall`を使ってください（[アラームと保護](../guides/alarms-and-protection.md#timing)）。
 - LIMITスイッチの状態は表示されません。
 
 ## ファームウェアのバージョン {#versions}
@@ -98,7 +116,7 @@ title: ブラウザ設定ツール
 
 ### Connectボタンが押せない {#no-connect-button}
 
-お使いのブラウザがWeb Serial APIに対応していません。Google ChromeまたはMicrosoft Edgeを使ってください。
+お使いのブラウザがWeb Serial APIに対応していません（たとえばSafari）。Google ChromeまたはMicrosoft Edgeを使ってください。
 
 ### シリアルポートの一覧にボードが出ない {#port-not-listed}
 
@@ -109,7 +127,7 @@ title: ブラウザ設定ツール
 
 ### ツールに思っていない値が表示される {#unexpected-values}
 
-ツールが読むのは、ボードの動いている設定です。起動したあとにOSCコマンドでボードを変えていると、カードのファイルとは異なることがあります。動いている値を残すには、**Save to SD**を使ってください。
+ツールが読むのは、ボードのメモリにある設定です。起動したあとにOSCコマンドでボードを変えていると、カードのファイルとは異なることがあります。この値を残すには、**Save to SD**を使ってください。
 
 ### 保存しても設定が変わらない {#not-applied}
 
@@ -120,6 +138,10 @@ IPアドレス、ポート、MACアドレス、ボードがドライバに書く
 - ボードにmicroSDカードが入っていること、ボードが起動したときにも入っていたことを確認してください。
 - カードがFAT16またはFAT32であること（exFATは使えません）、書き込み禁止になっていないことを確認してください。
 - `No SD card`と`SD open failed`のメッセージについては、[エラー](microsd-card.md#errors)をご覧ください。
+
+### 問い合わせるとき {#console}
+
+ブラウザのコンソール（開発者ツール）に、ツールの動きが表示されます。`[serial]`で始まる行は、ツール自身の記録で、時刻が付いています。`[board]`で始まる行は、ボードが送ってきた文です。問題を問い合わせるときは、`[serial]`の行を添えてください。
 
 ## 古いファームウェア {#legacy}
 
