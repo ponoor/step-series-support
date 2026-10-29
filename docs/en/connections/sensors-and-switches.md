@@ -49,7 +49,7 @@ The firmware and the driver respond when the switch turns on, that is, when the 
 ### Which switch to use {#switches}
 
 - **A switch with a normally open (NO) contact** is the simplest. Connect the NO contact between pin 1 and pin 2. The input is HIGH normally and goes LOW when the switch is operated.
-- **A switch with a normally closed (NC) contact** has the opposite behavior. The input is LOW normally, so the board sees the switch as on while the mechanism is away from the switch, and the input goes HIGH when the switch is operated. Do not use the NC contact. If the switch has a changeover contact, use the NO terminal and the common terminal.
+- **A switch with a normally closed (NC) contact** has the opposite behavior. The input is LOW normally, so the board sees the switch as on while the mechanism is away from the switch, and the input goes HIGH when the switch is operated. The board responds when the input falls, so the NC contact cannot be used as it is for homing. If the switch has a changeover contact, use the NO terminal and the common terminal.
 - **A sensor** needs an output that goes to 0 V when the sensor is on. Connect the output to pin 2, the ground of the sensor to pin 1, and the power of the sensor to pin 3 (5 V).
 
 The settings `/setHomeSwMode` and `/setLimitSwMode` do not invert the signal; they only choose what the board does when the switch is on.
@@ -62,7 +62,7 @@ The connection of the photo interrupter [EE-SX671A](http://www.ia.omron.com/prod
 
 | Pin number | Function | Sensor pin |
 | --- | --- | --- |
-| 1 | GND | - |
+| 1 | GND | − (0 V) |
 | 2 | Switch or sensor input | OUT |
 | 3 | 5 V output | + |
 
