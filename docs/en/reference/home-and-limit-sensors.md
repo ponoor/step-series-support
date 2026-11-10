@@ -6,7 +6,7 @@ title: HOME and LIMIT switches
 
 For how the HOME and LIMIT switches are used in homing, see [Homing and position](../guides/homing-and-position.md).
 
-## Status report
+## Status report {#status-report}
 
 <!-- osc: /enableHomeSwReport -->
 <!-- generated:begin osc /enableHomeSwReport -->
@@ -272,7 +272,7 @@ Available on STEP400 only.
 | 0 | Reverse |
 <!-- generated:end osc /getLimitSw -->
 
-## Response settings
+## Response settings {#response-settings}
 
 <!-- osc: /setHomeSwMode -->
 <!-- generated:begin osc /setHomeSwMode -->

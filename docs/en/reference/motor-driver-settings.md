@@ -4,7 +4,7 @@ title: Motor driver settings
 
 # Motor driver settings
 
-## Motor driver settings
+## Motor driver settings {#motor-driver-settings-group}
 
 <!-- osc: /setMicrostepMode -->
 <!-- generated:begin osc /setMicrostepMode -->
@@ -230,7 +230,7 @@ Gets the current value of the low speed optimization threshold.
 - **v2.2.0**: The third argument `optimizationEnabled` is sent with the integer type tag `i` (0 / 1). Before, it used `T` / `F`. Clients that expect `T` / `F` must be updated.
 <!-- generated:end osc /getLowSpeedOptimizeThreshold -->
 
-## Getting the status
+## Getting the status {#getting-the-status}
 
 <!-- osc: /enableBusyReport -->
 <!-- generated:begin osc /enableBusyReport -->
@@ -691,7 +691,7 @@ An interval above 65535 replies `CommandIgnored` with the motor ID 255 and nothi
 [`/getPositionList`](position-management.md#getpositionlist), [`/setPositionReportInterval`](motor-driver-settings.md#setpositionreportinterval)
 <!-- generated:end osc /setPositionListReportInterval -->
 
-## Debug
+## Debug {#debug}
 
 <!-- osc: /getAdcVal -->
 <!-- generated:begin osc /getAdcVal -->

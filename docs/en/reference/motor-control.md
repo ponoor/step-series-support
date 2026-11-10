@@ -6,7 +6,7 @@ title: Motor control
 
 For how the motions work, see [Speed profile and motions](../guides/speed-profile-and-motions.md).
 
-## Motor movement
+## Motor movement {#motor-movement}
 
 <!-- osc: /run -->
 <!-- generated:begin osc /run -->
@@ -181,7 +181,7 @@ A position outside the range is not rejected. A position above 4,194,303 is limi
 [`/goTo`](motor-control.md#goto), [`/combine/goToDir`](motor-control.md#combine-gotodir)
 <!-- generated:end osc /goToDir -->
 
-## Stops
+## Stops {#stops}
 
 <!-- osc: /softStop -->
 <!-- generated:begin osc /softStop -->
@@ -368,7 +368,7 @@ When: While homing is in progress
 [`/combine/hardHiZ`](motor-control.md#combine-hardhiz), [`/enableElectromagnetBrake`](brake.md#enableelectromagnetbrake)
 <!-- generated:end osc /hardHiZ -->
 
-## Combined commands
+## Combined commands {#combined-commands}
 
 <!-- osc: /combine/run -->
 <!-- generated:begin osc /combine/run -->
@@ -705,7 +705,7 @@ When: While homing is in progress
 [`/hardHiZ`](motor-control.md#hardhiz)
 <!-- generated:end osc /combine/hardHiZ -->
 
-## Raw register value commands
+## Raw register value commands {#raw-register-value-commands}
 
 The following commands specify the speed with the register value of the driver IC, without unit conversion.
 

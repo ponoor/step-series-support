@@ -4,7 +4,7 @@ title: "OSCコマンドリファレンス: 共通の決まり"
 
 # OSCコマンドリファレンス: 共通の決まり
 
-## 概要
+## 概要 {#overview}
 
 すべてのコマンドの一覧表は、[コマンド一覧](command-list.md)をご覧ください。
 
@@ -23,9 +23,9 @@ OSCコマンドのモータIDは、基板に印刷してある番号と一致し
 | STEP400 | 1-4, 255 |
 | STEP800 | 1-8, 255 |
 
-## 表記
+## 表記 {#notation}
 
-### 引数の型
+### 引数の型 {#argument-types}
 
 | 表記 | 説明 |
 | --- | --- |
@@ -34,7 +34,7 @@ OSCコマンドのモータIDは、基板に印刷してある番号と一致し
 | (bool) | 論理値で、1または0の整数として送ります。値の範囲を明確にするために、boolと表記しています。 |
 | (string) | 文字列（OSC-string）です。 |
 
-### ボードから送信されるメッセージ
+### ボードから送信されるメッセージ {#messages-from-the-board}
 
 [OSCの規格](https://opensoundcontrol.stanford.edu/spec-1_0.html)では、引数の型として、整数（int32）、浮動小数点数（float32）、文字列（OSC-string）などのほかに、非標準の型として論理値のTrue / Falseなどが定められています。STEPシリーズは、論理値をTrue / Falseでは送らず、いつも0または1の整数（型タグ`i`）として送ります。v2.2.0より前は、一部のメッセージがTrue / Falseを使っていました（[移行ガイド](../maintenance/migration-guide.md)をご覧ください）。
 
@@ -62,7 +62,7 @@ OSCコマンドのモータIDは、基板に印刷してある番号と一致し
 | float32 | 1.0以上 | 1.0未満 |
 | 論理値 | True | False |
 
-### コマンドを実行可能なタイミング
+### コマンドを実行可能なタイミング {#command-executable-timing}
 
 コマンドによっては、実行できる状態が限られています。各コマンドのリファレンスに「実行可能タイミング」として表示しています。
 
@@ -89,7 +89,7 @@ OSCコマンドのモータIDは、基板に印刷してある番号と一致し
 
 条件を満たさない動作コマンドは、`BrakeEngaged`、`InServoMode`、`HomeSwActivating`、`LimitSwActivating`などのエラーで拒否されます。コマンドごとのエラーは、各コマンドのリファレンスに載せています。
 
-## 留意点
+## 留意点 {#points-to-keep-in-mind}
 
 - ボードは、[`/setDestIp`](system-settings.md#setdestip)を受信するまで、ブロードキャストの[`/booted`](automatically-sent-messages.md#booted)を除いて、OSCメッセージを送信しません。宛先に届かないメッセージを大量に送ると、ボードの挙動がおかしくなることがあるためです（設定ツールで、`/setDestIp`を待たずに送信を始めるようにもできます。[`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip)をご覧ください）。
 - ボードが宛先のMACアドレスを解決している間（`/setDestIp`の後の最大数秒）も、宛先へのメッセージは破棄されます。詳しくは、[通信とメッセージ](../guides/communication-and-messages.md)をご覧ください。

@@ -6,7 +6,7 @@ title: HOME/LIMITスイッチ
 
 原点復帰でのHOMEスイッチとLIMITスイッチの使い方は、[原点復帰と位置管理](../guides/homing-and-position.md)をご覧ください。
 
-## 状態の取得
+## 状態の取得 {#status-report}
 
 <!-- osc: /enableHomeSwReport -->
 <!-- generated:begin osc /enableHomeSwReport -->
@@ -272,7 +272,7 @@ STEP400のみ。
 | 0 | 逆転方向 |
 <!-- generated:end osc /getLimitSw -->
 
-## 反応時の動作設定
+## 反応時の動作設定 {#response-settings}
 
 <!-- osc: /setHomeSwMode -->
 <!-- generated:begin osc /setHomeSwMode -->

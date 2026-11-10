@@ -6,7 +6,7 @@ title: Voltage and current mode settings
 
 For how to decide the KVAL and TVAL values, see [Voltage and current mode](../guides/voltage-and-current-mode.md).
 
-## Voltage mode
+## Voltage mode {#voltage-mode}
 
 <!-- osc: /setVoltageMode -->
 <!-- generated:begin osc /setVoltageMode -->
@@ -330,7 +330,7 @@ On STEP400 in the current mode only the stored setting changes; [`/setVoltageMod
 [`/setKval`](voltage-and-current-mode-settings.md#setkval)
 <!-- generated:end osc /setDecKval -->
 
-## Current mode
+## Current mode {#current-mode}
 
 <!-- osc: /setCurrentMode -->
 <!-- generated:begin osc /setCurrentMode -->

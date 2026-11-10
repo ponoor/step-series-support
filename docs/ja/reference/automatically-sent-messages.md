@@ -4,11 +4,11 @@ title: 自動送信されるメッセージ
 
 # 自動送信されるメッセージ
 
-## 概要
+## 概要 {#summary}
 
 ボードから送信されるメッセージの多くは、コマンド（問い合わせ）への返信です。たとえば、モータの現在位置を取得する[`/getPosition`](position-management.md#getposition)を送ると、ボードは[`/position`](#position)を返信します。一方、いくつかのメッセージは、特定のコマンドへの返信ではなく、ボードの状態が変化したときなどに、自動的に送信されます（通知）。このページでは、自動送信されるメッセージを説明します。返信だけで送信されるメッセージは、各コマンドの「返信」の欄に載せています。
 
-## 起動の通知
+## 起動の通知 {#startup-notification}
 
 <!-- osc-message: /booted -->
 <!-- generated:begin osc-message /booted -->
@@ -51,7 +51,7 @@ Config Toolの設定を用いて、このメッセージを送信しないよう
 - **v2.2.0**: [`/resetDevice`](system-settings.md#resetdevice)によるリセットでは、`resetCause`が5（ソフトウェア）になります。
 <!-- generated:end osc-message /booted -->
 
-## エラー
+## エラー {#error}
 
 <!-- osc-message: /error/osc -->
 <!-- generated:begin osc-message /error/osc -->
@@ -130,7 +130,7 @@ Config Toolの設定を用いて、このメッセージを送信しないよう
 - **v2.2.0**: `HomeSwActivating`は、HOMEスイッチがオンのときの`/goUntil`と`/goUntilRaw`が返します。以前は`HomeSwActivated`として送信され、今は他のコマンドのエラーと同じように`/reportError`に従います。
 <!-- generated:end osc-message /error/command -->
 
-## 状態の通知
+## 状態の通知 {#notification-of-state}
 
 <!-- osc-message: /busy -->
 <!-- generated:begin osc-message /busy -->
@@ -315,7 +315,7 @@ STEP400のみ。
 | 0 | 逆転方向 |
 <!-- generated:end osc-message /limitSw -->
 
-## アラームの通知
+## アラームの通知 {#alarm-notifications}
 
 <!-- osc-message: /uvlo -->
 <!-- generated:begin osc-message /uvlo -->

@@ -6,7 +6,7 @@ title: モータの回転・停止
 
 動作の仕組みは、[スピードプロファイルと動作](../guides/speed-profile-and-motions.md)をご覧ください。
 
-## モータの回転
+## モータの回転 {#motor-movement}
 
 <!-- osc: /run -->
 <!-- generated:begin osc /run -->
@@ -182,7 +182,7 @@ title: モータの回転・停止
 [`/goTo`](motor-control.md#goto), [`/combine/goToDir`](motor-control.md#combine-gotodir)
 <!-- generated:end osc /goToDir -->
 
-## モータの停止
+## モータの停止 {#stops}
 
 <!-- osc: /softStop -->
 <!-- generated:begin osc /softStop -->
@@ -375,7 +375,7 @@ title: モータの回転・停止
 [`/combine/hardHiZ`](motor-control.md#combine-hardhiz), [`/enableElectromagnetBrake`](brake.md#enableelectromagnetbrake)
 <!-- generated:end osc /hardHiZ -->
 
-## 連動コマンド
+## 連動コマンド {#combined-commands}
 
 <!-- osc: /combine/run -->
 <!-- generated:begin osc /combine/run -->
@@ -712,7 +712,7 @@ title: モータの回転・停止
 [`/hardHiZ`](motor-control.md#hardhiz)
 <!-- generated:end osc /combine/hardHiZ -->
 
-## Rawレジスタ値のコマンド
+## Rawレジスタ値のコマンド {#raw-register-value-commands}
 
 以下のコマンドは、速度を単位換算せずに、ドライバICのレジスタ値そのままで指定します。
 

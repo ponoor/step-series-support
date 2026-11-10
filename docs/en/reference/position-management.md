@@ -6,7 +6,7 @@ title: Position management
 
 For how the position is managed, see [Homing and position](../guides/homing-and-position.md).
 
-## Position
+## Position {#position}
 
 <!-- osc: /setPosition -->
 <!-- generated:begin osc /setPosition -->
@@ -204,7 +204,7 @@ Returns the current electrical position of the motor.
 | microstep | int | 0-127 | Microstep position |
 <!-- generated:end osc /getElPos -->
 
-## HOME/MARK
+## HOME/MARK {#homemark}
 
 <!-- osc: /setMark -->
 <!-- generated:begin osc /setMark -->

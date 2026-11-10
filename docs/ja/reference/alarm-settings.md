@@ -6,7 +6,7 @@ title: アラームの設定
 
 アラームと保護の仕組みは、[アラームと保護](../guides/alarms-and-protection.md)をご覧ください。
 
-## モータドライバ
+## モータドライバ {#motor-driver}
 
 <!-- osc: /enableUvloReport -->
 <!-- generated:begin osc /enableUvloReport -->
@@ -463,7 +463,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 | stallThreshold | float | 312.5-10000（STEP400）、31.25-4000（STEP800）mA | 閾値をmA単位であらわしたものです |
 <!-- generated:end osc /getStallThreshold -->
 
-## センサ
+## センサ {#sensor}
 
 <!-- osc: /setProhibitMotionOnHomeSw -->
 <!-- generated:begin osc /setProhibitMotionOnHomeSw -->

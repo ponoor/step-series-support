@@ -6,7 +6,7 @@ title: 位置管理
 
 位置管理の仕組みは、[原点復帰と位置管理](../guides/homing-and-position.md)をご覧ください。
 
-## 座標
+## 座標 {#position}
 
 <!-- osc: /setPosition -->
 <!-- generated:begin osc /setPosition -->
@@ -206,7 +206,7 @@ ABS_POSレジスタを0にリセットします。
 | microstep | int | 0-127 | マイクロステップでの位置 |
 <!-- generated:end osc /getElPos -->
 
-## HOME/MARK
+## HOME/MARK {#homemark}
 
 <!-- osc: /setMark -->
 <!-- generated:begin osc /setMark -->

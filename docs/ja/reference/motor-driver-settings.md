@@ -4,7 +4,7 @@ title: モータドライバの設定
 
 # モータドライバの設定
 
-## モータドライバの設定
+## モータドライバの設定 {#motor-driver-settings-group}
 
 <!-- osc: /setMicrostepMode -->
 <!-- generated:begin osc /setMicrostepMode -->
@@ -231,7 +231,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 - **v2.2.0**: 第3引数の`optimizationEnabled`は、整数の型タグ`i`（0 / 1）で送信されます。以前は`T` / `F`でした。`T` / `F`を想定しているクライアントは、更新が必要です。
 <!-- generated:end osc /getLowSpeedOptimizeThreshold -->
 
-## 状態の取得
+## 状態の取得 {#getting-the-status}
 
 <!-- osc: /enableBusyReport -->
 <!-- generated:begin osc /enableBusyReport -->
@@ -690,7 +690,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 [`/getPositionList`](position-management.md#getpositionlist), [`/setPositionReportInterval`](motor-driver-settings.md#setpositionreportinterval)
 <!-- generated:end osc /setPositionListReportInterval -->
 
-## デバッグ
+## デバッグ {#debug}
 
 <!-- osc: /getAdcVal -->
 <!-- generated:begin osc /getAdcVal -->

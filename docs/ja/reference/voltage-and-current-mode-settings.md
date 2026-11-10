@@ -6,7 +6,7 @@ title: 電圧モードと電流モード
 
 KVALとTVALの決め方は、[電圧モードと電流モード](../guides/voltage-and-current-mode.md)をご覧ください。
 
-## 電圧モード
+## 電圧モード {#voltage-mode}
 
 <!-- osc: /setVoltageMode -->
 <!-- generated:begin osc /setVoltageMode -->
@@ -327,7 +327,7 @@ STEP400の電流モードでは、保存される設定だけが変わります�
 [`/setKval`](voltage-and-current-mode-settings.md#setkval)
 <!-- generated:end osc /setDecKval -->
 
-## 電流モード
+## 電流モード {#current-mode}
 
 <!-- osc: /setCurrentMode -->
 <!-- generated:begin osc /setCurrentMode -->

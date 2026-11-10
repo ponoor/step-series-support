@@ -4,7 +4,7 @@ title: "OSC command reference: common rules"
 
 # OSC command reference: common rules
 
-## Overview
+## Overview {#overview}
 
 For a quick reference table of all commands, see the [Command list](command-list.md).
 
@@ -12,7 +12,7 @@ This is a reference for the Open Sound Control (OSC) commands. The commands are 
 
 Send each command as a single OSC message, not as an OSC bundle (several OSC messages combined). Bundles are not supported.
 
-## Motor ID
+## Motor ID {#motor-id}
 
 The motor ID of an OSC command corresponds to the number printed on the circuit board. Some commands can send the same instruction to all motors at once; specify 255 as the motor ID for this.
 
@@ -23,9 +23,9 @@ The motor IDs that can be used in a command are:
 | STEP400 | 1-4, 255 |
 | STEP800 | 1-8, 255 |
 
-## Notation
+## Notation {#notation}
 
-### Argument types
+### Argument types {#argument-types}
 
 | Item | Description |
 | --- | --- |
@@ -34,11 +34,11 @@ The motor IDs that can be used in a command are:
 | (bool) | A logical value, sent as the integer 1 or 0. It is written as bool to show that the range is 0 and 1. |
 | (string) | A string (OSC-string). |
 
-### Messages from the board
+### Messages from the board {#messages-from-the-board}
 
 The [OSC specification](https://opensoundcontrol.stanford.edu/spec-1_0.html) defines the argument types integer (int32), floating-point number (float32), string (OSC-string) and others, as well as non-standard types such as the logical values True / False. The STEP series always sends a logical value as the integer 0 or 1 (type tag `i`), never as True / False. Before v2.2.0, a few messages still used True / False (see the [Migration guide](../maintenance/migration-guide.md)).
 
-### Messages to the board
+### Messages to the board {#messages-to-the-board}
 
 The board checks the arguments of a command before it applies the command. When a check fails, nothing is applied.
 
@@ -62,7 +62,7 @@ An integer and a floating-point number are converted into each other when they a
 | float32 | 1.0 or more | less than 1.0 |
 | Logical value | True | False |
 
-### Command executable timing
+### Command executable timing {#command-executable-timing}
 
 Some commands can be executed only in a certain state. It is shown as "Executable timing" in the reference of each command.
 
@@ -89,7 +89,7 @@ In addition, the values of the command you send must meet the following conditio
 
 A motion command that does not meet the conditions is rejected with an error such as `BrakeEngaged`, `InServoMode`, `HomeSwActivating` or `LimitSwActivating`. The errors of each command are listed in its reference.
 
-## Points to keep in mind
+## Points to keep in mind {#points-to-keep-in-mind}
 
 - The board sends no OSC message, except the broadcast [`/booted`](automatically-sent-messages.md#booted), until it receives [`/setDestIp`](system-settings.md#setdestip). The board can behave unexpectedly if it sends a large number of messages that do not reach the destination. (With the configuration tool you can make the board send without waiting for `/setDestIp`. See [`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip).)
 - The messages to the destination are also dropped while the board resolves the MAC address of the destination (up to a few seconds after `/setDestIp`). For details, see [Communication and messages](../guides/communication-and-messages.md).

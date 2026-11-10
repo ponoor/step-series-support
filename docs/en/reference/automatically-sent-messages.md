@@ -4,11 +4,11 @@ title: Automatically sent messages
 
 # Automatically sent messages
 
-## Summary
+## Summary {#summary}
 
 Most messages the board sends are replies to commands. For example, when you send [`/getPosition`](position-management.md#getposition) to get the current position of a motor, the board replies with [`/position`](#position). Some messages, however, are not replies to a specific command: the board sends them automatically, for example when its state changes. This page describes these automatically sent messages. A message that is only a reply is shown in the "Response" field of each command.
 
-## Startup notification
+## Startup notification {#startup-notification}
 
 <!-- osc-message: /booted -->
 <!-- generated:begin osc-message /booted -->
@@ -51,7 +51,7 @@ This message can be disabled from the configuration tool.
 - **v2.2.0**: The reset by [`/resetDevice`](system-settings.md#resetdevice) now reports `resetCause` 5 (software).
 <!-- generated:end osc-message /booted -->
 
-## Error
+## Error {#error}
 
 <!-- osc-message: /error/osc -->
 <!-- generated:begin osc-message /error/osc -->
@@ -130,7 +130,7 @@ With 255 (all motors), each motor is judged alone for the errors that depend on 
 - **v2.2.0**: `HomeSwActivating` is replied by `/goUntil` and `/goUntilRaw` for an activated home switch. It was sent as `HomeSwActivated`, and it now follows `/reportError` like the other command errors.
 <!-- generated:end osc-message /error/command -->
 
-## Notification of state
+## Notification of state {#notification-of-state}
 
 <!-- osc-message: /busy -->
 <!-- generated:begin osc-message /busy -->
@@ -315,7 +315,7 @@ Available on STEP400 only.
 | 0 | Reverse |
 <!-- generated:end osc-message /limitSw -->
 
-## Alarm notifications
+## Alarm notifications {#alarm-notifications}
 
 <!-- osc-message: /uvlo -->
 <!-- generated:begin osc-message /uvlo -->

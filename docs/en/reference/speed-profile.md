@@ -371,7 +371,7 @@ Returns the current motor speed.
 | speed | float | -15625-15625 step/s | Current speed |
 <!-- generated:end osc /getSpeed -->
 
-## Raw register value commands
+## Raw register value commands {#raw-register-value-commands}
 
 The following commands set or get the parameters of the speed profile with the register values of the driver IC, without unit conversion. For most users the standard commands, which use physical units, are recommended. These are for advanced use where the registers are controlled directly.
 
