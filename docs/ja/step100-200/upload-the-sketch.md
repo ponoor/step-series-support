@@ -34,6 +34,8 @@ build_flags =
 	-D MZERO_WITH_ZERO_BOOTLOADER
 ```
 
+v2.2.0を、この設定で`step100`と`step200`の両方についてビルドし、microSDカードのCSピンが変わること（ビルドが通り、`PIN_SD_CS`が4から2になること）を確かめました。実機では確かめていません。
+
 ## Arduino IDEを使う場合 {#arduino-ide}
 
 手順は[Arduino IDEでのコンパイル](../maintenance/compile-the-arduino-sketch.md#arduino-ide)にあります。SAMDコアをインストールし、ライブラリをインストールし、最新のリリースのスケッチ（"Assets"にある`step-series-universal-firmware.zip`）を開きます。STEP100とSTEP200では、次の点に注意してください。

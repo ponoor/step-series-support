@@ -34,6 +34,8 @@ build_flags =
 	-D MZERO_WITH_ZERO_BOOTLOADER
 ```
 
+We built v2.2.0 with this setting for both the `step100` and the `step200`, and confirmed that the CS pin of the microSD card changes (the build succeeds, and `PIN_SD_CS` becomes 2 instead of 4). We have not tried it on real hardware.
+
 ## Upload with the Arduino IDE {#arduino-ide}
 
 The steps are in [Compiling with the Arduino IDE](../maintenance/compile-the-arduino-sketch.md#arduino-ide): install the SAMD core, install the libraries, and open the sketch of the latest release (`step-series-universal-firmware.zip`, in the "Assets"). For the STEP100 and the STEP200, note these points.
