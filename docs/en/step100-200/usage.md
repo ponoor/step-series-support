@@ -40,7 +40,7 @@ On the STEP400 and the STEP800, the Arduino part and the Ethernet part always st
 
 Many Ethernet shields have a microSD card slot. You can use it for the configuration file, as described in [Configuration with a microSD card](../connections/microsd-card.md). The board reads it only at the start.
 
-The [browser configuration tool](../connections/browser-config-tool.md) lists the STEP100 and the STEP200 as boards that it supports: it takes the product from the board, shows the panel **Current Mode** only for the STEP100, and has no items of the LIMIT switch and the brake for them (the items of the LIMIT switch appear if you enable `HAVE_LIMIT_GPIO`, see below). We have not tried it with a real STEP100 or STEP200. You can also use the configuration file of the corresponding board: the file of the STEP400 for the STEP100, and the file of the STEP800 for the STEP200. The firmware reads it even if the product in the file is different (the USB serial `s` shows that the file and the product do not match). The settings for more motors than the board has, and the settings of the LIMIT switch, are ignored.
+The [browser configuration tool](../connections/browser-config-tool.md) lists the STEP100 and the STEP200 as boards that it supports: it takes the product from the board, shows the panel **Current Mode** only for the STEP100, and has no items of the LIMIT switch and the brake for them (the items of the LIMIT switch appear if you enable `HAVE_LIMIT_GPIO`, see below). We have not tried it with a real STEP100 or STEP200. You can also use the configuration file of the corresponding board: the file of the STEP400 for the STEP100, and the file of the STEP800 for the STEP200. The firmware reads it even if the product in the file is different (the USB serial `s` shows that the file and the product do not match). The settings for more motors than the board has are ignored, and so are the settings of the LIMIT switch unless you have enabled `HAVE_LIMIT_GPIO` (see [LIMIT switch](#limit)).
 
 These boards have no pin that detects the card, so the firmware always tries to initialize the card at the start. Without a card, the initialization fails and the board starts with the initial values, as the STEP400 and the STEP800 do.
 
@@ -80,7 +80,7 @@ This is an example of the connection to the SW terminal of the first driver. A j
 
 ## LIMIT switch {#limit}
 
-The STEP100 and the STEP200 do not define the LIMIT switch pin, but you can use a spare pin of the Arduino as the LIMIT switch. In this case, you need to customize the firmware: edit the definition of your board in `boardsDef.h` (replace the commented-out line `// #define HAVE_LIMIT_GPIO`). With it, the commands of the LIMIT switch are available on the board.
+The STEP100 and the STEP200 do not define the LIMIT switch pin, but you can use a spare pin of the Arduino as the LIMIT switch. In this case, you need to customize the firmware: edit the definition of your board in `boardsDef.h` (replace the commented-out line `// #define HAVE_LIMIT_GPIO`). With it, the commands of the LIMIT switch are available on the board, and the firmware reads the settings of the LIMIT switch from the configuration file.
 
 For example, if you add the following definition, the pins `D6` and `D7` work as the LIMIT switch pins. The pin is pulled up, so connect the switch between the pin and GND.
 
