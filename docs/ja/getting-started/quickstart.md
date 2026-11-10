@@ -29,11 +29,7 @@ LANケーブルでボードとPCを直接つなぎます（一対一の接続）
 
 ### モータ {#motor}
 
-使えるのは、4線のバイポーラ型ステッピングモータだけです。`SM-42BYG011-25`は、たとえば次の店で購入できます（各店とは関係がありません）。
-
-- [Strawberry Linux](http://strawberry-linux.com/catalog/items?code=12026)
-- [秋月電子通商](https://akizukidenshi.com/catalog/g/gP-05372/)
-- [SparkFun](https://www.sparkfun.com/products/9238)
+使えるのは、4線のバイポーラ型ステッピングモータだけです。`SM-42BYG011-25`（MERCURY MOTOR）は、型番で探せば、電子部品の通販サイトなどで入手できます。
 
 ![](http://ponoor.com/manage/wp-content/uploads/2020/10/09238-01.jpg)
 
@@ -82,18 +78,12 @@ DIPスイッチが1で、初期設定のとき、ボードのネットワーク�
 
 ## PCの設定 {#pc-settings}
 
-ボードはPCのIPアドレスにメッセージを送りますので、ボードをつないだEthernetポートに固定のIPアドレスを設定します。PCのIPv4を次のように設定してください。
+ボードはPCのIPアドレスにメッセージを送りますので、ボードをつないだEthernetポートに固定のIPアドレスを設定します（設定のしかたは、お使いのOSの説明をご覧ください）。PCのIPv4を次のように設定してください。
 
 | 項目 | 設定値 |
 | --- | --- |
 | IPアドレス | 10.0.0.10 |
 | サブネットマスク | 255.255.255.0 |
-
-固定のIPアドレスの設定のしかたは、OSによって異なります。
-
-- [Windows](https://support.microsoft.com/ja-jp/help/15089/windows-change-tcp-ip-settings)
-- [Mac](https://support.apple.com/ja-jp/HT202480)
-- [Linux](https://www.youtube.com/watch?v=Yr6qI6v1QCY)
 
 ## 通信の確認 {#checking}
 

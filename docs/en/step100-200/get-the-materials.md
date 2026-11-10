@@ -16,7 +16,7 @@ The firmware is compatible with:
 - Arduino M0
 - [Adafruit METRO M0 Express](https://www.adafruit.com/product/3505)
 
-The Arduino Zero and the Arduino M0 are out of stock at the [official site](https://store-usa.arduino.cc/collections/boards/products/arduino-zero), but you can find the [M0 at Akizuki Denshi](https://akizukidenshi.com/catalog/g/gM-09079/) and [compatible products](https://www.aliexpress.com/item/4000544537659.html) at online shops like AliExpress.
+Compatible boards can be used too. The Arduino Zero is based on the Microchip `ATSAMD21G18` microcontroller (the board definition `zeroUSB` of PlatformIO, which the firmware uses, is for the `ATSAMD21G18A`), so look for a board of the Arduino Zero type that uses this microcontroller. Some compatible boards have the Arduino Zero bootloader and some have the Arduino M0 one; see [Arduino Zero or M0?](#zero-or-m0) for how to tell.
 
 ### Arduino Zero or M0? {#zero-or-m0}
 
@@ -40,11 +40,9 @@ The Leonardo and the MEGA do not have the SPI function on D11-D13, so they canno
 
 ![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643342683554.png)![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643702336632.png)
 
-The firmware has been tested with the [Arduino Ethernet Shield 2](https://docs.arduino.cc/hardware/ethernet-shield-rev2), which is based on the Wiznet W5500. It is also out of stock at the official store, but major distributors carry it ([Mouser](https://www.mouser.jp/ProductDetail/Arduino/A000024?qs=sGAEpiMZZMvfWfew95%2FxXPtlEf46RordNAHqnNtyb4k%3D), [Digikey](https://www.digikey.jp/ja/products/detail/arduino/A000024/3476356), [RS](https://jp.rs-online.com/web/p/shields-for-arduino/8732285?sra=pmpn) and others).
+The firmware has been tested with the [Arduino Ethernet Shield 2](https://docs.arduino.cc/hardware/ethernet-shield-rev2), which is based on the Wiznet W5500. Its official name is "Arduino Ethernet Shield 2" and the part number of the manufacturer is `A000024`. Major distributors of electronic components carry it.
 
-There are also many compatible products of the older shield based on the W5100 at AliExpress. In our test they did not work for the STEP100 (X-NUCLEO-IHM03A1). They worked for the STEP200 (X-NUCLEO-IHM02A1).
-
-The [Ethernet Shield for Arduino v2.2](https://akizukidenshi.com/catalog/g/gM-13165/) of Akizuki Denshi should work if you change the pin assignment in `boardsDef.h`, but we have not checked it on real hardware.
+There are also many compatible products of the older shield based on the W5100 at online shops. In our test they did not work for the STEP100 (X-NUCLEO-IHM03A1). They worked for the STEP200 (X-NUCLEO-IHM02A1).
 
 ![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643702118944.png)
 
@@ -54,12 +52,14 @@ A shield of this type cannot be used because you cannot put more shields on top 
 
 ![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643342852324.png)![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643342863866.png)
 
-These are evaluation boards of STMicroelectronics. Major distributors carry them too.
+These are evaluation boards of STMicroelectronics.
 
-| Model | X-NUCLEO | Driver IC | Mouser | Digikey | RS | Chip1stop |
-| --- | --- | --- | --- | --- | --- | --- |
-| STEP100 | [X-NUCLEO-IHM03A1](https://www.st.com/en/ecosystems/x-nucleo-ihm03a1.html) | PowerSTEP01 | [link](https://www.mouser.jp/ProductDetail/STMicroelectronics/X-NUCLEO-IHM03A1?qs=ILgNtqsyH21VjhjjaAqaGQ%3D%3D) | [link](https://www.digikey.jp/ja/products/detail/stmicroelectronics/X-NUCLEO-IHM03A1/5325495?s=N4IgTCBcDaIJYAsC2AGAzAQwIwgLoF8g) | [link](https://jp.rs-online.com/web/p/power-motor-robotics-development-tools/9064656) | [link](https://www.chip1stop.com/view/dispDetail/DispDetail?lang=en&cont=USA&partId=STMI-0106873&mpn=X-NUCLEO-IHM03A1&keyword=X-NUCLEO-IHM03A1) |
-| STEP200 | [X-NUCLEO-IHM02A1](https://www.st.com/en/ecosystems/x-nucleo-ihm02a1.html) | L6470 | [link](https://www.mouser.jp/ProductDetail/STMicroelectronics/X-NUCLEO-IHM02A1?qs=468p3M0KQ1q0beHvLX%2FUnA%3D%3D) | [link](https://www.digikey.jp/ja/products/detail/stmicroelectronics/X-NUCLEO-IHM02A1/5768392?s=N4IgTCBcDaIJYAsC2AGMBDAjCAugXyA) | [link](https://jp.rs-online.com/web/p/power-motor-robotics-development-tools/1646982?sra=pmpn) | [link](https://www.chip1stop.com/view/dispDetail/DispDetail?lang=en&cont=USA&partId=STMI-0102961&mpn=X-NUCLEO-IHM02A1&keyword=ihm02a1) |
+| Model | X-NUCLEO | Driver IC |
+| --- | --- | --- |
+| STEP100 | [X-NUCLEO-IHM03A1](https://www.st.com/en/ecosystems/x-nucleo-ihm03a1.html) | PowerSTEP01 |
+| STEP200 | [X-NUCLEO-IHM02A1](https://www.st.com/en/ecosystems/x-nucleo-ihm02a1.html) | L6470 |
+
+Besides the product pages of ST, major distributors of electronic components carry them.
 
 ## Power supply {#power-supply}
 

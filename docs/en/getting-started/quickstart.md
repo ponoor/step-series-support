@@ -29,11 +29,7 @@ Connect the board to your PC directly with the Ethernet cable (peer-to-peer). A 
 
 ### Motor {#motor}
 
-Only bipolar stepper motors with 4 wires can be used. The `SM-42BYG011-25` can be bought, for example, from these (unaffiliated) shops:
-
-- [SparkFun](https://www.sparkfun.com/products/9238)
-- [Strawberry Linux](http://strawberry-linux.com/catalog/items?code=12026)
-- [Akizuki Denshi](https://akizukidenshi.com/catalog/g/gP-05372/)
+Only bipolar stepper motors with 4 wires can be used. The `SM-42BYG011-25` (Mercury Motor) can be found by its part number at online shops for electronic components.
 
 ![](http://ponoor.com/manage/wp-content/uploads/2020/10/09238-01.jpg)
 
@@ -82,18 +78,12 @@ Turn on the power supply now. The back of the board has pins that carry the supp
 
 ## Settings of the PC {#pc-settings}
 
-The board sends its messages to the IP address of the PC, so set a fixed IP address to the Ethernet port that the board is connected to. Set the IPv4 address of the PC as follows:
+The board sends its messages to the IP address of the PC, so set a fixed IP address to the Ethernet port that the board is connected to (see the documentation of your OS for how to set it). Set the IPv4 address of the PC as follows:
 
 | Item | Value |
 | --- | --- |
 | IP address | 10.0.0.10 |
 | Subnet mask | 255.255.255.0 |
-
-How to set a fixed IP address depends on the OS:
-
-- [Windows](https://support.microsoft.com/en-us/windows/change-tcp-ip-settings-bd0a07af-15f5-cd6a-363f-ca2b6f391ace)
-- [Mac](https://support.apple.com/en-us/HT202480)
-- [Linux](https://www.youtube.com/watch?v=Yr6qI6v1QCY)
 
 ## Checking the connection {#checking}
 

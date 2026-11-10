@@ -16,7 +16,7 @@ STEP100とSTEP200は、Arduino Zero（または互換ボード）、Ethernetシ�
 - Arduino M0
 - [Adafruit METRO M0 Express](https://www.adafruit.com/product/3505)
 
-Arduino ZeroとM0は[公式のサイト](https://store-usa.arduino.cc/collections/boards/products/arduino-zero)では在庫切れになっていますが、秋月電子通商で[M0](https://akizukidenshi.com/catalog/g/gM-09079/)が入手できます。また、AliExpressなどで[互換品](https://www.aliexpress.com/item/4000544537659.html)が入手できます。
+互換ボードも使えます。Arduino Zeroは、Microchip社のMCU`ATSAMD21G18`を使っています（ファームウェアが使うPlatformIOのボード定義`zeroUSB`は、`ATSAMD21G18A`のものです）。互換ボードを探すときは、このMCUを使った、Arduino Zero型のボードを探してください。互換ボードには、Arduino Zeroのブートローダのものと、Arduino M0のブートローダのものがあります。見分けかたは、[Arduino ZeroかM0か](#zero-or-m0)をご覧ください。
 
 ### Arduino ZeroかM0か {#zero-or-m0}
 
@@ -40,11 +40,9 @@ LeonardoやMEGAでは、D11-D13にSPIの機能が割り当てられていない�
 
 ![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643342683554.png)![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643702336632.png)
 
-ファームウェアは、Wiznet W5500を使った[Arduino Ethernet Shield 2](https://docs.arduino.cc/hardware/ethernet-shield-rev2)で動作を確かめています。こちらも公式ストアでは在庫切れですが、大手のディストリビューター（[Mouser](https://www.mouser.jp/ProductDetail/Arduino/A000024?qs=sGAEpiMZZMvfWfew95%2FxXPtlEf46RordNAHqnNtyb4k%3D)、[Digikey](https://www.digikey.jp/ja/products/detail/arduino/A000024/3476356)、[RS](https://jp.rs-online.com/web/p/shields-for-arduino/8732285?sra=pmpn)など）で取り扱いがあります。
+ファームウェアは、Wiznet W5500を使った[Arduino Ethernet Shield 2](https://docs.arduino.cc/hardware/ethernet-shield-rev2)で動作を確かめています。正式な名前は「Arduino Ethernet Shield 2」で、メーカーの品番は`A000024`です。大手の電子部品のディストリビューターで取り扱いがあります。
 
-AliExpressなどには、W5100を使った古いタイプの互換品もたくさんあります。これは、実機でテストしたところ、STEP100（X-NUCLEO-IHM03A1）では動作しませんでした。STEP200（X-NUCLEO-IHM02A1）では動きます。
-
-秋月電子通商で売っている[Ethernet Shield for Arduino v2.2](https://akizukidenshi.com/catalog/g/gM-13165/)は、`boardsDef.h`のピン配置の定義を書き換えれば動作すると思われますが、実機での動作は確かめていません。
+通販サイトなどには、W5100を使った古いタイプの互換品もたくさんあります。これは、実機でテストしたところ、STEP100（X-NUCLEO-IHM03A1）では動作しませんでした。STEP200（X-NUCLEO-IHM02A1）では動きます。
 
 ![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643702118944.png)
 
@@ -54,12 +52,14 @@ AliExpressなどには、W5100を使った古いタイプの互換品もたく�
 
 ![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643342852324.png)![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643342863866.png)
 
-STMicroelectronics社から発売されている評価ボードです。こちらも大手ディストリビューターなどから入手できます。
+STMicroelectronics社から発売されている評価ボードです。
 
-| 製品 | X-NUCLEO | ドライバIC | Mouser | Digikey | RS | Chip1stop |
-| --- | --- | --- | --- | --- | --- | --- |
-| STEP100 | [X-NUCLEO-IHM03A1](https://www.st.com/en/ecosystems/x-nucleo-ihm03a1.html) | PowerSTEP01 | [link](https://www.mouser.jp/ProductDetail/STMicroelectronics/X-NUCLEO-IHM03A1?qs=ILgNtqsyH21VjhjjaAqaGQ%3D%3D) | [link](https://www.digikey.jp/ja/products/detail/stmicroelectronics/X-NUCLEO-IHM03A1/5325495?s=N4IgTCBcDaIJYAsC2AGAzAQwIwgLoF8g) | [link](https://jp.rs-online.com/web/p/power-motor-robotics-development-tools/9064656) | [link](https://www.chip1stop.com/view/dispDetail/DispDetail?lang=en&cont=USA&partId=STMI-0106873&mpn=X-NUCLEO-IHM03A1&keyword=X-NUCLEO-IHM03A1) |
-| STEP200 | [X-NUCLEO-IHM02A1](https://www.st.com/en/ecosystems/x-nucleo-ihm02a1.html) | L6470 | [link](https://www.mouser.jp/ProductDetail/STMicroelectronics/X-NUCLEO-IHM02A1?qs=468p3M0KQ1q0beHvLX%2FUnA%3D%3D) | [link](https://www.digikey.jp/ja/products/detail/stmicroelectronics/X-NUCLEO-IHM02A1/5768392?s=N4IgTCBcDaIJYAsC2AGMBDAjCAugXyA) | [link](https://jp.rs-online.com/web/p/power-motor-robotics-development-tools/1646982?sra=pmpn) | [link](https://www.chip1stop.com/view/dispDetail/DispDetail?lang=en&cont=USA&partId=STMI-0102961&mpn=X-NUCLEO-IHM02A1&keyword=ihm02a1) |
+| 製品 | X-NUCLEO | ドライバIC |
+| --- | --- | --- |
+| STEP100 | [X-NUCLEO-IHM03A1](https://www.st.com/en/ecosystems/x-nucleo-ihm03a1.html) | PowerSTEP01 |
+| STEP200 | [X-NUCLEO-IHM02A1](https://www.st.com/en/ecosystems/x-nucleo-ihm02a1.html) | L6470 |
+
+STの製品ページのほか、大手の電子部品のディストリビューターで取り扱いがあります。
 
 ## 電源 {#power-supply}
 
