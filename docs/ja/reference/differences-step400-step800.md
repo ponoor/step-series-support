@@ -7,7 +7,7 @@ lang: ja
 
 <!-- This page is generated from spec/osc-commands.yaml by tools/generate.py. Do not edit it directly. (自動生成・直接編集しない) -->
 
-## STEP400のみで使えるコマンド
+## STEP400のみで使えるコマンド {#commands-available-on-step400-only}
 
 これらのコマンドは、もう一方のボードにはありません。もう一方のボードに送ると、ボードは[`/error/osc`](automatically-sent-messages.md#error-osc)で`MessageNotMatch`を返し、何も実行しません。[`/reportError`](system-settings.md#reporterror)を0にしているときは、返しません。もう一方のボードでも受け付けると記したコマンドは例外で、そのボードも受け付けます。
 
@@ -30,7 +30,7 @@ lang: ja
 - [`/setLimitSwMode`](home-and-limit-sensors.md#setlimitswmode) (int)motorID (bool)SW_MODE
 - [`/getLimitSwMode`](home-and-limit-sensors.md#getlimitswmode) (int)motorID
 
-## STEP400のみが送信するメッセージ
+## STEP400のみが送信するメッセージ {#messages-sent-by-step400-only}
 
 - [`/prohibitMotionOnLimitSw`](alarm-settings.md#getprohibitmotiononlimitsw) (int)motorID (int)enable
 - [`/tval`](voltage-and-current-mode-settings.md#gettval) (int)motorID (int)holdTVAL (int)runTVAL (int)accTVAL (int)decTVAL
@@ -39,15 +39,15 @@ lang: ja
 - [`/limitSw`](automatically-sent-messages.md#limitsw) (int)motorID (int)swState (int)direction
 - [`/limitSwMode`](home-and-limit-sensors.md#getlimitswmode) (int)motorID (int)swMode
 
-## STEP800のみで使えるコマンド
+## STEP800のみで使えるコマンド {#commands-available-on-step800-only}
 
 なし。
 
-## STEP800のみが送信するメッセージ
+## STEP800のみが送信するメッセージ {#messages-sent-by-step800-only}
 
 なし。
 
-## ボードによって値が異なるコマンド
+## ボードによって値が異なるコマンド {#commands-with-board-specific-values}
 
 | コマンド | 引数 | STEP400 | STEP800 |
 | --- | --- | --- | --- |
@@ -58,14 +58,14 @@ lang: ja
 | [`/setSpeedProfile`](speed-profile.md#setspeedprofile) | dec（範囲） | 14.55-59590 | 14.55-59575 |
 | [`/setDec`](speed-profile.md#setdec) | dec（範囲） | 14.55-59590 | 14.55-59575 |
 
-## ボードによって値が異なるメッセージ
+## ボードによって値が異なるメッセージ {#messages-with-board-specific-values}
 
 | コマンド | 引数 | STEP400 | STEP800 |
 | --- | --- | --- | --- |
 | [`/overCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | overCurrentThreshold（範囲） | 312.5-10000 | 375-6000 |
 | [`/stallThreshold`](alarm-settings.md#setstallthreshold) | stallThreshold（範囲） | 312.5-10000 | 31.25-4000 |
 
-## ボード別の表
+## ボード別の表 {#board-specific-tables}
 
 | コマンド | 説明 |
 | --- | --- |
@@ -73,7 +73,7 @@ lang: ja
 | [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | ストール検出の閾値 |
 | [`/thermalStatus`](automatically-sent-messages.md#thermalstatus) | 温度の状態 |
 
-## STEP400のみの設定項目
+## STEP400のみの設定項目 {#configuration-items-of-step400-only}
 
 - [`alarmAndReport.reportLimitSwStatus`](../connections/configuration-items.md#alarmandreport-reportlimitswstatus)
 - [`driverSettings.limitSwMode`](../connections/configuration-items.md#driversettings-limitswmode)
@@ -87,11 +87,11 @@ lang: ja
 - [`currentMode.TON_MIN`](../connections/configuration-items.md#currentmode-ton_min)
 - [`currentMode.TOFF_MIN`](../connections/configuration-items.md#currentmode-toff_min)
 
-## STEP800のみの設定項目
+## STEP800のみの設定項目 {#configuration-items-of-step800-only}
 
 なし。
 
-## ボードによって値が異なる設定項目
+## ボードによって値が異なる設定項目 {#configuration-items-with-board-specific-values}
 
 | キー | 説明 | STEP400 | STEP800 |
 | --- | --- | --- | --- |

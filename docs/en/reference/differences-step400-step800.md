@@ -7,7 +7,7 @@ lang: en
 
 <!-- This page is generated from spec/osc-commands.yaml by tools/generate.py. Do not edit it directly. -->
 
-## Commands available on STEP400 only
+## Commands available on STEP400 only {#commands-available-on-step400-only}
 
 These commands do not exist on the other board. When one of them is sent to the other board, the board replies [`/error/osc`](automatically-sent-messages.md#error-osc) `MessageNotMatch` and executes nothing. The reply is not sent when [`/reportError`](system-settings.md#reporterror) is set to 0. A command marked as also accepted by the other board is the exception: that board accepts it.
 
@@ -30,7 +30,7 @@ These commands do not exist on the other board. When one of them is sent to the 
 - [`/setLimitSwMode`](home-and-limit-sensors.md#setlimitswmode) (int)motorID (bool)SW_MODE
 - [`/getLimitSwMode`](home-and-limit-sensors.md#getlimitswmode) (int)motorID
 
-## Messages sent by STEP400 only
+## Messages sent by STEP400 only {#messages-sent-by-step400-only}
 
 - [`/prohibitMotionOnLimitSw`](alarm-settings.md#getprohibitmotiononlimitsw) (int)motorID (int)enable
 - [`/tval`](voltage-and-current-mode-settings.md#gettval) (int)motorID (int)holdTVAL (int)runTVAL (int)accTVAL (int)decTVAL
@@ -39,15 +39,15 @@ These commands do not exist on the other board. When one of them is sent to the 
 - [`/limitSw`](automatically-sent-messages.md#limitsw) (int)motorID (int)swState (int)direction
 - [`/limitSwMode`](home-and-limit-sensors.md#getlimitswmode) (int)motorID (int)swMode
 
-## Commands available on STEP800 only
+## Commands available on STEP800 only {#commands-available-on-step800-only}
 
 None.
 
-## Messages sent by STEP800 only
+## Messages sent by STEP800 only {#messages-sent-by-step800-only}
 
 None.
 
-## Commands with board-specific values
+## Commands with board-specific values {#commands-with-board-specific-values}
 
 | Command | Argument | STEP400 | STEP800 |
 | --- | --- | --- | --- |
@@ -58,14 +58,14 @@ None.
 | [`/setSpeedProfile`](speed-profile.md#setspeedprofile) | dec (Range) | 14.55-59590 | 14.55-59575 |
 | [`/setDec`](speed-profile.md#setdec) | dec (Range) | 14.55-59590 | 14.55-59575 |
 
-## Messages with board-specific values
+## Messages with board-specific values {#messages-with-board-specific-values}
 
 | Command | Argument | STEP400 | STEP800 |
 | --- | --- | --- | --- |
 | [`/overCurrentThreshold`](alarm-settings.md#setovercurrentthreshold) | overCurrentThreshold (Range) | 312.5-10000 | 375-6000 |
 | [`/stallThreshold`](alarm-settings.md#setstallthreshold) | stallThreshold (Range) | 312.5-10000 | 31.25-4000 |
 
-## Board-specific tables
+## Board-specific tables {#board-specific-tables}
 
 | Command | Description |
 | --- | --- |
@@ -73,7 +73,7 @@ None.
 | [`/setStallThreshold`](alarm-settings.md#setstallthreshold) | Stall detection threshold |
 | [`/thermalStatus`](automatically-sent-messages.md#thermalstatus) | Thermal status |
 
-## Configuration items of STEP400 only
+## Configuration items of STEP400 only {#configuration-items-of-step400-only}
 
 - [`alarmAndReport.reportLimitSwStatus`](../connections/configuration-items.md#alarmandreport-reportlimitswstatus)
 - [`driverSettings.limitSwMode`](../connections/configuration-items.md#driversettings-limitswmode)
@@ -87,11 +87,11 @@ None.
 - [`currentMode.TON_MIN`](../connections/configuration-items.md#currentmode-ton_min)
 - [`currentMode.TOFF_MIN`](../connections/configuration-items.md#currentmode-toff_min)
 
-## Configuration items of STEP800 only
+## Configuration items of STEP800 only {#configuration-items-of-step800-only}
 
 None.
 
-## Configuration items with board-specific values
+## Configuration items with board-specific values {#configuration-items-with-board-specific-values}
 
 | Key | Description | STEP400 | STEP800 |
 | --- | --- | --- | --- |

@@ -9,7 +9,7 @@ lang: ja
 
 すべてのOSCコマンドを、リファレンスのページの順に並べています。コマンド名から詳細へ移動できます。
 
-## ボード全体の設定
+## ボード全体の設定 {#system-settings}
 
 | コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
@@ -21,7 +21,7 @@ lang: ja
 | [`/saveConfig`](system-settings.md#saveconfig) | - | ✓ | ✓ | 2.1.0 |
 | [`/resetDevice`](system-settings.md#resetdevice) | - | ✓ | ✓ |  |
 
-## モータドライバの設定
+## モータドライバの設定 {#motor-driver-settings}
 
 | コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
@@ -46,7 +46,7 @@ lang: ja
 | [`/resetMotorDriver`](motor-driver-settings.md#resetmotordriver) | (int)motorID | ✓ | ✓ |  |
 | [`/getStatusList`](motor-driver-settings.md#getstatuslist) | - | ✓ | ✓ |  |
 
-## アラームの設定
+## アラームの設定 {#alarm-settings}
 
 | コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
@@ -65,7 +65,7 @@ lang: ja
 | [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw) | (int)motorID (bool)enable | ✓ |  |  |
 | [`/getProhibitMotionOnLimitSw`](alarm-settings.md#getprohibitmotiononlimitsw) | (int)motorID | ✓ |  |  |
 
-## 電圧モードと電流モード
+## 電圧モードと電流モード {#voltage-and-current-mode-settings}
 
 | コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
@@ -89,7 +89,7 @@ lang: ja
 | [`/setAccTval`](voltage-and-current-mode-settings.md#setacctval) | (int)motorID (int)accTVAL | ✓ |  |  |
 | [`/setDecTval`](voltage-and-current-mode-settings.md#setdectval) | (int)motorID (int)decTVAL | ✓ |  |  |
 
-## スピードプロファイル
+## スピードプロファイル {#speed-profile}
 
 | コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
@@ -111,7 +111,7 @@ lang: ja
 | [`/setAccRaw`](speed-profile.md#setaccraw) | (int)motorID (int)acc | ✓ | ✓ |  |
 | [`/setDecRaw`](speed-profile.md#setdecraw) | (int)motorID (int)dec | ✓ | ✓ |  |
 
-## 原点復帰
+## 原点復帰 {#homing}
 
 | コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
@@ -128,7 +128,7 @@ lang: ja
 | [`/setReleaseSwTimeout`](homing.md#setreleaseswtimeout) | (int)motorID (int)timeOut | ✓ | ✓ |  |
 | [`/getReleaseSwTimeout`](homing.md#getreleaseswtimeout) | (int)motorID | ✓ | ✓ |  |
 
-## HOME/LIMITスイッチ
+## HOME/LIMITスイッチ {#home-and-limit-switches}
 
 | コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
@@ -142,7 +142,7 @@ lang: ja
 | [`/setLimitSwMode`](home-and-limit-sensors.md#setlimitswmode) | (int)motorID (bool)SW_MODE | ✓ |  |  |
 | [`/getLimitSwMode`](home-and-limit-sensors.md#getlimitswmode) | (int)motorID | ✓ |  |  |
 
-## 位置管理
+## 位置管理 {#position-management}
 
 | コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
@@ -157,7 +157,7 @@ lang: ja
 | [`/goHome`](position-management.md#gohome) | (int)motorID | ✓ | ✓ |  |
 | [`/goMark`](position-management.md#gomark) | (int)motorID | ✓ | ✓ |  |
 
-## モータの回転・停止
+## モータの回転・停止 {#motor-control}
 
 | コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
@@ -181,7 +181,7 @@ lang: ja
 | [`/goUntilRaw`](motor-control.md#gountilraw) | (int)motorID (bool)ACT (int)speed | ✓ | ✓ |  |
 | [`/combine/runRaw`](motor-control.md#combine-runraw) | (int)motorID1 (int)motorID2 (int)speed | ✓ | ✓ |  |
 
-## 電磁ブレーキ
+## 電磁ブレーキ {#electromagnetic-brake}
 
 | コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
@@ -192,7 +192,7 @@ lang: ja
 | [`/getBrakeTransitionDuration`](brake.md#getbraketransitionduration) | (int)motorID | ✓ | ✓ |  |
 | [`/getBrakeStatus`](brake.md#getbrakestatus) | (int)motorID | ✓ | ✓ | 2.2.0 |
 
-## サーボモード
+## サーボモード {#servo-mode}
 
 | コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |

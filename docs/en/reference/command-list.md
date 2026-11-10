@@ -9,7 +9,7 @@ lang: en
 
 All OSC commands in the order of the reference pages. Click a command to go to its reference.
 
-## System settings
+## System settings {#system-settings}
 
 | Command | Arguments | STEP400 | STEP800 | Since |
 | --- | --- | --- | --- | --- |
@@ -21,7 +21,7 @@ All OSC commands in the order of the reference pages. Click a command to go to i
 | [`/saveConfig`](system-settings.md#saveconfig) | - | ✓ | ✓ | 2.1.0 |
 | [`/resetDevice`](system-settings.md#resetdevice) | - | ✓ | ✓ |  |
 
-## Motor driver settings
+## Motor driver settings {#motor-driver-settings}
 
 | Command | Arguments | STEP400 | STEP800 | Since |
 | --- | --- | --- | --- | --- |
@@ -46,7 +46,7 @@ All OSC commands in the order of the reference pages. Click a command to go to i
 | [`/resetMotorDriver`](motor-driver-settings.md#resetmotordriver) | (int)motorID | ✓ | ✓ |  |
 | [`/getStatusList`](motor-driver-settings.md#getstatuslist) | - | ✓ | ✓ |  |
 
-## Alarm settings
+## Alarm settings {#alarm-settings}
 
 | Command | Arguments | STEP400 | STEP800 | Since |
 | --- | --- | --- | --- | --- |
@@ -65,7 +65,7 @@ All OSC commands in the order of the reference pages. Click a command to go to i
 | [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw) | (int)motorID (bool)enable | ✓ |  |  |
 | [`/getProhibitMotionOnLimitSw`](alarm-settings.md#getprohibitmotiononlimitsw) | (int)motorID | ✓ |  |  |
 
-## Voltage and current mode settings
+## Voltage and current mode settings {#voltage-and-current-mode-settings}
 
 | Command | Arguments | STEP400 | STEP800 | Since |
 | --- | --- | --- | --- | --- |
@@ -89,7 +89,7 @@ All OSC commands in the order of the reference pages. Click a command to go to i
 | [`/setAccTval`](voltage-and-current-mode-settings.md#setacctval) | (int)motorID (int)accTVAL | ✓ |  |  |
 | [`/setDecTval`](voltage-and-current-mode-settings.md#setdectval) | (int)motorID (int)decTVAL | ✓ |  |  |
 
-## Speed profile
+## Speed profile {#speed-profile}
 
 | Command | Arguments | STEP400 | STEP800 | Since |
 | --- | --- | --- | --- | --- |
@@ -111,7 +111,7 @@ All OSC commands in the order of the reference pages. Click a command to go to i
 | [`/setAccRaw`](speed-profile.md#setaccraw) | (int)motorID (int)acc | ✓ | ✓ |  |
 | [`/setDecRaw`](speed-profile.md#setdecraw) | (int)motorID (int)dec | ✓ | ✓ |  |
 
-## Homing
+## Homing {#homing}
 
 | Command | Arguments | STEP400 | STEP800 | Since |
 | --- | --- | --- | --- | --- |
@@ -128,7 +128,7 @@ All OSC commands in the order of the reference pages. Click a command to go to i
 | [`/setReleaseSwTimeout`](homing.md#setreleaseswtimeout) | (int)motorID (int)timeOut | ✓ | ✓ |  |
 | [`/getReleaseSwTimeout`](homing.md#getreleaseswtimeout) | (int)motorID | ✓ | ✓ |  |
 
-## HOME and LIMIT switches
+## HOME and LIMIT switches {#home-and-limit-switches}
 
 | Command | Arguments | STEP400 | STEP800 | Since |
 | --- | --- | --- | --- | --- |
@@ -142,7 +142,7 @@ All OSC commands in the order of the reference pages. Click a command to go to i
 | [`/setLimitSwMode`](home-and-limit-sensors.md#setlimitswmode) | (int)motorID (bool)SW_MODE | ✓ |  |  |
 | [`/getLimitSwMode`](home-and-limit-sensors.md#getlimitswmode) | (int)motorID | ✓ |  |  |
 
-## Position management
+## Position management {#position-management}
 
 | Command | Arguments | STEP400 | STEP800 | Since |
 | --- | --- | --- | --- | --- |
@@ -157,7 +157,7 @@ All OSC commands in the order of the reference pages. Click a command to go to i
 | [`/goHome`](position-management.md#gohome) | (int)motorID | ✓ | ✓ |  |
 | [`/goMark`](position-management.md#gomark) | (int)motorID | ✓ | ✓ |  |
 
-## Motor control
+## Motor control {#motor-control}
 
 | Command | Arguments | STEP400 | STEP800 | Since |
 | --- | --- | --- | --- | --- |
@@ -181,7 +181,7 @@ All OSC commands in the order of the reference pages. Click a command to go to i
 | [`/goUntilRaw`](motor-control.md#gountilraw) | (int)motorID (bool)ACT (int)speed | ✓ | ✓ |  |
 | [`/combine/runRaw`](motor-control.md#combine-runraw) | (int)motorID1 (int)motorID2 (int)speed | ✓ | ✓ |  |
 
-## Electromagnetic brake
+## Electromagnetic brake {#electromagnetic-brake}
 
 | Command | Arguments | STEP400 | STEP800 | Since |
 | --- | --- | --- | --- | --- |
@@ -192,7 +192,7 @@ All OSC commands in the order of the reference pages. Click a command to go to i
 | [`/getBrakeTransitionDuration`](brake.md#getbraketransitionduration) | (int)motorID | ✓ | ✓ |  |
 | [`/getBrakeStatus`](brake.md#getbrakestatus) | (int)motorID | ✓ | ✓ | 2.2.0 |
 
-## Servo mode
+## Servo mode {#servo-mode}
 
 | Command | Arguments | STEP400 | STEP800 | Since |
 | --- | --- | --- | --- | --- |

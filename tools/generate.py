@@ -44,6 +44,15 @@ Markers are counted in docs/en/ and docs/ja/ only (the old pages are not counted
 `docs/`). The usual run prints one WARNING line per language with the numbers and does not change the exit code;
 `--coverage` (also in the commit hook) lists every missing, duplicated or misplaced marker as an error.
 
+Ids of the headings: every `##` and `###` that this script writes has an id `{#...}` that is the same in English and
+Japanese (a link to a page must not depend on the language). The id is the slug of the ENGLISH title, made like the
+`toc` extension of MkDocs does (heading_id(): lower case, only letters, digits, `_` and `-`), so it is the id
+that MkDocs made automatically for the English heading before the ids were written out. The command list: the
+English title of the group (`groups.<key>.en` of the YAML), e.g. `motor-control`. The page of the differences: the
+English label of the heading (e.g. `commands-available-on-step400-only`; `{boards}` is replaced before). The page of the
+configuration items: the section name in lower case (as before). Blocks of a command, a message and a setting keep
+their own ids. The hand-written headings are checked by tests/test_heading_ids.py.
+
 Exit code 1 on an error (unknown address, broken `[[link]]`, changes with --check).
 """
 
@@ -57,7 +66,14 @@ from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+from markdown.extensions.toc import slugify  # noqa: E402
 from spec import LINK_RE, REPO_ROOT, SETTING_LINK_RE, SPEC_PATH, Spec, anchor  # noqa: E402
+
+
+def heading_id(en_text: str) -> str:
+    """The id of a heading from its English title (the same as the automatic id of MkDocs)."""
+    return slugify(en_text, "-")
+
 
 # ---------------------------------------------------------------------------
 # Layout of the pages. Change here when the site structure changes.
@@ -139,6 +155,9 @@ class GenerateError(Exception):
 
 # ---------------------------------------------------------------------------
 # context
+
+EN = LABELS["en"]
+
 
 class Ctx:
     """Everything a renderer needs: the spec, the language, the options and the counters."""
@@ -805,7 +824,7 @@ def page_command_list(ctx: Ctx) -> str:
         if not cmds:
             continue
         ctx.where = f"command list {gkey}"
-        out += [f"## {ctx.tx(g, 'group')}", ""]
+        out += [f"## {ctx.tx(g, 'group')} {{#{heading_id(g['en'])}}}", ""]
         rows = []
         for c in cmds:
             href = ctx.link_to(c["address"])
@@ -829,7 +848,7 @@ def page_diff(ctx: Ctx) -> str:
     # 1. only on some boards
     for b in boards:
         only = [c for c in spec.commands if b in spec.boards_of(c) and set(spec.boards_of(c)) != set(boards)]
-        out += [f"## {L['diff_only'].format(boards=b)}", ""]
+        out += [f"## {L['diff_only'].format(boards=b)} {{#{heading_id(EN['diff_only'].format(boards=b))}}}", ""]
         if only:
             err = f"[`/error/osc`]({ctx.link_to('/error/osc', prefer='message')})"
             rule = L["diff_rule"].format(error=err, report=cmd_link(spec.command("/reportError")))
@@ -838,17 +857,17 @@ def page_diff(ctx: Ctx) -> str:
             out += [rule, ""]
         out += ["\n".join(f"- {cmd_link(c)} {arg_heading(spec, c)}".rstrip() + _routed_note(ctx, c) for c in only) or L["none_found"], ""]
         msgs = [m for m in spec.messages if m.get("boards") and b in m["boards"] and set(m["boards"]) != set(boards)]
-        out += [f"## {L['diff_msg_only'].format(boards=b)}", ""]
+        out += [f"## {L['diff_msg_only'].format(boards=b)} {{#{heading_id(EN['diff_msg_only'].format(boards=b))}}}", ""]
         out += ["\n".join(f"- {msg_link(m)} {arg_heading(spec, m)}".rstrip() for m in msgs) or L["none_found"], ""]
     # 2. board-specific values of arguments
     rows = _board_value_rows(ctx, spec.commands, "command")
-    out += [f"## {L['diff_values']}", ""]
+    out += [f"## {L['diff_values']} {{#{heading_id(EN['diff_values'])}}}", ""]
     out += [table([L["command"], L["argument"], *boards], rows) if rows else L["none_found"], ""]
     rows = _board_value_rows(ctx, spec.messages, "message")
-    out += [f"## {L['diff_msg_values']}", ""]
+    out += [f"## {L['diff_msg_values']} {{#{heading_id(EN['diff_msg_values'])}}}", ""]
     out += [table([L["command"], L["argument"], *boards], rows) if rows else L["none_found"], ""]
     # 3. board-specific tables
-    out += [f"## {L['diff_tables']}", ""]
+    out += [f"## {L['diff_tables']} {{#{heading_id(EN['diff_tables'])}}}", ""]
     tbl = []
     for kind, items in (("command", spec.commands), ("message", spec.messages)):
         for it in items:
@@ -860,7 +879,7 @@ def page_diff(ctx: Ctx) -> str:
     # 4. settings
     for b in boards:
         only = [s for s in spec.settings if b in spec.boards_of(s) and set(spec.boards_of(s)) != set(boards)]
-        out += [f"## {L['diff_set_only'].format(boards=b)}", ""]
+        out += [f"## {L['diff_set_only'].format(boards=b)} {{#{heading_id(EN['diff_set_only'].format(boards=b))}}}", ""]
         out += ["\n".join(f"- [`{s['key']}`]({_settings_href(ctx, s['key'])})" for s in only) or L["none_found"], ""]
     srows = []
     for s in spec.settings:
@@ -876,7 +895,7 @@ def page_diff(ctx: Ctx) -> str:
                 x = spec.for_board(v, b)
                 cells.append("-" if x is None else (_rng(x) if field == "range" else ip_or_value(s["type"], x)))
             srows.append([f"[`{s['key']}`]({_settings_href(ctx, s['key'])})", field, *cells])
-    out += [f"## {L['diff_settings']}", ""]
+    out += [f"## {L['diff_settings']} {{#{heading_id(EN['diff_settings'])}}}", ""]
     out += [table([L["key"], L["description"], *boards], srows) if srows else L["none_found"], ""]
     return "\n".join(out)
 
