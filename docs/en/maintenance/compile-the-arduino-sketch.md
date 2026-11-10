@@ -79,7 +79,7 @@ The version of the driver library must match the version of the firmware:
 
 ## STEP100 and STEP200 {#step100-200}
 
-The firmware can be built for the STEP100 and the STEP200 (the environments `step100` and `step200`), but they have not been tested on real hardware since v2.1.0. See [STEP100 / STEP200](../step100-200/index.md).
+The firmware can be built for the STEP100 and the STEP200 (the environments `step100` and `step200`), but they have not been tested on real hardware since v2.1.0. See [Upload the Arduino sketch](../step100-200/upload-the-sketch.md).
 
 ## Notes for uploading the firmware {#uploading}
 
