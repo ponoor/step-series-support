@@ -12,10 +12,12 @@ All the products run the same firmware. They differ in the driver IC, the number
 
 | Product | Driver IC | Motors | Drive mode | Switch inputs | Electromagnetic brake output | Form |
 | --- | --- | --- | --- | --- | --- | --- |
-| [STEP400](../hardware/step400.md) | PowerSTEP01 | 4 | Voltage mode and current mode | HOME and LIMIT | With the [EMB-STEP400](../hardware/emb-step400.md) board | Finished board |
-| [STEP800](../hardware/step800.md) | L6470 | 8 | Voltage mode | HOME | On the board | Finished board |
+| [STEP400](../hardware/step400.md) | PowerSTEP01 | 4 | Voltage mode and current mode | HOME and LIMIT | 3.3 V logic output (J7); drive the brake with the [EMB-STEP400](../hardware/emb-step400.md) board | Finished board |
+| [STEP800](../hardware/step800.md) | L6470 | 8 | Voltage mode | HOME | 3.3 V logic output (J2); needs an external driver circuit | Finished board |
 | STEP100 | PowerSTEP01 | 1 | Voltage mode and current mode | HOME | None | Do-it-yourself |
 | STEP200 | L6470 | 2 | Voltage mode | HOME | None | Do-it-yourself |
+
+The brake outputs of the STEP400 and the STEP800 are logic signals, so a driver circuit is needed to drive a brake. See [Electromagnetic brake wiring](../connections/electromagnetic-brake-wiring.md).
 
 The commands are common to the products, but a command that needs a function that the board does not have is not available on it. The commands that differ between the STEP400 and the STEP800 are listed in [Differences between STEP400 and STEP800](../reference/differences-step400-step800.md). For the voltage mode and the current mode, see [Voltage mode and current mode](../guides/voltage-and-current-mode.md).
 

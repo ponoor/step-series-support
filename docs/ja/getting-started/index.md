@@ -12,10 +12,12 @@ STEPシリーズの製品の違い、できること、OSCを送るソフトウ�
 
 | 製品 | ドライバIC | モータの数 | 駆動方式 | スイッチ入力 | 電磁ブレーキの出力 | 形 |
 | --- | --- | --- | --- | --- | --- | --- |
-| [STEP400](../hardware/step400.md) | PowerSTEP01 | 4 | 電圧モードと電流モード | HOMEとLIMIT | [EMB-STEP400](../hardware/emb-step400.md)ボードを使用 | 完成品 |
-| [STEP800](../hardware/step800.md) | L6470 | 8 | 電圧モード | HOME | ボード上にあり | 完成品 |
+| [STEP400](../hardware/step400.md) | PowerSTEP01 | 4 | 電圧モードと電流モード | HOMEとLIMIT | 3.3Vのロジック出力（J7）。ブレーキの駆動には[EMB-STEP400](../hardware/emb-step400.md)ボードを使用 | 完成品 |
+| [STEP800](../hardware/step800.md) | L6470 | 8 | 電圧モード | HOME | 3.3Vのロジック出力（J2）。駆動回路が別に必要 | 完成品 |
 | STEP100 | PowerSTEP01 | 1 | 電圧モードと電流モード | HOME | なし | 自作 |
 | STEP200 | L6470 | 2 | 電圧モード | HOME | なし | 自作 |
+
+STEP400とSTEP800のブレーキの出力はロジック信号なので、ブレーキを駆動するには駆動回路が必要です。[電磁ブレーキの接続](../connections/electromagnetic-brake-wiring.md)をご覧ください。
 
 コマンドは製品に共通ですが、ボードにない機能のコマンドは、そのボードでは使えません。STEP400とSTEP800で異なるコマンドは、[STEP400とSTEP800の違い](../reference/differences-step400-step800.md)にまとめています。電圧モードと電流モードについては、[電圧モードと電流モード](../guides/voltage-and-current-mode.md)をご覧ください。
 
