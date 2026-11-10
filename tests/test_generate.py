@@ -677,7 +677,7 @@ class DifferencePageRuleTest(unittest.TestCase):
         ctx = generate.Ctx(SPEC, lang, "both", Counter(), [])
         text = generate.page_diff(ctx)
         parts = re.split(r"^## ", text, flags=re.M)[1:]
-        return {p.split("\n", 1)[0]: p.split("\n", 1)[1] for p in parts}
+        return {re.sub(r" \{#[^}]+\}$", "", p.split("\n", 1)[0]): p.split("\n", 1)[1] for p in parts}
 
     def only_sections(self, lang: str) -> tuple[str, str]:
         sec = self.sections(lang)

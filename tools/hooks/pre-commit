@@ -14,3 +14,7 @@ if ! "$py" tools/generate.py --check --defaults both --coverage >/dev/null; then
     echo "pre-commit: the generated pages are out of date, or a marker is missing, duplicated or misplaced. Run: python tools/generate.py --defaults both --coverage" >&2
     exit 1
 fi
+if ! "$py" -m unittest tests.test_heading_ids >/dev/null 2>&1; then
+    echo "pre-commit: a ## or ### heading has no id, or the ids differ between en and ja. See: python -m unittest tests.test_heading_ids -v" >&2
+    exit 1
+fi
