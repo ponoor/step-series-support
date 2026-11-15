@@ -26,7 +26,7 @@ With PlatformIO, you select the board by the **environment** of `platformio.ini`
   ```
 
 - Or choose the environment each time: `pio run -e step800 -t upload`, or `env:step800` in the environment selector of the status bar of VS Code.
-- Leave every board line in `boardsDef.h` commented out. A board that is defined in both places does not compile.
+- Leave every board line in `boardsDef.h` commented out. Do not select the board in both places.
 - The environment `zeroUSB` of the earlier versions is kept, and builds the STEP400.
 - With more than one board connected, add the port to the environment, for example `upload_port = /dev/cu.usbmodem1101` under `[env:step800]`.
 

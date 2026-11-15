@@ -12,5 +12,5 @@ title: 保守
 - [ファームウェアのコンパイル](compile-the-arduino-sketch.md): PlatformIOまたはArduino IDEでファームウェアをビルドして書き込む方法です。
 - [USBシリアル診断](usb-serial-diagnosis.md): USBシリアルの状態、設定、コマンドです。
 - [トラブルシューティング](troubleshooting.md): 症状ごとの原因と対処です。
-- [変更履歴](changelog.md): ファームウェアの各バージョンの変更点です。
-- [移行ガイド](migration-guide.md): 新しいバージョンに移るときに確認することです。
+- [変更履歴](changelog.md): ファームウェアの各バージョン（v2.0.0〜v2.2.0）の変更点です。
+- [移行ガイド](migration-guide.md): v2.1.0からv2.2.0に更新するときに確認することと、戻し方です。
