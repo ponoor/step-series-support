@@ -4,6 +4,8 @@
 root=$(git rev-parse --show-toplevel) || exit 1
 cd "$root" || exit 1
 py=python3
+# python3 may be missing or lack PyYAML (e.g. the Windows Store stub): then use python.
+python3 -c "import yaml" >/dev/null 2>&1 || py=python
 [ -x .venv/bin/python ] && py=.venv/bin/python
 
 if ! "$py" tools/validate_spec.py -q >/dev/null; then
