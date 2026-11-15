@@ -297,7 +297,7 @@ def join_lines(text: str, lang: str) -> str:
 
 def _relpath(target: Path, start: Path) -> str:
     import os
-    return os.path.relpath(target.as_posix(), start.as_posix())
+    return os.path.relpath(target.as_posix(), start.as_posix()).replace(os.sep, "/")
 
 
 def _is_block_line(line: str, nxt: str) -> bool:
