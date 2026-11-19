@@ -56,13 +56,14 @@ title: 変更履歴
 
 #### 電磁ブレーキ {#v2-2-0-brake}
 
+- **STEP800では、ブレーキ出力は、ブレーキの状態が変わるとすぐ変わります**（0.2〜0.3ms）。以前は10〜20ms後でした。
 - **ブレーキは6つの状態を持つ状態機械に従います**。[`/getBrakeStatus`](../reference/brake.md#getbrakestatus)で取得できます。ブレーキが有効なモータでは、コマンドの動作が変わりました。詳しくは[コマンドとブレーキ](../guides/electromagnetic-brake.md#commands)の表をご覧ください。主な点は次のとおりです。
   - ブレーキが解放されているときの`/activate 1`は何もしません（以前は即停止を送っていました）。コマンドの後の状態の読み出しで、ドライバが励磁されているときだけブレーキを解放します。そうでなければブレーキは保持状態のままで、`BrakeReleaseFailed`を送ります。
   - 回転中のモータへの`/activate 0`は、減速し、停止したらブレーキを保持状態にします。`/softHiZ`と同じです。
   - `/free`の後は、動作コマンドか`/activate 1`でモータが解放状態に戻ります。モータが止まっても、ブレーキを保持状態にしなくなりました。
   - ブレーキが保持状態のとき、または`/free`の後は、`/softStop`、`/hardStop`、`/enableServoMode 0`は何もしません。ブレーキが解放されていないときの`/enableServoMode 1`と`/homing`は`BrakeEngaged`を返します。
   - `/resetMotorDriver`と`/enableElectromagnetBrake`は、安全な状態でだけ受け付けます。そうでなければ`CommandIgnored`です（USBシリアルで読み込む設定にも同じ規則が働き、警告を表示します）。
-  - `/softHiZ`か`/activate 0`のための減速中の`/activate 1`や動作コマンドは、ブレーキを保持状態にする予定を取り消し、ブレーキは解放されたままになります（以前は`/activate 1`が即停止を送り、あとでモータが止まるとブレーキが保持状態になりました）。停止中のモータでは、`/softHiZ`と`/activate 0`は次の状態の読み出し（最大5ms後）でブレーキを保持状態にします。`/free`の後の`/activate 0`、`/softHiZ`、`/hardHiZ`はすぐに保持状態にします。解放状態のモータへの`/hardHiZ`は、先にモータを即停止します。STEP800では、ブレーキ出力は、ブレーキの状態が変わるとすぐ（0.2〜0.3ms）変わります。以前は10〜20ms後でした。
+  - `/softHiZ`か`/activate 0`のための減速中の`/activate 1`や動作コマンドは、ブレーキを保持状態にする予定を取り消し、ブレーキは解放されたままになります（以前は`/activate 1`が即停止を送り、あとでモータが止まるとブレーキが保持状態になりました）。停止中のモータでは、`/softHiZ`と`/activate 0`は次の状態の読み出し（最大5ms後）でブレーキを保持状態にします。`/free`の後の`/activate 0`、`/softHiZ`、`/hardHiZ`はすぐに保持状態にします。解放状態のモータへの`/hardHiZ`は、先にモータを即停止します。
   - ドライバが自分で無励磁になると、ブレーキを保持状態にし、`BrakeEngagedOnHiZ`を送ります。
   - `/softHiZ`か`/activate 0`のために減速している間（Stopping）に停止コマンドを受けると、ブレーキを保持状態にする予定が取り消され、状態はReleasedに戻ります。これは意図した動作で、最後に受けたコマンドが優先されます（[ブレーキを保持状態にするモータの停止](../guides/electromagnetic-brake.md#stopping)）。
 - **保持電流**: ブレーキが有効なモータが再び励磁されるたびに、KVAL_HOLD（TVAL_HOLD）がKVAL_RUN（TVAL_RUN）の半分以上に引き上げられます。`/free`の後も同じになりました（[保持電流](../guides/electromagnetic-brake.md#hold-current)）。
