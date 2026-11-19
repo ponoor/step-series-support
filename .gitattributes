@@ -1,0 +1,2 @@
+# 作業ツリーの改行を LF にそろえる（Windows で作業しても CRLF にしない）
+* text=auto eol=lf
