@@ -30,7 +30,7 @@ With PlatformIO, you select the board by the **environment** of `platformio.ini`
 - The environment `zeroUSB` of the earlier versions is kept, and builds the STEP400.
 - With more than one board connected, add the port to the environment, for example `upload_port = /dev/cu.usbmodem1101` under `[env:step800]`.
 
-The libraries for the drivers are taken from the tag ZIPs on GitHub, as `platformio.ini` says. Do not install them from the registry of PlatformIO.
+The libraries for the drivers are taken from the tag ZIPs on GitHub, as set in `platformio.ini`. Do not install them from the registry of PlatformIO.
 
 ## Compiling with the Arduino IDE {#arduino-ide}
 
