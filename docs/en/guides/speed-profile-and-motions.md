@@ -61,7 +61,7 @@ There are two choices, which make four commands:
 | Energized | [`/softStop`](../reference/motor-control.md#softstop) | [`/hardStop`](../reference/motor-control.md#hardstop) |
 | HiZ | [`/softHiZ`](../reference/motor-control.md#softhiz) | [`/hardHiZ`](../reference/motor-control.md#hardhiz) |
 
-An energized motor keeps its position: a voltage or a current according to KVAL_HOLD or TVAL_HOLD flows in the motor. In the HiZ state the outputs of the driver are high impedance, no current flows in the motor, and the motor does not hold its position. **A load that the motor is carrying can fall or lose its position when the motor is HiZ.**
+In voltage mode a voltage according to KVAL_HOLD is applied to an energized motor, and in current mode a current according to TVAL_HOLD flows in it, so the motor keeps its position. In the HiZ state the outputs of the driver are high impedance, no current flows in the motor, and the motor does not hold its position. **A load that the motor is carrying can fall or lose its position when the motor is HiZ.**
 
 For a motor with an electromagnetic brake, the commands that make the motor HiZ also engage the brake, and the stop commands act differently depending on the state of the brake. See [Electromagnetic brake](electromagnetic-brake.md#commands).
 

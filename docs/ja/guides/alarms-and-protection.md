@@ -4,7 +4,7 @@ title: アラームと保護
 
 # アラームと保護
 
-モータドライバチップは、4種類のアラームを検出します。電源電圧の低下（UVLO）、過熱、過電流、ストールです。このページでは、各アラームの意味、ドライバが何をするか、ボードが何を通知するかを説明します。
+モータドライバICは、4種類のアラームを検出します。電源電圧の低下（UVLO）、過熱、過電流、ストールです。このページでは、各アラームの意味、ドライバが何をするか、ボードが何を通知するかを説明します。
 
 ## 概要 {#overview}
 
@@ -23,7 +23,7 @@ STEP400のPowerSTEP01とSTEP800のL6470では、細かい点が異なります�
 
 ### UVLO: 電源電圧の低下 {#uvlo}
 
-ドライバの電源電圧が、遮断の閾値を下回ると、UVLOが起きます。ドライバはすべての出力をすぐに止めるため、モータは無励磁になり、この状態の間は動かせません。電圧が復帰の閾値を上回ると、状態は終わります。そのあとは[再開](#resuming)をご覧ください。閾値はSTEP400とSTEP800で異なります。ドライバチップのデータシートをご覧ください。
+ドライバの電源電圧が、遮断の閾値を下回ると、UVLOが起きます。ドライバはすべての出力をすぐに止めるため、モータは無励磁になり、この状態の間は動かせません。電圧が復帰の閾値を上回ると、状態は終わります。そのあとは[再開](#resuming)をご覧ください。閾値はSTEP400とSTEP800で異なります。ドライバICのデータシートをご覧ください。
 
 [`/enableUvloReport`](../reference/alarm-settings.md#enableuvloreport)で通知を有効にします（状態が変わると[`/uvlo`](../reference/automatically-sent-messages.md#uvlo)が送られます）。[`/getUvlo`](../reference/alarm-settings.md#getuvlo)で状態を読み出せます。
 
@@ -37,7 +37,7 @@ STEP400のPowerSTEP01とSTEP800のL6470では、細かい点が異なります�
 
 ドライバは、パワートランジスタの電流を測っています。電流が閾値を超えると、ドライバは出力を止めます（ファームウェアはこの保護を有効にしています）。モータは無励磁になります。この保護は重要なものなので、無効にすることは想定していません。
 
-[`/setOverCurrentThreshold`](../reference/alarm-settings.md#setovercurrentthreshold)で閾値を設定し、[`/enableOverCurrentReport`](../reference/alarm-settings.md#enableovercurrentreport)で通知を有効にします。[`/overCurrent`](../reference/automatically-sent-messages.md#overcurrent)が送られます。原因がなくなったあとにモータをもう一度動かす方法は、[再開](#resuming)をご覧ください（電磁ブレーキのモータでは、先に`/activate 1`が必要です）。
+[`/setOverCurrentThreshold`](../reference/alarm-settings.md#setovercurrentthreshold)で閾値を設定し、[`/enableOverCurrentReport`](../reference/alarm-settings.md#enableovercurrentreport)で通知を有効にすると、過電流が起きたときに[`/overCurrent`](../reference/automatically-sent-messages.md#overcurrent)が送られます。原因がなくなったあとにモータをもう一度動かす方法は、[再開](#resuming)をご覧ください（電磁ブレーキのモータでは、先に`/activate 1`が必要です）。
 
 ### ストール {#stall}
 

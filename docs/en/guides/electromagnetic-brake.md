@@ -14,7 +14,7 @@ The board controls the brake output of each motor on its own. It supports the ST
 
 ## Enabling the brake {#enable}
 
-Enable the brake of a motor with [`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake) or with [`driverSettings.electromagnetBrakeEnable`](../connections/configuration-items.md#driversettings-electromagnetbrakeenable) in the configuration. While the brake is enabled, the board releases the brake when the motor is energized and engages it when the motor is not energized, by itself. A motor whose brake is not enabled is not affected by anything on this page.
+Enable the brake of a motor with [`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake) or with [`driverSettings.electromagnetBrakeEnable`](../connections/configuration-items.md#driversettings-electromagnetbrakeenable) in the configuration. While the brake is enabled, the board releases the brake when the motor is energized and engages it when the motor is not energized, by itself. The brake behavior on this page does not apply to a motor whose brake is not enabled (the last paragraph of [Stopping a motor that is going to engage the brake](#stopping) is the one exception).
 
 The setting can be changed only while the driver is HiZ and, to disable the brake, only while it is engaged or after `/free`; otherwise the board replies `CommandIgnored`.
 
@@ -130,7 +130,7 @@ If you hang a load on the motor, take these times into account.
 
 [![PKP243D23M2](https://ponoor.com/cms/wp-content/uploads/2021/03/pkp243d-700x525.jpg)](https://ponoor.com/cms/wp-content/uploads/2021/03/pkp243d.jpg)
 
-[Orientalmotor](https://www.orientalmotor.co.jp/) PKP243D23M2
+[Oriental Motor](https://www.orientalmotor.co.jp/) PKP243D23M2
 
 ## Related commands and settings {#related}
 

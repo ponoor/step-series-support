@@ -56,7 +56,7 @@ terms:
     concept: 「HOMEスイッチ端子」とは書かない（スイッチの状態は「HOMEスイッチがオン」）
     avoid: [HOMEスイッチ端子, LIMITスイッチ端子]
   - use: オン
-    concept: スイッチの状態（オン = 入力が Low）。オフはその反対
+    concept: スイッチの状態（オン = 入力が LOW）。オフはその反対
     avoid: [作動している, 反応している, 押されている]
   - use: マイクロステップ
     concept: microstep

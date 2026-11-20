@@ -23,7 +23,7 @@ title: スピードプロファイルと動作
 
 [`/setSpeedProfile`](../reference/speed-profile.md#setspeedprofile)で、3つの値を設定します。加速度と減速度は、モータが停止している（または無励磁の）ときしか設定できません。モータが回転している間は、`/error/command MotorNotStopped`を返し、元の値のままです。最大速度は、いつでも設定できます。
 
-モータの停止中にしかドライバに書き込めない設定は、ほかにもあります。[`/setAcc`](../reference/speed-profile.md#setacc)、[`/setDec`](../reference/speed-profile.md#setdec)、[`/setMinSpeed`](../reference/speed-profile.md#setminspeed)、[`/enableLowSpeedOptimize`](../reference/motor-driver-settings.md#enablelowspeedoptimize)と、それぞれのRaw版です。どのコマンドがどの状態で実行できるかは、各コマンドの「実行可能タイミング」に載せています。[コマンドを実行可能なタイミング](../reference/index.md)もご覧ください。
+モータの停止中にしかドライバに書き込めない設定は、ほかにもあります。[`/setAcc`](../reference/speed-profile.md#setacc)、[`/setDec`](../reference/speed-profile.md#setdec)、[`/setMinSpeed`](../reference/speed-profile.md#setminspeed)、[`/enableLowSpeedOptimize`](../reference/motor-driver-settings.md#enablelowspeedoptimize)と、それぞれのRaw版です。どのコマンドがどの状態で実行できるかは、各コマンドの「実行可能タイミング」に載せています。[コマンドを実行可能なタイミング](../reference/index.md#command-executable-timing)もご覧ください。
 
 加速度と減速度は、ドライバのレジスタで表せる最も近い値に丸められます。[`/getSpeedProfile`](../reference/speed-profile.md#getspeedprofile)が返す値は、設定した値と少し異なることがあります。
 
@@ -43,7 +43,7 @@ title: スピードプロファイルと動作
 
 代表的なコマンドは[`/goTo`](../reference/motor-control.md#goto)と[`/move`](../reference/motor-control.md#move)です。[`/goHome`](../reference/position-management.md#gohome)、[`/goMark`](../reference/position-management.md#gomark)、[`/goToDir`](../reference/motor-control.md#gotodir)も位置決め運転です。
 
-運転中の位置決め運転に、別の位置決め運転で割り込めます。ただし`/move`は除きます。[`/goTo`](../reference/motor-control.md#goto)、[`/goToDir`](../reference/motor-control.md#gotodir)、[`/goHome`](../reference/position-management.md#gohome)、[`/goMark`](../reference/position-management.md#gomark)は、モータがBUSY状態でも受け付けられます（ファームウェアが先にBUSY状態を解除します）。`/move`は受け付けられません。モータが回転している間はドライバが無視し、ボードは`/error/command CommandIgnored`を返します。
+運転中の位置決め運転に、別の位置決め運転で割り込めます。ただし`/move`は除きます。[`/goTo`](../reference/motor-control.md#goto)、[`/goToDir`](../reference/motor-control.md#gotodir)、[`/goHome`](../reference/position-management.md#gohome)、[`/goMark`](../reference/position-management.md#gomark)は、モータがBUSY状態でも受け付けられます（ファームウェアが先にBUSY状態を解除します）。`/move`は受け付けられません。モータが回転している間は、ボードは`/error/command CommandIgnored`を返します。
 
 ### サーボモード {#servo-mode}
 
@@ -54,14 +54,14 @@ title: スピードプロファイルと動作
 2つの選択肢があり、合計4種類のコマンドがあります。
 
 - スピードプロファイルに従って減速して停止するか、即座に停止するか
-- 停止後も励磁したままにするか、無励磁（HiZ）にするか
+- 停止後も励磁したままにするか、無励磁にするか
 
 | 停止後の状態 | 減速停止 | 即停止 |
 | --- | --- | --- |
 | 励磁 | [`/softStop`](../reference/motor-control.md#softstop) | [`/hardStop`](../reference/motor-control.md#hardstop) |
 | 無励磁 | [`/softHiZ`](../reference/motor-control.md#softhiz) | [`/hardHiZ`](../reference/motor-control.md#hardhiz) |
 
-励磁状態では、KVAL_HOLDやTVAL_HOLDに応じた電圧や電流がモータに流れて、モータは位置を保ちます。無励磁（HiZ）とは、モータドライバの出力が高インピーダンスになり、モータに電流が流れない状態です。モータは位置を保てません。**モータが負荷を支えているときは、無励磁にすると、負荷が落下したり、位置がずれたりすることがあります。**
+励磁状態では、電圧モードではKVAL_HOLDに応じた電圧がモータに加わり、電流モードではTVAL_HOLDに応じた電流がモータに流れて、モータは位置を保ちます。無励磁（HiZ）とは、モータドライバの出力が高インピーダンスになり、モータに電流が流れない状態です。モータは位置を保てません。**モータが負荷を支えているときは、無励磁にすると、負荷が落下したり、位置がずれたりすることがあります。**
 
 電磁ブレーキのモータでは、無励磁にするコマンドはブレーキも保持状態にします。ブレーキの状態によって、停止コマンドの作用が異なります。[電磁ブレーキ](electromagnetic-brake.md#commands)をご覧ください。
 

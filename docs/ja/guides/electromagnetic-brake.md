@@ -14,13 +14,13 @@ title: 電磁ブレーキ
 
 ## ブレーキを有効にする {#enable}
 
-モータのブレーキは、[`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake)か、設定の[`driverSettings.electromagnetBrakeEnable`](../connections/configuration-items.md#driversettings-electromagnetbrakeenable)で有効にします。有効にしている間、ボードは、モータが励磁されるとブレーキを解放し、励磁されないとブレーキを保持状態にします。ブレーキを有効にしていないモータは、このページのことの影響を受けません。
+モータのブレーキは、[`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake)か、設定の[`driverSettings.electromagnetBrakeEnable`](../connections/configuration-items.md#driversettings-electromagnetbrakeenable)で有効にします。有効にしている間、ボードは、モータが励磁されるとブレーキを解放し、励磁されないとブレーキを保持状態にします。ブレーキを有効にしていないモータには、このページに書いたブレーキの動作は関係ありません（例外は、[ブレーキを保持状態にする途中での停止](#stopping)の最後の段落です）。
 
 設定の変更は、ドライバが無励磁のときだけできます。ブレーキを無効にするときは、ブレーキが保持状態のときか`/free`の後だけできます。そうでなければ、ボードは`CommandIgnored`を返します。
 
 ## ブレーキの状態 {#states}
 
-各モータのブレーキは、6つの状態のどれかです。[`/getBrakeStatus`](../reference/brake.md#getbrakestatus)で番号を取得できます。番号は仕様で、新しい状態は6、7、...として追加されるだけです。ブレーキを無効にしているモータの状態は-1です。
+各モータのブレーキは、6つの状態のどれかです。[`/getBrakeStatus`](../reference/brake.md#getbrakestatus)で番号を取得できます。番号は仕様として固定されていて、変わりません。新しい状態は、6、7、...として追加されるだけです。ブレーキを無効にしているモータの状態は-1です。
 
 | 状態 | 名前 | ブレーキ出力 | ドライバ | 意味 |
 | --- | --- | --- | --- | --- |
@@ -67,7 +67,7 @@ title: 電磁ブレーキ
 
 `/softHiZ`や`/activate 0`で減速している間（Stopping）は、**最後に受け取ったコマンドが優先されます**。
 
-- `/softStop`、`/hardStop`、`/enableServoMode 0`は、ブレーキを保持状態にする予定を取り消します。状態はReleasedに戻り、モータは停止して励磁されたままになります。これらのコマンドは「止めて保持する」という意味なので、先の「止めてブレーキを保持状態にする」を上書きします。そのあとブレーキを保持状態にしたいときは、`/softHiZ`、`/activate 0`、`/hardHiZ`をもう一度送ってください。
+- `/softStop`、`/hardStop`、`/enableServoMode 0`は、ブレーキを保持状態にする予定を取り消します。状態はReleasedに戻り、モータは停止して励磁されたままになります。これらのコマンドは「止めて励磁したままにする」という意味なので、先の「止めてブレーキを保持状態にする」を上書きします。そのあとブレーキを保持状態にしたいときは、`/softHiZ`、`/activate 0`、`/hardHiZ`をもう一度送ってください。
 - `/hardHiZ`は予定を取り消しません。モータをすぐに止めて、ブレーキを保持状態にします。
 - `/softHiZ`と`/activate 0`は何もしません。減速と予定はそのまま続きます。
 - 動作コマンドと`/activate 1`も予定を取り消します。ブレーキは解放されたままです。
@@ -76,18 +76,18 @@ title: 電磁ブレーキ
 
 ## 移行時間 {#transition-duration}
 
-ブレーキが機械的に動作するには少し時間がかかるため、その間は、モータとブレーキの両方で軸を保持しておく必要があります。**移行時間**（[`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration)、[`driverSettings.brakeTransitionDuration`](../connections/configuration-items.md#driversettings-braketransitionduration)）は、この重なりの時間です。
+ブレーキが機械的に動作するには少し時間がかかるため、その間は、モータとブレーキの両方で軸を止めておく必要があります。**移行時間**（[`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration)、[`driverSettings.brakeTransitionDuration`](../connections/configuration-items.md#driversettings-braketransitionduration)）は、この重なりの時間です。
 
 - 解放するとき: ボードはモータを励磁し、移行時間を待ってから、ブレーキを解放します。
 - 保持状態にするとき: ボードはブレーキを保持状態にし、移行時間を待ってから、モータを無励磁にします。
 
 [![ブレーキの移行時間](https://ponoor.com/cms/wp-content/uploads/2021/03/brakeTransition.png)](https://ponoor.com/cms/wp-content/uploads/2021/03/brakeTransition.png)
 
-移行時間は、ブレーキがロックするまでの時間には影響しません。ブレーキの後に、モータを無励磁にしたり、ブレーキを解放したりするまでの待ち時間に影響します。待ち時間は5ms単位で数えるため、実際の時間は、設定値より0〜5ms長くなります。
+移行時間は、ブレーキがロックするまでの時間は変えません。変わるのは、ボードの待ち時間です。ブレーキを保持状態にしてからモータを無励磁にするまで、またはモータを励磁してからブレーキを解放するまで、ボードは移行時間だけ待ちます。待ち時間は5ms単位で数えるため、実際の時間は、設定値より0〜5ms長くなります。
 
 推奨値は示しません。使うブレーキの応答時間、負荷、装置によって決まるためです。使うブレーキの仕様にある吸引・釈放時間に、余裕を足した値にしてください。初期値と範囲は[`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration)をご覧ください。
 
-## 保持の電流 {#hold-current}
+## 保持電流 {#hold-current}
 
 ブレーキを有効にしているモータが再び励磁されるとき（`/activate 1`と、`/free`の後の動作コマンド）、KVAL_HOLD（電流モードではTVAL_HOLD）は、KVAL_RUN（TVAL_RUN）の半分以上に引き上げられます。ブレーキを解放している間、モータが負荷を支えるためです。[`/getKval`](../reference/voltage-and-current-mode-settings.md#getkval)は引き上げられた値を返します。[電圧モードと電流モード](voltage-and-current-mode.md#kval-tval)をご覧ください。
 
@@ -101,7 +101,7 @@ title: 電磁ブレーキ
 
 リセットの原因は、[`/booted`](../reference/automatically-sent-messages.md#booted)の2番目の引数です。番号は[`/booted`](../reference/automatically-sent-messages.md#booted)をご覧ください。
 
-EthernetをつないだままUSBを抜くと、STEP400（R1基板）は再起動することがあります（ハードウェアの問題です）。先にブレーキは保持状態になりますが、抜くのはモータを止めているときにしてください。
+EthernetをつないだままUSBを抜くと、STEP400（R1）は再起動することがあります（ハードウェアの問題です）。先にブレーキは保持状態になりますが、抜くのはモータを止めているときにしてください。
 
 ## 負荷を支えられない時間 {#unsupported}
 
@@ -116,7 +116,7 @@ EthernetをつないだままUSBを抜くと、STEP400（R1基板）は再起動
 
 ## 使い方の注意 {#usage}
 
-- **ブレーキの電源は、モータと同じ電源から取るか、モータの電源と一緒に切れる電源にしてください。** モータの電源だけが先に切れる状態は避けてください。モータの電源だけが切れると、電源電圧の低下（UVLO）が働く前に保持力が抜けて、負荷が落下します。モータとブレーキの電圧が違う構成（例: 48Vのモータと24Vのブレーキ）でも、ブレーキの電源がモータの電源に連動して切れるようにします。
+- **ブレーキの電源は、モータと同じ電源から取るか、モータの電源と一緒に切れる電源にしてください。** モータの電源だけが先に切れる状態は避けてください。モータの電源だけが切れると、電源電圧の低下（UVLO）が働く前にモータが位置を保つ力が失われて、負荷が落下します。モータとブレーキの電圧が違う構成（例: 48Vのモータと24Vのブレーキ）でも、ブレーキの電源がモータの電源に連動して切れるようにします。
 - **再起動のあとと、モータが無励磁になったあとは、原点復帰をやり直してください。** 位置が信頼できなくなっています。モータが再び励磁されたあとの最初のブレーキの解放で、軸がずれることがあります。[原点復帰と位置管理](homing-and-position.md)をご覧ください。
 - **`/free`はメンテナンス用です。** ブレーキを解放したままモータを無励磁にするため、モータに負荷が吊り下げられていると、負荷が落下します。このコマンドは十分に注意して送ってください。送る前に、負荷を安全な状態にしてください。
 - モータが回るのは、ブレーキが解放されているときだけです。上の動作開始条件をご覧ください。

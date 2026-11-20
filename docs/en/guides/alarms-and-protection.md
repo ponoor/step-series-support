@@ -4,7 +4,7 @@ title: Alarms and protection
 
 # Alarms and protection
 
-The motor driver chips detect four kinds of alarms: a drop of the supply voltage (UVLO), overtemperature, overcurrent and stall. This page explains what each alarm means, what the driver does, and what the board sends to you.
+The driver ICs detect four kinds of alarms: a drop of the supply voltage (UVLO), overtemperature, overcurrent and stall. This page explains what each alarm means, what the driver does, and what the board sends to you.
 
 ## Overview {#overview}
 
@@ -23,7 +23,7 @@ The PowerSTEP01 of the STEP400 and the L6470 of the STEP800 differ in the detail
 
 ### UVLO: undervoltage lockout {#uvlo}
 
-UVLO happens when the supply voltage of the driver falls below the turn-off threshold. The driver turns off all the outputs at once, so the motor is HiZ and cannot be operated while the condition lasts. The condition ends when the voltage is above the turn-on threshold; then see [Resuming](#resuming). The thresholds are different on the STEP400 and on the STEP800; see the datasheets of the driver chips.
+UVLO happens when the supply voltage of the driver falls below the turn-off threshold. The driver turns off all the outputs at once, so the motor is HiZ and cannot be operated while the condition lasts. The condition ends when the voltage is above the turn-on threshold; then see [Resuming](#resuming). The thresholds are different on the STEP400 and on the STEP800; see the datasheets of the driver ICs.
 
 [`/enableUvloReport`](../reference/alarm-settings.md#enableuvloreport) turns the notification on (the message [`/uvlo`](../reference/automatically-sent-messages.md#uvlo) is sent when the state changes). [`/getUvlo`](../reference/alarm-settings.md#getuvlo) reads the state.
 
@@ -37,7 +37,7 @@ The driver monitors its temperature. At the warning level, only a flag is set an
 
 The driver measures the current of the power transistors. When the current exceeds the threshold, the driver turns off the outputs (the firmware keeps this protection on), so the motor is HiZ. The protection is a critical one; it is not meant to be turned off.
 
-[`/setOverCurrentThreshold`](../reference/alarm-settings.md#setovercurrentthreshold) sets the threshold, [`/enableOverCurrentReport`](../reference/alarm-settings.md#enableovercurrentreport) turns the notification on, and [`/overCurrent`](../reference/automatically-sent-messages.md#overcurrent) is sent. To start the motor again after the cause has gone, see [Resuming](#resuming) (a motor with the electromagnetic brake needs `/activate 1` first).
+[`/setOverCurrentThreshold`](../reference/alarm-settings.md#setovercurrentthreshold) sets the threshold, [`/enableOverCurrentReport`](../reference/alarm-settings.md#enableovercurrentreport) turns the notification on, and then [`/overCurrent`](../reference/automatically-sent-messages.md#overcurrent) is sent when an overcurrent occurs. To start the motor again after the cause has gone, see [Resuming](#resuming) (a motor with the electromagnetic brake needs `/activate 1` first).
 
 ### Stall {#stall}
 

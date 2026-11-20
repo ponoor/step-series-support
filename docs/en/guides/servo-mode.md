@@ -8,7 +8,7 @@ The servo mode lets the motor follow a target position that changes in real time
 
 ## What the servo mode is {#what}
 
-The servo mode is not a function of the motor driver chip. Positioning commands of the driver need the target position to be set before the motion starts, and a new target is not accepted until the motion has finished. In the servo mode, you can define a new target position *while the motor is moving*, like a radio-controlled servo motor. While the mode is active, the other motion commands cannot be sent: they are rejected with `InServoMode`.
+The servo mode is not a function of the motor driver IC. Positioning commands of the driver need the target position to be set before the motion starts. In the servo mode, you can define a new target position *while the motor is moving*, like a radio-controlled servo motor. While the mode is active, the other motion commands cannot be sent: they are rejected with `InServoMode`.
 
 ![The control of the servo mode](https://python-step-series.readthedocs.io/en/documentation/_images/pid-control.jpg)
 
