@@ -78,11 +78,11 @@ Config and product match : Yes
 
 | メッセージ | 説明 |
 | --- | --- |
-| CONFIG_VERSION_UNDEFINED | 設定のバージョンが未定義です |
-| CONFIG_VERSION_NOTLOADED | 設定をmicroSDカードから読み込んでいません |
-| CONFIG_VERSION_OLD | 設定のバージョンが古いです |
-| CONFIG_VERSION_APPLICABLE | 設定とファームウェアのバージョンが合っています |
-| CONFIG_VERSION_NEW | 設定のバージョンが、ファームウェアより新しいです（ファームウェアが古いです） |
+| CONFIG_VERSION_UNDEFINED | 設定のバージョンが未定義 |
+| CONFIG_VERSION_NOTLOADED | 設定をmicroSDカードから読み込んでいない |
+| CONFIG_VERSION_OLD | 設定のバージョンが古い |
+| CONFIG_VERSION_APPLICABLE | 設定とファームウェアのバージョンが合っている |
+| CONFIG_VERSION_NEW | 設定のバージョンが、ファームウェアより新しい（ファームウェアが古い） |
 
 `Config and product match`は、設定ファイルの製品名（`information.targetProduct`）がボードの製品と違うときに`No`になります。
 
@@ -211,12 +211,12 @@ Dest Ip : 10.0.0.10
 
 | コマンド | 説明 |
 | --- | --- |
-| `G` | 動いている設定を、1行のJSONで出力します |
-| `T` | ボードとモータの状態を、1行のJSONで出力します |
-| `{...}` | 設定のJSONオブジェクトを適用して、カードに保存します |
-| `F<path>` | 次の再起動まで、以降の保存の保存先を変えます |
-| `R` | ボードを再起動します |
-| `p` | 処理時間の統計を出力して、リセットします |
+| `G` | 動いている設定を、1行のJSONで出力する |
+| `T` | ボードとモータの状態を、1行のJSONで出力する |
+| `{...}` | 設定のJSONオブジェクトを適用して、カードに保存する |
+| `F<path>` | 次の再起動まで、以降の保存の保存先を変える |
+| `R` | ボードを再起動する |
+| `p` | 処理時間の統計を出力して、リセットする |
 
 - **`G`**: `board`（製品、モータの数、ファームウェアのバージョン、設定ファイル名）と、設定の各セクションです。
 - **`T`**: `board`には、製品、MCU（`mcu`）、リセットの原因（`resetCause`と、MCUの`resetCauseRaw`）、ファームウェアのバージョン、IPアドレス、ID、リンク、送信先のMACアドレス（`destMac`、6つの数。ブロードキャストのあとは255が6つ）、`arpPending`（送信先のMACアドレスを解決中かどうか）、カードと設定の状態が入っています。`motors`の各要素には、位置、速度、状態、スイッチの状態などが入っています。`ocd`と`stall`は、常にfalseです。これらにはOSCメッセージを使ってください。`resetCause`の意味は[`/booted`](../reference/automatically-sent-messages.md#booted)にあります。
