@@ -4,7 +4,7 @@ title: Compiling the firmware
 
 # Compiling the firmware
 
-To update or customize the firmware, you build it in your own environment and upload it to the board. The MCU is an [Arduino Zero](https://www.arduino.cc/en/Main/ArduinoBoardZero&) compatible one, so the firmware is built as an Arduino-compatible project. The recommended way is PlatformIO. The Arduino IDE is also supported.
+To update or customize the firmware, you build it in your own environment and upload it to the board. The MCU is an [Arduino Zero](https://docs.arduino.cc/hardware/zero) compatible one, so the firmware is built as an Arduino-compatible project. The recommended way is PlatformIO. The Arduino IDE is also supported.
 
 The source code is in the [GitHub repository](https://github.com/ponoor/step-series-universal-firmware), and the versions are on the [Releases](https://github.com/ponoor/step-series-universal-firmware/releases) page. The releases have no ready-made binary files (`.bin`): you build the firmware and upload it through the USB bootloader. The instructions here follow the README of the repository.
 

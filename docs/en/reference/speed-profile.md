@@ -4,7 +4,7 @@ title: Speed profile
 
 # Speed profile
 
-For how the speed profile and the motions work, see [Speed profile and motions](../guides/speed-profile-and-motions.md).
+For how the speed profile and the motions work, see [Speed profile and types of motor motion](../guides/speed-profile-and-motions.md).
 
 <!-- osc: /setSpeedProfile -->
 <!-- generated:begin osc /setSpeedProfile -->

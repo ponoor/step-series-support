@@ -6,7 +6,7 @@ title: HOME/LIMITスイッチ
 
 原点復帰でのHOMEスイッチとLIMITスイッチの使い方は、[原点復帰と位置管理](../guides/homing-and-position.md)をご覧ください。
 
-## 状態の取得 {#status-report}
+## 状態の通知と取得 {#status-report}
 
 <!-- osc: /enableHomeSwReport -->
 <!-- generated:begin osc /enableHomeSwReport -->

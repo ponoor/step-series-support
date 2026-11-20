@@ -14,7 +14,7 @@ title: USBシリアル診断
 
 USBを先につないで、モータの電源をあとから入れると、ドライバICは初期化されていない状態になります。ボードがドライバICを初期化するのは、起動するときだけだからです。先にモータの電源を入れてからUSBをつなぐか、モータの電源を入れたあとにRESETボタンを押してください。すべてのモータ（255）に[`/resetMotorDriver`](../reference/motor-driver-settings.md#resetmotordriver)を送ってもよいです。
 
-EthernetをつないだままUSBケーブルを抜くと、STEP400（R1基板）は再起動することがあります。ハードウェアの問題です。ケーブルを抜く前に、モータを止めてください。[STEP400](../hardware/step400.md#usb-unplug)をご覧ください。
+EthernetをつないだままUSBケーブルを抜くと、STEP400（R1）は再起動することがあります。ハードウェアの問題です。ケーブルを抜く前に、モータを止めてください。[STEP400](../hardware/step400.md#usb-unplug)をご覧ください。
 
 ## シリアルモニタ {#serial-monitor}
 
@@ -53,7 +53,7 @@ R: reboot board
 p: print timing stats [us] and reset them
 ```
 
-各コマンドを以下で説明します。Ethernetのリンクが変わったときは、`Ethernet link up`と`Ethernet link down`も表示されます。応答しない送信先への送信を止めたとき、再開したときにも、メッセージが表示されます。
+各コマンドを以下で説明します。Ethernetのリンクが変わったときは、`Ethernet link up`と`Ethernet link down`も表示されます。ARPに応答しない送信先への送信を止めたとき、再開したときにも、メッセージが表示されます。
 
 ## 状態（`s`） {#status}
 
@@ -115,7 +115,7 @@ Current outPort : 50101
 
 - `Ethernet hardware status`: EthernetコントローラのW5500の状態です。正常なら`EthernetW5500`です。`EthernetNoHardware`は、ボードがW5500と通信できないことを表します。
 - `Ethernet link status`: `LinkON`（リンクしている）、`LinkOff`（リンクしていない）、`Unknown`（状態を取得できない）のどれかです。
-- `isDestIpSet`: 送信先が設定されていて、つまり[`/setDestIp`](../reference/system-settings.md#setdestip)を受信している（または、受信前にも送信する設定になっている）、ボードがOSCメッセージを送信できるときに`Yes`です。
+- `isDestIpSet`: 送信先が設定されていて、ボードがOSCメッセージを送信できるときに`Yes`です。つまり、[`/setDestIp`](../reference/system-settings.md#setdestip)を受信している（または、受信前にも送信する設定になっている）ときです。
 - `Destination Ip`、`Current My Ip`、`Current MAC address`、`Current outPort`: 送信先と、ボードが今使っているIPアドレス、MACアドレス、送信ポートです。IDが加算されています。
 - `Destination MAC address`: 最後の送信の宛先のMACアドレスです。最後の送信がブロードキャストだったときは、`FF:FF:FF:FF:FF:FF`です。
 
@@ -214,7 +214,7 @@ Dest Ip : 10.0.0.10
 | `G` | 動いている設定を、1行のJSONで出力します |
 | `T` | ボードとモータの状態を、1行のJSONで出力します |
 | `{...}` | 設定のJSONオブジェクトを適用して、カードに保存します |
-| `F<path>` | 次の再起動まで、次の保存の保存先を変えます |
+| `F<path>` | 次の再起動まで、以降の保存の保存先を変えます |
 | `R` | ボードを再起動します |
 | `p` | 処理時間の統計を出力して、リセットします |
 
@@ -222,5 +222,5 @@ Dest Ip : 10.0.0.10
 - **`T`**: `board`には、製品、MCU（`mcu`）、リセットの原因（`resetCause`と、MCUの`resetCauseRaw`）、ファームウェアのバージョン、IPアドレス、ID、リンク、送信先のMACアドレス（`destMac`、6つの数。ブロードキャストのあとは255が6つ）、`arpPending`（送信先のMACアドレスを解決中かどうか）、カードと設定の状態が入っています。`motors`の各要素には、位置、速度、状態、スイッチの状態などが入っています。`ocd`と`stall`は、常にfalseです。これらにはOSCメッセージを使ってください。`resetCause`の意味は[`/booted`](../reference/automatically-sent-messages.md#booted)にあります。
 - **`{...}`**: ボードは、設定を適用して、カードに書き、`{"result":"ok", ...}`またはエラーを返します。**送る前に、モータを止めてください。** 保存の間、ボードは何も処理しません（[設定の仕組み](../connections/how-settings-work.md#saving)をご覧ください）。効くときは[変更が効くとき](../connections/how-settings-work.md#when)をご覧ください。
 - **`F<path>`**: 規則と、起動時にボードが読まないファイル名は、[`F<path>`で決めた名前](../connections/microsd-card.md#f-path)をご覧ください。
-- **`R`**: 最初に`{"result":"ok","message":"Rebooting..."}`を返します。ボードは、少なくとも50ms待ち、ブレーキが有効でブレーキが保持されていない、回転しているモータを止めて、そのブレーキを保持状態にし、移行時間（最大1s）を待ってから、再起動します。[再起動、ウォッチドッグ、CPU動作異常](../guides/electromagnetic-brake.md#restart)をご覧ください。
+- **`R`**: 最初に`{"result":"ok","message":"Rebooting..."}`を返します。ボードは、少なくとも50ms待ちます。次に、ブレーキが有効で、まだ保持されていない状態で回転しているモータを止め、そのブレーキを保持状態にして、移行時間（最大1s）を待ってから、再起動します。[再起動、ウォッチドッグ、CPU動作異常](../guides/electromagnetic-brake.md#restart)をご覧ください。
 - **`p`**: ループと処理の時間（最大、平均、回数。単位はマイクロ秒）と、送信と、送信先のMACアドレスの解決のカウンタ（`udpSendFailed`、`udpSendDropped`、`arpResolve`、`arpProbe`など）です。[MACアドレスの解決](../guides/communication-and-messages.md#arp)をご覧ください。

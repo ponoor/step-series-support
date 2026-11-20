@@ -66,15 +66,6 @@ The main components are as follows.
 | A3 | W5500_RESET |  |
 | A4 | SD_DETECT |  |
 | A5 | Shift Register CS |  |
-| D22/MISO | MISO | - | SERCOM4.0 |
-| D23/MOSI | MOSI | - | SERCOM4.2 |
-| D24/SCK | SCK | - | SERCOM4.3 |
-| D6 | MISO | - | SERCOM3.2 |
-| D11 | MOSI | - | SERCOM3.0 |
-| D12 | SCK | - | SERCOM3.3 |
-| D3 | MISO | - | SERCOM2.1 |
-| D2 | MOSI | SERCOM2.2 | - |
-| D0 | SCK | - | SERCOM2.3 |
 
 L6470_RESET and W5500_RESET are connected to the reset pins of the L6470 and the W5500 separately. Set the pin mode to OUTPUT and then set the state to HIGH.
 

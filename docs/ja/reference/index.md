@@ -45,7 +45,7 @@ OSCコマンドのモータIDは、基板に印刷してある番号と一致し
 | 場合 | 返るエラー |
 | --- | --- |
 | コマンドに必要な数より引数が少ない | `/error/osc MissingArgument` |
-| 型が違う引数: 数値の代わりの文字列、NaN、∞、`/setConfigName`に文字列以外 | `/error/osc WrongDataType` |
+| 型が違う引数: 数値の代わりの文字列、NaN、∞、文字列ではない`/setConfigName`の引数 | `/error/osc WrongDataType` |
 | ボードにないモータID | `/error/command MotorIdNotMatch`（送ったモータIDつき） |
 | コマンドの範囲外の値 | `/error/command CommandIgnored` |
 | 16個を超える引数、または512バイトを超えるパケット | `/error/osc OscSyntaxError` |
@@ -84,8 +84,8 @@ OSCコマンドのモータIDは、基板に印刷してある番号と一致し
 
 また、送ろうとしているコマンドの値は、次の条件を満たしている必要があります。
 
-- [`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw)が設定されていて、HOMEスイッチがオンのときに、`homingDirection`へ動作しようとしていない
-- [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)が設定されていて、LIMITスイッチがオンのときに、`homingDirection`の逆方向へ動作しようとしていない
+- [`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw)が設定されていて、HOMEスイッチがオンのときに、原点復帰方向（`homingDirection`）へ動作しようとしていない
+- [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)が設定されていて、LIMITスイッチがオンのときに、原点復帰方向の逆方向へ動作しようとしていない
 
 条件を満たさない動作コマンドは、`BrakeEngaged`、`InServoMode`、`HomeSwActivating`、`LimitSwActivating`などのエラーで拒否されます。コマンドごとのエラーは、各コマンドのリファレンスに載せています。
 

@@ -4,7 +4,7 @@ title: Voltage and current mode settings
 
 # Voltage and current mode settings
 
-For how to decide the KVAL and TVAL values, see [Voltage and current mode](../guides/voltage-and-current-mode.md).
+For how to decide the KVAL and TVAL values, see [Voltage mode and current mode](../guides/voltage-and-current-mode.md).
 
 ## Voltage mode {#voltage-mode}
 

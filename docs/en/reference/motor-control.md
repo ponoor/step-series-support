@@ -4,7 +4,7 @@ title: Motor control
 
 # Motor control
 
-For how the motions work, see [Speed profile and motions](../guides/speed-profile-and-motions.md).
+For how the motions work, see [Speed profile and types of motor motion](../guides/speed-profile-and-motions.md).
 
 ## Motor movement {#motor-movement}
 

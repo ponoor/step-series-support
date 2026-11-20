@@ -4,7 +4,7 @@ title: STEP800
 
 # STEP800
 
-STEP800のハードウェアです。基板、主な部品、ピン配置、ほかのページで説明していないコネクタをまとめています。
+STEP800のハードウェアです。基板、主な部品、ピン割り振り、ほかのページで説明していないコネクタをまとめています。
 
 ## ハードウェアの概要 {#overview}
 
@@ -66,15 +66,6 @@ M3用の取付穴が、基板の各隅と中央付近の5か所にあります�
 | A3 | W5500_RESET |  |
 | A4 | SD_DETECT |  |
 | A5 | Shift Register CS |  |
-| D22/MISO | MISO | - | SERCOM4.0 |
-| D23/MOSI | MOSI | - | SERCOM4.2 |
-| D24/SCK | SCK | - | SERCOM4.3 |
-| D6 | MISO | - | SERCOM3.2 |
-| D11 | MOSI | - | SERCOM3.0 |
-| D12 | SCK | - | SERCOM3.3 |
-| D3 | MISO | - | SERCOM2.1 |
-| D2 | MOSI | SERCOM2.2 | - |
-| D0 | SCK | - | SERCOM2.3 |
 
 L6470_RESETとW5500_RESETは、それぞれL6470とW5500のリセットピンに別々につながっています。ピンモードをOUTPUTにしてから、HIGHにしてください。
 

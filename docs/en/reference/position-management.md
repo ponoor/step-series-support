@@ -4,7 +4,7 @@ title: Position management
 
 # Position management
 
-For how the position is managed, see [Homing and position](../guides/homing-and-position.md).
+For how the position is managed, see [Homing and position management](../guides/homing-and-position.md).
 
 ## Position {#position}
 

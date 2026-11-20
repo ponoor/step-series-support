@@ -12,7 +12,7 @@ title: トラブルシューティング
 
 コマンドは効くのに、何も返ってこないことがあります。次の点を確認してください。
 
-- **`/setDestIp`を送っていない。** ボードは、[`/setDestIp`](../reference/system-settings.md#setdestip)を受け取るまで、PCに何も送りません（`canSendMsgBeforeDestIp`の設定がオンのときを除きます）。[送信先と`/setDestIp`](../guides/communication-and-messages.md#setdestip)をご覧ください。
+- **`/setDestIp`を送っていない。** ボードは、[`/setDestIp`](../reference/system-settings.md#setdestip)を受け取るまで、PCにメッセージを送りません（ブロードキャストの`/booted`と、`canSendMsgBeforeDestIp`の設定がオンのときを除きます）。[送信先と`/setDestIp`](../guides/communication-and-messages.md#setdestip)をご覧ください。
 - **`/destIp`が返ってこない。** ボードは、返信する前に送信先のMACアドレスを解決しますが、失敗することがあります。`/setDestIp`を送り直してください。[MACアドレスの解決](../guides/communication-and-messages.md#arp)をご覧ください。
 - **IPアドレス、サブネット、ポートが違う。** ボードとPCは、同じネットワークにある必要があります。DIPスイッチのIDは、IPアドレスと送信ポートに加算されるので、PCは、IDを加算したポートで受信する必要があります。結果が範囲を超えるときは、ボードはIDを加算せず、USBシリアルに警告を表示します。[ネットワークとDIPスイッチ](../connections/network-and-dip-switch.md#adding-id)をご覧ください。
 - **PCのファイアウォールがメッセージを止めている。**
@@ -63,7 +63,7 @@ ChromeまたはEdgeと、データ通信ができるUSBケーブルを使い、�
 ### モータが動かない {#motor-not-moving}
 
 - **USBだけをつないでいる。** USBでは、ドライバICに電源が入りません。モータの電源を入れてください。[接続](usb-serial-diagnosis.md#connection)をご覧ください。
-- **コマンドに`/error/command`が返ってくる。** エラーが理由を示します。たとえば、`BrakeEngaged`（ブレーキが解放されていない）、`MotorNotHiZ`、`MotorNotStopped`、`InServoMode`です。[`/error/command`](../reference/automatically-sent-messages.md#error-command)と[エラー](../guides/communication-and-messages.md#errors)をご覧ください。動作を始める条件は[動作開始条件](../reference/index.md#motion-start-condition)に、ブレーキの場合は[電磁ブレーキ](../guides/electromagnetic-brake.md#commands)にあります。エラーが届かないときは、エラーの報告をオフにしていないか確認してください（[`/reportError`](../reference/system-settings.md#reporterror)）。
+- **コマンドに`/error/command`が返ってくる。** エラーが理由を示します。たとえば、`BrakeEngaged`（ブレーキが解放されていない）、`MotorNotHiZ`、`MotorNotStopped`、`InServoMode`です。[`/error/command`](../reference/automatically-sent-messages.md#error-command)と[エラー](../guides/communication-and-messages.md#errors)をご覧ください。動作を始める条件は[動作開始条件](../reference/index.md#motion-start-condition)に、ブレーキの場合は[電磁ブレーキ](../guides/electromagnetic-brake.md#commands)にあります。エラーが届かないときは、[`/reportError`](../reference/system-settings.md#reporterror)で`/error/command`の送信をオフにしていないか確認してください。
 - **スイッチが動作を禁止している。** [動作を禁止するスイッチ](../guides/alarms-and-protection.md#switches)をご覧ください。
 - **ドライバが自分で無励磁になった**（過電流、過熱、電源電圧の低下）。[ドライバが自分で無励磁になったとき](../guides/alarms-and-protection.md#hiz-by-itself)をご覧ください。
 
@@ -75,7 +75,7 @@ v2.1.0までのファームウェアでは、原点復帰がすぐに`ReleaseSwT
 
 ### USBを抜くとSTEP400が再起動する {#usb-unplug}
 
-Ethernetをつないだままでは、USBケーブルを抜くと、STEP400（R1基板）が再起動することがあります。ハードウェアの問題です。先にブレーキは保持状態になります。ケーブルを抜く前に、モータを止めてください。[STEP400](../hardware/step400.md#usb-unplug)をご覧ください。
+Ethernetをつないだままでは、USBケーブルを抜くと、STEP400（R1）が再起動することがあります。ハードウェアの問題です。先にブレーキは保持状態になります。ケーブルを抜く前に、モータを止めてください。[STEP400](../hardware/step400.md#usb-unplug)をご覧ください。
 
 ### ファームウェアを書き込めない {#cannot-write}
 

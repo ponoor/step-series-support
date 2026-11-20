@@ -4,7 +4,7 @@ title: Homing
 
 # Homing
 
-For how homing and the position work, see [Homing and position](../guides/homing-and-position.md).
+For how homing and the position work, see [Homing and position management](../guides/homing-and-position.md).
 
 <!-- osc: /homing -->
 <!-- generated:begin osc /homing -->

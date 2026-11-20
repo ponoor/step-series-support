@@ -1,5 +1,5 @@
 ---
-title: STEP400 と STEP800 の違い
+title: STEP400とSTEP800の違い
 lang: ja
 ---
 

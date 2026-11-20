@@ -12,7 +12,7 @@ Symptoms, their causes, and what to do. Each item links to the page that explain
 
 The commands may work, but nothing comes back. Check these points:
 
-- **`/setDestIp` was not sent.** The board does not send anything to the PC before it gets [`/setDestIp`](../reference/system-settings.md#setdestip) (unless the setting `canSendMsgBeforeDestIp` is on). See [The destination and `/setDestIp`](../guides/communication-and-messages.md#setdestip).
+- **`/setDestIp` was not sent.** The board does not send anything to the PC before it gets [`/setDestIp`](../reference/system-settings.md#setdestip) (except the broadcast `/booted`, and unless the setting `canSendMsgBeforeDestIp` is on). See [The destination and `/setDestIp`](../guides/communication-and-messages.md#setdestip).
 - **`/destIp` did not come back.** The board resolves the MAC address of the destination before it replies, and can fail. Send `/setDestIp` again. See [Resolving the MAC address](../guides/communication-and-messages.md#arp).
 - **The IP address, the subnet or the port is wrong.** The board and the PC must be in the same network. The ID of the DIP switch is added to the IP address and to the sending port, so the PC must receive on the port with the ID added. If the result is out of range, the board does not add the ID and prints a warning on USB serial. See [Network and the DIP switch](../connections/network-and-dip-switch.md#adding-id).
 - **A firewall of the PC blocks the messages.**
