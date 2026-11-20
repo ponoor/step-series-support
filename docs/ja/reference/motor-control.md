@@ -1,8 +1,8 @@
 ---
-title: モータの回転・停止
+title: モータの制御
 ---
 
-# モータの回転・停止
+# モータの制御
 
 動作の仕組みは、[スピードプロファイルと動作](../guides/speed-profile-and-motions.md)をご覧ください。
 
@@ -77,12 +77,15 @@ title: モータの回転・停止
 
 絶対値が4,194,303（22ビット）を超えるステップ数は拒否されず、ドライバライブラリによって4,194,303に制限されます。
 
+モータが回転している間は、ドライバがコマンドを無視し、ボードは`MotorNotStopped`ではなく`CommandIgnored`を返します。
+
 #### エラー
 
 - `BrakeEngaged`: 電磁ブレーキが効いた状態のままモーションコマンドを送信した。ブレーキが保持されている間、解放中、保持への移行中の`/enableServoMode 1`と`/homing`でも送信される（停止処理中と`/free`の後は除く）。
 - `HomeSwActivating`: HOMEスイッチがオンの状態から原点復帰方向に移動しようとした。HOMEスイッチがすでにオンのときの`/goUntil`と`/goUntilRaw`でも送信される。**v2.2.0**: `/goUntil`と`/goUntilRaw`が、HOMEスイッチがすでにオンのときに送信します。以前は`HomeSwActivated`として送信されていました。
 - `LimitSwActivating`: LIMITスイッチがオンの状態から原点復帰方向の逆向きに移動しようとした。
 - `InServoMode`: サーボモードでは実行できないコマンドを送信した。**v2.2.0**: `/goUntil`、`/goUntilRaw`、`/releaseSw`でも送信されます。
+- `CommandIgnored`: コマンドが実行可能なタイミングではない。タイミング参照。値がコマンドの範囲外のときにも送信され、何も適用されない（`/setPositionListReportInterval`のモータIDは255）。
 
 #### 関連
 

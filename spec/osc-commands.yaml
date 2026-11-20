@@ -26,12 +26,12 @@ groups:
   system: {page: system-settings, en: System settings, ja: ボード全体の設定}
   driver: {page: motor-driver-settings, en: Motor driver settings, ja: モータドライバの設定}
   alarm: {page: alarm-settings, en: Alarm settings, ja: アラームの設定}
-  drive_mode: {page: voltage-and-current-mode-settings, en: Voltage and current mode settings, ja: 電圧モードと電流モード}
+  drive_mode: {page: voltage-and-current-mode-settings, en: Voltage and current mode settings, ja: 電圧モードと電流モードの設定}
   speed_profile: {page: speed-profile, en: Speed profile, ja: スピードプロファイル}
   homing: {page: homing, en: Homing, ja: 原点復帰}
   sensors: {page: home-and-limit-sensors, en: HOME and LIMIT switches, ja: HOME/LIMITスイッチ}
   position: {page: position-management, en: Position management, ja: 位置管理}
-  motion: {page: motor-control, en: Motor control, ja: モータの回転・停止}
+  motion: {page: motor-control, en: Motor control, ja: モータの制御}
   brake: {page: brake, en: Electromagnetic brake, ja: 電磁ブレーキ}
   servo: {page: servo-mode_reference, en: Servo mode, ja: サーボモード}
 
@@ -478,7 +478,7 @@ settings:
           en: 980V/us
           ja: 980V/us
           changes:
-            - {version: "2.2.0", en: "The driver is now really set to the 980 V/us of the datasheet (gate current 96 mA, TCC 375 ns). Firmware 2.1.0 and earlier, with driver library v1.1.0, wrote 64 mA and 2375 ns for this value by mistake, so the switching was slower than 980 V/us. This value is the initial value, so a board with the default setting switches faster than before. The values 0-4 are unchanged. The driver library recommends checking the temperature of the drivers and the EMI on the real hardware.", ja: "ドライバに、データシートの980V/usの設定（ゲート電流96mA、TCC 375ns）が正しく書き込まれるようになりました。ファームウェア2.1.0以前（ドライバライブラリv1.1.0）は、この値に64mAと2375nsを誤って書き込んでいたため、実際のスイッチングは980V/usより遅くなっていました。この値は初期値なので、初期設定のままのボードではスイッチングが以前より速くなります。0〜4の値は変わりません。ドライバライブラリは、実機でドライバの温度とEMIを確認することを勧めています。"}
+            - {version: "2.2.0", en: "The driver is now really set to the 980 V/us of the datasheet (gate current 96 mA, TCC 375 ns). Firmware 2.1.0 and earlier, with driver library v1.1.0, wrote 64 mA and 2375 ns for this value by mistake, so the switching was slower than 980 V/us. This value is the initial value, so a board with the default setting switches faster than before. The values 0-4 are unchanged. Check the temperature of the drivers and the EMI on the real hardware.", ja: "ドライバに、データシートの980V/usの設定（ゲート電流96mA、TCC 375ns）が正しく書き込まれるようになりました。ファームウェア2.1.0以前（ドライバライブラリv1.1.0）は、この値に64mAと2375nsを誤って書き込んでいたため、実際のスイッチングは980V/usより遅くなっていました。この値は初期値なので、初期設定のままのボードではスイッチングが以前より速くなります。0〜4の値は変わりません。実機で、ドライバの温度と電磁ノイズ（EMI）を確認してください。"}
       STEP800:
         - {value: 0, en: 180V/us, ja: 180V/us}
         - {value: 1, en: 290V/us, ja: 290V/us}
@@ -2904,11 +2904,15 @@ commands:
         Moves specified number of steps according to the pre-set speed profile. It remains in the BUSY state until it reaches the specified step count. This command can only execute when the motor is stopped.
 
         A step count whose absolute value is above 4,194,303 (22 bits) is not rejected: it is limited to 4,194,303 by the driver library.
+
+        While the motor is turning, the driver ignores the command and the board replies `CommandIgnored` (not `MotorNotStopped`).
       ja: |-
         事前に設定したスピードプロファイルに従って、指定ステップ数移動します。指定ステップ数を移動し終わるまではBUSY状態になります。このコマンドはモータが停止していないと実行できません。
 
         絶対値が4,194,303（22ビット）を超えるステップ数は拒否されず、ドライバライブラリによって4,194,303に制限されます。
-    errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode]
+
+        モータが回転している間は、ドライバがコマンドを無視し、ボードは`MotorNotStopped`ではなく`CommandIgnored`を返します。
+    errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode, CommandIgnored]
     see_also: [/combine/move]
 
   - address: /goTo
@@ -3293,6 +3297,8 @@ commands:
       ja: |
         電磁ブレーキモードを有効・無効にします。
         電磁ブレーキモードが有効になると、電磁ブレーキを解放しないままモータを回すコマンドを送っても`BrakeEngaged`（[[/error/command]]）エラーになります。
+
+        設定を変更できるのは、ドライバが無励磁のときだけです。ブレーキを無効にできるのは、ブレーキが保持状態のときか[[/free]]の後だけで、それ以外では`CommandIgnored`を返します。現在の値を送っても何もしません。変更したあとは、ブレーキ出力は保持状態になり、ブレーキの状態もEngagedになります。USBシリアルで読み込む設定にも同じ決まりが適用されます（変更されないモータには警告が出力されます）。
     errors: [CommandIgnored]
     changes:
       - {version: "2.2.0", en: "Changes the setting only while the driver is HiZ, and disables the brake only while it is engaged or after `/free`; otherwise `/error/command CommandIgnored`. Sending the current value does nothing. After a change the brake output is engaged and the state is engaged. Before, disabling a released brake engaged it on a turning motor, and enabling it on an energized motor left a state where `/activate 0` and `/hardHiZ` did nothing.", ja: "ドライバが無励磁のときだけ設定を変更し、ブレーキを無効にできるのは、ブレーキが保持されている間か`/free`の後だけです。それ以外では`/error/command CommandIgnored`を返します。現在の値を送っても何も起きません。変更後は、ブレーキ出力が保持され、状態も保持になります。以前は、解放中のブレーキを無効にすると、回転中のモータでブレーキが保持され、励磁中のモータで有効にすると、`/activate 0`と`/hardHiZ`が何もしない状態になっていました。"}
@@ -3454,7 +3460,7 @@ commands:
       - {version: "2.2.0", en: "When a driver goes HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) in the servo mode, the servo mode is cancelled and `/error/command ServoModeCancelledOnHiZ` is sent (follows [[/reportError]]), with or without the brake. With the brake enabled, `BrakeEngagedOnHiZ` is also sent. Before, with the brake disabled the next servo update energized the driver again. The commands that make the driver HiZ cancel the servo mode first and do not send this error.", ja: "サーボモード中にドライバが過電流、過熱、電源電圧の低下（UVLO）による遮断で自分で無励磁になったとき、サーボモードを取り消し、`/error/command ServoModeCancelledOnHiZ`を送信します（[[/reportError]]に従います）。ブレーキの有無によらず同じです。電磁ブレーキが有効なときは、`BrakeEngagedOnHiZ`も送信されます。以前は、ブレーキが無効だと、次のサーボの更新でドライバが再び励磁されていました。ドライバを無励磁にするコマンドは、先にサーボモードを取り消すので、このエラーは送信されません。"}
       - {version: "2.2.0", en: "Enabling the servo mode resets the integral and the previous error of the PID controller. The previous values were kept from the last time the servo mode was used.", ja: "サーボモードを有効にすると、PID制御の積分値と前回の誤差がリセットされます。以前は、前回サーボモードを使ったときの値が残っていました。"}
       - {version: "2.2.0", en: "The update period is 5 ms instead of 10 ms (and no longer varies between 7 and 13 ms when position reports are enabled; an OSC message that sends several replies can still delay one update, up to 7.75 ms measured). The integral and derivative terms are scaled by the period, so the same `kP`, `kI` and `kD` were designed to give about the same response; retune the gains if needed.", ja: "更新周期が10msから5msになりました（位置レポートが有効なときに7〜13msの間で変動することもなくなりました。複数の返信を送るOSCメッセージが、1回の更新を遅らせることはあります。実測で最大7.75ms）。積分項と微分項は周期に応じて換算されるので、同じ`kP`、`kI`、`kD`でほぼ同じ動きになるように設計されていますが、必要に応じてゲインを調整してください。"}
-      - {version: "2.2.0", en: "STEP400: the home switch and the limit switch are judged separately. A pressed home switch stops the motion towards `homingDirection` (with `/setProhibitMotionOnHomeSw` or the home switch in the hard stop mode), and a pressed limit switch stops the motion away from it (with `/setProhibitMotionOnLimitSw` or the limit switch in the hard stop mode), as before. While the home switch was pressed, the limit switch was not checked. Only a motor with both switches pressed behaves differently.", ja: "STEP400: HOMEスイッチとLIMITスイッチを別々に判定します。オンのHOMEスイッチは`homingDirection`に向かう動作を止め（`/setProhibitMotionOnHomeSw`が有効か、HOMEスイッチの動作が即停止のとき）、オンのLIMITスイッチはそれと逆向きの動作を止めます（`/setProhibitMotionOnLimitSw`が有効か、LIMITスイッチの動作が即停止のとき）。ここまでは以前と同じです。以前は、HOMEスイッチがオンの間はLIMITスイッチを確認していませんでした。動作が変わるのは、2つのスイッチが両方オンのモータだけです。"}
+      - {version: "2.2.0", en: "STEP400: the home switch and the limit switch are judged separately. A pressed home switch stops the motion towards `homingDirection` (with `/setProhibitMotionOnHomeSw` or the home switch in the hard stop mode), and a pressed limit switch stops the motion away from `homingDirection` (with `/setProhibitMotionOnLimitSw` or the limit switch in the hard stop mode), as before. While the home switch was pressed, the limit switch was not checked. Only a motor with both switches pressed behaves differently.", ja: "STEP400: HOMEスイッチとLIMITスイッチを別々に判定します。オンのHOMEスイッチは`homingDirection`に向かう動作を止め（`/setProhibitMotionOnHomeSw`が有効か、HOMEスイッチの動作が即停止のとき）、オンのLIMITスイッチは`homingDirection`と逆向きの動作を止めます（`/setProhibitMotionOnLimitSw`が有効か、LIMITスイッチの動作が即停止のとき）。ここまでは以前と同じです。以前は、HOMEスイッチがオンの間はLIMITスイッチを確認していませんでした。動作が変わるのは、2つのスイッチが両方オンのモータだけです。"}
       - {version: "2.2.0", en: "The automatic hard stop at a switch event in the servo mode is not sent to a motor whose driver is HiZ.", ja: "サーボモード中のセンサイベントでの自動の即停止は、ドライバが無励磁のモータには送りません。"}
       - {version: "2.2.0", en: "Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.", ja: "保留中の動作を取り消します。ブレーキが無効なモータでも同じです。取り消されるのは、BUSYフラグが下りるのを待っている`/goTo`、`/goToDir`、`/goHome`、`/goMark`（以前は、モータがBUSYでなくなったときに送られていたため、止まっていたモータが再び動き出していました）、原点復帰（以前は、そのタイムアウトで送られる即停止が、その間に無励磁になったモータを励磁していました）、サーボモードです。"}
     see_also: [/setTargetPosition, /setServoParam]

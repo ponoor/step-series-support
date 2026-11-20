@@ -77,12 +77,15 @@ Moves specified number of steps according to the pre-set speed profile. It remai
 
 A step count whose absolute value is above 4,194,303 (22 bits) is not rejected: it is limited to 4,194,303 by the driver library.
 
+While the motor is turning, the driver ignores the command and the board replies `CommandIgnored` (not `MotorNotStopped`).
+
 #### Errors
 
 - `BrakeEngaged`: A motion command was sent while the electromagnetic brake was active. Also sent for `/enableServoMode 1` and `/homing` while the brake is engaged, releasing or engaging (not while stopping or after `/free`).
 - `HomeSwActivating`: Movement from home switch position towards the origin point. Also sent by `/goUntil` and `/goUntilRaw` when the home switch is already activated. **v2.2.0**: Sent by `/goUntil` and `/goUntilRaw` when the home switch is already activated. It was sent as `HomeSwActivated` before.
 - `LimitSwActivating`: Movement from limit switch position towards the opposite direction from origin.
 - `InServoMode`: Received a command which can not be executed while servo mode. **v2.2.0**: Also sent for `/goUntil`, `/goUntilRaw` and `/releaseSw`.
+- `CommandIgnored`: The command is currently not executable. Also refer Timing section. Also sent when a value is outside the range of the command; nothing is applied (the motor ID is 255 for `/setPositionListReportInterval`).
 
 #### See also
 

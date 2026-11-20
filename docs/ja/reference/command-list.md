@@ -65,7 +65,7 @@ lang: ja
 | [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw) | (int)motorID (bool)enable | ✓ |  |  |
 | [`/getProhibitMotionOnLimitSw`](alarm-settings.md#getprohibitmotiononlimitsw) | (int)motorID | ✓ |  |  |
 
-## 電圧モードと電流モード {#voltage-and-current-mode-settings}
+## 電圧モードと電流モードの設定 {#voltage-and-current-mode-settings}
 
 | コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
@@ -157,7 +157,7 @@ lang: ja
 | [`/goHome`](position-management.md#gohome) | (int)motorID | ✓ | ✓ |  |
 | [`/goMark`](position-management.md#gomark) | (int)motorID | ✓ | ✓ |  |
 
-## モータの回転・停止 {#motor-control}
+## モータの制御 {#motor-control}
 
 | コマンド | 引数 | STEP400 | STEP800 | 追加 |
 | --- | --- | --- | --- | --- |
