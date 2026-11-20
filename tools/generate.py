@@ -609,9 +609,6 @@ def render_command_block(ctx: Ctx, addr: str) -> str:
     desc = ctx.tx(cmd.get("description"), "description")
     if desc.strip():
         parts.append(f"#### {L['description']}\n\n" + ctx.md(desc))
-    ch = render_changes(ctx, cmd)
-    if ch:
-        parts.append(ch)
     resp = cmd.get("response") or []
     notif = cmd.get("notifies") or []
     if resp or notif:
@@ -636,6 +633,10 @@ def render_command_block(ctx: Ctx, addr: str) -> str:
             href = ctx.link_to(s)
             links.append(f"[`{s}`]({href})" if href else f"`{s}`")
         parts.append(f"#### {L['see_also']}\n\n" + ", ".join(links))
+    # Changes come last, after see also (2026-11-20): before the response they hid it.
+    ch = render_changes(ctx, cmd)
+    if ch:
+        parts.append(ch)
     return "\n\n".join(parts) + "\n"
 
 

@@ -388,6 +388,21 @@ class ResponseTest(unittest.TestCase):
         resp = text[text.index("#### 返信"):]
         self.assertIn("##### 説明", resp)
 
+    def test_changes_of_a_command_come_last(self):
+        """The changes of a command come after see also; without see also they are the last section.
+        The changes of a message in the response stay inside the response (one level below)."""
+        for lang, ch, see in (("en", "Changes", "See also"), ("ja", "変更", "関連")):
+            text = self.expand(lang, "<!-- osc: /saveConfig -->")
+            block = text[text.index("### `/saveConfig`"):]
+            heads = re.findall(r"^#### (.+)$", block, flags=re.M)
+            self.assertEqual(heads[-2:], [see, ch], heads)
+            text = self.expand(lang, "<!-- osc: /getSpeedProfile -->")
+            block = text[text.index("### `/getSpeedProfile`"):]
+            heads = re.findall(r"^#### (.+)$", block, flags=re.M)
+            self.assertNotIn(see, heads)
+            self.assertEqual(heads[-1], ch, heads)
+            self.assertEqual(heads.count(ch), 1, heads)
+
     def test_standalone_message_in_a_response_is_a_link_only(self):
         text = self.expand("en", "<!-- osc: /getHomingStatus -->")
         resp = text[text.index("#### Response"):]
