@@ -4,7 +4,7 @@ title: Example parameter values for example steppers
 
 # Example parameter values for example steppers
 
-We publish the parameters that we tested and worked out for the motors that we have in our lab, as configuration files. You can copy a file to the microSD card, or open it in the [browser configuration tool](browser-config-tool.md) and adjust it.
+We publish the parameters that we worked out from the datasheets and our measurements for the motors that we have in our lab, as configuration files. You can copy a file to the microSD card, or open it in the [browser configuration tool](browser-config-tool.md) and adjust it.
 
 The files are here: <https://github.com/ponoor/step-series-support/tree/main/configGenerator>
 
@@ -23,7 +23,7 @@ The values depend on the supply voltage of the motor. A set of values that suits
 
 ### Current mode {#current-mode}
 
-- The TVAL values (TVAL_HOLD is half of TVAL_RUN).
+- The TVAL values (TVAL_HOLD is half of TVAL_RUN). Only the files for the STEP400 have them.
 
 ### Speed profile {#speed-profile}
 
@@ -31,4 +31,4 @@ The maximum speed and the acceleration and deceleration of a motor depend greatl
 
 ## Using the files {#using}
 
-Copy the file as it is to the root folder of the microSD card. The board reads any `.json` file in the root folder, so you do not need to rename it. (Firmware before v2.1.0 reads only a file named `config.txt`.) See [The file that the board reads](microsd-card.md#files) for the rules.
+Copy the file as it is to the root folder of the microSD card. The board reads the first `.json` file in the root folder in alphabetical order. You do not need to rename the file, but another `.json` file may be read first, so put only the file that you use on the card. (Firmware before v2.1.0 reads only a file named `config.txt`.) See [The file that the board reads](microsd-card.md#files) for the rules.

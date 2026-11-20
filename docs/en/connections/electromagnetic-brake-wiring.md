@@ -27,9 +27,11 @@ To use a brake, enable it for the motor with [`electromagnetBrakeEnable`](config
 
 Supply the voltage that the electromagnetic brake needs to the EMB-STEP400. Many brakes use 24 V; check the datasheet of your motor. **Take the power from the same supply as the motor, or from a supply that is cut together with the motor power**; the voltage can differ from the motor's (see [Usage notes](../guides/electromagnetic-brake.md#usage) for the reason).
 
-The board has two power terminals, a DC barrel jack and a Euro-style terminal block. They are connected in parallel on the board, so **never supply power to both at the same time.**
+The EMB-STEP400 has two power terminals, a DC barrel jack and a Euro-style terminal block. They are connected in parallel on the EMB-STEP400, so **never supply power to both at the same time.**
 
 #### DC barrel jack {#brake-dc-jack}
+
+A plug with these dimensions fits the jack:
 
 - 5.5 mm outer diameter
 - 2.1 mm inner diameter
@@ -37,7 +39,7 @@ The board has two power terminals, a DC barrel jack and a Euro-style terminal bl
 
 #### Euro-style terminal block {#brake-terminal-block}
 
-The terminal block is a 3.81 mm pitch, 2 pin block. Connect the polarity as printed on the board.
+The terminal block is a 3.81 mm pitch, 2 pin block. Connect the polarity as printed on the EMB-STEP400.
 
 [![](https://ponoor.com/cms/wp-content/uploads/2021/03/brake-power-700x525.jpg)](https://ponoor.com/cms/wp-content/uploads/2021/03/brake-power.jpg)
 
@@ -45,7 +47,7 @@ The terminal block is a 3.81 mm pitch, 2 pin block. Connect the polarity as prin
 
 Connect the wires of the electromagnetic brake to the brake terminals. The terminals of the brake board are numbered like the motors of the STEP400. Connect each brake to the terminal with the same number as its motor.
 
-Most electromagnetic brakes have a polarity. Connect them as the signs on the board show.
+Most electromagnetic brakes have a polarity. Connect them as the signs on the EMB-STEP400 show.
 
 ### Connecting the STEP400 {#connecting-step400}
 
@@ -66,7 +68,7 @@ The output is not under the control of the firmware from the power-on or the res
 
 Countermeasures for the STEP800:
 
-- Supply the power of the brake after the board has sent [`/booted`](../reference/automatically-sent-messages.md#booted).
+- Supply the power of the brake after the board has sent [`/booted`](../reference/automatically-sent-messages.md#booted) (when `bootedMsgEnable` is enabled and the Ethernet is connected).
 - Or make the driving circuit so that it does not release the brake for a fixed time after the power is applied. Make the time long enough for the longest time in the guide.
 
 ## Notes {#notes}

@@ -34,8 +34,8 @@ title: microSDカードでの設定
 
 ### ファイル名 {#names}
 
-- 長いファイル名を使えます。先頭の`/`を含めたパスは、**63文字まで**です。
-- `.`で始まるファイルとフォルダは無視します。macOSは、FATのカードにファイルをコピーするたびに、`._*`のファイルや`.Trashes`を作ります。これらが本物のファイルを隠してしまうのを防ぐためです。
+- 長いファイル名を使えます。先頭の`/`を含めたパスは、**63バイトまで**です。
+- `.`で始まるファイルとフォルダは無視します。macOSは、FATのカードにファイルをコピーするたびに、`._*`のファイルや`.Trashes`を作ります。これらが本物のファイルを隠してしまうので、無視します。
 - サブフォルダの中は探しません。ファイルはルートフォルダに置いてください。
 
 ## カードを読むとき {#when-read}
@@ -52,7 +52,7 @@ title: microSDカードでの設定
 
 ボードは、同じフォルダの隠しファイル`.<名前>.tmp`に設定を書き、書き込んで閉じてから、保存先のファイルをそれで置き換えます。書き込みに失敗したときは、保存先のファイルは元のままです。
 
-**v2.2.0の既知の問題:** 設定ファイルなしで起動した（カードがない、または有効なファイルがない）ボードで保存すると、ボードには書くべきバージョンと製品がありません。ファイルの`information.configVersion`は`[-1, 0]`、`information.targetProduct`は`"---"`になります。値は保存され、次の起動でボードはそのファイルを読みますが、診断には、設定のバージョンが-1.0、"Config and product match"がfalseと表示されます。正しいバージョンと製品のファイルが必要なときは、[ブラウザ設定ツール](browser-config-tool.md)（**Download JSON**）で作ってください。また、保存では`canSendMsgBeforeDestIp`が正しく書かれないことがあります。[`network.canSendMsgBeforeDestIp`](configuration-items.md#network-cansendmsgbeforedestip)をご覧ください。
+**v2.2.0の既知の問題:** 設定ファイルなしで起動した（カードがない、または有効なファイルがない）ボードで保存すると、ファイルの`information.configVersion`と`information.targetProduct`に書く値が、ボードにありません。そのため、`information.configVersion`は`[-1, 0]`、`information.targetProduct`は`"---"`になります。値は保存され、次の起動でボードはそのファイルを読みますが、診断には、設定のバージョンが-1.0、"Config and product match"がfalseと表示されます。正しいバージョンと製品のファイルが必要なときは、[ブラウザ設定ツール](browser-config-tool.md)（**Download JSON**）で作ってください。また、保存では`canSendMsgBeforeDestIp`が正しく書かれないことがあります。[`network.canSendMsgBeforeDestIp`](configuration-items.md#network-cansendmsgbeforedestip)をご覧ください。
 
 保存の間は、ボードの処理が少しの間止まります。保存する前に、モータを止めてください。[保存の間](how-settings-work.md#saving)をご覧ください。
 
@@ -67,7 +67,7 @@ OSCコマンド`/saveConfig`は、同じ文字列を`/error/saveConfig`で返し
 
 ### `F<path>`で決めた名前 {#f-path}
 
-USBシリアルのコマンド`F<path>`で、次の再起動まで、ボードが保存するファイルを変えられます。ボードは、`/`で始まり、`.json`か`.txt`で終わる、63文字までの名前なら、何でも受け付けます。
+USBシリアルのコマンド`F<path>`で、次の再起動まで、ボードが保存するファイルを変えられます。ボードは、`/`で始まり、`.json`か`.txt`で終わる、63バイトまでの名前なら、何でも受け付けます。
 
 ボードは、それより長い名前も拒否しません。**64バイト以上の名前は、エラーなしで63バイトに切られ**（v2.2.0）、切られた名前で保存されます。
 

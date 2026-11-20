@@ -34,7 +34,7 @@ This means that old `config.txt` files work as before, and that a new card can h
 
 ### File names {#names}
 
-- Long file names can be used. The path, including the leading `/`, can have **at most 63 characters**.
+- Long file names can be used. The path, including the leading `/`, can have **at most 63 bytes**.
 - Files and folders whose name starts with `.` are ignored. macOS writes `._*` files and `.Trashes` to a FAT card when it copies files, and they would hide the real files.
 - The board does not look into subfolders. Put the file in the root folder.
 
@@ -67,7 +67,7 @@ The OSC command `/saveConfig` replies `/error/saveConfig` with the same texts. I
 
 ### The name set by `F<path>` {#f-path}
 
-With the USB serial command `F<path>` you can change the file that the board saves to, until the next restart. The board accepts any name that starts with `/`, ends with `.json` or `.txt`, and has at most 63 characters.
+With the USB serial command `F<path>` you can change the file that the board saves to, until the next restart. The board accepts any name that starts with `/`, ends with `.json` or `.txt`, and has at most 63 bytes.
 
 The board does not refuse a longer name: **a name of 64 bytes or more is cut to 63 bytes without an error** (v2.2.0), and the file is saved under the cut name.
 

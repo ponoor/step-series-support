@@ -39,6 +39,8 @@ The currents are the sum of the phase currents of all the motors, not the curren
 
 #### DC barrel jack {#dc-jack}
 
+A plug with these dimensions fits the jack:
+
 - 5.5 mm outer diameter
 - 2.1 mm inner diameter
 - Center positive
@@ -47,7 +49,7 @@ Use the screw terminal for a voltage or a current beyond the rating of the jack.
 
 #### Screw terminal {#screw-terminal}
 
-- Negative on the left, positive on the right
+- Seen from the edge of the board, negative is on the left and positive on the right.
 - M3 screws
 - You can fasten the bare wire directly, but a wire terminal such as the `NICHIFU TMEX1.25-3N` is more secure.
 
@@ -106,7 +108,7 @@ So the STEP800 may not be suitable for driving larger motors. Some small motors 
 
 The STEP400 works from 12 V. That is the lower limit of its on-board DC-DC converter, so the voltage can drop in the wiring from the power supply at the inrush current when the motor starts, and the STEP400 can reset. We do not recommend 12 V except for a small motor with a low load.
 
-![STEP400 working with the 48 V configuration, series of two 24V power supplies.](https://ponoor.com/cms/wp-content/uploads/2020/10/update-48V-configuration-800x533.jpg)
+![A STEP400 supplied with 48 V from two 24 V power supplies in series](https://ponoor.com/cms/wp-content/uploads/2020/10/update-48V-configuration-800x533.jpg)
 
 A STEP400 supplied with 48 V from two 24 V power supplies in series.
 

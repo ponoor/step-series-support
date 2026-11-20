@@ -25,8 +25,8 @@ STEP400とSTEP800の各軸には、スイッチやセンサをつなぐHOME端�
 | 品名 | 型番 | 備考 |
 | --- | --- | --- |
 | （参考）基板ポスト | B03B-XASK-1 (LF)(SN) | ボード上に実装されている部品 |
-| ハウジング | XAP-03V-1 | 差し込むコネクタ本体 |
-| コンタクト | BXA-001T-P0.6 | ハウジングに挿入する接続部 |
+| ハウジング | XAP-03V-1 | 樹脂製の、差し込むコネクタ本体 |
+| コンタクト | BXA-001T-P0.6 | ハウジングに挿入する圧着コンタクト |
 
 ### ピン配置 {#pins}
 
@@ -58,7 +58,7 @@ STEP400とSTEP800の各軸には、スイッチやセンサをつなぐHOME端�
 
 オムロンのフォトマイクロセンサ[EE-SX671A](http://www.ia.omron.com/product/item/2219/)をつなぐ例です。
 
-![EE-SX671A Diagram](http://ponoor.com/manage/wp-content/uploads/2020/10/ee-sx67.jpeg)
+![EE-SX671Aの接続図](http://ponoor.com/manage/wp-content/uploads/2020/10/ee-sx67.jpeg)
 
 | ピン番号 | 機能 | センサのピン |
 | --- | --- | --- |
@@ -70,7 +70,7 @@ STEP400とSTEP800の各軸には、スイッチやセンサをつなぐHOME端�
 
 センサを買う前によく考えてください。
 
-![Dark on or Light on](http://ponoor.com/manage/wp-content/uploads/2020/10/sensor_dark_light.png)
+![入光時オンと遮光時オンのセンサ](http://ponoor.com/manage/wp-content/uploads/2020/10/sensor_dark_light.png)
 
 左の図では、原点位置でセンサに光が入ります。右の図では、原点位置でセンサの光が遮られます。
 
