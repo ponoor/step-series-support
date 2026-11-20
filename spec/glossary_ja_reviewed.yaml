@@ -28,3 +28,249 @@
   term: 保持
   text: "停止すると保持します"
   note: ブレーキ
+# R6（2026-11-20）: REPORT_r6_0.md 1.2 の「よい」の分類（夜1 の下書き claude_docs/r6_reviewed_draft.yaml から）
+- where: "docs/ja/connections/microsd-card.md"
+  term: 無視
+  text: "とフォルダは無視します。ma"
+  note: ファイルや設定ファイルのキーを読み飛ばす。エラーを送らない
+- where: "docs/ja/connections/sensors-and-switches.md"
+  term: 基板
+  text: "| （参考）基板ポスト | "
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/getting-started/quickstart.md"
+  term: 基板
+  text: "上に置くか、基板の穴にスペー"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/guides/alarms-and-protection.md"
+  term: 基板
+  text: "EP400の基板の電流検出回"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/guides/communication-and-messages.md"
+  term: 無視
+  text: "超える引数は無視されます。"
+  note: 余分な引数はエラーを送らずに捨てる
+- where: "docs/ja/guides/electromagnetic-brake.md"
+  term: 保持
+  text: "eased（保持の予定を取り"
+  note: ブレーキの状態の名前
+- where: "docs/ja/guides/electromagnetic-brake.md"
+  term: 保持
+  text: "sing | 保持 | 励磁 |"
+  note: ブレーキの状態の名前
+- where: "docs/ja/guides/electromagnetic-brake.md"
+  term: 保持
+  text: "しない | 保持の予定を取り"
+  note: ブレーキの状態の名前
+- where: "docs/ja/guides/speed-profile-and-motions.md"
+  term: HiZ
+  text: "す。無励磁（HiZ）とは、モー"
+  note: 無励磁（HiZ）の定義の文。初出で（HiZ）を添える
+- where: "docs/ja/hardware/emb-step400.md"
+  term: 基板
+  text: "## 基板外形図 {#"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/hardware/emb-step400.md"
+  term: 基板
+  text: "- 基板サイズ: 4"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/hardware/step400.md"
+  term: 基板
+  text: "### 基板のサイズ {"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/hardware/step400.md"
+  term: 基板
+  text: "### 基板裏面のパッド"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/hardware/step400.md"
+  term: 基板
+  text: "。ピン番号は基板に印刷されて"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/hardware/step400.md"
+  term: 基板
+  text: "い部分は捨て基板で、製造後に"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/hardware/step400.md"
+  term: 基板
+  text: "のパッドが、基板の裏面にあり"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/hardware/step400.md"
+  term: 基板
+  text: "の取付穴が、基板の各隅と中央"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/hardware/step400.md"
+  term: 基板
+  text: "ウェアです。基板、主な部品、"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/hardware/step800.md"
+  term: 基板
+  text: "### 基板のサイズ {"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/hardware/step800.md"
+  term: 基板
+  text: "### 基板裏面のパッド"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/hardware/step800.md"
+  term: 基板
+  text: "い部分は捨て基板で、製造後に"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/hardware/step800.md"
+  term: 基板
+  text: "のパッドが、基板の裏面にあり"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/hardware/step800.md"
+  term: 基板
+  text: "の取付穴が、基板の各隅と中央"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/hardware/step800.md"
+  term: 基板
+  text: "ウェアです。基板、主な部品、"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/maintenance/changelog.md"
+  term: 保持
+  text: "りました（[保持電流]）。"
+  note: 保持電流（KVAL_HOLD/TVAL_HOLD のパラメータ）。用語として使う
+- where: "docs/ja/maintenance/changelog.md"
+  term: 保持
+  text: "行った設定が保持されます**"
+  note: 設定値が保存されて残る（persist）の意味。ブレーキの保持ではない
+- where: "docs/ja/maintenance/changelog.md"
+  term: 応答
+  text: "でほぼ同じ応答になるはずで"
+  note: サーボの制御としての応答（ステップ応答など）。ネットワークの応答ではない
+- where: "docs/ja/maintenance/changelog.md"
+  term: 無視
+  text: "0はこの値を無視し、v2.1"
+  note: ファイルや設定ファイルのキーを読み飛ばす。エラーを送らない
+- where: "docs/ja/maintenance/changelog.md"
+  term: 無視
+  text: "が書き込みを無視してもファー"
+  note: ドライバの挙動。エラーを送らずに捨てる
+- where: "docs/ja/maintenance/changelog.md"
+  term: 無視
+  text: "な引数は今も無視します。0〜"
+  note: 余分な引数はエラーを送らずに捨てる
+- where: "docs/ja/maintenance/changelog.md"
+  term: 無視
+  text: "の値は黙って無視され、既定値"
+  note: ファイルや設定ファイルのキーを読み飛ばす。エラーを送らない
+- where: "docs/ja/maintenance/changelog.md"
+  term: 無視
+  text: "ビット12を無視します。["
+  note: ドライバの挙動。エラーを送らずに捨てる
+- where: "docs/ja/maintenance/migration-guide.md"
+  term: 保持
+  text: "### 保持電流 {#b"
+  note: 保持電流（KVAL_HOLD/TVAL_HOLD のパラメータ）。用語として使う
+- where: "docs/ja/maintenance/migration-guide.md"
+  term: 保持
+  text: "。詳しくは[保持電流]をご覧"
+  note: 保持電流（KVAL_HOLD/TVAL_HOLD のパラメータ）。用語として使う
+- where: "docs/ja/maintenance/migration-guide.md"
+  term: 保持
+  text: "いか。** 保持電流がモータ"
+  note: 保持電流（KVAL_HOLD/TVAL_HOLD のパラメータ）。用語として使う
+- where: "docs/ja/maintenance/migration-guide.md"
+  term: 保持
+  text: "いる → [保持電流]、[再"
+  note: 保持電流（KVAL_HOLD/TVAL_HOLD のパラメータ）。用語として使う
+- where: "docs/ja/maintenance/migration-guide.md"
+  term: 応答
+  text: "ていますが、応答が変わること"
+  note: サーボの制御としての応答（ステップ応答など）。ネットワークの応答ではない
+- where: "docs/ja/maintenance/migration-guide.md"
+  term: 応答
+  text: "でほぼ同じ応答になるように"
+  note: サーボの制御としての応答（ステップ応答など）。ネットワークの応答ではない
+- where: "docs/ja/maintenance/migration-guide.md"
+  term: 応答
+  text: "ーボモードの応答を確かめ、必"
+  note: サーボの制御としての応答（ステップ応答など）。ネットワークの応答ではない
+- where: "docs/ja/maintenance/migration-guide.md"
+  term: 無視
+  text: "0はその値を無視し、v2.1"
+  note: ファイルや設定ファイルのキーを読み飛ばす。エラーを送らない
+- where: "docs/ja/maintenance/migration-guide.md"
+  term: 無視
+  text: "たキーの値は無視され、既定値"
+  note: ファイルや設定ファイルのキーを読み飛ばす。エラーを送らない
+- where: "docs/ja/maintenance/migration-guide.md"
+  term: 無視
+  text: "な引数は今も無視します。この"
+  note: 余分な引数はエラーを送らずに捨てる
+- where: "docs/ja/maintenance/migration-guide.md"
+  term: 無視
+  text: "をドライバは無視しましたが、"
+  note: ドライバの挙動。エラーを送らずに捨てる
+- where: "docs/ja/maintenance/migration-guide.md"
+  term: 無視
+  text: "ビット12を無視します（低速"
+  note: ドライバの挙動。エラーを送らずに捨てる
+- where: "docs/ja/maintenance/troubleshooting.md"
+  term: 無視
+  text: "は、無視されることが"
+  note: 再起動の直後はコマンドが処理されない。エラーは送られない
+- where: "docs/ja/maintenance/troubleshooting.md"
+  term: 無視
+  text: "ブフォルダは無視され、パスは"
+  note: ファイルや設定ファイルのキーを読み飛ばす。エラーを送らない
+- where: "docs/ja/reference/index.md"
+  term: HiZ
+  text: "無励磁（HiZ）とは、モー"
+  note: 無励磁（HiZ）の定義の文。初出で（HiZ）を添える
+- where: "docs/ja/reference/index.md"
+  term: 基板
+  text: "ータIDは、基板に印刷してあ"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/reference/index.md"
+  term: 無視
+  text: "超える引数は無視されます。エ"
+  note: 余分な引数はエラーを送らずに捨てる
+- where: "docs/ja/step100-200/assemble/connections.md"
+  term: 基板
+  text: "つなぎます。基板上の表示との"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/step100-200/assemble/connections.md"
+  term: 基板
+  text: "ペアの基板上の表記は次"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+- where: "docs/ja/step100-200/usage.md"
+  term: 基板
+  text: "Wピンです。基板上の白丸（●"
+  note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
+# R6（2026-11-20）: 夜2 の判断と直しのあとに残った review
+- where: "commands[/move].description.ja"
+  term: 無視
+  text: "ドライバがコマンドを無視し"
+  note: ドライバの挙動。同じ文でボードが`CommandIgnored`を返すと書いている（1-06）
+- where: "docs/ja/connections/electromagnetic-brake-wiring.md"
+  term: 基板
+  text: "STEP400用のブレーキ基板EMB-STEP400"
+  note: 「ブレーキ基板」はEMB-STEP400の呼び方としてよい（REPORT_r6_2 2-08 の判断）
+- where: "docs/ja/connections/electromagnetic-brake-wiring.md"
+  term: 基板
+  text: "ブレーキ基板の端子には"
+  note: 「ブレーキ基板」はEMB-STEP400の呼び方としてよい（REPORT_r6_2 2-08 の判断）
+- where: "docs/ja/guides/electromagnetic-brake.md"
+  term: 基板
+  text: "ブレーキ基板の仕様は"
+  note: 「ブレーキ基板」はEMB-STEP400の呼び方としてよい（REPORT_r6_2 2-08 の判断）
+- where: "docs/ja/guides/electromagnetic-brake.md"
+  term: 基板
+  text: "（ブレーキ基板が引き下げます）"
+  note: 「ブレーキ基板」はEMB-STEP400の呼び方としてよい（REPORT_r6_2 2-08 の判断）
+- where: "docs/ja/hardware/emb-step400.md"
+  term: 基板
+  text: "STEP400用のブレーキ基板です"
+  note: 「ブレーキ基板」はEMB-STEP400の呼び方としてよい（REPORT_r6_2 2-08 の判断）
+- where: "docs/ja/guides/electromagnetic-brake.md"
+  term: 保持
+  text: "## 保持電流 {#hold-current}"
+  note: 保持電流（KVAL_HOLD/TVAL_HOLD のパラメータ）。用語として使う（H2a。見出しは H2b で「保持電流」にそろえた）
+- where: "docs/ja/maintenance/usb-serial-diagnosis.md"
+  term: 応答
+  text: "ARPに応答しない送信先"
+  note: ネットワーク（ARP）の応答（R2 で「ARPに」を足した）
+- where: "docs/ja/connections/microsd-card.md"
+  term: 無視
+  text: "隠してしまうので、無視します。"
+  note: ファイルを読み飛ばす。エラーを送らない（2-11 で文を直して 2 つ目の「無視」になった）
