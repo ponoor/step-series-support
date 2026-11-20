@@ -44,11 +44,6 @@ title: モータドライバの設定
 
 0〜7の範囲外の値は拒否されません。8ビットに変換されてから0〜7に制限されます（-1は7、256は0になります）。
 
-#### 変更
-
-- **v2.2.0**: モータは無励磁でなければなりません。そうでないときは`/error/command MotorNotHiZ`を返し、何も適用されません。以前は、ドライバが書き込みを無視する一方で、ファームウェアの変数と保存される設定は新しい値になっていました。
-- **v2.2.0**: STEP400の電流モードでは、1/16より細かいステップモードに`CommandIgnored`を返します（PowerSTEP01の電流モードは1/16までです）。
-
 #### エラー
 
 - `MotorNotHiZ`: ドライバのレジスタのうち、出力が無励磁のときだけ書き込めるものをコマンドが書き込もうとしたが、モータが無励磁ではなかった。励磁して位置を保っているモータは無励磁ではない。先に`/softHiZ`か`/hardHiZ`を送る。何も適用されない。v2.2.0で追加。
@@ -61,6 +56,11 @@ title: モータドライバの設定
 #### 関連
 
 [`/getMicrostepMode`](motor-driver-settings.md#getmicrostepmode), [`/setCurrentMode`](voltage-and-current-mode-settings.md#setcurrentmode)
+
+#### 変更
+
+- **v2.2.0**: モータは無励磁でなければなりません。そうでないときは`/error/command MotorNotHiZ`を返し、何も適用されません。以前は、ドライバが書き込みを無視する一方で、ファームウェアの変数と保存される設定は新しい値になっていました。
+- **v2.2.0**: STEP400の電流モードでは、1/16より細かいステップモードに`CommandIgnored`を返します（PowerSTEP01の電流モードは1/16までです）。
 <!-- generated:end osc /setMicrostepMode -->
 
 <!-- osc: /getMicrostepMode -->
@@ -132,10 +132,6 @@ title: モータドライバの設定
 
 低速回転時の相電流ひずみ補正（Low speed optimization）の有効無効を切り替えます。この設定が有効になっていると、`Min Speed`は自動的に0になります。この補正は電圧モードでのみ利用可能です。詳しくは対応するデータシートの "Low speed optimization"を参照してください。
 
-#### 変更
-
-- **v2.2.0**: モータは停止中か無励磁でなければなりません。回転中のモータには`/error/command MotorNotStopped`を返し、何も適用されません。
-
 #### エラー
 
 - `MotorNotStopped`: 停止中か無励磁のときだけ書き込めるドライバのレジスタをコマンドが書き込もうとしたが、モータが回転していた。何も適用されない。v2.2.0で追加。
@@ -147,6 +143,10 @@ title: モータドライバの設定
 #### 関連
 
 [`/setLowSpeedOptimizeThreshold`](motor-driver-settings.md#setlowspeedoptimizethreshold), [`/setMinSpeed`](speed-profile.md#setminspeed)
+
+#### 変更
+
+- **v2.2.0**: モータは停止中か無励磁でなければなりません。回転中のモータには`/error/command MotorNotStopped`を返し、何も適用されません。
 <!-- generated:end osc /enableLowSpeedOptimize -->
 
 <!-- osc: /setLowSpeedOptimizeThreshold -->
@@ -172,10 +172,6 @@ title: モータドライバの設定
 
 低速最適化が有効の間は、モータは停止中か無励磁でなければなりません。回転中のモータには`MotorNotStopped`を返し、何も適用されません。
 
-#### 変更
-
-- **v2.2.0**: 低速最適化が有効の間は、回転中のモータに`/error/command MotorNotStopped`を返し、何も適用されません。
-
 #### エラー
 
 - `MotorNotStopped`: 停止中か無励磁のときだけ書き込めるドライバのレジスタをコマンドが書き込もうとしたが、モータが回転していた。何も適用されない。v2.2.0で追加。
@@ -187,6 +183,10 @@ title: モータドライバの設定
 #### 関連
 
 [`/getLowSpeedOptimizeThreshold`](motor-driver-settings.md#getlowspeedoptimizethreshold), [`/enableLowSpeedOptimize`](motor-driver-settings.md#enablelowspeedoptimize)
+
+#### 変更
+
+- **v2.2.0**: 低速最適化が有効の間は、回転中のモータに`/error/command MotorNotStopped`を返し、何も適用されません。
 <!-- generated:end osc /setLowSpeedOptimizeThreshold -->
 
 <!-- osc: /getLowSpeedOptimizeThreshold -->
@@ -468,10 +468,6 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 指定したモータの回転方向を取得します。
 
-#### 変更
-
-- **v2.2.0**: `/getDir 255`（全モータ）が方向を返します。以前は無励磁の状態が返っていました。
-
 #### 返信
 
 [`/dir`](automatically-sent-messages.md#dir)
@@ -491,6 +487,10 @@ Low speed optimization thresholdの現在の設定値を取得します。
 | --- | --- |
 | 1 | 正転方向 |
 | 0 | 逆転方向 |
+
+#### 変更
+
+- **v2.2.0**: `/getDir 255`（全モータ）が方向を返します。以前は無励磁の状態が返っていました。
 <!-- generated:end osc /getDir -->
 
 <!-- osc: /enableMotorStatusReport -->
@@ -609,11 +609,6 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 65535を超える間隔には`CommandIgnored`を返し、何も適用されません。負の間隔は、0と同じく通知を無効にします。
 
-#### 変更
-
-- **v2.2.0**: 65535を超える値には`/error/command CommandIgnored`を返し、何も適用されません。以前は32768以上が負の値として読まれ、通知が止まっていました。負の間隔で通知が止まる点は変わりません。
-- **v2.2.0**: 1つのモータで通知を有効にしたとき（間隔が0より大きいとき）は、保存されている位置リスト通知の間隔も、255の場合と同じように消去されます。以前は、リスト通知から1つのモータの通知に切り替えて保存した設定が、次の起動でリスト通知を再び始め、そのモータの通知を消していました。
-
 #### 返信
 
 [`/position`](automatically-sent-messages.md#position)
@@ -638,6 +633,11 @@ Low speed optimization thresholdの現在の設定値を取得します。
 #### 関連
 
 [`/getPosition`](position-management.md#getposition), [`/setPositionListReportInterval`](motor-driver-settings.md#setpositionlistreportinterval)
+
+#### 変更
+
+- **v2.2.0**: 65535を超える値には`/error/command CommandIgnored`を返し、何も適用されません。以前は32768以上が負の値として読まれ、通知が止まっていました。負の間隔で通知が止まる点は変わりません。
+- **v2.2.0**: 1つのモータで通知を有効にしたとき（間隔が0より大きいとき）は、保存されている位置リスト通知の間隔も、255の場合と同じように消去されます。以前は、リスト通知から1つのモータの通知に切り替えて保存した設定が、次の起動でリスト通知を再び始め、そのモータの通知を消していました。
 <!-- generated:end osc /setPositionReportInterval -->
 
 <!-- osc: /setPositionListReportInterval -->
@@ -660,10 +660,6 @@ Low speed optimization thresholdの現在の設定値を取得します。
 このコマンドが有効化される際には`/setPositionReportInterval`はすべての軸で無効になり自動停止します。
 
 65535を超える間隔には、モータID 255で`CommandIgnored`を返し、何も適用されません。負の間隔は、0と同じく通知を無効にします。
-
-#### 変更
-
-- **v2.2.0**: 65535を超える値には`/error/command CommandIgnored 255`を返し、何も適用されません。以前は32768以上が負の値として読まれ、通知が止まっていました。負の間隔で通知が止まる点は変わりません。
 
 #### 返信
 
@@ -688,6 +684,10 @@ Low speed optimization thresholdの現在の設定値を取得します。
 #### 関連
 
 [`/getPositionList`](position-management.md#getpositionlist), [`/setPositionReportInterval`](motor-driver-settings.md#setpositionreportinterval)
+
+#### 変更
+
+- **v2.2.0**: 65535を超える値には`/error/command CommandIgnored 255`を返し、何も適用されません。以前は32768以上が負の値として読まれ、通知が止まっていました。負の間隔で通知が止まる点は変わりません。
 <!-- generated:end osc /setPositionListReportInterval -->
 
 ## デバッグ {#debug}
@@ -748,10 +748,6 @@ STEP400のみです。ファームウェアはSTEP800でもこのコマンドを
 
 このコマンドはラッチされたフラグを消しません。消すのはファームウェアのSTATUSレジスタの読み出し（5msごと）だけです。
 
-#### 変更
-
-- **v2.2.0**: STATUSレジスタをGetStatusではなくGetParamで読み出すため、ラッチされたドライバのフラグ（OCD、ストールのフラグ、UVLO、SW_EVNなど）を消さなくなりました。レジスタの値は同じです。フラグを消すのはファームウェアのSTATUSレジスタの読み出し（5msごと）だけになったため、直前に別の`/getStatus`を送っていても、先の返信に出ていたフラグが次の返信にも出ることがあります（次の読み出しまでの最大5ms）。
-
 #### 返信
 
 ```
@@ -780,6 +776,10 @@ STEP400のみです。ファームウェアはSTEP800でもこのコマンドを
 #### 関連
 
 [`/getStatusList`](motor-driver-settings.md#getstatuslist)
+
+#### 変更
+
+- **v2.2.0**: STATUSレジスタをGetStatusではなくGetParamで読み出すため、ラッチされたドライバのフラグ（OCD、ストールのフラグ、UVLO、SW_EVNなど）を消さなくなりました。レジスタの値は同じです。フラグを消すのはファームウェアのSTATUSレジスタの読み出し（5msごと）だけになったため、直前に別の`/getStatus`を送っていても、先の返信に出ていたフラグが次の返信にも出ることがあります（次の読み出しまでの最大5ms）。
 <!-- generated:end osc /getStatus -->
 
 <!-- osc: /getConfigRegister -->
@@ -834,15 +834,15 @@ CONFIGレジスタにはモータドライバの各種設定が収められて�
 
 電磁ブレーキが有効なときは、ブレーキが保持されている間か[`/free`](brake.md#free)の後（モータが無励磁）だけ受け付けます。それ以外では`CommandIgnored`を返します。受け付けたときは（ブレーキが無効でも）、保留中の動作とサーボモードを取り消します。拒否されたコマンド（`CommandIgnored`）は、何も取り消しません。
 
+#### エラー
+
+- `CommandIgnored`: コマンドが実行可能なタイミングではない。タイミング参照。値がコマンドの範囲外のときにも送信され、何も適用されない（`/setPositionListReportInterval`のモータIDは255）。
+
 #### 変更
 
 - **v2.2.0**: 電磁ブレーキが有効なときは、ブレーキが保持されている間か`/free`の後だけ受け付けます。それ以外では`/error/command CommandIgnored`を返します。以前は、ブレーキを解放したままドライバを無励磁にしていました。
 - **v2.2.0**: 受け付けたときは、保留中の動作（BUSYフラグが下りるのを待つ`/goTo`など、原点復帰、サーボモード）を取り消します。ブレーキが無効なモータでも同じです。拒否されたコマンド（`CommandIgnored`）は、何も取り消しません。
 - **v2.2.0**: リセット後に再び適用される設定には、Rawコマンドで設定したもの（[`/setAccRaw`](speed-profile.md#setaccraw)を参照）も含まれます。
-
-#### エラー
-
-- `CommandIgnored`: コマンドが実行可能なタイミングではない。タイミング参照。値がコマンドの範囲外のときにも送信され、何も適用されない（`/setPositionListReportInterval`のモータIDは255）。
 <!-- generated:end osc /resetMotorDriver -->
 
 <!-- osc: /getStatusList -->
@@ -861,10 +861,6 @@ CONFIGレジスタにはモータドライバの各種設定が収められて�
 
 すべてのモータのSTATUSレジスタをまとめて取得します。レジスタの内容は[`/getStatus`](motor-driver-settings.md#getstatus)を参照してください。
 
-#### 変更
-
-- **v2.2.0**: STATUSレジスタをGetStatusではなくGetParamで読み出すため、ラッチされたドライバのフラグを消さなくなりました。[`/getStatus`](motor-driver-settings.md#getstatus)を参照してください。
-
 #### 返信
 
 ```
@@ -878,4 +874,8 @@ CONFIGレジスタにはモータドライバの各種設定が収められて�
 #### 関連
 
 [`/getStatus`](motor-driver-settings.md#getstatus)
+
+#### 変更
+
+- **v2.2.0**: STATUSレジスタをGetStatusではなくGetParamで読み出すため、ラッチされたドライバのフラグを消さなくなりました。[`/getStatus`](motor-driver-settings.md#getstatus)を参照してください。
 <!-- generated:end osc /getStatusList -->

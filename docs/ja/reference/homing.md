@@ -32,11 +32,6 @@ title: 原点復帰
 
 原点復帰動作の状態変化に応じて下記の通知があります。
 
-#### 変更
-
-- **v2.2.0**: ブレーキが保持されている間、解放中、保持への移行中（停止処理中と`/free`の後は除く）は、`/error/command BrakeEngaged`を返し、何もしません。以前は、原点復帰が始まらないのに原点復帰の状態になっていました。
-- **v2.2.0**: 原点復帰が、センサを検出した約1ms後に、3（ReleaseSW完了）ではなく`/homingStatus` 4と`ReleaseSwTimeout`で終わることが多かった問題を修正しました（タイムアウト判定の時刻の誤差が原因で、起動のしかたによって、ほとんどの原点復帰で起きるか、ほとんど起きないかのどちらかでした）。
-
 #### 返信
 
 [`/homingStatus`](automatically-sent-messages.md#homingstatus)
@@ -61,6 +56,11 @@ title: 原点復帰
 #### 関連
 
 [`/getHomingStatus`](homing.md#gethomingstatus)
+
+#### 変更
+
+- **v2.2.0**: ブレーキが保持されている間、解放中、保持への移行中（停止処理中と`/free`の後は除く）は、`/error/command BrakeEngaged`を返し、何もしません。以前は、原点復帰が始まらないのに原点復帰の状態になっていました。
+- **v2.2.0**: 原点復帰が、センサを検出した約1ms後に、3（ReleaseSW完了）ではなく`/homingStatus` 4と`ReleaseSwTimeout`で終わることが多かった問題を修正しました（タイムアウト判定の時刻の誤差が原因で、起動のしかたによって、ほとんどの原点復帰で起きるか、ほとんど起きないかのどちらかでした）。
 <!-- generated:end osc /homing -->
 
 <!-- osc: /getHomingStatus -->
@@ -257,11 +257,6 @@ title: 原点復帰
 
 速度の符号が方向になります。絶対値が範囲を超える速度は、ドライバライブラリによってレジスタの最大値（0xFFFFF、約15625step/s）に制限されます。
 
-#### 変更
-
-- **v2.2.0**: HOMEスイッチがオンの場合は、エラーの一覧にあるとおり`/error/command HomeSwActivating`として送信されます。以前は`HomeSwActivated`として送信されていました。他のコマンドのエラーと同じように、[`/reportError`](system-settings.md#reporterror)に従います。
-- **v2.2.0**: サーボモードのモータには`/error/command InServoMode`を返し、何もしません。以前は、コマンドがドライバに送られていました。255のときは、サーボモードのモータだけがエラーを返し、他のモータはコマンドを実行します。
-
 #### エラー
 
 - `BrakeEngaged`: 電磁ブレーキが効いた状態のままモーションコマンドを送信した。ブレーキが保持されている間、解放中、保持への移行中の`/enableServoMode 1`と`/homing`でも送信される（停止処理中と`/free`の後は除く）。
@@ -272,6 +267,11 @@ title: 原点復帰
 #### 関連
 
 [`/setGoUntilTimeout`](homing.md#setgountiltimeout), [`/releaseSw`](homing.md#releasesw), [`/goUntilRaw`](motor-control.md#gountilraw)
+
+#### 変更
+
+- **v2.2.0**: HOMEスイッチがオンの場合は、エラーの一覧にあるとおり`/error/command HomeSwActivating`として送信されます。以前は`HomeSwActivated`として送信されていました。他のコマンドのエラーと同じように、[`/reportError`](system-settings.md#reporterror)に従います。
+- **v2.2.0**: サーボモードのモータには`/error/command InServoMode`を返し、何もしません。以前は、コマンドがドライバに送られていました。255のときは、サーボモードのモータだけがエラーを返し、他のモータはコマンドを実行します。
 <!-- generated:end osc /goUntil -->
 
 <!-- osc: /setGoUntilTimeout -->
@@ -295,11 +295,6 @@ title: 原点復帰
 
 負の値には`CommandIgnored`を返し、何も適用されません。最大値は2147483647です。タイムアウトでの自動の即停止は、ドライバが無励磁のモータには送られません（タイムアウトのエラーは送信されます）。
 
-#### 変更
-
-- **v2.2.0**: 負の値には`/error/command CommandIgnored`を返し、何も適用されません。以前は約49日になっていました。
-- **v2.2.0**: タイムアウト時の即停止は、ドライバが無励磁のモータには送りません。電磁ブレーキが無効でも同じです（即停止は無励磁のドライバを励磁してしまうため）。タイムアウトのエラーは送信されます。
-
 #### エラー
 
 - `CommandIgnored`: コマンドが実行可能なタイミングではない。タイミング参照。値がコマンドの範囲外のときにも送信され、何も適用されない（`/setPositionListReportInterval`のモータIDは255）。
@@ -311,6 +306,11 @@ title: 原点復帰
 #### 関連
 
 [`/getGoUntilTimeout`](homing.md#getgountiltimeout)
+
+#### 変更
+
+- **v2.2.0**: 負の値には`/error/command CommandIgnored`を返し、何も適用されません。以前は約49日になっていました。
+- **v2.2.0**: タイムアウト時の即停止は、ドライバが無励磁のモータには送りません。電磁ブレーキが無効でも同じです（即停止は無励磁のドライバを励磁してしまうため）。タイムアウトのエラーは送信されます。
 <!-- generated:end osc /setGoUntilTimeout -->
 
 <!-- osc: /getGoUntilTimeout -->
@@ -377,11 +377,6 @@ title: 原点復帰
 
 指定方向にminimum speed（初期状態では5[step/s]）で回転し、HOMEスイッチがオフになると、ACTの値に応じた処理を行います。ACTの処理内容は[`/goUntil`](homing.md#gountil)と同じです。その後hardStopします。
 
-#### 変更
-
-- **v2.2.0**: `ACT`は、他の真偽値の引数と同じように読まれます（1.0以上の数か、正の整数が真）。以前は整数として読まれていたため、0.5は0になっていました。
-- **v2.2.0**: サーボモードのモータには`/error/command InServoMode`を返し、何もしません。以前は、コマンドがドライバに送られていました。255のときは、サーボモードのモータだけがエラーを返し、他のモータはコマンドを実行します。
-
 #### エラー
 
 - `BrakeEngaged`: 電磁ブレーキが効いた状態のままモーションコマンドを送信した。ブレーキが保持されている間、解放中、保持への移行中の`/enableServoMode 1`と`/homing`でも送信される（停止処理中と`/free`の後は除く）。
@@ -391,6 +386,11 @@ title: 原点復帰
 #### 関連
 
 [`/setReleaseSwTimeout`](homing.md#setreleaseswtimeout), [`/setMinSpeed`](speed-profile.md#setminspeed)
+
+#### 変更
+
+- **v2.2.0**: `ACT`は、他の真偽値の引数と同じように読まれます（1.0以上の数か、正の整数が真）。以前は整数として読まれていたため、0.5は0になっていました。
+- **v2.2.0**: サーボモードのモータには`/error/command InServoMode`を返し、何もしません。以前は、コマンドがドライバに送られていました。255のときは、サーボモードのモータだけがエラーを返し、他のモータはコマンドを実行します。
 <!-- generated:end osc /releaseSw -->
 
 <!-- osc: /setReleaseSwTimeout -->
@@ -414,11 +414,6 @@ title: 原点復帰
 
 負の値には`CommandIgnored`を返し、何も適用されません。最大値は2147483647です。タイムアウトでの自動の即停止は、ドライバが無励磁のモータには送られません（タイムアウトのエラーは送信されます）。
 
-#### 変更
-
-- **v2.2.0**: 負の値には`/error/command CommandIgnored`を返し、何も適用されません。以前は約49日になっていました。
-- **v2.2.0**: タイムアウト時の即停止は、ドライバが無励磁のモータには送りません。電磁ブレーキが無効でも同じです（即停止は無励磁のドライバを励磁してしまうため）。タイムアウトのエラーは送信されます。
-
 #### エラー
 
 - `CommandIgnored`: コマンドが実行可能なタイミングではない。タイミング参照。値がコマンドの範囲外のときにも送信され、何も適用されない（`/setPositionListReportInterval`のモータIDは255）。
@@ -430,6 +425,11 @@ title: 原点復帰
 #### 関連
 
 [`/getReleaseSwTimeout`](homing.md#getreleaseswtimeout)
+
+#### 変更
+
+- **v2.2.0**: 負の値には`/error/command CommandIgnored`を返し、何も適用されません。以前は約49日になっていました。
+- **v2.2.0**: タイムアウト時の即停止は、ドライバが無励磁のモータには送りません。電磁ブレーキが無効でも同じです（即停止は無励磁のドライバを励磁してしまうため）。タイムアウトのエラーは送信されます。
 <!-- generated:end osc /setReleaseSwTimeout -->
 
 <!-- osc: /getReleaseSwTimeout -->

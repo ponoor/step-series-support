@@ -111,11 +111,6 @@ Inside the driver, -2,097,152 and 2,097,151 are located next to each other in a 
 
 A position outside the range is not rejected. A position above 4,194,303 is limited to 4,194,303 by the driver library, which the driver reads as -1. Any other position is cut to its lower 22 bits and read as a signed number: 2,097,152 becomes -2,097,152 and -2,097,153 becomes 2,097,151.
 
-#### Changes
-
-- **v2.2.0**: Judges its direction correctly when the home switch or the limit switch prohibits a motion ([`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw), [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.
-- **v2.2.0**: On a busy motor, the STATUS register is read with GetParam, which does not clear the latched flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.
-
 #### Response
 
 When: While homing is in progress
@@ -141,6 +136,11 @@ When: While homing is in progress
 #### See also
 
 [`/goToDir`](motor-control.md#gotodir), [`/combine/goTo`](motor-control.md#combine-goto)
+
+#### Changes
+
+- **v2.2.0**: Judges its direction correctly when the home switch or the limit switch prohibits a motion ([`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw), [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.
+- **v2.2.0**: On a busy motor, the STATUS register is read with GetParam, which does not clear the latched flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.
 <!-- generated:end osc /goTo -->
 
 <!-- osc: /goToDir -->
@@ -165,10 +165,6 @@ Moves to the specified position in the specified direction according to the pre-
 
 A position outside the range is not rejected. A position above 4,194,303 is limited to 4,194,303 by the driver library, which the driver reads as -1. Any other position is cut to its lower 22 bits and read as a signed number: 2,097,152 becomes -2,097,152 and -2,097,153 becomes 2,097,151.
 
-#### Changes
-
-- **v2.2.0**: On a busy motor, the STATUS register is read with GetParam, which does not clear the latched flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.
-
 #### Errors
 
 - `BrakeEngaged`: A motion command was sent while the electromagnetic brake was active. Also sent for `/enableServoMode 1` and `/homing` while the brake is engaged, releasing or engaging (not while stopping or after `/free`).
@@ -179,6 +175,10 @@ A position outside the range is not rejected. A position above 4,194,303 is limi
 #### See also
 
 [`/goTo`](motor-control.md#goto), [`/combine/goToDir`](motor-control.md#combine-gotodir)
+
+#### Changes
+
+- **v2.2.0**: On a busy motor, the STATUS register is read with GetParam, which does not clear the latched flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.
 <!-- generated:end osc /goToDir -->
 
 ## Stops {#stops}
@@ -204,11 +204,6 @@ If it was in the servo mode, the mode will be released.
 
 With the electromagnetic brake enabled, the command does nothing while the brake is engaged or after [`/free`](brake.md#free) (the motor is HiZ). During the deceleration of [`/softHiZ`](motor-control.md#softhiz) or `/activate 0` (brake state 3), the command is executed and cancels the engaging: the brake stays released (state 2).
 
-#### Changes
-
-- **v2.2.0**: With the brake enabled, does nothing while the brake is engaged or after `/free` (motor HiZ). Before, it energized the motor and left the brake state engaged, so `/activate 0` and `/hardHiZ` could not make the motor HiZ again.
-- **v2.2.0**: Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.
-
 #### Response
 
 When: While homing is in progress
@@ -227,6 +222,11 @@ When: While homing is in progress
 #### See also
 
 [`/combine/softStop`](motor-control.md#combine-softstop)
+
+#### Changes
+
+- **v2.2.0**: With the brake enabled, does nothing while the brake is engaged or after `/free` (motor HiZ). Before, it energized the motor and left the brake state engaged, so `/activate 0` and `/hardHiZ` could not make the motor HiZ again.
+- **v2.2.0**: Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.
 <!-- generated:end osc /softStop -->
 
 <!-- osc: /hardStop -->
@@ -250,11 +250,6 @@ If it was in the servo mode, the mode will be released.
 
 With the electromagnetic brake enabled, the command does nothing while the brake is engaged or after [`/free`](brake.md#free) (the motor is HiZ). During the deceleration of [`/softHiZ`](motor-control.md#softhiz) or `/activate 0` (brake state 3), the command is executed and cancels the engaging: the brake stays released (state 2).
 
-#### Changes
-
-- **v2.2.0**: With the brake enabled, does nothing while the brake is engaged or after `/free` (motor HiZ). Before, it energized the motor and left the brake state engaged, so `/activate 0` and `/hardHiZ` could not make the motor HiZ again.
-- **v2.2.0**: Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.
-
 #### Response
 
 When: While homing is in progress
@@ -273,6 +268,11 @@ When: While homing is in progress
 #### See also
 
 [`/combine/hardStop`](motor-control.md#combine-hardstop)
+
+#### Changes
+
+- **v2.2.0**: With the brake enabled, does nothing while the brake is engaged or after `/free` (motor HiZ). Before, it energized the motor and left the brake state engaged, so `/activate 0` and `/hardHiZ` could not make the motor HiZ again.
+- **v2.2.0**: Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.
 <!-- generated:end osc /hardStop -->
 
 <!-- osc: /softHiZ -->
@@ -295,13 +295,6 @@ Decelerate according to the speed profile, then stop the motor and release excit
 If it was in the servo mode, it will be released.  
 if electromagnetic brake mode is enabled, the controller puts the brake into hold state, and then transits to High Z state.
 
-#### Changes
-
-- **v2.2.0**: With the brake enabled, on a stopped motor the brake is engaged at the next status read (up to 5 ms later). The stop is judged on a status read after the command.
-- **v2.2.0**: A motion command (`/run`, `/move`, `/goTo`, ...) or `/activate 1` during the deceleration cancels the engaging; the brake stays released. Before, the brake engaged when the motor stopped later.
-- **v2.2.0**: After `/free`, the brake is engaged at once (the motor is already HiZ).
-- **v2.2.0**: Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.
-
 #### Response
 
 When: While homing is in progress
@@ -320,6 +313,13 @@ When: While homing is in progress
 #### See also
 
 [`/combine/softHiZ`](motor-control.md#combine-softhiz), [`/enableElectromagnetBrake`](brake.md#enableelectromagnetbrake)
+
+#### Changes
+
+- **v2.2.0**: With the brake enabled, on a stopped motor the brake is engaged at the next status read (up to 5 ms later). The stop is judged on a status read after the command.
+- **v2.2.0**: A motion command (`/run`, `/move`, `/goTo`, ...) or `/activate 1` during the deceleration cancels the engaging; the brake stays released. Before, the brake engaged when the motor stopped later.
+- **v2.2.0**: After `/free`, the brake is engaged at once (the motor is already HiZ).
+- **v2.2.0**: Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.
 <!-- generated:end osc /softHiZ -->
 
 <!-- osc: /hardHiZ -->
@@ -342,12 +342,6 @@ Immediately stops the motor and releases the stepper excitation. When the motor 
 If it was in the servo mode, it will be released.  
 if electromagnetic brake mode is enabled, the controller puts the brake into hold state, and then transits to High Z state.
 
-#### Changes
-
-- **v2.2.0**: A single motor no longer sends a soft stop before the hard HiZ; a single motor, all motors (255) and `/combine/hardHiZ` behave the same. With the brake enabled and released (after `/activate 1`), the motor is stopped with a hard stop (still energized) before the brake is engaged, so it does not keep running during the brake transition time. While the brake is engaged or engaging, the command does nothing as before.
-- **v2.2.0**: After `/free`, the brake is engaged at once (the motor is already HiZ).
-- **v2.2.0**: Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.
-
 #### Response
 
 When: While homing is in progress
@@ -366,6 +360,12 @@ When: While homing is in progress
 #### See also
 
 [`/combine/hardHiZ`](motor-control.md#combine-hardhiz), [`/enableElectromagnetBrake`](brake.md#enableelectromagnetbrake)
+
+#### Changes
+
+- **v2.2.0**: A single motor no longer sends a soft stop before the hard HiZ; a single motor, all motors (255) and `/combine/hardHiZ` behave the same. With the brake enabled and released (after `/activate 1`), the motor is stopped with a hard stop (still energized) before the brake is engaged, so it does not keep running during the brake transition time. While the brake is engaged or engaging, the command does nothing as before.
+- **v2.2.0**: After `/free`, the brake is engaged at once (the motor is already HiZ).
+- **v2.2.0**: Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.
 <!-- generated:end osc /hardHiZ -->
 
 ## Combined commands {#combined-commands}
@@ -469,10 +469,6 @@ In motion start condition
 
 Same as [`/goTo`](motor-control.md#goto) for two motors. A position outside the range is not rejected. A position above 4,194,303 is limited to 4,194,303 by the driver library, which the driver reads as -1. Any other position is cut to its lower 22 bits and read as a signed number: 2,097,152 becomes -2,097,152 and -2,097,153 becomes 2,097,151.
 
-#### Changes
-
-- **v2.2.0**: Judges its direction correctly when the home switch or the limit switch prohibits a motion ([`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw), [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.
-
 #### Response
 
 When: While homing is in progress
@@ -498,6 +494,10 @@ When: While homing is in progress
 #### See also
 
 [`/goTo`](motor-control.md#goto)
+
+#### Changes
+
+- **v2.2.0**: Judges its direction correctly when the home switch or the limit switch prohibits a motion ([`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw), [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.
 <!-- generated:end osc /combine/goTo -->
 
 <!-- osc: /combine/goToDir -->
@@ -552,10 +552,6 @@ Always
 
 Same as [`/softStop`](motor-control.md#softstop) for two motors: it is handled as [`/softStop`](motor-control.md#softstop) for motorID1 and then for motorID2.
 
-#### Changes
-
-- **v2.2.0**: Cancels pending motion like [`/softStop`](motor-control.md#softstop) (each of the two motors is handled as a separate [`/softStop`](motor-control.md#softstop)), also for a motor with the brake disabled.
-
 #### Response
 
 When: While homing is in progress
@@ -574,6 +570,10 @@ When: While homing is in progress
 #### See also
 
 [`/softStop`](motor-control.md#softstop)
+
+#### Changes
+
+- **v2.2.0**: Cancels pending motion like [`/softStop`](motor-control.md#softstop) (each of the two motors is handled as a separate [`/softStop`](motor-control.md#softstop)), also for a motor with the brake disabled.
 <!-- generated:end osc /combine/softStop -->
 
 <!-- osc: /combine/hardStop -->
@@ -595,10 +595,6 @@ Always
 
 Same as [`/hardStop`](motor-control.md#hardstop) for two motors: it is handled as [`/hardStop`](motor-control.md#hardstop) for motorID1 and then for motorID2.
 
-#### Changes
-
-- **v2.2.0**: Cancels pending motion like [`/hardStop`](motor-control.md#hardstop) (each of the two motors is handled as a separate [`/hardStop`](motor-control.md#hardstop)), also for a motor with the brake disabled.
-
 #### Response
 
 When: While homing is in progress
@@ -617,6 +613,10 @@ When: While homing is in progress
 #### See also
 
 [`/hardStop`](motor-control.md#hardstop)
+
+#### Changes
+
+- **v2.2.0**: Cancels pending motion like [`/hardStop`](motor-control.md#hardstop) (each of the two motors is handled as a separate [`/hardStop`](motor-control.md#hardstop)), also for a motor with the brake disabled.
 <!-- generated:end osc /combine/hardStop -->
 
 <!-- osc: /combine/softHiZ -->
@@ -638,10 +638,6 @@ Always
 
 Same as [`/softHiZ`](motor-control.md#softhiz) for two motors: it is handled as [`/softHiZ`](motor-control.md#softhiz) for motorID1 and then for motorID2.
 
-#### Changes
-
-- **v2.2.0**: Cancels pending motion like [`/softHiZ`](motor-control.md#softhiz) (each of the two motors is handled as a separate [`/softHiZ`](motor-control.md#softhiz)), also for a motor with the brake disabled.
-
 #### Response
 
 When: While homing is in progress
@@ -660,6 +656,10 @@ When: While homing is in progress
 #### See also
 
 [`/softHiZ`](motor-control.md#softhiz)
+
+#### Changes
+
+- **v2.2.0**: Cancels pending motion like [`/softHiZ`](motor-control.md#softhiz) (each of the two motors is handled as a separate [`/softHiZ`](motor-control.md#softhiz)), also for a motor with the brake disabled.
 <!-- generated:end osc /combine/softHiZ -->
 
 <!-- osc: /combine/hardHiZ -->
@@ -681,10 +681,6 @@ Always
 
 Same as [`/hardHiZ`](motor-control.md#hardhiz) for two motors: it is handled as [`/hardHiZ`](motor-control.md#hardhiz) for motorID1 and then for motorID2.
 
-#### Changes
-
-- **v2.2.0**: Cancels pending motion like [`/hardHiZ`](motor-control.md#hardhiz) (each of the two motors is handled as a separate [`/hardHiZ`](motor-control.md#hardhiz)), also for a motor with the brake disabled.
-
 #### Response
 
 When: While homing is in progress
@@ -703,6 +699,10 @@ When: While homing is in progress
 #### See also
 
 [`/hardHiZ`](motor-control.md#hardhiz)
+
+#### Changes
+
+- **v2.2.0**: Cancels pending motion like [`/hardHiZ`](motor-control.md#hardhiz) (each of the two motors is handled as a separate [`/hardHiZ`](motor-control.md#hardhiz)), also for a motor with the brake disabled.
 <!-- generated:end osc /combine/hardHiZ -->
 
 ## Raw register value commands {#raw-register-value-commands}
@@ -779,13 +779,6 @@ Same as `/goUntil` but uses a raw register value for speed. The sign of the spee
 
 The speed is limited to 20 bits (0xFFFFF) by the firmware and the driver libraries. `/goUntilRaw 255` (all motors) interprets the speed as a raw register value, like for a single motor.
 
-#### Changes
-
-- **v2.2.0**: Limits the speed to 20 bits (`0xFFFFF`), like [`/runRaw`](motor-control.md#runraw). Larger values were sent as is, and the driver ignored the upper bits.
-- **v2.2.0**: `/goUntilRaw 255` (all motors) interprets the speed as a raw register value, like for a single motor. It was treated as steps/s.
-- **v2.2.0**: An activated home switch is reported as `/error/command HomeSwActivating`, the text in the error list. It was sent as `HomeSwActivated`. It now follows [`/reportError`](system-settings.md#reporterror) like the other command errors.
-- **v2.2.0**: For a motor in the servo mode, replies `/error/command InServoMode` and does nothing. Before, the command was sent to the driver. With 255, only the motors in the servo mode reply the error; the others execute the command.
-
 #### Errors
 
 - `BrakeEngaged`: A motion command was sent while the electromagnetic brake was active. Also sent for `/enableServoMode 1` and `/homing` while the brake is engaged, releasing or engaging (not while stopping or after `/free`).
@@ -796,6 +789,13 @@ The speed is limited to 20 bits (0xFFFFF) by the firmware and the driver librari
 #### See also
 
 [`/goUntil`](homing.md#gountil)
+
+#### Changes
+
+- **v2.2.0**: Limits the speed to 20 bits (`0xFFFFF`), like [`/runRaw`](motor-control.md#runraw). Larger values were sent as is, and the driver ignored the upper bits.
+- **v2.2.0**: `/goUntilRaw 255` (all motors) interprets the speed as a raw register value, like for a single motor. It was treated as steps/s.
+- **v2.2.0**: An activated home switch is reported as `/error/command HomeSwActivating`, the text in the error list. It was sent as `HomeSwActivated`. It now follows [`/reportError`](system-settings.md#reporterror) like the other command errors.
+- **v2.2.0**: For a motor in the servo mode, replies `/error/command InServoMode` and does nothing. Before, the command was sent to the driver. With 255, only the motors in the servo mode reply the error; the others execute the command.
 <!-- generated:end osc /goUntilRaw -->
 
 <!-- osc: /combine/runRaw -->

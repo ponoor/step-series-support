@@ -112,11 +112,6 @@ title: モータの回転・停止
 
 範囲外の位置は拒否されません。4,194,303を超える位置は、ドライバライブラリによって4,194,303に制限され、ドライバはこれを-1として読みます。それ以外の位置は、下位22ビットだけが使われ、符号付きの数として読まれます。2,097,152は-2,097,152に、-2,097,153は2,097,151になります。
 
-#### 変更
-
-- **v2.2.0**: HOMEスイッチまたはLIMITスイッチが動作を禁止する場合（[`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw)、[`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)）の方向を、正しく判定します。目標との22ビットの差の符号で決まり、ドライバが進む向き（最短経路）と同じです。以前は、目標が2048ステップ未満の距離にあると方向が逆になり（スイッチから離れる短い移動が`HomeSwActivating` / `LimitSwActivating`で拒否され、スイッチに向かう短い移動が開始されていました）、2^21ステップを超えるとまた誤っていました。
-- **v2.2.0**: BUSYのモータでは、ラッチされたフラグを消さないGetParamでSTATUSレジスタを読みます。以前はGetStatusで読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo`など）が失われることがありました。
-
 #### 返信
 
 条件: 原点復帰動作中のとき
@@ -142,6 +137,11 @@ title: モータの回転・停止
 #### 関連
 
 [`/goToDir`](motor-control.md#gotodir), [`/combine/goTo`](motor-control.md#combine-goto)
+
+#### 変更
+
+- **v2.2.0**: HOMEスイッチまたはLIMITスイッチが動作を禁止する場合（[`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw)、[`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)）の方向を、正しく判定します。目標との22ビットの差の符号で決まり、ドライバが進む向き（最短経路）と同じです。以前は、目標が2048ステップ未満の距離にあると方向が逆になり（スイッチから離れる短い移動が`HomeSwActivating` / `LimitSwActivating`で拒否され、スイッチに向かう短い移動が開始されていました）、2^21ステップを超えるとまた誤っていました。
+- **v2.2.0**: BUSYのモータでは、ラッチされたフラグを消さないGetParamでSTATUSレジスタを読みます。以前はGetStatusで読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo`など）が失われることがありました。
 <!-- generated:end osc /goTo -->
 
 <!-- osc: /goToDir -->
@@ -166,10 +166,6 @@ title: モータの回転・停止
 
 範囲外の位置は拒否されません。4,194,303を超える位置は、ドライバライブラリによって4,194,303に制限され、ドライバはこれを-1として読みます。それ以外の位置は、下位22ビットだけが使われ、符号付きの数として読まれます。2,097,152は-2,097,152に、-2,097,153は2,097,151になります。
 
-#### 変更
-
-- **v2.2.0**: BUSYのモータでは、ラッチされたフラグを消さないGetParamでSTATUSレジスタを読みます。以前はGetStatusで読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo`など）が失われることがありました。
-
 #### エラー
 
 - `BrakeEngaged`: 電磁ブレーキが効いた状態のままモーションコマンドを送信した。ブレーキが保持されている間、解放中、保持への移行中の`/enableServoMode 1`と`/homing`でも送信される（停止処理中と`/free`の後は除く）。
@@ -180,6 +176,10 @@ title: モータの回転・停止
 #### 関連
 
 [`/goTo`](motor-control.md#goto), [`/combine/goToDir`](motor-control.md#combine-gotodir)
+
+#### 変更
+
+- **v2.2.0**: BUSYのモータでは、ラッチされたフラグを消さないGetParamでSTATUSレジスタを読みます。以前はGetStatusで読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo`など）が失われることがありました。
 <!-- generated:end osc /goToDir -->
 
 ## モータの停止 {#stops}
@@ -206,11 +206,6 @@ title: モータの回転・停止
 
 電磁ブレーキが有効なとき、ブレーキが保持されている間と[`/free`](brake.md#free)の後（モータが無励磁）は、何もしません。[`/softHiZ`](motor-control.md#softhiz)または`/activate 0`の減速中（ブレーキの状態3）は、コマンドが実行され、ブレーキの保持を取り消します。ブレーキは解放されたままになります（状態2）。
 
-#### 変更
-
-- **v2.2.0**: 電磁ブレーキが有効なとき、ブレーキが保持されている間と`/free`の後（モータが無励磁）は、何もしません。以前は、モータを励磁してブレーキの状態は保持のままにしていたため、`/activate 0`と`/hardHiZ`でモータを再び無励磁にできませんでした。
-- **v2.2.0**: 保留中の動作を取り消します。ブレーキが無効なモータでも同じです。取り消されるのは、BUSYフラグが下りるのを待っている`/goTo`、`/goToDir`、`/goHome`、`/goMark`（以前は、モータがBUSYでなくなったときに送られていたため、止まっていたモータが再び動き出していました）、原点復帰（以前は、そのタイムアウトで送られる即停止が、その間に無励磁になったモータを励磁していました）、サーボモードです。
-
 #### 返信
 
 条件: 原点復帰動作中のとき
@@ -229,6 +224,11 @@ title: モータの回転・停止
 #### 関連
 
 [`/combine/softStop`](motor-control.md#combine-softstop)
+
+#### 変更
+
+- **v2.2.0**: 電磁ブレーキが有効なとき、ブレーキが保持されている間と`/free`の後（モータが無励磁）は、何もしません。以前は、モータを励磁してブレーキの状態は保持のままにしていたため、`/activate 0`と`/hardHiZ`でモータを再び無励磁にできませんでした。
+- **v2.2.0**: 保留中の動作を取り消します。ブレーキが無効なモータでも同じです。取り消されるのは、BUSYフラグが下りるのを待っている`/goTo`、`/goToDir`、`/goHome`、`/goMark`（以前は、モータがBUSYでなくなったときに送られていたため、止まっていたモータが再び動き出していました）、原点復帰（以前は、そのタイムアウトで送られる即停止が、その間に無励磁になったモータを励磁していました）、サーボモードです。
 <!-- generated:end osc /softStop -->
 
 <!-- osc: /hardStop -->
@@ -253,11 +253,6 @@ title: モータの回転・停止
 
 電磁ブレーキが有効なとき、ブレーキが保持されている間と[`/free`](brake.md#free)の後（モータが無励磁）は、何もしません。[`/softHiZ`](motor-control.md#softhiz)または`/activate 0`の減速中（ブレーキの状態3）は、コマンドが実行され、ブレーキの保持を取り消します。ブレーキは解放されたままになります（状態2）。
 
-#### 変更
-
-- **v2.2.0**: 電磁ブレーキが有効なとき、ブレーキが保持されている間と`/free`の後（モータが無励磁）は、何もしません。以前は、モータを励磁してブレーキの状態は保持のままにしていたため、`/activate 0`と`/hardHiZ`でモータを再び無励磁にできませんでした。
-- **v2.2.0**: 保留中の動作を取り消します。ブレーキが無効なモータでも同じです。取り消されるのは、BUSYフラグが下りるのを待っている`/goTo`、`/goToDir`、`/goHome`、`/goMark`（以前は、モータがBUSYでなくなったときに送られていたため、止まっていたモータが再び動き出していました）、原点復帰（以前は、そのタイムアウトで送られる即停止が、その間に無励磁になったモータを励磁していました）、サーボモードです。
-
 #### 返信
 
 条件: 原点復帰動作中のとき
@@ -276,6 +271,11 @@ title: モータの回転・停止
 #### 関連
 
 [`/combine/hardStop`](motor-control.md#combine-hardstop)
+
+#### 変更
+
+- **v2.2.0**: 電磁ブレーキが有効なとき、ブレーキが保持されている間と`/free`の後（モータが無励磁）は、何もしません。以前は、モータを励磁してブレーキの状態は保持のままにしていたため、`/activate 0`と`/hardHiZ`でモータを再び無励磁にできませんでした。
+- **v2.2.0**: 保留中の動作を取り消します。ブレーキが無効なモータでも同じです。取り消されるのは、BUSYフラグが下りるのを待っている`/goTo`、`/goToDir`、`/goHome`、`/goMark`（以前は、モータがBUSYでなくなったときに送られていたため、止まっていたモータが再び動き出していました）、原点復帰（以前は、そのタイムアウトで送られる即停止が、その間に無励磁になったモータを励磁していました）、サーボモードです。
 <!-- generated:end osc /hardStop -->
 
 <!-- osc: /softHiZ -->
@@ -300,13 +300,6 @@ title: モータの回転・停止
 
 電磁ブレーキモードが有効になっている場合は、電磁ブレーキを保持状態にしてから無励磁状態に移行します。
 
-#### 変更
-
-- **v2.2.0**: 電磁ブレーキが有効で、モータが停止しているときは、次のSTATUSレジスタの読み出し（最大5ms後）でブレーキを保持します。停止の判定は、コマンドの後のSTATUSレジスタの読み出しで行います。
-- **v2.2.0**: 減速中に動作コマンド（`/run`、`/move`、`/goTo`など）か`/activate 1`を受け取ると、ブレーキの保持を取り消し、ブレーキは解放されたままになります。以前は、モータがその後止まったときにブレーキが保持されていました。
-- **v2.2.0**: `/free`の後は、ブレーキをすぐに保持します（モータはすでに無励磁です）。
-- **v2.2.0**: 保留中の動作を取り消します。ブレーキが無効なモータでも同じです。取り消されるのは、BUSYフラグが下りるのを待っている`/goTo`、`/goToDir`、`/goHome`、`/goMark`（以前は、モータがBUSYでなくなったときに送られていたため、止まっていたモータが再び動き出していました）、原点復帰（以前は、そのタイムアウトで送られる即停止が、その間に無励磁になったモータを励磁していました）、サーボモードです。
-
 #### 返信
 
 条件: 原点復帰動作中のとき
@@ -325,6 +318,13 @@ title: モータの回転・停止
 #### 関連
 
 [`/combine/softHiZ`](motor-control.md#combine-softhiz), [`/enableElectromagnetBrake`](brake.md#enableelectromagnetbrake)
+
+#### 変更
+
+- **v2.2.0**: 電磁ブレーキが有効で、モータが停止しているときは、次のSTATUSレジスタの読み出し（最大5ms後）でブレーキを保持します。停止の判定は、コマンドの後のSTATUSレジスタの読み出しで行います。
+- **v2.2.0**: 減速中に動作コマンド（`/run`、`/move`、`/goTo`など）か`/activate 1`を受け取ると、ブレーキの保持を取り消し、ブレーキは解放されたままになります。以前は、モータがその後止まったときにブレーキが保持されていました。
+- **v2.2.0**: `/free`の後は、ブレーキをすぐに保持します（モータはすでに無励磁です）。
+- **v2.2.0**: 保留中の動作を取り消します。ブレーキが無効なモータでも同じです。取り消されるのは、BUSYフラグが下りるのを待っている`/goTo`、`/goToDir`、`/goHome`、`/goMark`（以前は、モータがBUSYでなくなったときに送られていたため、止まっていたモータが再び動き出していました）、原点復帰（以前は、そのタイムアウトで送られる即停止が、その間に無励磁になったモータを励磁していました）、サーボモードです。
 <!-- generated:end osc /softHiZ -->
 
 <!-- osc: /hardHiZ -->
@@ -349,12 +349,6 @@ title: モータの回転・停止
 
 電磁ブレーキモードが有効になっている場合は、電磁ブレーキを保持状態にしてから無励磁状態に移行します。
 
-#### 変更
-
-- **v2.2.0**: 1つのモータでも、`/hardHiZ`の前に減速停止を送らなくなりました。1つのモータ、全モータ（255）、`/combine/hardHiZ`は同じ動作です。電磁ブレーキが有効で解放されている（`/activate 1`の後の）ときは、ブレーキを保持する前に、即停止でモータを止めます（励磁されたまま）。ブレーキの移行時間の間にモータが回り続けることはありません。ブレーキが保持されている間と保持への移行中は、以前と同じく何もしません。
-- **v2.2.0**: `/free`の後は、ブレーキをすぐに保持します（モータはすでに無励磁です）。
-- **v2.2.0**: 保留中の動作を取り消します。ブレーキが無効なモータでも同じです。取り消されるのは、BUSYフラグが下りるのを待っている`/goTo`、`/goToDir`、`/goHome`、`/goMark`（以前は、モータがBUSYでなくなったときに送られていたため、止まっていたモータが再び動き出していました）、原点復帰（以前は、そのタイムアウトで送られる即停止が、その間に無励磁になったモータを励磁していました）、サーボモードです。
-
 #### 返信
 
 条件: 原点復帰動作中のとき
@@ -373,6 +367,12 @@ title: モータの回転・停止
 #### 関連
 
 [`/combine/hardHiZ`](motor-control.md#combine-hardhiz), [`/enableElectromagnetBrake`](brake.md#enableelectromagnetbrake)
+
+#### 変更
+
+- **v2.2.0**: 1つのモータでも、`/hardHiZ`の前に減速停止を送らなくなりました。1つのモータ、全モータ（255）、`/combine/hardHiZ`は同じ動作です。電磁ブレーキが有効で解放されている（`/activate 1`の後の）ときは、ブレーキを保持する前に、即停止でモータを止めます（励磁されたまま）。ブレーキの移行時間の間にモータが回り続けることはありません。ブレーキが保持されている間と保持への移行中は、以前と同じく何もしません。
+- **v2.2.0**: `/free`の後は、ブレーキをすぐに保持します（モータはすでに無励磁です）。
+- **v2.2.0**: 保留中の動作を取り消します。ブレーキが無効なモータでも同じです。取り消されるのは、BUSYフラグが下りるのを待っている`/goTo`、`/goToDir`、`/goHome`、`/goMark`（以前は、モータがBUSYでなくなったときに送られていたため、止まっていたモータが再び動き出していました）、原点復帰（以前は、そのタイムアウトで送られる即停止が、その間に無励磁になったモータを励磁していました）、サーボモードです。
 <!-- generated:end osc /hardHiZ -->
 
 ## 連動コマンド {#combined-commands}
@@ -476,10 +476,6 @@ title: モータの回転・停止
 
 2つのモータに対する[`/goTo`](motor-control.md#goto)と同じです。範囲外の位置は拒否されません。4,194,303を超える位置は、ドライバライブラリによって4,194,303に制限され、ドライバはこれを-1として読みます。それ以外の位置は、下位22ビットだけが使われ、符号付きの数として読まれます。2,097,152は-2,097,152に、-2,097,153は2,097,151になります。
 
-#### 変更
-
-- **v2.2.0**: HOMEスイッチまたはLIMITスイッチが動作を禁止する場合（[`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw)、[`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)）の方向を、正しく判定します。目標との22ビットの差の符号で決まり、ドライバが進む向き（最短経路）と同じです。以前は、目標が2048ステップ未満の距離にあると方向が逆になり（スイッチから離れる短い移動が`HomeSwActivating` / `LimitSwActivating`で拒否され、スイッチに向かう短い移動が開始されていました）、2^21ステップを超えるとまた誤っていました。
-
 #### 返信
 
 条件: 原点復帰動作中のとき
@@ -505,6 +501,10 @@ title: モータの回転・停止
 #### 関連
 
 [`/goTo`](motor-control.md#goto)
+
+#### 変更
+
+- **v2.2.0**: HOMEスイッチまたはLIMITスイッチが動作を禁止する場合（[`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw)、[`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)）の方向を、正しく判定します。目標との22ビットの差の符号で決まり、ドライバが進む向き（最短経路）と同じです。以前は、目標が2048ステップ未満の距離にあると方向が逆になり（スイッチから離れる短い移動が`HomeSwActivating` / `LimitSwActivating`で拒否され、スイッチに向かう短い移動が開始されていました）、2^21ステップを超えるとまた誤っていました。
 <!-- generated:end osc /combine/goTo -->
 
 <!-- osc: /combine/goToDir -->
@@ -559,10 +559,6 @@ title: モータの回転・停止
 
 2つのモータに対する[`/softStop`](motor-control.md#softstop)と同じです。motorID1、続いてmotorID2に対して、[`/softStop`](motor-control.md#softstop)として処理されます。
 
-#### 変更
-
-- **v2.2.0**: [`/softStop`](motor-control.md#softstop)と同じように、保留中の動作を取り消します（2つのモータは、それぞれ別の[`/softStop`](motor-control.md#softstop)として処理されます）。ブレーキが無効なモータでも同じです。
-
 #### 返信
 
 条件: 原点復帰動作中のとき
@@ -581,6 +577,10 @@ title: モータの回転・停止
 #### 関連
 
 [`/softStop`](motor-control.md#softstop)
+
+#### 変更
+
+- **v2.2.0**: [`/softStop`](motor-control.md#softstop)と同じように、保留中の動作を取り消します（2つのモータは、それぞれ別の[`/softStop`](motor-control.md#softstop)として処理されます）。ブレーキが無効なモータでも同じです。
 <!-- generated:end osc /combine/softStop -->
 
 <!-- osc: /combine/hardStop -->
@@ -602,10 +602,6 @@ title: モータの回転・停止
 
 2つのモータに対する[`/hardStop`](motor-control.md#hardstop)と同じです。motorID1、続いてmotorID2に対して、[`/hardStop`](motor-control.md#hardstop)として処理されます。
 
-#### 変更
-
-- **v2.2.0**: [`/hardStop`](motor-control.md#hardstop)と同じように、保留中の動作を取り消します（2つのモータは、それぞれ別の[`/hardStop`](motor-control.md#hardstop)として処理されます）。ブレーキが無効なモータでも同じです。
-
 #### 返信
 
 条件: 原点復帰動作中のとき
@@ -624,6 +620,10 @@ title: モータの回転・停止
 #### 関連
 
 [`/hardStop`](motor-control.md#hardstop)
+
+#### 変更
+
+- **v2.2.0**: [`/hardStop`](motor-control.md#hardstop)と同じように、保留中の動作を取り消します（2つのモータは、それぞれ別の[`/hardStop`](motor-control.md#hardstop)として処理されます）。ブレーキが無効なモータでも同じです。
 <!-- generated:end osc /combine/hardStop -->
 
 <!-- osc: /combine/softHiZ -->
@@ -645,10 +645,6 @@ title: モータの回転・停止
 
 2つのモータに対する[`/softHiZ`](motor-control.md#softhiz)と同じです。motorID1、続いてmotorID2に対して、[`/softHiZ`](motor-control.md#softhiz)として処理されます。
 
-#### 変更
-
-- **v2.2.0**: [`/softHiZ`](motor-control.md#softhiz)と同じように、保留中の動作を取り消します（2つのモータは、それぞれ別の[`/softHiZ`](motor-control.md#softhiz)として処理されます）。ブレーキが無効なモータでも同じです。
-
 #### 返信
 
 条件: 原点復帰動作中のとき
@@ -667,6 +663,10 @@ title: モータの回転・停止
 #### 関連
 
 [`/softHiZ`](motor-control.md#softhiz)
+
+#### 変更
+
+- **v2.2.0**: [`/softHiZ`](motor-control.md#softhiz)と同じように、保留中の動作を取り消します（2つのモータは、それぞれ別の[`/softHiZ`](motor-control.md#softhiz)として処理されます）。ブレーキが無効なモータでも同じです。
 <!-- generated:end osc /combine/softHiZ -->
 
 <!-- osc: /combine/hardHiZ -->
@@ -688,10 +688,6 @@ title: モータの回転・停止
 
 2つのモータに対する[`/hardHiZ`](motor-control.md#hardhiz)と同じです。motorID1、続いてmotorID2に対して、[`/hardHiZ`](motor-control.md#hardhiz)として処理されます。
 
-#### 変更
-
-- **v2.2.0**: [`/hardHiZ`](motor-control.md#hardhiz)と同じように、保留中の動作を取り消します（2つのモータは、それぞれ別の[`/hardHiZ`](motor-control.md#hardhiz)として処理されます）。ブレーキが無効なモータでも同じです。
-
 #### 返信
 
 条件: 原点復帰動作中のとき
@@ -710,6 +706,10 @@ title: モータの回転・停止
 #### 関連
 
 [`/hardHiZ`](motor-control.md#hardhiz)
+
+#### 変更
+
+- **v2.2.0**: [`/hardHiZ`](motor-control.md#hardhiz)と同じように、保留中の動作を取り消します（2つのモータは、それぞれ別の[`/hardHiZ`](motor-control.md#hardhiz)として処理されます）。ブレーキが無効なモータでも同じです。
 <!-- generated:end osc /combine/hardHiZ -->
 
 ## Rawレジスタ値のコマンド {#raw-register-value-commands}
@@ -786,13 +786,6 @@ title: モータの回転・停止
 
 速度は、ファームウェアとドライバライブラリによって20ビット（0xFFFFF）に制限されます。`/goUntilRaw 255`（全モータ）は、1つのモータのときと同じように、速度をレジスタ値として解釈します。
 
-#### 変更
-
-- **v2.2.0**: [`/runRaw`](motor-control.md#runraw)と同じように、速度を20ビット（`0xFFFFF`）に制限します。以前は、大きな値がそのまま送られ、ドライバは上位ビットを無視していました。
-- **v2.2.0**: `/goUntilRaw 255`（全モータ）は、1つのモータのときと同じように、速度をレジスタ値として解釈します。以前はstep/sとして扱われていました。
-- **v2.2.0**: HOMEスイッチがオンの場合は、エラーの一覧にあるとおり`/error/command HomeSwActivating`として送信されます。以前は`HomeSwActivated`として送信されていました。他のコマンドのエラーと同じように、[`/reportError`](system-settings.md#reporterror)に従います。
-- **v2.2.0**: サーボモードのモータには`/error/command InServoMode`を返し、何もしません。以前は、コマンドがドライバに送られていました。255のときは、サーボモードのモータだけがエラーを返し、他のモータはコマンドを実行します。
-
 #### エラー
 
 - `BrakeEngaged`: 電磁ブレーキが効いた状態のままモーションコマンドを送信した。ブレーキが保持されている間、解放中、保持への移行中の`/enableServoMode 1`と`/homing`でも送信される（停止処理中と`/free`の後は除く）。
@@ -803,6 +796,13 @@ title: モータの回転・停止
 #### 関連
 
 [`/goUntil`](homing.md#gountil)
+
+#### 変更
+
+- **v2.2.0**: [`/runRaw`](motor-control.md#runraw)と同じように、速度を20ビット（`0xFFFFF`）に制限します。以前は、大きな値がそのまま送られ、ドライバは上位ビットを無視していました。
+- **v2.2.0**: `/goUntilRaw 255`（全モータ）は、1つのモータのときと同じように、速度をレジスタ値として解釈します。以前はstep/sとして扱われていました。
+- **v2.2.0**: HOMEスイッチがオンの場合は、エラーの一覧にあるとおり`/error/command HomeSwActivating`として送信されます。以前は`HomeSwActivated`として送信されていました。他のコマンドのエラーと同じように、[`/reportError`](system-settings.md#reporterror)に従います。
+- **v2.2.0**: サーボモードのモータには`/error/command InServoMode`を返し、何もしません。以前は、コマンドがドライバに送られていました。255のときは、サーボモードのモータだけがエラーを返し、他のモータはコマンドを実行します。
 <!-- generated:end osc /goUntilRaw -->
 
 <!-- osc: /combine/runRaw -->

@@ -162,10 +162,6 @@ ABS_POSレジスタを0にリセットします。
 
 0〜3の範囲外のフルステップ、0〜127の範囲外のマイクロステップには`CommandIgnored`を返し、何も適用されません。
 
-#### 変更
-
-- **v2.2.0**: 0〜3の範囲外のフルステップ、0〜127の範囲外のマイクロステップには、`/error/command CommandIgnored`を返し、何も適用されません。以前は範囲内に丸められていました。
-
 #### エラー
 
 - `CommandIgnored`: コマンドが実行可能なタイミングではない。タイミング参照。値がコマンドの範囲外のときにも送信され、何も適用されない（`/setPositionListReportInterval`のモータIDは255）。
@@ -173,6 +169,10 @@ ABS_POSレジスタを0にリセットします。
 #### 関連
 
 [`/getElPos`](position-management.md#getelpos)
+
+#### 変更
+
+- **v2.2.0**: 0〜3の範囲外のフルステップ、0〜127の範囲外のマイクロステップには、`/error/command CommandIgnored`を返し、何も適用されません。以前は範囲内に丸められていました。
 <!-- generated:end osc /setElPos -->
 
 <!-- osc: /getElPos -->
@@ -282,17 +282,17 @@ MARKの位置を取得します。
 
 HOME位置までスピードプロファイルに従って移動します。
 
-#### 変更
-
-- **v2.2.0**: HOMEスイッチまたはLIMITスイッチが動作を禁止する場合（[`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw)、[`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)）の方向を、正しく判定します。目標との22ビットの差の符号で決まり、ドライバが進む向き（最短経路）と同じです。以前は、目標が2048ステップ未満の距離にあると方向が逆になり（スイッチから離れる短い移動が`HomeSwActivating` / `LimitSwActivating`で拒否され、スイッチに向かう短い移動が開始されていました）、2^21ステップを超えるとまた誤っていました。
-- **v2.2.0**: BUSYのモータでは、ラッチされたフラグを消さないGetParamでSTATUSレジスタを読みます。以前はGetStatusで読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo`など）が失われることがありました。
-
 #### エラー
 
 - `BrakeEngaged`: 電磁ブレーキが効いた状態のままモーションコマンドを送信した。ブレーキが保持されている間、解放中、保持への移行中の`/enableServoMode 1`と`/homing`でも送信される（停止処理中と`/free`の後は除く）。
 - `HomeSwActivating`: HOMEスイッチがオンの状態から原点復帰方向に移動しようとした。HOMEスイッチがすでにオンのときの`/goUntil`と`/goUntilRaw`でも送信される。**v2.2.0**: `/goUntil`と`/goUntilRaw`が、HOMEスイッチがすでにオンのときに送信します。以前は`HomeSwActivated`として送信されていました。
 - `LimitSwActivating`: LIMITスイッチがオンの状態から原点復帰方向の逆向きに移動しようとした。
 - `InServoMode`: サーボモードでは実行できないコマンドを送信した。**v2.2.0**: `/goUntil`、`/goUntilRaw`、`/releaseSw`でも送信されます。
+
+#### 変更
+
+- **v2.2.0**: HOMEスイッチまたはLIMITスイッチが動作を禁止する場合（[`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw)、[`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)）の方向を、正しく判定します。目標との22ビットの差の符号で決まり、ドライバが進む向き（最短経路）と同じです。以前は、目標が2048ステップ未満の距離にあると方向が逆になり（スイッチから離れる短い移動が`HomeSwActivating` / `LimitSwActivating`で拒否され、スイッチに向かう短い移動が開始されていました）、2^21ステップを超えるとまた誤っていました。
+- **v2.2.0**: BUSYのモータでは、ラッチされたフラグを消さないGetParamでSTATUSレジスタを読みます。以前はGetStatusで読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo`など）が失われることがありました。
 <!-- generated:end osc /goHome -->
 
 <!-- osc: /goMark -->
@@ -313,11 +313,6 @@ HOME位置までスピードプロファイルに従って移動します。
 
 MARK位置までスピードプロファイルに従って移動します。
 
-#### 変更
-
-- **v2.2.0**: HOMEスイッチまたはLIMITスイッチが動作を禁止する場合（[`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw)、[`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)）の方向を、正しく判定します。目標との22ビットの差の符号で決まり、ドライバが進む向き（最短経路）と同じです。以前は、目標が2048ステップ未満の距離にあると方向が逆になり（スイッチから離れる短い移動が`HomeSwActivating` / `LimitSwActivating`で拒否され、スイッチに向かう短い移動が開始されていました）、2^21ステップを超えるとまた誤っていました。
-- **v2.2.0**: BUSYのモータでは、ラッチされたフラグを消さないGetParamでSTATUSレジスタを読みます。以前はGetStatusで読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo`など）が失われることがありました。
-
 #### エラー
 
 - `BrakeEngaged`: 電磁ブレーキが効いた状態のままモーションコマンドを送信した。ブレーキが保持されている間、解放中、保持への移行中の`/enableServoMode 1`と`/homing`でも送信される（停止処理中と`/free`の後は除く）。
@@ -328,4 +323,9 @@ MARK位置までスピードプロファイルに従って移動します。
 #### 関連
 
 [`/setMark`](position-management.md#setmark)
+
+#### 変更
+
+- **v2.2.0**: HOMEスイッチまたはLIMITスイッチが動作を禁止する場合（[`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw)、[`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)）の方向を、正しく判定します。目標との22ビットの差の符号で決まり、ドライバが進む向き（最短経路）と同じです。以前は、目標が2048ステップ未満の距離にあると方向が逆になり（スイッチから離れる短い移動が`HomeSwActivating` / `LimitSwActivating`で拒否され、スイッチに向かう短い移動が開始されていました）、2^21ステップを超えるとまた誤っていました。
+- **v2.2.0**: BUSYのモータでは、ラッチされたフラグを消さないGetParamでSTATUSレジスタを読みます。以前はGetStatusで読んでいたため、STATUSレジスタの読み出しがフラグを見逃し、通知（`/overCurrent`、`/stall`、`/swEvent`、`/uvlo`など）が失われることがありました。
 <!-- generated:end osc /goMark -->

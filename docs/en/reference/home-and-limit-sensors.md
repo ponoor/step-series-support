@@ -302,10 +302,6 @@ Sets switch mode whether to stop immediately when the HOME switch terminal state
 
 The outputs must be HiZ; otherwise `MotorNotHiZ` is replied and nothing is applied.
 
-#### Changes
-
-- **v2.2.0**: The outputs must be HiZ (SW_MODE of the CONFIG register is writable only in HiZ); otherwise `/error/command MotorNotHiZ` and nothing is applied.
-
 #### Errors
 
 - `MotorNotHiZ`: The command writes a driver register that can be written only while the outputs are HiZ, and the motor is not HiZ. A motor holding its position is not HiZ: send `/softHiZ` or `/hardHiZ` first. Nothing is applied. Added in v2.2.0.
@@ -317,6 +313,10 @@ The outputs must be HiZ; otherwise `MotorNotHiZ` is replied and nothing is appli
 #### See also
 
 [`/getHomeSwMode`](home-and-limit-sensors.md#gethomeswmode)
+
+#### Changes
+
+- **v2.2.0**: The outputs must be HiZ (SW_MODE of the CONFIG register is writable only in HiZ); otherwise `/error/command MotorNotHiZ` and nothing is applied.
 <!-- generated:end osc /setHomeSwMode -->
 
 <!-- osc: /getHomeSwMode -->
@@ -381,10 +381,6 @@ Always
 
 Sets the Switch mode whether to stop the motor immediately when the LIMIT switch terminal condition is changed.
 
-#### Changes
-
-- **v2.2.0**: The automatic hard stop at the limit switch (`SW_HARD_STOP`) is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver).
-
 #### Initial value
 
 - `SW_MODE`: true (User disposal (Does not stop)) ([driverSettings.limitSwMode](../connections/configuration-items.md#driversettings-limitswmode))
@@ -392,6 +388,10 @@ Sets the Switch mode whether to stop the motor immediately when the LIMIT switch
 #### See also
 
 [`/getLimitSwMode`](home-and-limit-sensors.md#getlimitswmode)
+
+#### Changes
+
+- **v2.2.0**: The automatic hard stop at the limit switch (`SW_HARD_STOP`) is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver).
 <!-- generated:end osc /setLimitSwMode -->
 
 <!-- osc: /getLimitSwMode -->

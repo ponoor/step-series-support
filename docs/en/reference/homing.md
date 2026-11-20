@@ -32,11 +32,6 @@ Time-out can be set for each of the `/goUntil` and `/releaseSw` commands. The co
 
 Depending on the state change on the homing movement, following response will be sent.
 
-#### Changes
-
-- **v2.2.0**: While the brake is engaged, releasing or engaging (not while stopping or after `/free`), replies `/error/command BrakeEngaged` and does nothing. Before, it set the homing state although it did not start.
-- **v2.2.0**: The homing no longer often ends with `/homingStatus` 4 and `ReleaseSwTimeout` about 1 ms after the switch was found, instead of 3 (a timing error of the timeout check; it happened in almost every homing or almost never, depending on the start-up).
-
 #### Response
 
 [`/homingStatus`](automatically-sent-messages.md#homingstatus)
@@ -61,6 +56,11 @@ Depending on the state change on the homing movement, following response will be
 #### See also
 
 [`/getHomingStatus`](homing.md#gethomingstatus)
+
+#### Changes
+
+- **v2.2.0**: While the brake is engaged, releasing or engaging (not while stopping or after `/free`), replies `/error/command BrakeEngaged` and does nothing. Before, it set the homing state although it did not start.
+- **v2.2.0**: The homing no longer often ends with `/homingStatus` 4 and `ReleaseSwTimeout` about 1 ms after the switch was found, instead of 3 (a timing error of the timeout check; it happened in almost every homing or almost never, depending on the start-up).
 <!-- generated:end osc /homing -->
 
 <!-- osc: /getHomingStatus -->
@@ -257,11 +257,6 @@ The motor will softStop afterwards, but if the SW_MODE is set to 0 in the [`/set
 
 The sign of the speed is the direction. A speed whose absolute value is above the range is limited to the largest register value (0xFFFFF, about 15625 step/s) by the driver library.
 
-#### Changes
-
-- **v2.2.0**: An activated home switch is reported as `/error/command HomeSwActivating`, the text in the error list. It was sent as `HomeSwActivated`. It now follows [`/reportError`](system-settings.md#reporterror) like the other command errors.
-- **v2.2.0**: For a motor in the servo mode, replies `/error/command InServoMode` and does nothing. Before, the command was sent to the driver. With 255, only the motors in the servo mode reply the error; the others execute the command.
-
 #### Errors
 
 - `BrakeEngaged`: A motion command was sent while the electromagnetic brake was active. Also sent for `/enableServoMode 1` and `/homing` while the brake is engaged, releasing or engaging (not while stopping or after `/free`).
@@ -272,6 +267,11 @@ The sign of the speed is the direction. A speed whose absolute value is above th
 #### See also
 
 [`/setGoUntilTimeout`](homing.md#setgountiltimeout), [`/releaseSw`](homing.md#releasesw), [`/goUntilRaw`](motor-control.md#gountilraw)
+
+#### Changes
+
+- **v2.2.0**: An activated home switch is reported as `/error/command HomeSwActivating`, the text in the error list. It was sent as `HomeSwActivated`. It now follows [`/reportError`](system-settings.md#reporterror) like the other command errors.
+- **v2.2.0**: For a motor in the servo mode, replies `/error/command InServoMode` and does nothing. Before, the command was sent to the driver. With 255, only the motors in the servo mode reply the error; the others execute the command.
 <!-- generated:end osc /goUntil -->
 
 <!-- osc: /setGoUntilTimeout -->
@@ -295,11 +295,6 @@ Sets the time-out duration when executing [`/goUntil`](homing.md#gountil) comman
 
 A negative value replies `CommandIgnored` and nothing is applied. The maximum is 2147483647. The automatic hard stop at the timeout is not sent to a motor whose driver is HiZ (the timeout error is still sent).
 
-#### Changes
-
-- **v2.2.0**: A negative value replies `/error/command CommandIgnored` and nothing is applied. Before, it became about 49 days.
-- **v2.2.0**: The hard stop at the timeout is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver). The timeout error is still sent.
-
 #### Errors
 
 - `CommandIgnored`: The command is currently not executable. Also refer Timing section. Also sent when a value is outside the range of the command; nothing is applied (the motor ID is 255 for `/setPositionListReportInterval`).
@@ -311,6 +306,11 @@ A negative value replies `CommandIgnored` and nothing is applied. The maximum is
 #### See also
 
 [`/getGoUntilTimeout`](homing.md#getgountiltimeout)
+
+#### Changes
+
+- **v2.2.0**: A negative value replies `/error/command CommandIgnored` and nothing is applied. Before, it became about 49 days.
+- **v2.2.0**: The hard stop at the timeout is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver). The timeout error is still sent.
 <!-- generated:end osc /setGoUntilTimeout -->
 
 <!-- osc: /getGoUntilTimeout -->
@@ -377,11 +377,6 @@ Always
 
 Move at minimum speed (5[step/s] by default) in the specified direction until the HOME switch pin becomes open. Then it will process the ABS_POS register according to the value of ACT. The process of the ACT is same as the [`/goUntil`](homing.md#gountil) command. Then halt the motor with hardStop.
 
-#### Changes
-
-- **v2.2.0**: `ACT` is read like the other boolean arguments (a number of 1.0 or more, or a positive integer, is true). It was read as an integer, so 0.5 was 0.
-- **v2.2.0**: For a motor in the servo mode, replies `/error/command InServoMode` and does nothing. Before, the command was sent to the driver. With 255, only the motors in the servo mode reply the error; the others execute the command.
-
 #### Errors
 
 - `BrakeEngaged`: A motion command was sent while the electromagnetic brake was active. Also sent for `/enableServoMode 1` and `/homing` while the brake is engaged, releasing or engaging (not while stopping or after `/free`).
@@ -391,6 +386,11 @@ Move at minimum speed (5[step/s] by default) in the specified direction until th
 #### See also
 
 [`/setReleaseSwTimeout`](homing.md#setreleaseswtimeout), [`/setMinSpeed`](speed-profile.md#setminspeed)
+
+#### Changes
+
+- **v2.2.0**: `ACT` is read like the other boolean arguments (a number of 1.0 or more, or a positive integer, is true). It was read as an integer, so 0.5 was 0.
+- **v2.2.0**: For a motor in the servo mode, replies `/error/command InServoMode` and does nothing. Before, the command was sent to the driver. With 255, only the motors in the servo mode reply the error; the others execute the command.
 <!-- generated:end osc /releaseSw -->
 
 <!-- osc: /setReleaseSwTimeout -->
@@ -414,11 +414,6 @@ Sets the time-out duration when executing [`/releaseSw`](homing.md#releasesw) co
 
 A negative value replies `CommandIgnored` and nothing is applied. The maximum is 2147483647. The automatic hard stop at the timeout is not sent to a motor whose driver is HiZ (the timeout error is still sent).
 
-#### Changes
-
-- **v2.2.0**: A negative value replies `/error/command CommandIgnored` and nothing is applied. Before, it became about 49 days.
-- **v2.2.0**: The hard stop at the timeout is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver). The timeout error is still sent.
-
 #### Errors
 
 - `CommandIgnored`: The command is currently not executable. Also refer Timing section. Also sent when a value is outside the range of the command; nothing is applied (the motor ID is 255 for `/setPositionListReportInterval`).
@@ -430,6 +425,11 @@ A negative value replies `CommandIgnored` and nothing is applied. The maximum is
 #### See also
 
 [`/getReleaseSwTimeout`](homing.md#getreleaseswtimeout)
+
+#### Changes
+
+- **v2.2.0**: A negative value replies `/error/command CommandIgnored` and nothing is applied. Before, it became about 49 days.
+- **v2.2.0**: The hard stop at the timeout is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver). The timeout error is still sent.
 <!-- generated:end osc /setReleaseSwTimeout -->
 
 <!-- osc: /getReleaseSwTimeout -->

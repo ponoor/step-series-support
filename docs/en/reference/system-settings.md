@@ -27,13 +27,6 @@ Until the board receives `/setDestIp`, it sends nothing to the destination (exce
 
 To resolve the MAC address, the board sends one byte of UDP to port 9 (discard) of the broadcast address and one byte to port 9 (discard) of the destination; a Mac answers with ICMP port unreachable, which has no effect on the board. To check that the board is alive, use a command with a reply such as [`/getVersion`](system-settings.md#getversion), not `/setDestIp`.
 
-#### Changes
-
-- **v2.2.0**: When this `/setDestIp` starts the resolution of the MAC address of the destination, the reply `/destIp` is sent once it has been resolved, so it can come later than before (a few ms on a wired network, up to a few seconds on Wi-Fi). If it does not come, send `/setDestIp` again. A `/setDestIp` that starts no resolution (for example one sent every second as a heartbeat) is answered at once.
-- **v2.2.0**: Messages to the destination (replies, reports, errors) are dropped while the MAC address is being resolved (up to a few seconds). The broadcast `/booted` is still sent.
-- **v2.2.0**: A `/setDestIp` from a different device with the same IP address (another PC or network adapter), sent 1.5 s or more after the last packet from the old one, now makes the board send to the new device. Before, the board kept sending to the old MAC address until it was restarted.
-- **v2.2.0**: A send to a destination that has never answered ARP (for example a wrong destination address) blocks the processing for about 41 ms (1.6 s or more before). It no longer happens for every message: the sends to that destination are paused for 1 s: the messages in that time are dropped, not sent later. A packet received from that destination resumes the sends at once. The broadcast `/booted` is not affected.
-
 #### Response
 
 ```
@@ -51,6 +44,13 @@ To resolve the MAC address, the board sends one byte of UDP to port 9 (discard) 
 ##### Changes
 
 - **v2.2.0**: When the `/setDestIp` starts the resolution of the MAC address (the first one, one from another address, or one 1.5 s or more after the last packet from the destination), the message is sent once it has been resolved, so it can come up to about 2 s later; otherwise it is sent at once. If it does not come, send `/setDestIp` again.
+
+#### Changes
+
+- **v2.2.0**: When this `/setDestIp` starts the resolution of the MAC address of the destination, the reply `/destIp` is sent once it has been resolved, so it can come later than before (a few ms on a wired network, up to a few seconds on Wi-Fi). If it does not come, send `/setDestIp` again. A `/setDestIp` that starts no resolution (for example one sent every second as a heartbeat) is answered at once.
+- **v2.2.0**: Messages to the destination (replies, reports, errors) are dropped while the MAC address is being resolved (up to a few seconds). The broadcast `/booted` is still sent.
+- **v2.2.0**: A `/setDestIp` from a different device with the same IP address (another PC or network adapter), sent 1.5 s or more after the last packet from the old one, now makes the board send to the new device. Before, the board kept sending to the old MAC address until it was restarted.
+- **v2.2.0**: A send to a destination that has never answered ARP (for example a wrong destination address) blocks the processing for about 41 ms (1.6 s or more before). It no longer happens for every message: the sends to that destination are paused for 1 s: the messages in that time are dropped, not sent later. A packet received from that destination resumes the sends at once. The broadcast `/booted` is not affected.
 <!-- generated:end osc /setDestIp -->
 
 <!-- osc: /getVersion -->
@@ -261,11 +261,6 @@ The configuration is written to a hidden temporary file `.<name>.tmp` in the sam
 
 The card is checked only at start-up. With no usable card at start-up (a card inserted afterwards, or an exFAT card) the reply is `No SD card`; with a card removed after start-up, a full card or a missing folder it is `SD open failed`. The saved configuration is applied at the next start-up.
 
-#### Changes
-
-- **v2.2.0**: The configuration is written to a hidden temporary file `.<name>.tmp` in the same folder, and the saved file is replaced only after the temporary file has been written and closed. A save that fails (the card or the folder is full, the folder does not exist, a write error) leaves the saved file as it was and replies `SD open failed`. Before, the old file was deleted first, so a failed save left no configuration file on the card. If the power is cut after the old file is deleted and before the new one is renamed, or if the rename fails (`SD open failed`), only the temporary file remains (there is no recovery at start-up). Its name starts with `.`, so it is not read as a configuration file (see [`/configName`](system-settings.md#getconfigname)).
-- **v2.2.0**: Arduino IDE build: saving to an exFAT card (SDXC, 64 GB or more by default) deleted the file on the card and replied `SD open failed`. Now the Arduino IDE build is the same as the PlatformIO build: an exFAT card is not used (`No SD card`) and nothing on it is touched. Format the card as FAT16 or FAT32.
-
 #### Response
 
 When: Saved
@@ -302,6 +297,11 @@ Added in v2.1.0.
 #### See also
 
 [`/configName`](system-settings.md#getconfigname), [`/setConfigName`](system-settings.md#setconfigname)
+
+#### Changes
+
+- **v2.2.0**: The configuration is written to a hidden temporary file `.<name>.tmp` in the same folder, and the saved file is replaced only after the temporary file has been written and closed. A save that fails (the card or the folder is full, the folder does not exist, a write error) leaves the saved file as it was and replies `SD open failed`. Before, the old file was deleted first, so a failed save left no configuration file on the card. If the power is cut after the old file is deleted and before the new one is renamed, or if the rename fails (`SD open failed`), only the temporary file remains (there is no recovery at start-up). Its name starts with `.`, so it is not read as a configuration file (see [`/configName`](system-settings.md#getconfigname)).
+- **v2.2.0**: Arduino IDE build: saving to an exFAT card (SDXC, 64 GB or more by default) deleted the file on the card and replied `SD open failed`. Now the Arduino IDE build is the same as the PlatformIO build: an exFAT card is not used (`No SD card`) and nothing on it is touched. Format the card as FAT16 or FAT32.
 <!-- generated:end osc /saveConfig -->
 
 <!-- osc: /resetDevice -->

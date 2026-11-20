@@ -28,11 +28,6 @@ STEP400のみ。
 
 指定したモータを電圧モードに切り替えます。STEP800は常に電圧モードで動作しますので、この切替コマンドはSTEP400のみ利用可能です。
 
-#### 変更
-
-- **v2.2.0**: 出力は無励磁でなければなりません。そうでないときは`/error/command MotorNotHiZ`を返し、何も適用されません。
-- **v2.2.0**: ドライバがモードを受け付けたとき（STEP_MODEを読み戻して確認します）だけモードを変更します。そうでないときは`/error/command CommandIgnored`を返します。以前は、ドライバが元のモードのままなのに保存されるモードだけが変わっていたため、その後の[`/setKval`](voltage-and-current-mode-settings.md#setkval)と[`/setTval`](voltage-and-current-mode-settings.md#settval)が誤ったレジスタに書き込んでいました。
-
 #### エラー
 
 - `MotorNotHiZ`: ドライバのレジスタのうち、出力が無励磁のときだけ書き込めるものをコマンドが書き込もうとしたが、モータが無励磁ではなかった。励磁して位置を保っているモータは無励磁ではない。先に`/softHiZ`か`/hardHiZ`を送る。何も適用されない。v2.2.0で追加。
@@ -41,6 +36,11 @@ STEP400のみ。
 #### 関連
 
 [`/setCurrentMode`](voltage-and-current-mode-settings.md#setcurrentmode)
+
+#### 変更
+
+- **v2.2.0**: 出力は無励磁でなければなりません。そうでないときは`/error/command MotorNotHiZ`を返し、何も適用されません。
+- **v2.2.0**: ドライバがモードを受け付けたとき（STEP_MODEを読み戻して確認します）だけモードを変更します。そうでないときは`/error/command CommandIgnored`を返します。以前は、ドライバが元のモードのままなのに保存されるモードだけが変わっていたため、その後の[`/setKval`](voltage-and-current-mode-settings.md#setkval)と[`/setTval`](voltage-and-current-mode-settings.md#settval)が誤ったレジスタに書き込んでいました。
 <!-- generated:end osc /setVoltageMode -->
 
 <!-- osc: /setKval -->
@@ -101,10 +101,6 @@ KVAL4種をまとめて取得します。
 
 電磁ブレーキが有効で電圧モードのとき、モータが再び励磁されるたびに（保持、保持への移行中、`/free`の後から）KVAL_HOLDがKVAL_RUNの半分以上に引き上げられ、このコマンドは引き上げられた値を返します。電流モードでは、代わりにTVAL_HOLDが引き上げられます。
 
-#### 変更
-
-- **v2.2.0**: ドライバのレジスタではなく、設定（[`/setKval`](voltage-and-current-mode-settings.md#setkval)で設定し、`/saveConfig`で保存される値）を返します。電流モードではKVALのレジスタは以前の値のままで、電圧モードではレジスタの値です。電磁ブレーキのモータで引き上げられたKVAL_HOLDも返されます。STEP800の返信は以前と同じです。
-
 #### 返信
 
 ```
@@ -118,6 +114,10 @@ KVAL4種をまとめて取得します。
 | runKVAL | int | 0-255 | 一定速運転時のKVAL |
 | accKVAL | int | 0-255 | 加速時のKVAL |
 | decKVAL | int | 0-255 | 減速時のKVAL |
+
+#### 変更
+
+- **v2.2.0**: ドライバのレジスタではなく、設定（[`/setKval`](voltage-and-current-mode-settings.md#setkval)で設定し、`/saveConfig`で保存される値）を返します。電流モードではKVALのレジスタは以前の値のままで、電圧モードではレジスタの値です。電磁ブレーキのモータで引き上げられたKVAL_HOLDも返されます。STEP800の返信は以前と同じです。
 <!-- generated:end osc /getKval -->
 
 <!-- osc: /setBemfParam -->
@@ -146,10 +146,6 @@ BEMF補償パラメータのレジスタを設定します。各レジスタの�
 
 範囲外の値は拒否されません。INT_SPEEDは0〜16383に、他のパラメータは0〜255に制限されます。
 
-#### 変更
-
-- **v2.2.0**: 出力は無励磁でなければなりません（INT_SPEED、ST_SLP、FN_SLP_ACC、FN_SLP_DECは無励磁のときだけ書き込めます）。そうでないときは`/error/command MotorNotHiZ`を返し、何も適用されません。
-
 #### エラー
 
 - `MotorNotHiZ`: ドライバのレジスタのうち、出力が無励磁のときだけ書き込めるものをコマンドが書き込もうとしたが、モータが無励磁ではなかった。励磁して位置を保っているモータは無励磁ではない。先に`/softHiZ`か`/hardHiZ`を送る。何も適用されない。v2.2.0で追加。
@@ -164,6 +160,10 @@ BEMF補償パラメータのレジスタを設定します。各レジスタの�
 #### 関連
 
 [`/getBemfParam`](voltage-and-current-mode-settings.md#getbemfparam)
+
+#### 変更
+
+- **v2.2.0**: 出力は無励磁でなければなりません（INT_SPEED、ST_SLP、FN_SLP_ACC、FN_SLP_DECは無励磁のときだけ書き込めます）。そうでないときは`/error/command MotorNotHiZ`を返し、何も適用されません。
 <!-- generated:end osc /setBemfParam -->
 
 <!-- osc: /getBemfParam -->
@@ -351,11 +351,6 @@ STEP400のみ。
 
 PowerSTEP01の電流モードは1/16マイクロステップまでです。それより細かいマイクロステップモードは1/16に下げられ、保存されている設定（[`/setMicrostepMode`](motor-driver-settings.md#setmicrostepmode)、`driverSettings.stepMode`）も一緒に変わります。
 
-#### 変更
-
-- **v2.2.0**: 出力は無励磁でなければなりません。そうでないときは`/error/command MotorNotHiZ`を返し、何も適用されません。
-- **v2.2.0**: ドライバがモードを受け付けたとき（STEP_MODEを読み戻して確認します）だけモードを変更します。そうでないときは`/error/command CommandIgnored`を返します。以前は、ドライバが元のモードのままなのに保存されるモードだけが変わっていたため、その後の[`/setKval`](voltage-and-current-mode-settings.md#setkval)と[`/setTval`](voltage-and-current-mode-settings.md#settval)が誤ったレジスタに書き込んでいました。
-
 #### エラー
 
 - `MotorNotHiZ`: ドライバのレジスタのうち、出力が無励磁のときだけ書き込めるものをコマンドが書き込もうとしたが、モータが無励磁ではなかった。励磁して位置を保っているモータは無励磁ではない。先に`/softHiZ`か`/hardHiZ`を送る。何も適用されない。v2.2.0で追加。
@@ -364,6 +359,11 @@ PowerSTEP01の電流モードは1/16マイクロステップまでです。そ�
 #### 関連
 
 [`/setVoltageMode`](voltage-and-current-mode-settings.md#setvoltagemode), [`/setMicrostepMode`](motor-driver-settings.md#setmicrostepmode)
+
+#### 変更
+
+- **v2.2.0**: 出力は無励磁でなければなりません。そうでないときは`/error/command MotorNotHiZ`を返し、何も適用されません。
+- **v2.2.0**: ドライバがモードを受け付けたとき（STEP_MODEを読み戻して確認します）だけモードを変更します。そうでないときは`/error/command CommandIgnored`を返します。以前は、ドライバが元のモードのままなのに保存されるモードだけが変わっていたため、その後の[`/setKval`](voltage-and-current-mode-settings.md#setkval)と[`/setTval`](voltage-and-current-mode-settings.md#settval)が誤ったレジスタに書き込んでいました。
 <!-- generated:end osc /setCurrentMode -->
 
 <!-- osc: /setTval -->
@@ -438,10 +438,6 @@ TVAL4種をまとめて取得します。
 
 電磁ブレーキが有効で電流モードのとき、モータが再び励磁されるたびに（保持、保持への移行中、`/free`の後から）TVAL_HOLDがTVAL_RUNの半分以上に引き上げられ、このコマンドは引き上げられた値を返します。電圧モードでは、代わりにKVAL_HOLDが引き上げられます。
 
-#### 変更
-
-- **v2.2.0**: ドライバのレジスタではなく、設定（[`/setTval`](voltage-and-current-mode-settings.md#settval)で設定し、`/saveConfig`で保存される値）を返します。電圧モードではTVALのレジスタは以前の値のままです。電磁ブレーキのモータで引き上げられたTVAL_HOLDも返されます。
-
 #### 返信
 
 STEP400のみ。
@@ -461,6 +457,10 @@ STEP400のみ。
 #### 関連
 
 [`/getTval_mA`](voltage-and-current-mode-settings.md#gettval_ma)
+
+#### 変更
+
+- **v2.2.0**: ドライバのレジスタではなく、設定（[`/setTval`](voltage-and-current-mode-settings.md#settval)で設定し、`/saveConfig`で保存される値）を返します。電圧モードではTVALのレジスタは以前の値のままです。電磁ブレーキのモータで引き上げられたTVAL_HOLDも返されます。
 <!-- generated:end osc /getTval -->
 
 <!-- osc: /getTval_mA -->
@@ -483,10 +483,6 @@ STEP400のみ。
 
 TVAL4種をまとめて取得します。レジスタの値ではなく単位[mA]の設定値で返します。
 
-#### 変更
-
-- **v2.2.0**: ドライバのレジスタではなく、設定（[`/setTval`](voltage-and-current-mode-settings.md#settval)で設定し、`/saveConfig`で保存される値）を返します。電圧モードではTVALのレジスタは以前の値のままです。電磁ブレーキのモータで引き上げられたTVAL_HOLDも返されます。
-
 #### 返信
 
 STEP400のみ。
@@ -506,6 +502,10 @@ STEP400のみ。
 #### 関連
 
 [`/getTval`](voltage-and-current-mode-settings.md#gettval)
+
+#### 変更
+
+- **v2.2.0**: ドライバのレジスタではなく、設定（[`/setTval`](voltage-and-current-mode-settings.md#settval)で設定し、`/saveConfig`で保存される値）を返します。電圧モードではTVALのレジスタは以前の値のままです。電磁ブレーキのモータで引き上げられたTVAL_HOLDも返されます。
 <!-- generated:end osc /getTval_mA -->
 
 <!-- osc: /setDecayModeParam -->
@@ -535,11 +535,6 @@ STEP400のみ。
 
 TON_MINとTOFF_MINは7ビット（0〜127）です。範囲外の値には`CommandIgnored`を返し、何も適用されません。0〜255の範囲外のT_FASTは0〜255に制限されます。
 
-#### 変更
-
-- **v2.2.0**: TON_MINとTOFF_MINは0〜127（7ビット）です。範囲外の値には`/error/command CommandIgnored`を返し、何も適用されません。以前は、128〜255はドライバで128の剰余として扱われる一方、保存される値は128〜255のままでした。T_FASTは以前と同じく0〜255です。
-- **v2.2.0**: 出力は無励磁でなければなりません。そうでないときは`/error/command MotorNotHiZ`を返し、何も適用されません。
-
 #### エラー
 
 - `MotorNotHiZ`: ドライバのレジスタのうち、出力が無励磁のときだけ書き込めるものをコマンドが書き込もうとしたが、モータが無励磁ではなかった。励磁して位置を保っているモータは無励磁ではない。先に`/softHiZ`か`/hardHiZ`を送る。何も適用されない。v2.2.0で追加。
@@ -554,6 +549,11 @@ TON_MINとTOFF_MINは7ビット（0〜127）です。範囲外の値には`Comma
 #### 関連
 
 [`/getDecayModeParam`](voltage-and-current-mode-settings.md#getdecaymodeparam)
+
+#### 変更
+
+- **v2.2.0**: TON_MINとTOFF_MINは0〜127（7ビット）です。範囲外の値には`/error/command CommandIgnored`を返し、何も適用されません。以前は、128〜255はドライバで128の剰余として扱われる一方、保存される値は128〜255のままでした。T_FASTは以前と同じく0〜255です。
+- **v2.2.0**: 出力は無励磁でなければなりません。そうでないときは`/error/command MotorNotHiZ`を返し、何も適用されません。
 <!-- generated:end osc /setDecayModeParam -->
 
 <!-- osc: /getDecayModeParam -->

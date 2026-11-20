@@ -39,17 +39,6 @@ With the electromagnetic brake enabled, `/enableServoMode 1` replies `BrakeEngag
 
 When the driver goes HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) in the servo mode, the servo mode is cancelled and `ServoModeCancelledOnHiZ` is sent (`BrakeEngagedOnHiZ` too, with the brake enabled). Enable the servo mode again with `/enableServoMode 1`; the current position becomes the target.
 
-#### Changes
-
-- **v2.2.0**: With the brake enabled, `/enableServoMode 1` while the brake is engaged, releasing or engaging (not while stopping or after `/free`) replies `/error/command BrakeEngaged` and does nothing. Before, it energized and moved the motor with the brake engaged.
-- **v2.2.0**: With the brake enabled, `/enableServoMode 0` while the brake is engaged or after `/free` (motor HiZ) does nothing. Before, it energized the motor.
-- **v2.2.0**: When a driver goes HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) in the servo mode, the servo mode is cancelled and `/error/command ServoModeCancelledOnHiZ` is sent (follows [`/reportError`](system-settings.md#reporterror)), with or without the brake. With the brake enabled, `BrakeEngagedOnHiZ` is also sent. Before, with the brake disabled the next servo update energized the driver again. The commands that make the driver HiZ cancel the servo mode first and do not send this error.
-- **v2.2.0**: Enabling the servo mode resets the integral and the previous error of the PID controller. The previous values were kept from the last time the servo mode was used.
-- **v2.2.0**: The update period is 5 ms instead of 10 ms (and no longer varies between 7 and 13 ms when position reports are enabled; an OSC message that sends several replies can still delay one update, up to 7.75 ms measured). The integral and derivative terms are scaled by the period, so the same `kP`, `kI` and `kD` were designed to give about the same response; retune the gains if needed.
-- **v2.2.0**: STEP400: the home switch and the limit switch are judged separately. A pressed home switch stops the motion towards `homingDirection` (with `/setProhibitMotionOnHomeSw` or the home switch in the hard stop mode), and a pressed limit switch stops the motion away from it (with `/setProhibitMotionOnLimitSw` or the limit switch in the hard stop mode), as before. While the home switch was pressed, the limit switch was not checked. Only a motor with both switches pressed behaves differently.
-- **v2.2.0**: The automatic hard stop at a switch event in the servo mode is not sent to a motor whose driver is HiZ.
-- **v2.2.0**: Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.
-
 #### Response
 
 When: While homing is in progress
@@ -72,6 +61,17 @@ When: While homing is in progress
 #### See also
 
 [`/setTargetPosition`](servo-mode_reference.md#settargetposition), [`/setServoParam`](servo-mode_reference.md#setservoparam)
+
+#### Changes
+
+- **v2.2.0**: With the brake enabled, `/enableServoMode 1` while the brake is engaged, releasing or engaging (not while stopping or after `/free`) replies `/error/command BrakeEngaged` and does nothing. Before, it energized and moved the motor with the brake engaged.
+- **v2.2.0**: With the brake enabled, `/enableServoMode 0` while the brake is engaged or after `/free` (motor HiZ) does nothing. Before, it energized the motor.
+- **v2.2.0**: When a driver goes HiZ by itself (overcurrent shutdown, thermal shutdown, UVLO) in the servo mode, the servo mode is cancelled and `/error/command ServoModeCancelledOnHiZ` is sent (follows [`/reportError`](system-settings.md#reporterror)), with or without the brake. With the brake enabled, `BrakeEngagedOnHiZ` is also sent. Before, with the brake disabled the next servo update energized the driver again. The commands that make the driver HiZ cancel the servo mode first and do not send this error.
+- **v2.2.0**: Enabling the servo mode resets the integral and the previous error of the PID controller. The previous values were kept from the last time the servo mode was used.
+- **v2.2.0**: The update period is 5 ms instead of 10 ms (and no longer varies between 7 and 13 ms when position reports are enabled; an OSC message that sends several replies can still delay one update, up to 7.75 ms measured). The integral and derivative terms are scaled by the period, so the same `kP`, `kI` and `kD` were designed to give about the same response; retune the gains if needed.
+- **v2.2.0**: STEP400: the home switch and the limit switch are judged separately. A pressed home switch stops the motion towards `homingDirection` (with `/setProhibitMotionOnHomeSw` or the home switch in the hard stop mode), and a pressed limit switch stops the motion away from it (with `/setProhibitMotionOnLimitSw` or the limit switch in the hard stop mode), as before. While the home switch was pressed, the limit switch was not checked. Only a motor with both switches pressed behaves differently.
+- **v2.2.0**: The automatic hard stop at a switch event in the servo mode is not sent to a motor whose driver is HiZ.
+- **v2.2.0**: Cancels pending motion, also for a motor with the brake disabled: a `/goTo`, `/goToDir`, `/goHome` or `/goMark` waiting for the BUSY flag to clear (it was sent when the motor became not busy, so a stopped motor started again), the homing (its timeout sent a hard stop, which energized a motor made HiZ in the meantime) and the servo mode.
 <!-- generated:end osc /enableServoMode -->
 
 <!-- osc: /setServoParam -->
@@ -97,11 +97,6 @@ Adjusts the PID control gain.
 
 A negative gain replies `CommandIgnored` and nothing is applied. The update period of the servo mode is 5 ms; the integral and derivative terms are scaled by the period.
 
-#### Changes
-
-- **v2.2.0**: A negative gain replies `/error/command CommandIgnored` and nothing is applied. Before, it was set to 0.
-- **v2.2.0**: The servo update period is 5 ms instead of 10 ms. The same gains were designed to give about the same response, but retune them if needed.
-
 #### Errors
 
 - `CommandIgnored`: The command is currently not executable. Also refer Timing section. Also sent when a value is outside the range of the command; nothing is applied (the motor ID is 255 for `/setPositionListReportInterval`).
@@ -115,6 +110,11 @@ A negative gain replies `CommandIgnored` and nothing is applied. The update peri
 #### See also
 
 [`/getServoParam`](servo-mode_reference.md#getservoparam)
+
+#### Changes
+
+- **v2.2.0**: A negative gain replies `/error/command CommandIgnored` and nothing is applied. Before, it was set to 0.
+- **v2.2.0**: The servo update period is 5 ms instead of 10 ms. The same gains were designed to give about the same response, but retune them if needed.
 <!-- generated:end osc /setServoParam -->
 
 <!-- osc: /getServoParam -->
@@ -191,11 +191,11 @@ Always
 
 Sets the target positions of the servo mode for all axes at once.
 
-#### Changes
-
-- **v2.2.0**: A message with fewer positions than the number of motors replies `/error/osc MissingArgument` and nothing is applied. Before, the missing positions became 0 and a servo-mode motor ran to 0.
-
 #### See also
 
 [`/setTargetPosition`](servo-mode_reference.md#settargetposition)
+
+#### Changes
+
+- **v2.2.0**: A message with fewer positions than the number of motors replies `/error/osc MissingArgument` and nothing is applied. Before, the missing positions became 0 and a servo-mode motor ran to 0.
 <!-- generated:end osc /setTargetPositionList -->

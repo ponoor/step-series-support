@@ -389,10 +389,6 @@ Stall detection lets the driver detect, from the motor current, that the motor c
 
 A value above the range is not rejected; it wraps around: the value after the maximum is 0 (on STEP800, 128 becomes 0 and 129 becomes 1).
 
-#### Changes
-
-- **v2.2.0**: Also changes the saved STALL_TH (`/saveConfig`, `/resetMotorDriver`). Before, it changed the register only.
-
 #### Response
 
 ```
@@ -431,6 +427,10 @@ A value above the range is not rejected; it wraps around: the value after the ma
 #### See also
 
 [`/getStallThreshold`](alarm-settings.md#getstallthreshold), [`/enableStallReport`](alarm-settings.md#enablestallreport)
+
+#### Changes
+
+- **v2.2.0**: Also changes the saved STALL_TH (`/saveConfig`, `/resetMotorDriver`). Before, it changed the register only.
 <!-- generated:end osc /setStallThreshold -->
 
 <!-- osc: /getStallThreshold -->
@@ -491,10 +491,6 @@ Always
 
 Prohibits any motion commands towards the origin point when the HOME switch is activated. The direction to the origin point can be configured through the configuration tool or by the `/setHomingDirection` command.
 
-#### Changes
-
-- **v2.2.0**: The automatic hard stop at the home switch is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver).
-
 #### Initial value
 
 - `enable`: false (Allow) ([driverSettings.prohibitMotionOnHomeSw](../connections/configuration-items.md#driversettings-prohibitmotiononhomesw))
@@ -502,6 +498,10 @@ Prohibits any motion commands towards the origin point when the HOME switch is a
 #### See also
 
 [`/getProhibitMotionOnHomeSw`](alarm-settings.md#getprohibitmotiononhomesw), [`/setHomingDirection`](homing.md#sethomingdirection)
+
+#### Changes
+
+- **v2.2.0**: The automatic hard stop at the home switch is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver).
 <!-- generated:end osc /setProhibitMotionOnHomeSw -->
 
 <!-- osc: /getProhibitMotionOnHomeSw -->

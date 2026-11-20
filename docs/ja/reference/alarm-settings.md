@@ -389,10 +389,6 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 範囲を超える値は拒否されず、最大値の次を0として数え直した値になります（STEP800で128は0、129は1）。
 
-#### 変更
-
-- **v2.2.0**: 保存されるSTALL_TH（`/saveConfig`、`/resetMotorDriver`）も変更します。以前は、レジスタだけを変更していました。
-
 #### 返信
 
 ```
@@ -431,6 +427,10 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 #### 関連
 
 [`/getStallThreshold`](alarm-settings.md#getstallthreshold), [`/enableStallReport`](alarm-settings.md#enablestallreport)
+
+#### 変更
+
+- **v2.2.0**: 保存されるSTALL_TH（`/saveConfig`、`/resetMotorDriver`）も変更します。以前は、レジスタだけを変更していました。
 <!-- generated:end osc /setStallThreshold -->
 
 <!-- osc: /getStallThreshold -->
@@ -491,10 +491,6 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 HOMEスイッチがオンの状態で、原点復帰方向へのモーションコマンドを禁止します。原点復帰方向はconfigToolや`/setHomingDirection`で設定できます。
 
-#### 変更
-
-- **v2.2.0**: ドライバが無励磁のモータには、HOMEスイッチでの自動の即停止を送りません。電磁ブレーキが無効でも同じです（即停止は無励磁のドライバを励磁してしまうため）。
-
 #### 初期値
 
 - `enable`: false（許可）（[driverSettings.prohibitMotionOnHomeSw](../connections/configuration-items.md#driversettings-prohibitmotiononhomesw)）
@@ -502,6 +498,10 @@ HOMEスイッチがオンの状態で、原点復帰方向へのモーション�
 #### 関連
 
 [`/getProhibitMotionOnHomeSw`](alarm-settings.md#getprohibitmotiononhomesw), [`/setHomingDirection`](homing.md#sethomingdirection)
+
+#### 変更
+
+- **v2.2.0**: ドライバが無励磁のモータには、HOMEスイッチでの自動の即停止を送りません。電磁ブレーキが無効でも同じです（即停止は無励磁のドライバを励磁してしまうため）。
 <!-- generated:end osc /setProhibitMotionOnHomeSw -->
 
 <!-- osc: /getProhibitMotionOnHomeSw -->

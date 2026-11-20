@@ -43,11 +43,6 @@ The motor must be HiZ. A motor holding its position is not HiZ: send [`/softHiZ`
 
 A value outside 0-7 is not rejected: it is converted to 8 bits and then limited to 0-7 (-1 becomes 7, 256 becomes 0).
 
-#### Changes
-
-- **v2.2.0**: The motor must be HiZ; otherwise `/error/command MotorNotHiZ` is replied and nothing is applied. Before, the driver ignored the write while the firmware variable and the saved configuration took the new value.
-- **v2.2.0**: STEP400 in the current mode: a step mode finer than 1/16 replies `CommandIgnored` (the PowerSTEP01 current mode goes up to 1/16).
-
 #### Errors
 
 - `MotorNotHiZ`: The command writes a driver register that can be written only while the outputs are HiZ, and the motor is not HiZ. A motor holding its position is not HiZ: send `/softHiZ` or `/hardHiZ` first. Nothing is applied. Added in v2.2.0.
@@ -60,6 +55,11 @@ A value outside 0-7 is not rejected: it is converted to 8 bits and then limited 
 #### See also
 
 [`/getMicrostepMode`](motor-driver-settings.md#getmicrostepmode), [`/setCurrentMode`](voltage-and-current-mode-settings.md#setcurrentmode)
+
+#### Changes
+
+- **v2.2.0**: The motor must be HiZ; otherwise `/error/command MotorNotHiZ` is replied and nothing is applied. Before, the driver ignored the write while the firmware variable and the saved configuration took the new value.
+- **v2.2.0**: STEP400 in the current mode: a step mode finer than 1/16 replies `CommandIgnored` (the PowerSTEP01 current mode goes up to 1/16).
 <!-- generated:end osc /setMicrostepMode -->
 
 <!-- osc: /getMicrostepMode -->
@@ -131,10 +131,6 @@ When the motor is stopped
 
 Enable/disable low speed optimization feature which compensate phase current distortion at a very low speed using a small driving voltage. When this optimization is enabled, speed profile minimum speed (`Min speed`) is force to zero. Only work with voltage mode. See data sheets for details.
 
-#### Changes
-
-- **v2.2.0**: The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and nothing is applied.
-
 #### Errors
 
 - `MotorNotStopped`: The command writes a driver register that can be written only while the motor is stopped or HiZ, and the motor is turning. Nothing is applied. Added in v2.2.0.
@@ -146,6 +142,10 @@ Enable/disable low speed optimization feature which compensate phase current dis
 #### See also
 
 [`/setLowSpeedOptimizeThreshold`](motor-driver-settings.md#setlowspeedoptimizethreshold), [`/setMinSpeed`](speed-profile.md#setminspeed)
+
+#### Changes
+
+- **v2.2.0**: The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and nothing is applied.
 <!-- generated:end osc /enableLowSpeedOptimize -->
 
 <!-- osc: /setLowSpeedOptimizeThreshold -->
@@ -171,10 +171,6 @@ No reply is sent. Read the value back with [`/getLowSpeedOptimizeThreshold`](mot
 
 While the low speed optimization is enabled, the motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and nothing is applied.
 
-#### Changes
-
-- **v2.2.0**: While the low speed optimization is enabled, a turning motor replies `/error/command MotorNotStopped` and nothing is applied.
-
 #### Errors
 
 - `MotorNotStopped`: The command writes a driver register that can be written only while the motor is stopped or HiZ, and the motor is turning. Nothing is applied. Added in v2.2.0.
@@ -186,6 +182,10 @@ While the low speed optimization is enabled, the motor must be stopped or HiZ; a
 #### See also
 
 [`/getLowSpeedOptimizeThreshold`](motor-driver-settings.md#getlowspeedoptimizethreshold), [`/enableLowSpeedOptimize`](motor-driver-settings.md#enablelowspeedoptimize)
+
+#### Changes
+
+- **v2.2.0**: While the low speed optimization is enabled, a turning motor replies `/error/command MotorNotStopped` and nothing is applied.
 <!-- generated:end osc /setLowSpeedOptimizeThreshold -->
 
 <!-- osc: /getLowSpeedOptimizeThreshold -->
@@ -467,10 +467,6 @@ Always
 
 Requests the direction of the specified motor.
 
-#### Changes
-
-- **v2.2.0**: `/getDir 255` (all motors) returns the direction. It returned the HiZ state.
-
 #### Response
 
 [`/dir`](automatically-sent-messages.md#dir)
@@ -490,6 +486,10 @@ Requests the direction of the specified motor.
 | --- | --- |
 | 1 | Forward |
 | 0 | Reverse |
+
+#### Changes
+
+- **v2.2.0**: `/getDir 255` (all motors) returns the direction. It returned the HiZ state.
 <!-- generated:end osc /getDir -->
 
 <!-- osc: /enableMotorStatusReport -->
@@ -609,11 +609,6 @@ When this function enabled, `/setPositionListReportInterval` will be automatical
 
 An interval above 65535 replies `CommandIgnored` and nothing is applied. A negative interval disables the report, as 0.
 
-#### Changes
-
-- **v2.2.0**: A value above 65535 replies `/error/command CommandIgnored` and nothing is applied. Before, 32768 and above were read as negative and disabled the report. A negative interval still disables it.
-- **v2.2.0**: When the report is enabled (interval above 0) for one motor, the saved position list report interval is cleared too, as it was for 255. Before, a configuration saved after switching from the list report to one motor's report started the list report again at the next start and cleared the motor's report.
-
 #### Response
 
 [`/position`](automatically-sent-messages.md#position)
@@ -638,6 +633,11 @@ An interval above 65535 replies `CommandIgnored` and nothing is applied. A negat
 #### See also
 
 [`/getPosition`](position-management.md#getposition), [`/setPositionListReportInterval`](motor-driver-settings.md#setpositionlistreportinterval)
+
+#### Changes
+
+- **v2.2.0**: A value above 65535 replies `/error/command CommandIgnored` and nothing is applied. Before, 32768 and above were read as negative and disabled the report. A negative interval still disables it.
+- **v2.2.0**: When the report is enabled (interval above 0) for one motor, the saved position list report interval is cleared too, as it was for 255. Before, a configuration saved after switching from the list report to one motor's report started the list report again at the next start and cleared the motor's report.
 <!-- generated:end osc /setPositionReportInterval -->
 
 <!-- osc: /setPositionListReportInterval -->
@@ -662,10 +662,6 @@ When this function enabled, `/setPositionReportInterval` will be disabled automa
 
 An interval above 65535 replies `CommandIgnored` with the motor ID 255 and nothing is applied. A negative interval disables the report, as 0.
 
-#### Changes
-
-- **v2.2.0**: A value above 65535 replies `/error/command CommandIgnored 255` and nothing is applied. Before, 32768 and above were read as negative and disabled the report. A negative interval still disables it.
-
 #### Response
 
 [`/positionList`](automatically-sent-messages.md#positionlist)
@@ -689,6 +685,10 @@ An interval above 65535 replies `CommandIgnored` with the motor ID 255 and nothi
 #### See also
 
 [`/getPositionList`](position-management.md#getpositionlist), [`/setPositionReportInterval`](motor-driver-settings.md#setpositionreportinterval)
+
+#### Changes
+
+- **v2.2.0**: A value above 65535 replies `/error/command CommandIgnored 255` and nothing is applied. Before, 32768 and above were read as negative and disabled the report. A negative interval still disables it.
 <!-- generated:end osc /setPositionListReportInterval -->
 
 ## Debug {#debug}
@@ -749,10 +749,6 @@ Refer to "STATUS" in the data sheet for the information contained in the registe
 
 This command does not clear the latched flags; only the status poll of the firmware (every 5 ms) does.
 
-#### Changes
-
-- **v2.2.0**: Reads the STATUS register with GetParam instead of GetStatus, so it no longer clears the latched driver flags (e.g. OCD, stall flags, UVLO, SW_EVN). The register values are the same. Only the status poll of the firmware (every 5 ms) clears them now, so a `/getStatus` sent right after another can show a flag the earlier reply showed (until the next poll, up to 5 ms).
-
 #### Response
 
 ```
@@ -781,6 +777,10 @@ This command does not clear the latched flags; only the status poll of the firmw
 #### See also
 
 [`/getStatusList`](motor-driver-settings.md#getstatuslist)
+
+#### Changes
+
+- **v2.2.0**: Reads the STATUS register with GetParam instead of GetStatus, so it no longer clears the latched driver flags (e.g. OCD, stall flags, UVLO, SW_EVN). The register values are the same. Only the status poll of the firmware (every 5 ms) clears them now, so a `/getStatus` sent right after another can show a flag the earlier reply showed (until the next poll, up to 5 ms).
 <!-- generated:end osc /getStatus -->
 
 <!-- osc: /getConfigRegister -->
@@ -835,15 +835,15 @@ Resets the motor driver (PowerSTEP01/L6470) and rewrites the setting.
 
 With the electromagnetic brake enabled, the command is accepted only while the brake is engaged or after [`/free`](brake.md#free) (the motor is HiZ); otherwise it replies `CommandIgnored`. When it is accepted (also with the brake disabled), it cancels pending motion and the servo mode. A command that is refused (`CommandIgnored`) cancels nothing.
 
+#### Errors
+
+- `CommandIgnored`: The command is currently not executable. Also refer Timing section. Also sent when a value is outside the range of the command; nothing is applied (the motor ID is 255 for `/setPositionListReportInterval`).
+
 #### Changes
 
 - **v2.2.0**: With the electromagnetic brake enabled, accepted only while the brake is engaged or after `/free`; otherwise `/error/command CommandIgnored`. Before, it made the driver HiZ with the brake released.
 - **v2.2.0**: Cancels pending motion (a `/goTo` etc. waiting for the BUSY flag, the homing, the servo mode) when it is accepted, also with the brake disabled. A refused command (`CommandIgnored`) cancels nothing.
 - **v2.2.0**: The settings applied again after the reset include those made with the Raw commands (see [`/setAccRaw`](speed-profile.md#setaccraw)).
-
-#### Errors
-
-- `CommandIgnored`: The command is currently not executable. Also refer Timing section. Also sent when a value is outside the range of the command; nothing is applied (the motor ID is 255 for `/setPositionListReportInterval`).
 <!-- generated:end osc /resetMotorDriver -->
 
 <!-- osc: /getStatusList -->
@@ -862,10 +862,6 @@ Always
 
 Gets the STATUS registers of all motors at once. See [`/getStatus`](motor-driver-settings.md#getstatus) for the contents of the register.
 
-#### Changes
-
-- **v2.2.0**: Reads the STATUS registers with GetParam instead of GetStatus, so it no longer clears the latched driver flags. See [`/getStatus`](motor-driver-settings.md#getstatus).
-
 #### Response
 
 ```
@@ -879,4 +875,8 @@ Gets the STATUS registers of all motors at once. See [`/getStatus`](motor-driver
 #### See also
 
 [`/getStatus`](motor-driver-settings.md#getstatus)
+
+#### Changes
+
+- **v2.2.0**: Reads the STATUS registers with GetParam instead of GetStatus, so it no longer clears the latched driver flags. See [`/getStatus`](motor-driver-settings.md#getstatus).
 <!-- generated:end osc /getStatusList -->

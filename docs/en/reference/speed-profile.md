@@ -31,12 +31,6 @@ The speed profile is the set of acceleration, deceleration and maximum speed hel
 
 ACC and DEC are rounded to the nearest register value, so the written value can differ by 1 LSB. MAX_SPEED alone is writable at any time, but nothing is written to a motor that replies with `MotorNotStopped`. A value outside the range is limited by the driver library. On STEP400, a maximum speed of 0 is written as 1 (the register value 0 is reserved).
 
-#### Changes
-
-- **v2.2.0**: The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old values.
-- **v2.2.0**: `acc` and `dec` are rounded to the nearest register value, so the written value can differ by 1 LSB.
-- **v2.2.0**: STEP400: a maximum speed of 0 is written as 1 (the register value 0 is reserved).
-
 #### Errors
 
 - `MotorNotStopped`: The command writes a driver register that can be written only while the motor is stopped or HiZ, and the motor is turning. Nothing is applied. Added in v2.2.0.
@@ -50,6 +44,12 @@ ACC and DEC are rounded to the nearest register value, so the written value can 
 #### See also
 
 [`/getSpeedProfile`](speed-profile.md#getspeedprofile), [`/setAcc`](speed-profile.md#setacc), [`/setDec`](speed-profile.md#setdec), [`/setMaxSpeed`](speed-profile.md#setmaxspeed)
+
+#### Changes
+
+- **v2.2.0**: The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old values.
+- **v2.2.0**: `acc` and `dec` are rounded to the nearest register value, so the written value can differ by 1 LSB.
+- **v2.2.0**: STEP400: a maximum speed of 0 is written as 1 (the register value 0 is reserved).
 <!-- generated:end osc /setSpeedProfile -->
 
 <!-- osc: /getSpeedProfile -->
@@ -70,10 +70,6 @@ Always
 
 Gets the acc, dec, and maxSpeed of the speed profile together.
 
-#### Changes
-
-- **v2.2.0**: The acceleration and deceleration are reported about 4.9% smaller than before; they now match the datasheet (driver libraries v1.2.0).
-
 #### Response
 
 ```
@@ -86,6 +82,10 @@ Gets the acc, dec, and maxSpeed of the speed profile together.
 | acc | float | 14.55-59590 step/s/s | acceleration |
 | dec | float | 14.55-59590 step/s/s | deceleration |
 | maxSpeed | float | 15.25-15610 step/s | maximum speed |
+
+#### Changes
+
+- **v2.2.0**: The acceleration and deceleration are reported about 4.9% smaller than before; they now match the datasheet (driver libraries v1.2.0).
 <!-- generated:end osc /getSpeedProfile -->
 
 <!-- osc: /setFullstepSpeed -->
@@ -169,10 +169,6 @@ Set the maximum speed of the speed profile
 
 A value outside the range is limited by the driver library. On STEP400, a maximum speed of 0 is written as 1 (the register value 0 is reserved).
 
-#### Changes
-
-- **v2.2.0**: STEP400: a maximum speed of 0 is written as 1 (the register value 0 is reserved). STEP800 is unchanged.
-
 #### Initial value
 
 - `maxSpeed`: 650 (firmware) / 620 (template) ([speedProfile.maxSpeed](../connections/configuration-items.md#speedprofile-maxspeed))
@@ -180,6 +176,10 @@ A value outside the range is limited by the driver library. On STEP400, a maximu
 #### See also
 
 [`/setSpeedProfile`](speed-profile.md#setspeedprofile)
+
+#### Changes
+
+- **v2.2.0**: STEP400: a maximum speed of 0 is written as 1 (the register value 0 is reserved). STEP800 is unchanged.
 <!-- generated:end osc /setMaxSpeed -->
 
 <!-- osc: /setAcc -->
@@ -205,11 +205,6 @@ The value is rounded to the nearest register value, so the written value can dif
 
 The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value.
 
-#### Changes
-
-- **v2.2.0**: The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.
-- **v2.2.0**: Rounds to the nearest register value, so the written value can differ by 1 LSB.
-
 #### Errors
 
 - `MotorNotStopped`: The command writes a driver register that can be written only while the motor is stopped or HiZ, and the motor is turning. Nothing is applied. Added in v2.2.0.
@@ -221,6 +216,11 @@ The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and 
 #### See also
 
 [`/setSpeedProfile`](speed-profile.md#setspeedprofile)
+
+#### Changes
+
+- **v2.2.0**: The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.
+- **v2.2.0**: Rounds to the nearest register value, so the written value can differ by 1 LSB.
 <!-- generated:end osc /setAcc -->
 
 <!-- osc: /setDec -->
@@ -246,11 +246,6 @@ The value is rounded to the nearest register value, so the written value can dif
 
 The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value.
 
-#### Changes
-
-- **v2.2.0**: The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.
-- **v2.2.0**: Rounds to the nearest register value, so the written value can differ by 1 LSB.
-
 #### Errors
 
 - `MotorNotStopped`: The command writes a driver register that can be written only while the motor is stopped or HiZ, and the motor is turning. Nothing is applied. Added in v2.2.0.
@@ -262,6 +257,11 @@ The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and 
 #### See also
 
 [`/setSpeedProfile`](speed-profile.md#setspeedprofile)
+
+#### Changes
+
+- **v2.2.0**: The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.
+- **v2.2.0**: Rounds to the nearest register value, so the written value can differ by 1 LSB.
 <!-- generated:end osc /setDec -->
 
 <!-- osc: /setMinSpeed -->
@@ -287,11 +287,6 @@ While the low speed optimization is disabled, the motor must be stopped or HiZ; 
 
 A value above the range is limited to 976.3 step/s by the driver library. A negative value below about -0.24 is not limited to 0: the driver library converts it to a huge unsigned number and limits that to the maximum, so it becomes 976.3 step/s.
 
-#### Changes
-
-- **v2.2.0**: While the low speed optimization is disabled, the motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.
-- **v2.2.0**: `/setMinSpeed 255` (all motors) checks the low speed optimization setting of each motor. It read an invalid array element.
-
 #### Errors
 
 - `MotorNotStopped`: The command writes a driver register that can be written only while the motor is stopped or HiZ, and the motor is turning. Nothing is applied. Added in v2.2.0.
@@ -303,6 +298,11 @@ A value above the range is limited to 976.3 step/s by the driver library. A nega
 #### See also
 
 [`/getMinSpeed`](speed-profile.md#getminspeed)
+
+#### Changes
+
+- **v2.2.0**: While the low speed optimization is disabled, the motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.
+- **v2.2.0**: `/setMinSpeed 255` (all motors) checks the low speed optimization setting of each motor. It read an invalid array element.
 <!-- generated:end osc /setMinSpeed -->
 
 <!-- osc: /getMinSpeed -->
@@ -325,10 +325,6 @@ Return the speed profile minimum speed.
 
 Returns 0.0 for a motor with the low speed optimization enabled: the MIN_SPEED register then holds the optimization threshold (read it with [`/getLowSpeedOptimizeThreshold`](motor-driver-settings.md#getlowspeedoptimizethreshold)) and the actual minimum speed is 0. For a motor with the optimization disabled, it returns the MIN_SPEED register value of the driver in step/s.
 
-#### Changes
-
-- **v2.2.0**: Returns 0.0 for a motor with the low speed optimization enabled. A single motor returned the MIN_SPEED register value (the threshold) and `255` (all motors) returned the stored minimum speed setting; both behave the same now.
-
 #### Response
 
 ```
@@ -339,6 +335,10 @@ Returns 0.0 for a motor with the low speed optimization enabled: the MIN_SPEED r
 | --- | --- | --- | --- |
 | motorID | int | 1-4 (STEP400), 1-8 (STEP800) | Motor ID |
 | minSpeed | float | 0-976.3 step/s | Minimum speed |
+
+#### Changes
+
+- **v2.2.0**: Returns 0.0 for a motor with the low speed optimization enabled. A single motor returned the MIN_SPEED register value (the threshold) and `255` (all motors) returned the stored minimum speed setting; both behave the same now.
 <!-- generated:end osc /getMinSpeed -->
 
 <!-- osc: /getSpeed -->
@@ -398,11 +398,6 @@ Sets the acc, dec, and maxSpeed of the speed profile using raw driver IC registe
 
 A value outside the range is not rejected: it is converted to 16 bits (70000 becomes 4464) and then masked to the width of the register by the driver. The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value.
 
-#### Changes
-
-- **v2.2.0**: Also sets the acceleration, deceleration and maximum speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.
-- **v2.2.0**: The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.
-
 #### Errors
 
 - `MotorNotStopped`: The command writes a driver register that can be written only while the motor is stopped or HiZ, and the motor is turning. Nothing is applied. Added in v2.2.0.
@@ -410,6 +405,11 @@ A value outside the range is not rejected: it is converted to 16 bits (70000 bec
 #### See also
 
 [`/getSpeedProfileRaw`](speed-profile.md#getspeedprofileraw), [`/setSpeedProfile`](speed-profile.md#setspeedprofile)
+
+#### Changes
+
+- **v2.2.0**: Also sets the acceleration, deceleration and maximum speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.
+- **v2.2.0**: The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.
 <!-- generated:end osc /setSpeedProfileRaw -->
 
 <!-- osc: /getSpeedProfileRaw -->
@@ -467,13 +467,13 @@ A value outside the range is not rejected: it is converted to 16 bits (70000 bec
 
 `/setMaxSpeedRaw 0` writes 0, also on STEP400.
 
-#### Changes
-
-- **v2.2.0**: Also sets the maximum speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.
-
 #### See also
 
 [`/setMaxSpeed`](speed-profile.md#setmaxspeed)
+
+#### Changes
+
+- **v2.2.0**: Also sets the maximum speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.
 <!-- generated:end osc /setMaxSpeedRaw -->
 
 <!-- osc: /setMinSpeedRaw -->
@@ -497,12 +497,6 @@ Sets the minimum speed of the speed profile using a raw register value.
 
 A value outside the range is not rejected: it is converted to 16 bits (70000 becomes 4464) and then masked to the width of the register by the driver. While the low speed optimization is disabled, the motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value. While it is enabled, only the saved value changes and no error is sent.
 
-#### Changes
-
-- **v2.2.0**: Also sets the minimum speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.
-- **v2.2.0**: While the low speed optimization is disabled, the motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.
-- **v2.2.0**: Bit 12 is ignored (it switched the low speed optimization on without [`/enableLowSpeedOptimize`](motor-driver-settings.md#enablelowspeedoptimize)). While the optimization is on, the command only changes the saved value, as [`/setMinSpeed`](speed-profile.md#setminspeed) does.
-
 #### Errors
 
 - `MotorNotStopped`: The command writes a driver register that can be written only while the motor is stopped or HiZ, and the motor is turning. Nothing is applied. Added in v2.2.0.
@@ -510,6 +504,12 @@ A value outside the range is not rejected: it is converted to 16 bits (70000 bec
 #### See also
 
 [`/setMinSpeed`](speed-profile.md#setminspeed)
+
+#### Changes
+
+- **v2.2.0**: Also sets the minimum speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.
+- **v2.2.0**: While the low speed optimization is disabled, the motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.
+- **v2.2.0**: Bit 12 is ignored (it switched the low speed optimization on without [`/enableLowSpeedOptimize`](motor-driver-settings.md#enablelowspeedoptimize)). While the optimization is on, the command only changes the saved value, as [`/setMinSpeed`](speed-profile.md#setminspeed) does.
 <!-- generated:end osc /setMinSpeedRaw -->
 
 <!-- osc: /setFullstepSpeedRaw -->
@@ -533,13 +533,13 @@ Sets the full-step speed threshold using a raw register value.
 
 A value outside the range is not rejected: it is converted to 16 bits (70000 becomes 4464) and then masked to the width of the register by the driver.
 
-#### Changes
-
-- **v2.2.0**: Also sets the full-step speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.
-
 #### See also
 
 [`/setFullstepSpeed`](speed-profile.md#setfullstepspeed)
+
+#### Changes
+
+- **v2.2.0**: Also sets the full-step speed setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.
 <!-- generated:end osc /setFullstepSpeedRaw -->
 
 <!-- osc: /setAccRaw -->
@@ -563,11 +563,6 @@ Sets the acceleration of the speed profile using a raw register value.
 
 A value outside the range is not rejected: it is converted to 16 bits (70000 becomes 4464) and then masked to the width of the register by the driver. The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value.
 
-#### Changes
-
-- **v2.2.0**: Also sets the acceleration setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.
-- **v2.2.0**: The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.
-
 #### Errors
 
 - `MotorNotStopped`: The command writes a driver register that can be written only while the motor is stopped or HiZ, and the motor is turning. Nothing is applied. Added in v2.2.0.
@@ -575,6 +570,11 @@ A value outside the range is not rejected: it is converted to 16 bits (70000 bec
 #### See also
 
 [`/setAcc`](speed-profile.md#setacc)
+
+#### Changes
+
+- **v2.2.0**: Also sets the acceleration setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.
+- **v2.2.0**: The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.
 <!-- generated:end osc /setAccRaw -->
 
 <!-- osc: /setDecRaw -->
@@ -598,11 +598,6 @@ Sets the deceleration of the speed profile using a raw register value.
 
 A value outside the range is not rejected: it is converted to 16 bits (70000 becomes 4464) and then masked to the width of the register by the driver. The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and keeps its old value.
 
-#### Changes
-
-- **v2.2.0**: Also sets the deceleration setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.
-- **v2.2.0**: The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.
-
 #### Errors
 
 - `MotorNotStopped`: The command writes a driver register that can be written only while the motor is stopped or HiZ, and the motor is turning. Nothing is applied. Added in v2.2.0.
@@ -610,4 +605,9 @@ A value outside the range is not rejected: it is converted to 16 bits (70000 bec
 #### See also
 
 [`/setDec`](speed-profile.md#setdec)
+
+#### Changes
+
+- **v2.2.0**: Also sets the deceleration setting that `/saveConfig` saves and `/resetMotorDriver` applies again. Before, only the register was changed, so a reset or a saved configuration brought back the value from before.
+- **v2.2.0**: The motor must be stopped or HiZ; a turning motor replies `/error/command MotorNotStopped` and keeps its old value.
 <!-- generated:end osc /setDecRaw -->

@@ -31,11 +31,6 @@ Switches the specified motor to the voltage drive mode.
 Note: This command is only available in STEP400.  
 STEP800 is always in this voltage mode and cannot change.
 
-#### Changes
-
-- **v2.2.0**: The outputs must be HiZ; otherwise `/error/command MotorNotHiZ` is replied and nothing is applied.
-- **v2.2.0**: The mode is changed only if the driver took it (STEP_MODE is read back); otherwise `/error/command CommandIgnored`. Before, the stored mode was changed while the driver kept the old one, so [`/setKval`](voltage-and-current-mode-settings.md#setkval) and [`/setTval`](voltage-and-current-mode-settings.md#settval) then wrote the wrong registers.
-
 #### Errors
 
 - `MotorNotHiZ`: The command writes a driver register that can be written only while the outputs are HiZ, and the motor is not HiZ. A motor holding its position is not HiZ: send `/softHiZ` or `/hardHiZ` first. Nothing is applied. Added in v2.2.0.
@@ -44,6 +39,11 @@ STEP800 is always in this voltage mode and cannot change.
 #### See also
 
 [`/setCurrentMode`](voltage-and-current-mode-settings.md#setcurrentmode)
+
+#### Changes
+
+- **v2.2.0**: The outputs must be HiZ; otherwise `/error/command MotorNotHiZ` is replied and nothing is applied.
+- **v2.2.0**: The mode is changed only if the driver took it (STEP_MODE is read back); otherwise `/error/command CommandIgnored`. Before, the stored mode was changed while the driver kept the old one, so [`/setKval`](voltage-and-current-mode-settings.md#setkval) and [`/setTval`](voltage-and-current-mode-settings.md#settval) then wrote the wrong registers.
 <!-- generated:end osc /setVoltageMode -->
 
 <!-- osc: /setKval -->
@@ -104,10 +104,6 @@ Get the four KVALs together.
 
 With the electromagnetic brake enabled and the voltage mode, KVAL_HOLD is raised to at least half of KVAL_RUN whenever the motor is energized again (from engaged, engaging or after [`/free`](brake.md#free)), and this command returns the raised value. In the current mode TVAL_HOLD is raised instead.
 
-#### Changes
-
-- **v2.2.0**: Returns the settings (what [`/setKval`](voltage-and-current-mode-settings.md#setkval) sets and `/saveConfig` saves) instead of the driver registers. In the current mode the KVAL registers keep the value from before; in the voltage mode they are the registers. KVAL_HOLD raised for a motor with the electromagnetic brake is returned too. STEP800: the reply is the same as before.
-
 #### Response
 
 ```
@@ -121,6 +117,10 @@ With the electromagnetic brake enabled and the voltage mode, KVAL_HOLD is raised
 | runKVAL | int | 0-255 | KVAL in constant speed operation |
 | accKVAL | int | 0-255 | KVAL during acceleration |
 | decKVAL | int | 0-255 | KVAL during deceleration |
+
+#### Changes
+
+- **v2.2.0**: Returns the settings (what [`/setKval`](voltage-and-current-mode-settings.md#setkval) sets and `/saveConfig` saves) instead of the driver registers. In the current mode the KVAL registers keep the value from before; in the voltage mode they are the registers. KVAL_HOLD raised for a motor with the electromagnetic brake is returned too. STEP800: the reply is the same as before.
 <!-- generated:end osc /getKval -->
 
 <!-- osc: /setBemfParam -->
@@ -149,10 +149,6 @@ The outputs must be HiZ; otherwise `MotorNotHiZ` is replied and nothing is appli
 
 A value outside the range is not rejected: INT_SPEED is limited to 0-16383 and the other parameters to 0-255.
 
-#### Changes
-
-- **v2.2.0**: The outputs must be HiZ (INT_SPEED, ST_SLP, FN_SLP_ACC and FN_SLP_DEC are writable only in HiZ); otherwise `/error/command MotorNotHiZ` and nothing is applied.
-
 #### Errors
 
 - `MotorNotHiZ`: The command writes a driver register that can be written only while the outputs are HiZ, and the motor is not HiZ. A motor holding its position is not HiZ: send `/softHiZ` or `/hardHiZ` first. Nothing is applied. Added in v2.2.0.
@@ -167,6 +163,10 @@ A value outside the range is not rejected: INT_SPEED is limited to 0-16383 and t
 #### See also
 
 [`/getBemfParam`](voltage-and-current-mode-settings.md#getbemfparam)
+
+#### Changes
+
+- **v2.2.0**: The outputs must be HiZ (INT_SPEED, ST_SLP, FN_SLP_ACC and FN_SLP_DEC are writable only in HiZ); otherwise `/error/command MotorNotHiZ` and nothing is applied.
 <!-- generated:end osc /setBemfParam -->
 
 <!-- osc: /getBemfParam -->
@@ -354,11 +354,6 @@ Switches the specified motor to the current drive mode.
 
 The PowerSTEP01 current mode goes up to 1/16 microsteps: a finer microstep mode is lowered to 1/16, and the stored setting ([`/setMicrostepMode`](motor-driver-settings.md#setmicrostepmode), `driverSettings.stepMode`) is changed with it.
 
-#### Changes
-
-- **v2.2.0**: The outputs must be HiZ; otherwise `/error/command MotorNotHiZ` is replied and nothing is applied.
-- **v2.2.0**: The mode is changed only if the driver took it (STEP_MODE is read back); otherwise `/error/command CommandIgnored`. Before, the stored mode was changed while the driver kept the old one, so [`/setKval`](voltage-and-current-mode-settings.md#setkval) and [`/setTval`](voltage-and-current-mode-settings.md#settval) then wrote the wrong registers.
-
 #### Errors
 
 - `MotorNotHiZ`: The command writes a driver register that can be written only while the outputs are HiZ, and the motor is not HiZ. A motor holding its position is not HiZ: send `/softHiZ` or `/hardHiZ` first. Nothing is applied. Added in v2.2.0.
@@ -367,6 +362,11 @@ The PowerSTEP01 current mode goes up to 1/16 microsteps: a finer microstep mode 
 #### See also
 
 [`/setVoltageMode`](voltage-and-current-mode-settings.md#setvoltagemode), [`/setMicrostepMode`](motor-driver-settings.md#setmicrostepmode)
+
+#### Changes
+
+- **v2.2.0**: The outputs must be HiZ; otherwise `/error/command MotorNotHiZ` is replied and nothing is applied.
+- **v2.2.0**: The mode is changed only if the driver took it (STEP_MODE is read back); otherwise `/error/command CommandIgnored`. Before, the stored mode was changed while the driver kept the old one, so [`/setKval`](voltage-and-current-mode-settings.md#setkval) and [`/setTval`](voltage-and-current-mode-settings.md#settval) then wrote the wrong registers.
 <!-- generated:end osc /setCurrentMode -->
 
 <!-- osc: /setTval -->
@@ -440,10 +440,6 @@ Get the four TVAL types together.
 
 With the electromagnetic brake enabled and the current mode, TVAL_HOLD is raised to at least half of TVAL_RUN whenever the motor is energized again (from engaged, engaging or after [`/free`](brake.md#free)), and this command returns the raised value. In the voltage mode KVAL_HOLD is raised instead.
 
-#### Changes
-
-- **v2.2.0**: Returns the settings (what [`/setTval`](voltage-and-current-mode-settings.md#settval) sets and `/saveConfig` saves) instead of the driver registers. In the voltage mode the TVAL registers keep the value from before. TVAL_HOLD raised for a motor with the electromagnetic brake is returned too.
-
 #### Response
 
 Available on STEP400 only.
@@ -463,6 +459,10 @@ Available on STEP400 only.
 #### See also
 
 [`/getTval_mA`](voltage-and-current-mode-settings.md#gettval_ma)
+
+#### Changes
+
+- **v2.2.0**: Returns the settings (what [`/setTval`](voltage-and-current-mode-settings.md#settval) sets and `/saveConfig` saves) instead of the driver registers. In the voltage mode the TVAL registers keep the value from before. TVAL_HOLD raised for a motor with the electromagnetic brake is returned too.
 <!-- generated:end osc /getTval -->
 
 <!-- osc: /getTval_mA -->
@@ -485,10 +485,6 @@ Always
 
 Get the four TVAL types together. Not in register values but in the actual current values in [mA].
 
-#### Changes
-
-- **v2.2.0**: Returns the settings (what [`/setTval`](voltage-and-current-mode-settings.md#settval) sets and `/saveConfig` saves) instead of the driver registers. In the voltage mode the TVAL registers keep the value from before. TVAL_HOLD raised for a motor with the electromagnetic brake is returned too.
-
 #### Response
 
 Available on STEP400 only.
@@ -508,6 +504,10 @@ Available on STEP400 only.
 #### See also
 
 [`/getTval`](voltage-and-current-mode-settings.md#gettval)
+
+#### Changes
+
+- **v2.2.0**: Returns the settings (what [`/setTval`](voltage-and-current-mode-settings.md#settval) sets and `/saveConfig` saves) instead of the driver registers. In the voltage mode the TVAL registers keep the value from before. TVAL_HOLD raised for a motor with the electromagnetic brake is returned too.
 <!-- generated:end osc /getTval_mA -->
 
 <!-- osc: /setDecayModeParam -->
@@ -537,11 +537,6 @@ The outputs must be HiZ; otherwise `MotorNotHiZ` is replied and nothing is appli
 
 TON_MIN and TOFF_MIN are 7 bit (0-127): a value outside it replies `CommandIgnored` and nothing is applied. A T_FAST outside 0-255 is limited to 0-255.
 
-#### Changes
-
-- **v2.2.0**: TON_MIN and TOFF_MIN are 0-127 (7 bit); a value outside it replies `/error/command CommandIgnored` and nothing is applied. Before, 128-255 were taken modulo 128 by the driver while the saved value stayed 128-255. T_FAST is 0-255 as before.
-- **v2.2.0**: The outputs must be HiZ; otherwise `/error/command MotorNotHiZ` and nothing is applied.
-
 #### Errors
 
 - `MotorNotHiZ`: The command writes a driver register that can be written only while the outputs are HiZ, and the motor is not HiZ. A motor holding its position is not HiZ: send `/softHiZ` or `/hardHiZ` first. Nothing is applied. Added in v2.2.0.
@@ -556,6 +551,11 @@ TON_MIN and TOFF_MIN are 7 bit (0-127): a value outside it replies `CommandIgnor
 #### See also
 
 [`/getDecayModeParam`](voltage-and-current-mode-settings.md#getdecaymodeparam)
+
+#### Changes
+
+- **v2.2.0**: TON_MIN and TOFF_MIN are 0-127 (7 bit); a value outside it replies `/error/command CommandIgnored` and nothing is applied. Before, 128-255 were taken modulo 128 by the driver while the saved value stayed 128-255. T_FAST is 0-255 as before.
+- **v2.2.0**: The outputs must be HiZ; otherwise `/error/command MotorNotHiZ` and nothing is applied.
 <!-- generated:end osc /setDecayModeParam -->
 
 <!-- osc: /getDecayModeParam -->

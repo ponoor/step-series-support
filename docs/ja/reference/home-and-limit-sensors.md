@@ -302,10 +302,6 @@ HOME端子に入力があった際に即停止するかどうか（Switch mode�
 
 出力は無励磁でなければなりません。そうでないときは`MotorNotHiZ`を返し、何も適用されません。
 
-#### 変更
-
-- **v2.2.0**: 出力は無励磁でなければなりません（CONFIGレジスタのSW_MODEは無励磁のときだけ書き込めます）。そうでないときは`/error/command MotorNotHiZ`を返し、何も適用されません。
-
 #### エラー
 
 - `MotorNotHiZ`: ドライバのレジスタのうち、出力が無励磁のときだけ書き込めるものをコマンドが書き込もうとしたが、モータが無励磁ではなかった。励磁して位置を保っているモータは無励磁ではない。先に`/softHiZ`か`/hardHiZ`を送る。何も適用されない。v2.2.0で追加。
@@ -317,6 +313,10 @@ HOME端子に入力があった際に即停止するかどうか（Switch mode�
 #### 関連
 
 [`/getHomeSwMode`](home-and-limit-sensors.md#gethomeswmode)
+
+#### 変更
+
+- **v2.2.0**: 出力は無励磁でなければなりません（CONFIGレジスタのSW_MODEは無励磁のときだけ書き込めます）。そうでないときは`/error/command MotorNotHiZ`を返し、何も適用されません。
 <!-- generated:end osc /setHomeSwMode -->
 
 <!-- osc: /getHomeSwMode -->
@@ -381,10 +381,6 @@ STEP400のみ。
 
 LIMIT端子に入力があった際に即停止するかどうか（Switch mode）を指定します。
 
-#### 変更
-
-- **v2.2.0**: ドライバが無励磁のモータには、LIMITスイッチでの自動の即停止（`SW_HARD_STOP`）を送りません。電磁ブレーキが無効でも同じです（即停止は無励磁のドライバを励磁してしまうため）。
-
 #### 初期値
 
 - `SW_MODE`: true（User disposal（停止しない））（[driverSettings.limitSwMode](../connections/configuration-items.md#driversettings-limitswmode)）
@@ -392,6 +388,10 @@ LIMIT端子に入力があった際に即停止するかどうか（Switch mode�
 #### 関連
 
 [`/getLimitSwMode`](home-and-limit-sensors.md#getlimitswmode)
+
+#### 変更
+
+- **v2.2.0**: ドライバが無励磁のモータには、LIMITスイッチでの自動の即停止（`SW_HARD_STOP`）を送りません。電磁ブレーキが無効でも同じです（即停止は無励磁のドライバを励磁してしまうため）。
 <!-- generated:end osc /setLimitSwMode -->
 
 <!-- osc: /getLimitSwMode -->

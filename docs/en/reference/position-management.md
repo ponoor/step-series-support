@@ -160,10 +160,6 @@ Use it while the motor is HiZ. There is no guard on the motor state: the L6470 a
 
 A full step outside 0-3 or a microstep outside 0-127 replies `CommandIgnored` and nothing is applied.
 
-#### Changes
-
-- **v2.2.0**: A full step outside 0-3 or a microstep outside 0-127 replies `/error/command CommandIgnored` and nothing is applied. Before, they were clamped.
-
 #### Errors
 
 - `CommandIgnored`: The command is currently not executable. Also refer Timing section. Also sent when a value is outside the range of the command; nothing is applied (the motor ID is 255 for `/setPositionListReportInterval`).
@@ -171,6 +167,10 @@ A full step outside 0-3 or a microstep outside 0-127 replies `CommandIgnored` an
 #### See also
 
 [`/getElPos`](position-management.md#getelpos)
+
+#### Changes
+
+- **v2.2.0**: A full step outside 0-3 or a microstep outside 0-127 replies `/error/command CommandIgnored` and nothing is applied. Before, they were clamped.
 <!-- generated:end osc /setElPos -->
 
 <!-- osc: /getElPos -->
@@ -280,17 +280,17 @@ In motion start condition
 
 Move the motor to the HOME position (zero position) according to the speed profile.
 
-#### Changes
-
-- **v2.2.0**: Judges its direction correctly when the home switch or the limit switch prohibits a motion ([`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw), [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.
-- **v2.2.0**: On a busy motor, the STATUS register is read with GetParam, which does not clear the latched flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.
-
 #### Errors
 
 - `BrakeEngaged`: A motion command was sent while the electromagnetic brake was active. Also sent for `/enableServoMode 1` and `/homing` while the brake is engaged, releasing or engaging (not while stopping or after `/free`).
 - `HomeSwActivating`: Movement from home switch position towards the origin point. Also sent by `/goUntil` and `/goUntilRaw` when the home switch is already activated. **v2.2.0**: Sent by `/goUntil` and `/goUntilRaw` when the home switch is already activated. It was sent as `HomeSwActivated` before.
 - `LimitSwActivating`: Movement from limit switch position towards the opposite direction from origin.
 - `InServoMode`: Received a command which can not be executed while servo mode. **v2.2.0**: Also sent for `/goUntil`, `/goUntilRaw` and `/releaseSw`.
+
+#### Changes
+
+- **v2.2.0**: Judges its direction correctly when the home switch or the limit switch prohibits a motion ([`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw), [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.
+- **v2.2.0**: On a busy motor, the STATUS register is read with GetParam, which does not clear the latched flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.
 <!-- generated:end osc /goHome -->
 
 <!-- osc: /goMark -->
@@ -311,11 +311,6 @@ In motion start condition
 
 Move the motor to the MARK position according to the speed profile.
 
-#### Changes
-
-- **v2.2.0**: Judges its direction correctly when the home switch or the limit switch prohibits a motion ([`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw), [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.
-- **v2.2.0**: On a busy motor, the STATUS register is read with GetParam, which does not clear the latched flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.
-
 #### Errors
 
 - `BrakeEngaged`: A motion command was sent while the electromagnetic brake was active. Also sent for `/enableServoMode 1` and `/homing` while the brake is engaged, releasing or engaging (not while stopping or after `/free`).
@@ -326,4 +321,9 @@ Move the motor to the MARK position according to the speed profile.
 #### See also
 
 [`/setMark`](position-management.md#setmark)
+
+#### Changes
+
+- **v2.2.0**: Judges its direction correctly when the home switch or the limit switch prohibits a motion ([`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw), [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)): it is the sign of the 22-bit difference to the target, the way the driver goes (the shortest way). The direction was reversed for a target less than 2048 steps away (so a short move away from the switch was refused with `HomeSwActivating` / `LimitSwActivating` and a short move towards it was started), and wrong again beyond 2^21 steps.
+- **v2.2.0**: On a busy motor, the STATUS register is read with GetParam, which does not clear the latched flags. Before, it was read with GetStatus, so the status poll could miss a flag and the report (`/overCurrent`, `/stall`, `/swEvent`, `/uvlo`, ...) was lost.
 <!-- generated:end osc /goMark -->
