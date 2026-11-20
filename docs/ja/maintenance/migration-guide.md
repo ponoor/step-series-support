@@ -237,7 +237,7 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 
 **影響を受けるのは。** 既定のスルーレートを使うSTEP400です。
 
-**何をすればよいか。** 実機でドライバの温度とEMIを確かめてください。必要なら、`driverSettings.slewRate`をより小さい値にしてください。詳しくは[`driverSettings.slewRate`](../connections/configuration-items.md#driversettings-slewrate)をご覧ください。
+**何をすればよいか。** 実機でドライバの温度と電磁ノイズ（EMI）を確かめてください。必要なら、`driverSettings.slewRate`をより小さい値にしてください。詳しくは[`driverSettings.slewRate`](../connections/configuration-items.md#driversettings-slewrate)をご覧ください。
 
 ### ブラウザ設定ツールからの書き込み {#config-tool}
 
