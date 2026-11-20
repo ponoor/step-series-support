@@ -17,7 +17,7 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 - [ ] クライアントが`/booted`の引数の数を確かめている → [`/booted`に引数が増えました](#booted)
 - [ ] クライアントが`/uvlo`や`/lowSpeedOptimizeThreshold`を読んでいる → [真偽値は整数で送られます](#boolean-args)
 - [ ] 引数が足りない、型が違う、範囲外の値になりうるコマンドを送っている → [誤ったコマンドは拒否されます](#rejected-args)
-- [ ] モータが回転中または位置を保持している間に、マイクロステップモード、スピードプロファイル、電圧モードか電流モード、減衰モードを変えている → [一部の状態でしか受け付けない設定](#register-states)
+- [ ] モータが回転中、または励磁して位置を保っている間に、マイクロステップモード、スピードプロファイル、電圧モードか電流モード、減衰モードを変えている → [一部の状態でしか受け付けない設定](#register-states)
 - [ ] KVAL、TVAL、スピードプロファイル、最小速度を読み返している → [getコマンドが返す値](#getters)
 - [ ] Wi-Fiでボードと通信している、PCを替える、`/setDestIp`をハートビートに使っている → [`/setDestIp`と`/destIp`](#destip)
 - [ ] `/getStatus`を読んでいる、`/overCurrent`や`/stall`を数えている → [状態のフラグと通知](#status-reports)
@@ -29,7 +29,7 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 
 **設定ファイルを作る、またはmicroSDカードを使う場合:**
 
-- [ ] `/setAccRaw`などのRawコマンドを、`/saveConfig`や`/resetMotorDriver`と一緒に使っている → [Rawの設定は保持されます](#raw-saved)
+- [ ] `/setAccRaw`などのRawコマンドを、`/saveConfig`や`/resetMotorDriver`と一緒に使っている → [Rawの設定は残ります](#raw-saved)
 - [ ] 64GB以上のSDXCカード、またはMacでフォーマットしたカードを使っている → [exFATのカードと隠しファイル](#exfat)
 - [ ] カードに無効な設定ファイルが入っていることがある → [無効なファイルは適用されません](#invalid-files)
 - [ ] `myIp`や送信先ポートにIDを足している → [IDを足したアドレスとポート](#id-limits)
@@ -87,22 +87,22 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 
 **何が変わったか。** ドライバは、一部のレジスタを特定の状態でしか受け付けません。v2.1.0では、条件を満たさないset系のコマンドをドライバは無視しましたが、ファームウェアと保存される設定は新しい値を受け取ったため、レジスタと保存された値が食い違いました。v2.2.0は、コマンドを受けたときに状態を読み、状態に合わないモータにはエラーを返して何も適用しません。
 
-- `/error/command MotorNotHiZ`: 出力が無励磁でなければなりません。`/setMicrostepMode`、`/setHomeSwMode`、`/setBemfParam`、`/setDecayModeParam`と、（STEP400の）`/setVoltageMode`、`/setCurrentMode`です。**位置を保持しているモータは、無励磁ではありません。**
+- `/error/command MotorNotHiZ`: 出力が無励磁でなければなりません。`/setMicrostepMode`、`/setHomeSwMode`、`/setBemfParam`、`/setDecayModeParam`と、（STEP400の）`/setVoltageMode`、`/setCurrentMode`です。**励磁して位置を保っているモータは、無励磁ではありません。**
 - `/error/command MotorNotStopped`: モータが停止中か無励磁でなければなりません。`/setAcc`、`/setDec`、`/setMinSpeed`、`/setSpeedProfile`、これらのRaw版、`/enableLowSpeedOptimize`、低速最適化が有効なときの`/setLowSpeedOptimizeThreshold`です。
 - STEP400のモータが電流モードのときの`/setMicrostepMode`: 1/16より細かいステップモードには`CommandIgnored`を返します。
 - `/setVoltageMode`と`/setCurrentMode`は、ドライバが受け付けたときだけモードを変えます。そうでなければ`CommandIgnored`です。
 
 255のときは、モータごとに判定します。その状態にあるモータは変更され、ほかのモータはエラーを返します。
 
-**影響を受けるのは。** モータの回転中や位置の保持中にこれらの設定を変えるクライアントです。
+**影響を受けるのは。** モータの回転中や、励磁して位置を保っている間にこれらの設定を変えるクライアントです。
 
-**何をすればよいか。** MotorNotHiZのグループは、先に`/softHiZ`か`/hardHiZ`を送ってください。MotorNotStoppedのグループは、先にモータを止めてください（停止して保持している状態は受け付けられます）。エラーを処理してください。詳しくは[エラー](../guides/communication-and-messages.md#errors)と、各コマンドのリファレンス（たとえば[`/setMicrostepMode`](../reference/motor-driver-settings.md#setmicrostepmode)）をご覧ください。
+**何をすればよいか。** MotorNotHiZのグループは、先に`/softHiZ`か`/hardHiZ`を送ってください。MotorNotStoppedのグループは、先にモータを止めてください（停止して位置を保っている状態は受け付けられます）。エラーを処理してください。詳しくは[エラー](../guides/communication-and-messages.md#errors)と、各コマンドのリファレンス（たとえば[`/setMicrostepMode`](../reference/motor-driver-settings.md#setmicrostepmode)）をご覧ください。
 
 ### getコマンドが返す値 {#getters}
 
 **何が変わったか。**
 
-- `/getKval`、`/getTval`、`/getTval_mA`（STEP400）は、レジスタではなく設定（`/setKval`と`/setTval`が設定し、`/saveConfig`が保存する値）を返します。電流モードではKVALのレジスタが以前の値のまま、電圧モードではTVALのレジスタが以前の値のままです。ブレーキのあるモータでは、引き上げられたKVAL_HOLD（TVAL_HOLD）を返します。STEP800は変わりません。
+- `/getKval`、`/getTval`、`/getTval_mA`（STEP400）は、レジスタではなく設定（`/setKval`と`/setTval`が設定し、`/saveConfig`が保存する値）を返します。`/setKval`が書き換えるのは電圧モードのKVALのレジスタだけ、`/setTval`が書き換えるのは電流モードのTVALのレジスタだけです。そのため、使っていないほうのモードのレジスタには、以前の値が残っています。ブレーキのあるモータでは、引き上げられたKVAL_HOLD（TVAL_HOLD）を返します。STEP800は変わりません。
 - `/getSpeedProfile`が返す加速度と減速度は、同じ動きでもv2.1.0より約4.9%小さくなります。データシートと一致するようになりました。`/setAcc`、`/setDec`、`/setSpeedProfile`は最も近いレジスタの値に丸めるので、書き込まれる値が1LSBずれることがあります。
 - `/getMinSpeed`は、低速最適化が有効なモータには、1つのモータでも`255`でも`0.0`を返します。
 - `/getDir 255`は回転方向を返します（以前は無励磁の状態を返していました）。
@@ -110,15 +110,13 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 
 **影響を受けるのは。** 設定した値と読み出した値を比べるクライアントや、これらの値を表示するクライアントです。
 
-**何をすればよいか。** 数値を厳密に比べず、丸めを許してください。報告された加速度を、値が適用されたかの確認に使わないでください。実際の動きが4.9%変わるのではなく、報告される値が変わるだけです。詳しくは[`/getKval`](../reference/voltage-and-current-mode-settings.md#getkval)と[`/getSpeedProfile`](../reference/speed-profile.md#getspeedprofile)をご覧ください。
+**何をすればよいか。** 数値を厳密に比べず、丸めを許してください。`/getSpeedProfile`が返す加速度を、値が適用されたかの確認に使わないでください。実際の動きが4.9%変わるのではなく、返される値が変わるだけです。詳しくは[`/getKval`](../reference/voltage-and-current-mode-settings.md#getkval)と[`/getSpeedProfile`](../reference/speed-profile.md#getspeedprofile)をご覧ください。
 
 ### `/setDestIp`と`/destIp` {#destip}
 
-**何が変わったか。** `/setDestIp`が送信先のMACアドレスの解決を始めるとき（最初のもの、今の送信先と別のアドレスからのもの、送信先からの最後のパケットから1.5s以上あとのもの）は、アドレスが解決されてから返信`/destIp`を送ります。有線では数ms、Wi-Fiでは数秒までかかります。解決の間は、送信先へのメッセージ（返信、位置レポート、エラー）は、後で送られるのではなく捨てられます。ブロードキャストの`/booted`は送られます。そのかわり、同じIPアドレスの別の機器に替えたクライアントは、新しい機器から`/setDestIp`を送れば使えるようになりました。
+**何が変わったか。** `/setDestIp`が送信先のMACアドレスの解決を始めるとき（最初の`/setDestIp`、今の送信先と別のアドレスからの`/setDestIp`、送信先からの最後のパケットから1.5s以上あとの`/setDestIp`）は、アドレスが解決されてから返信`/destIp`を送ります。有線では数ms、Wi-Fiでは数秒までかかります。解決の間は、送信先へのメッセージ（返信、位置レポート、エラー）は、後で送られるのではなく捨てられます。ブロードキャストの`/booted`は送られます。そのかわり、同じIPアドレスの別の機器に替えたクライアントは、新しい機器から`/setDestIp`を送れば使えるようになりました。同じ解決は、起動時、IDの変更の後、リンクの復帰のときにも行われます。ARPに一度も答えない送信先があると、送信は1s止まり、その間のメッセージは捨てられます。
 
 **影響を受けるのは。** 短いタイムアウトで`/destIp`を待つクライアント、Wi-Fiのクライアント、1秒ごとに`/setDestIp`をハートビートとして送るクライアント、PCやネットワークアダプタを替える装置です。
-
-同じ解決は、起動時、IDの変更の後、リンクの復帰のときにも行われます。ARPに一度も答えない送信先があると、送信は1s止まり、その間のメッセージは捨てられます。
 
 **何をすればよいか。** `/destIp`を数秒待ち、来なければ`/setDestIp`を送り直してください。`/setDestIp`は、接続を始めるときと、ネットワークやPCを替えたとき（前のものの最後のパケットから1.5s以上あと）に送ってください。Wi-Fiでの解決は、ボードの処理を最大約41msずつ止めることがあるので、モータを止めているときに送ってください。ボードが動いているかは、`/setDestIp`ではなく、`/getVersion`のように返信のあるコマンドで確かめてください。詳しくは[送信先と`/setDestIp`](../guides/communication-and-messages.md#setdestip)と[`/setDestIp`](../reference/system-settings.md#setdestip)をご覧ください。
 
@@ -126,8 +124,8 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 
 **何が変わったか。**
 
-- `/getStatus`と`/getStatusList`は、ドライバのラッチされたフラグ（OCD、ストールのフラグ、UVLO、SW_EVN）を消さなくなりました。フラグを消すのは、ファームウェアの状態のポーリング（5msごと）だけです。直前の`/getStatus`の直後に送った`/getStatus`には、前の返信で見えたフラグが見えることがあります。
-- `/setStallThreshold`は保存される値も変えるので、`/saveConfig`と`/resetMotorDriver`がその値を保持します。
+- `/getStatus`と`/getStatusList`は、ドライバのラッチされたフラグ（OCD、ストールのフラグ、UVLO、SW_EVN）を消さなくなりました。フラグを消すのは、ファームウェアの状態のポーリング（5msごと）だけです。`/getStatus`の直後に続けて`/getStatus`を送ると、前の返信で見えたフラグが、また見えることがあります。
+- `/setStallThreshold`は保存される値も変えるので、`/saveConfig`と`/resetMotorDriver`がその値を使います。
 - `/overCurrent`と`/stall`は、状態が始まったときにすぐ送られ、続く間は、モータごと・種類ごとに最短200ms間隔で送られます。以前は、状態を読むたびに送られていました。
 - 状態を10msではなく5msごとに読むので、状態の通知（`/busy`、`/HiZ`、`/homeSw`など）は最大5ms早く届きます。変化したときだけ送られる点は同じです。
 
@@ -141,7 +139,7 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 
 **影響を受けるのは。** サーボモードを使うすべての人と、過電流の遮断の後もサーボモードが続くと考えているクライアントです。
 
-**何をすればよいか。** サーボモードの応答を確かめ、必要ならゲインを調整し直してください（[PIDパラメータの決め方](../guides/servo-mode.md#tuning)）。`ServoModeCancelledOnHiZ`を処理してください。詳しくは[サーボモード](../guides/servo-mode.md)と[ドライバが自分で無励磁になったとき](../guides/alarms-and-protection.md#hiz-by-itself)をご覧ください。
+**何をすればよいか。** サーボモードの応答を確かめ、必要ならゲインを調整し直してください（[制御パラメータの決定方法](../guides/servo-mode.md#tuning)）。`ServoModeCancelledOnHiZ`を処理してください。詳しくは[サーボモード](../guides/servo-mode.md)と[ドライバが自分で無励磁になったとき](../guides/alarms-and-protection.md#hiz-by-itself)をご覧ください。
 
 ### スイッチの近くでの回転方向 {#switch-direction}
 
@@ -149,15 +147,15 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 
 **影響を受けるのは。** これらの設定を、スイッチの近くで`/goTo`などと一緒に使っている装置です。特に短い移動で、v2.1.0と動きが異なることがあります。
 
-**何をすればよいか。** スイッチの近くの動作を、もう一度試してください。以前の向きに合わせて作った回避策は、もう要りません。詳しくは[動作を禁止するスイッチ](../guides/alarms-and-protection.md#switches)をご覧ください。
+**何をすればよいか。** スイッチの近くの動作を、もう一度試してください。以前の向きに合わせて作った回避策は、もう要りません。詳しくは[スイッチによる動作の禁止](../guides/alarms-and-protection.md#switches)をご覧ください。
 
 ### 停止コマンド {#stop-commands}
 
 **何が変わったか。**
 
-- 1つのモータへの`/hardHiZ`は、即停止の無励磁の前に減速停止を送らなくなりました。1つのモータ、`255`、`/combine/hardHiZ`は同じ動作になります。ブレーキが有効で解放されているときは、ブレーキを保持状態にする前にモータを即停止します。
+- 1つのモータへの`/hardHiZ`は、即停止して無励磁にする前に、減速停止を送らなくなりました。1つのモータ、`255`、`/combine/hardHiZ`は同じ動作になります。ブレーキが有効で解放されているときは、ブレーキを保持状態にする前にモータを即停止します。
 - `/goUntilRaw 255`は、1つのモータへの`/goUntilRaw`と同じように、速度をレジスタの値として読みます（以前はステップ/sでした）。
-- `/softStop`、`/hardStop`、`/softHiZ`、`/hardHiZ`、`/enableServoMode`、`/resetMotorDriver`は、ブレーキが無効なモータでも、待機中の動作を取り消します。BUSYフラグを待つ`/goTo`、`/goToDir`、`/goHome`、`/goMark`、原点復帰、サーボモードです。以前は、止まったモータが再び動き出したり、取り消した原点復帰のタイムアウトが、無励磁にしたモータを励磁する即停止を送ったりしました。受け付けられた動作コマンドは、待っている`/goTo`も取り消します。
+- `/softStop`、`/hardStop`、`/softHiZ`、`/hardHiZ`、`/enableServoMode`、`/resetMotorDriver`は、ブレーキが無効なモータでも、待機中の動作を取り消します。BUSYフラグを待つ`/goTo`、`/goToDir`、`/goHome`、`/goMark`、原点復帰、サーボモードです。以前は、停止したモータが後から再び動き出すことがありました。また、取り消した原点復帰のタイムアウトが即停止を送り、無励磁にしたモータを励磁してしまうことがありました。受け付けられた動作コマンドは、待っている`/goTo`も取り消します。
 - 自動の即停止（`/setProhibitMotionOnHomeSw`によるHOMEスイッチ、LIMITスイッチ、サーボモード中のスイッチのイベント、`/goUntil`と`/releaseSw`のタイムアウト）は、ドライバが無励磁のモータには送られません。
 
 **影響を受けるのは。** 停止コマンドを送った後で、先に送った`/goTo`が後から始まることに頼っているクライアントや、即停止で無励磁のモータを励磁することに頼っているクライアントです。
@@ -174,7 +172,7 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 
 ### 原点復帰がすぐ`ReleaseSwTimeout`で終わらなくなりました {#homing-timeout}
 
-**何が変わったか。** v2.1.0以前では、`/homing`がスイッチを見つけた約1ms後に、3ではなく`/homingStatus`の4と`ReleaseSwTimeout`で終わることがよくありました。ほとんどの原点復帰で起きるか、ほとんど起きないかは、起動のたびに決まっていました。タイムアウトの判定の時間の誤りで、v2.2.0で直りました。
+**何が変わったか。** v2.1.0以前では、`/homing`がスイッチを見つけた約1ms後に、3ではなく`/homingStatus`の4と`ReleaseSwTimeout`で終わることがよくありました。ほとんどの原点復帰で起きるか、ほとんど起きないかは、起動のたびに決まっていました。タイムアウトの経過時間の計算の誤りで、v2.2.0で直りました。
 
 **影響を受けるのは。** この誤りを避けるために、原点復帰を再試行したり、`/homingStatus`の4を成功として扱ったりしていたクライアントです。
 
@@ -182,9 +180,9 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 
 ## 設定ファイルとmicroSDカード {#config-files}
 
-### Rawの設定は保持されます {#raw-saved}
+### Rawの設定は残ります {#raw-saved}
 
-**何が変わったか。** `/setSpeedProfileRaw`、`/setMaxSpeedRaw`、`/setMinSpeedRaw`、`/setFullstepSpeedRaw`、`/setAccRaw`、`/setDecRaw`は、`/saveConfig`が保存し`/resetMotorDriver`が再び適用する設定（故障の後のリセットも含みます）も変えるようになりました。v2.1.0ではレジスタだけを変えていたので、リセットや保存された設定で、以前の値に戻りました。保持される値は、同じRawの値に換算し直せる値なので、`/getMinSpeed`や`/getFullstepSpeed`の値と、レジスタの刻みの半分だけずれることがあります。`/setMinSpeedRaw`はビット12を無視します（低速最適化を有効にしてしまうためです）。
+**何が変わったか。** `/setSpeedProfileRaw`、`/setMaxSpeedRaw`、`/setMinSpeedRaw`、`/setFullstepSpeedRaw`、`/setAccRaw`、`/setDecRaw`は、`/saveConfig`が保存し`/resetMotorDriver`が再び適用する設定（故障の後のリセットも含みます）も変えるようになりました。v2.1.0ではレジスタだけを変えていたので、リセットや保存された設定で、以前の値に戻りました。残る値は、同じRawの値に換算し直せる値なので、`/getMinSpeed`や`/getFullstepSpeed`の値と、レジスタの刻みの半分だけずれることがあります。`/setMinSpeedRaw`はビット12を無視します（低速最適化を有効にしてしまうためです）。
 
 **影響を受けるのは。** Rawコマンドを`/saveConfig`と一緒に使っている装置や、リセットで以前の値に戻ることを前提にしていた装置です。
 
@@ -192,7 +190,7 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 
 ### 無効なファイルは適用されません {#invalid-files}
 
-**何が変わったか。** 受け付けられなかった設定ファイルの値は、適用されなくなりました。v2.1.0では、`information.configVersion`のない最初の`.json`ファイルや、途中で解析に失敗した`config.txt`は、読み込めなかったと報告されても、その値（または失敗までの値）が使われていました。今は、カードがないときと同じように、既定値が使われます。優先順位は同じで、`config.txt`、続いてアルファベット順で最初の`.json`ファイルです。そのファイルが無効なら、探索は終わり、既定値になります。
+**何が変わったか。** 受け付けられなかった設定ファイルの値は、適用されなくなりました。v2.1.0では、`information.configVersion`のない最初の`.json`ファイルや、途中で解析に失敗した`config.txt`は、`/getConfigName`の返信で読み込めなかったと分かっても、その値（または失敗までの値）が使われていました。今は、カードがないときと同じように、既定値が使われます。優先順位は同じで、`config.txt`、続いてアルファベット順で最初の`.json`ファイルです。そのファイルが無効なら、探索は終わり、既定値になります。
 
 **影響を受けるのは。** 無効なファイルが入っているカードと、Macでコピーしたカード（次の項目）です。
 
@@ -257,6 +255,7 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 
 **何が変わったか。** ブレーキは、6つの状態を持つ新しい状態機械に従います。`/getBrakeStatus`で取得できます。要点は次のとおりです。
 
+- STEP800では、ブレーキの状態が変わるとすぐ、ブレーキ出力が変わります（コマンドの0.3ms以内。以前は10〜20ms後）。
 - ブレーキが解放されているときの`/activate 1`は何もしません（以前は即停止を送っていました）。コマンドの後の状態の読み出しで、ドライバが励磁されているときだけブレーキを解放します。そうでなければブレーキは保持状態のままで、`BrakeReleaseFailed`を送ります。以前は、どんな場合も`brakeTransitionDuration`の後にブレーキを解放していました。
 - 回転中のモータへの`/activate 0`は、減速し、停止したらブレーキを保持状態にします。`/softHiZ`と同じです。以前は、モータを止めずにブレーキを保持状態にしていました。
 - ブレーキが保持状態のとき、または`/free`の後は、`/softStop`、`/hardStop`、`/enableServoMode 0`は何もしません。ブレーキが解放されていないときの`/enableServoMode 1`と`/homing`は、`BrakeEngaged`を返して何もしません。
@@ -264,13 +263,13 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 - `/free`の後は、動作コマンドか`/activate 1`でモータが励磁され、Releasedに戻ります。
 - `/resetMotorDriver`は、ブレーキが保持状態のとき、または`/free`の後にだけ受け付けます。`/enableElectromagnetBrake`は、ドライバが無励磁のときだけ設定を変えます。そうでなければ`CommandIgnored`です。
 - ドライバが自分で無励磁になると、次の状態の読み出しでブレーキを保持状態にし、`BrakeEngagedOnHiZ`を送ります。
-- `/softHiZ`か`/activate 0`のための減速中の`/activate 1`や動作コマンドは、保持状態にする予定を取り消します（以前は`/activate 1`が即停止を送りました）。STEP800では、ブレーキ出力がコマンドの0.3ms以内に変わります（以前は10〜20ms後）。
+- `/softHiZ`か`/activate 0`のための減速中の`/activate 1`や動作コマンドは、保持状態にする予定を取り消します（以前は`/activate 1`が即停止を送りました）。
 - 起動時の原点復帰（`homingAtStartup`）は、先にブレーキを解放し、解放が終わってから原点復帰を始めます。
 - ブレーキの時間は5msの刻みで数えます。解放は、`brakeTransitionDuration`の0〜5ms後になります。
 
 **影響を受けるのは。** ブレーキを有効にしたモータを制御するクライアントです。
 
-**何をすればよいか。** 開始には`/activate 1`を使い（動作コマンドを送る前に、`/getBrakeStatus`で状態が2、Releasedになったことを確かめます）、停止には`/softHiZ`か`/activate 0`を使い、`BrakeEngaged`、`BrakeReleaseFailed`、`BrakeEngagedOnHiZ`を処理してください。`/activate`の以前の動作に頼らないでください。詳しくは[コマンドとブレーキ](../guides/electromagnetic-brake.md#commands)の表、[ブレーキの状態](../guides/electromagnetic-brake.md#states)、[ブレーキを保持状態にするモータの停止](../guides/electromagnetic-brake.md#stopping)をご覧ください。
+**何をすればよいか。** 開始には`/activate 1`を使い（動作コマンドを送る前に、`/getBrakeStatus`で状態が2、Releasedになったことを確かめます）、停止には`/softHiZ`か`/activate 0`を使い、`BrakeEngaged`、`BrakeReleaseFailed`、`BrakeEngagedOnHiZ`を処理してください。`/activate`の以前の動作に頼らないでください。詳しくは[コマンドとブレーキ](../guides/electromagnetic-brake.md#commands)の表、[ブレーキの状態](../guides/electromagnetic-brake.md#states)、[ブレーキを保持状態にする途中での停止](../guides/electromagnetic-brake.md#stopping)をご覧ください。
 
 ### 保持電流 {#brake-hold-current}
 
@@ -282,11 +281,11 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 
 ### 再起動、ウォッチドッグ、CPU動作異常 {#brake-restart}
 
-**何が変わったか。** ボードは、再起動する前にブレーキを保持状態にします。`/resetDevice`とUSBシリアルの`R`は、回転中のモータを即停止し、ブレーキを保持状態にして、`brakeTransitionDuration`の最大値（最大1s）を待ちます。ウォッチドッグが停止を検出する（最後のウォッチドッグのリセットから約250ms後）と、先にすべてのブレーキを保持状態にし、`brakeTransitionDuration`の最大値（最大1s）の後に、`resetCause`4で再起動します。v2.1.0は、停止の約62.5ms後に再起動しました。CPU動作異常のときは、すべてのブレーキをすぐに保持状態にし、`resetCause`6で再起動します。
+**何が変わったか。** ボードは、再起動する前にブレーキを保持状態にします。`/resetDevice`とUSBシリアルの`R`は、回転中のモータを即停止し、ブレーキを保持状態にして、`brakeTransitionDuration`の最大値（最大1s）を待ちます。ボードの処理が止まったことをウォッチドッグが検出する（最後のウォッチドッグのリセットから約250ms後）と、先にすべてのブレーキを保持状態にし、`brakeTransitionDuration`の最大値（最大1s）の後に、`resetCause`4で再起動します。v2.1.0は、処理が止まってから約62.5ms後に再起動しました。CPU動作異常のときは、すべてのブレーキをすぐに保持状態にし、`resetCause`6で再起動します。
 
 **影響を受けるのは。** 再起動が速くなければならない装置や、再起動を監視する装置です。
 
-**何をすればよいか。** 再起動に最大1s長くかかると考えてください。ウォッチドッグ自体は、ブレーキの有無によらず、停止の約250ms後に働きます（v2.1.0は約62.5ms）。これより長くボードを止めるコマンドは再起動を起こしますが、知られているものはありません。詳しくは[再起動、ウォッチドッグ、CPU動作異常](../guides/electromagnetic-brake.md#restart)をご覧ください。
+**何をすればよいか。** 再起動に最大1s長くかかると考えてください。ウォッチドッグ自体は、ブレーキの有無によらず、処理が止まってから約250ms後に働きます（v2.1.0は約62.5ms）。これより長くボードを止めるコマンドは再起動を起こしますが、知られているものはありません。詳しくは[再起動、ウォッチドッグ、CPU動作異常](../guides/electromagnetic-brake.md#restart)をご覧ください。
 
 ### 負荷を支えられない時間 {#brake-unsupported}
 
@@ -304,7 +303,7 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 
 **影響を受けるのは。** PlatformIOでビルドするすべての人です。
 
-**何をすればよいか。** `boardsDef.h`のボードの行は、すべてコメントのままにしてください。両方でボードを指定しないでください。環境は、`pio run -e step800 -t upload`か、`platformio.ini`の`default_envs`で選びます。以前の環境`zeroUSB`は残っていて、STEP400をビルドします。詳しくは[ボードの選択](compile-the-arduino-sketch.md#select-board)をご覧ください。
+**何をすればよいか。** `boardsDef.h`のボードの行は、すべてコメントのままにしてください。両方でボードを指定しないでください。環境は、`pio run -e step800 -t upload`か、`platformio.ini`の`default_envs`で選びます。以前の環境`zeroUSB`は残っていて、STEP400をビルドします。詳しくは[ボードの選び方](compile-the-arduino-sketch.md#select-board)をご覧ください。
 
 ### ライブラリ {#libraries}
 
@@ -325,7 +324,7 @@ v2.1.0で加わったものは次のとおりです。読んだうえで、こ�
 
 ## v2.1.0に戻す {#downgrade}
 
-v2.2.0からv2.1.0に戻すには、v2.1.0をドライバライブラリ**1.1.x**でビルドして書き込みます（ライブラリ1.2.0はv2.2.0用です。PlatformIOやライブラリマネージャが1.1.xを入れることを確かめてください。v2.1.0の`platformio.ini`の`^1.1.0`は、より新しいバージョンに解決されることがあります。[ライブラリ](#libraries)をご覧ください）。
+v2.2.0からv2.1.0に戻すには、v2.1.0をドライバライブラリ**1.1.x**でビルドして書き込みます。ライブラリ1.2.0はv2.2.0用です。PlatformIOやライブラリマネージャが1.1.xを入れることを確かめてください。v2.1.0の`platformio.ini`の`^1.1.0`は、より新しいバージョンに解決されることがあります（[ライブラリ](#libraries)をご覧ください）。
 
 - **設定ファイル**: v2.2.0が保存した設定は、v2.1.0と同じキーと同じ適用可能な設定のバージョンを持つので、v2.1.0で読めます。Rawの設定は、通常の設定と同じキーに保存されます。
 - **`.tmp`ファイル**: 保存の失敗で残った`.tmp`ファイルは、v2.1.0でも設定ファイルの候補にはなりません。

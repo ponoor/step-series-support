@@ -14,7 +14,7 @@ title: 変更履歴
 
 #### 引数の検査とエラー {#v2-2-0-arguments}
 
-- **コマンドを適用する前に引数を検査します**（すべてのコマンド）。引数が足りないと`/error/osc MissingArgument`、型が違う引数（数値の代わりの文字列、NaN、無限大、文字列以外を送った`/setConfigName`）には`/error/osc WrongDataType`を返し、どちらも何も適用しません。以前は、足りない引数や違う型の引数を0として適用していました（`/setKval 1`はそのモータのKVALをすべて0にしました）。余分な引数は今も無視します。0〜255の外のモータIDには、送った値のまま`MotorIdNotMatch`を返します。[エラー](../guides/communication-and-messages.md#errors)と[`/error/osc`](../reference/automatically-sent-messages.md#error-osc)をご覧ください。
+- **コマンドを適用する前に引数を検査します**（すべてのコマンド）。引数が足りないと`/error/osc MissingArgument`、型が違う引数（数値の代わりの文字列、NaN、無限大、文字列以外を送った`/setConfigName`）には`/error/osc WrongDataType`を返し、どちらも何も適用しません。以前は、足りない引数や違う型の引数を0として適用していました（`/setKval 1`はそのモータのKVALをすべて0にしました）。余分な引数は今も無視します。0〜255の外のモータIDには`MotorIdNotMatch`を返し、エラーのモータIDには送った値が入ります。[エラー](../guides/communication-and-messages.md#errors)と[`/error/osc`](../reference/automatically-sent-messages.md#error-osc)をご覧ください。
 - **コマンドの範囲の外の値は拒否します**。`/error/command CommandIgnored`を返し、何も適用しません。対象は、65535を超える[`/setPositionReportInterval`](../reference/motor-driver-settings.md#setpositionreportinterval)と[`/setPositionListReportInterval`](../reference/motor-driver-settings.md#setpositionlistreportinterval)（以前は32768以上が負の値として読まれ、レポートが無効になっていました）、0未満の[`/setGoUntilTimeout`](../reference/homing.md#setgountiltimeout)と[`/setReleaseSwTimeout`](../reference/homing.md#setreleaseswtimeout)（以前は約49日になっていました）、フルステップが0〜3の外またはマイクロステップが0〜127の外の[`/setElPos`](../reference/position-management.md#setelpos)、負のゲインの[`/setServoParam`](../reference/servo-mode_reference.md#setservoparam)、0〜65535の外の[`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration)、そして[`/setDecayModeParam`](../reference/voltage-and-current-mode-settings.md#setdecaymodeparam)（STEP400）の127を超えるTON_MINとTOFF_MINです。
 - **512バイトを超えるパケットと、17個以上の引数を持つメッセージ**には、`/error/osc OscSyntaxError`を返します。
 - **ドライバが一部の状態でしか受け付けないレジスタ。** このレジスタに書き込むコマンドは、その状態にないモータには`/error/command MotorNotHiZ`または`MotorNotStopped`を返し、何も適用しません。たとえば[`/setMicrostepMode`](../reference/motor-driver-settings.md#setmicrostepmode)は出力が無励磁のとき、[`/setAcc`](../reference/speed-profile.md#setacc)は停止中にだけ受け付けます。以前は、ドライバが書き込みを無視してもファームウェアと保存される設定が値を受け取ったため、レジスタと保存された値が食い違っていました。[`/setVoltageMode`](../reference/voltage-and-current-mode-settings.md#setvoltagemode)と[`/setCurrentMode`](../reference/voltage-and-current-mode-settings.md#setcurrentmode)は、ドライバが受け付けたときだけモードを変えます。電流モードのSTEP400のモータへの`/setMicrostepMode`は、1/16より細かいステップモードには`CommandIgnored`を返します。255のときは、モータごとに判定します。
@@ -24,7 +24,7 @@ title: 変更履歴
 #### ボードが送るメッセージ {#v2-2-0-messages}
 
 - **`/booted`に2番目の引数`resetCause`が付きました**: `/booted myId resetCause`。引数の数を厳密に確かめるクライアントは更新が必要です。番号は、0が不明、1が電源投入、2が電源電圧の低下、3がリセットピン、4がウォッチドッグ、5がソフトウェアリセット、6がCPU動作異常です。1と2はどちらも電源によるリセットとして扱い（SAMD21では、普通の電源投入でも2になることが多くあります）、知らない番号は「その他」として扱ってください。[`/booted`](../reference/automatically-sent-messages.md#booted)をご覧ください。
-- **`T`/`F`で送っていた真偽値は、整数の0/1になりました**（型タグ`i`）。対象は、`/uvlo`の通知（[`/uvlo`](../reference/automatically-sent-messages.md#uvlo)）と、`/lowSpeedOptimizeThreshold`の3番目の引数（[`/getLowSpeedOptimizeThreshold`](../reference/motor-driver-settings.md#setlowspeedoptimizethreshold)）です。
+- **`T`/`F`で送っていた真偽値は、整数の0/1になりました**（型タグ`i`）。対象は、`/uvlo`の通知（[`/uvlo`](../reference/automatically-sent-messages.md#uvlo)）と、`/lowSpeedOptimizeThreshold`の3番目の引数（[`/getLowSpeedOptimizeThreshold`](../reference/motor-driver-settings.md#getlowspeedoptimizethreshold)）です。
 - **[`/overCurrent`](../reference/automatically-sent-messages.md#overcurrent)と[`/stall`](../reference/automatically-sent-messages.md#stall)**は、状態が始まったときにすぐ送られ、続く間は、モータごと・種類ごとに最短200ms間隔で送られます。以前は、状態を読むたびに送っていました。
 - **ドライバの状態を5msごとに読みます**（以前は10ms）。状態の通知（`/busy`、`/HiZ`、`/homeSw`、`/dir`、`/motorStatus`、`/swEvent`、`/uvlo`、`/thermalStatus`、`/limitSw`）は最大5ms早く届き、変化したときだけ送られる点は同じです。位置レポートとほかの10msごとの処理は変わりません。[通知のタイミング](../guides/alarms-and-protection.md#timing)をご覧ください。
 - **[`/getStatus`](../reference/motor-driver-settings.md#getstatus)と[`/getStatusList`](../reference/motor-driver-settings.md#getstatuslist)は、ドライバのラッチされたフラグを消さなくなりました**。`/getStatus`がフラグを消したために通知が失われることはありません。フラグを消すのは状態のポーリングだけなので、最初の`/getStatus`の直後にもう一度送ると、同じフラグが見えることがあります。
@@ -60,22 +60,22 @@ title: 変更履歴
 - **ブレーキは6つの状態を持つ状態機械に従います**。[`/getBrakeStatus`](../reference/brake.md#getbrakestatus)で取得できます。ブレーキが有効なモータでは、コマンドの動作が変わりました。詳しくは[コマンドとブレーキ](../guides/electromagnetic-brake.md#commands)の表をご覧ください。主な点は次のとおりです。
   - ブレーキが解放されているときの`/activate 1`は何もしません（以前は即停止を送っていました）。コマンドの後の状態の読み出しで、ドライバが励磁されているときだけブレーキを解放します。そうでなければブレーキは保持状態のままで、`BrakeReleaseFailed`を送ります。
   - 回転中のモータへの`/activate 0`は、減速し、停止したらブレーキを保持状態にします。`/softHiZ`と同じです。
-  - `/free`の後は、動作コマンドか`/activate 1`でモータが解放状態に戻ります。モータが止まっても、ブレーキを保持状態にしなくなりました。
+  - `/free`の後は、動作コマンドか`/activate 1`でモータがReleased（解放）の状態に戻ります。モータが止まっても、ブレーキを保持状態にしなくなりました。
   - ブレーキが保持状態のとき、または`/free`の後は、`/softStop`、`/hardStop`、`/enableServoMode 0`は何もしません。ブレーキが解放されていないときの`/enableServoMode 1`と`/homing`は`BrakeEngaged`を返します。
   - `/resetMotorDriver`と`/enableElectromagnetBrake`は、安全な状態でだけ受け付けます。そうでなければ`CommandIgnored`です（USBシリアルで読み込む設定にも同じ規則が働き、警告を表示します）。
-  - `/softHiZ`か`/activate 0`のための減速中の`/activate 1`や動作コマンドは、ブレーキを保持状態にする予定を取り消し、ブレーキは解放されたままになります（以前は`/activate 1`が即停止を送り、あとでモータが止まるとブレーキが保持状態になりました）。停止中のモータでは、`/softHiZ`と`/activate 0`は次の状態の読み出し（最大5ms後）でブレーキを保持状態にします。`/free`の後の`/activate 0`、`/softHiZ`、`/hardHiZ`はすぐに保持状態にします。解放状態のモータへの`/hardHiZ`は、先にモータを即停止します。
+  - `/softHiZ`か`/activate 0`で減速している間に`/activate 1`や動作コマンドを受けると、ブレーキを保持状態にする予定が取り消され、ブレーキは解放されたままになります（以前は`/activate 1`が即停止を送り、あとでモータが止まるとブレーキが保持状態になりました）。停止中のモータでは、`/softHiZ`と`/activate 0`は次の状態の読み出し（最大5ms後）でブレーキを保持状態にします。`/free`の後の`/activate 0`、`/softHiZ`、`/hardHiZ`はすぐに保持状態にします。ブレーキが解放されているモータへの`/hardHiZ`は、先にモータを即停止します。
   - ドライバが自分で無励磁になると、ブレーキを保持状態にし、`BrakeEngagedOnHiZ`を送ります。
-  - `/softHiZ`か`/activate 0`のために減速している間（Stopping）に停止コマンドを受けると、ブレーキを保持状態にする予定が取り消され、状態はReleasedに戻ります。これは意図した動作で、最後に受けたコマンドが優先されます（[ブレーキを保持状態にするモータの停止](../guides/electromagnetic-brake.md#stopping)）。
+  - `/softHiZ`か`/activate 0`のために減速している間（Stopping）に停止コマンドを受けると、ブレーキを保持状態にする予定が取り消され、状態はReleasedに戻ります。これは意図した動作で、最後に受けたコマンドが優先されます（[ブレーキを保持状態にする途中での停止](../guides/electromagnetic-brake.md#stopping)）。
 - **保持電流**: ブレーキが有効なモータが再び励磁されるたびに、KVAL_HOLD（TVAL_HOLD）がKVAL_RUN（TVAL_RUN）の半分以上に引き上げられます。`/free`の後も同じになりました（[保持電流](../guides/electromagnetic-brake.md#hold-current)）。
-- **再起動、ウォッチドッグ、CPU動作異常**: [`/resetDevice`](../reference/system-settings.md#resetdevice)とUSBシリアルの`R`コマンドは、先に回転中のモータを止め、ブレーキを保持状態にし、移行時間の最大値（最大1s）を待ちます。**ウォッチドッグは、最後のウォッチドッグのリセットから約250ms後に停止を検出します**。ブレーキの有無によりません（v2.1.0は約62.5ms）。これより長くボードを止めるコマンドや負荷があると再起動しますが、知られているものはありません。ブレーキがあるときは、先にすべてのブレーキを保持状態にし、最大1s後に再起動します（`resetCause`は4）。CPU動作異常のときは、すべてのブレーキを保持状態にして再起動し、`resetCause`は6です（[再起動、ウォッチドッグ、CPU動作異常](../guides/electromagnetic-brake.md#restart)）。
+- **再起動、ウォッチドッグ、CPU動作異常**: [`/resetDevice`](../reference/system-settings.md#resetdevice)とUSBシリアルの`R`コマンドは、先に回転中のモータを止め、ブレーキを保持状態にし、移行時間の最大値（最大1s）を待ちます。**ウォッチドッグは、ボードの処理が約250ms止まると、それを検出します**。ブレーキの有無によりません（v2.1.0は約62.5ms）。これより長く処理を止めるコマンドや負荷があると再起動しますが、知られているものはありません。ブレーキがあるときは、先にすべてのブレーキを保持状態にし、最大1s後に再起動します（`resetCause`は4）。CPU動作異常のときは、すべてのブレーキを保持状態にして再起動し、`resetCause`は6です（[再起動、ウォッチドッグ、CPU動作異常](../guides/electromagnetic-brake.md#restart)）。
 - **負荷を支えられない時間はなくなりません**。STEP800では、`setup()`でドライバをリセットする前にブレーキ出力を保持状態にします。電源投入時は、それまでの約250ms（ほとんどはブートローダ）は解放されたままで、電源によってはさらに長くなります（24Vで約2sの実測があります）。リセットや電源電圧の低下の後は、約0.5s解放されたままです。[負荷を支えられない時間](../guides/electromagnetic-brake.md#unsupported)をご覧ください。
 
 #### ネットワーク {#v2-2-0-network}
 
 - **`/destIp`が遅れて返ることがあります。** [`/setDestIp`](../reference/system-settings.md#setdestip)が送信先のMACアドレスの解決を始めたときは、アドレスが解決されてから返信します。有線では数ms、Wi-Fiでは数秒までかかります。返ってこなければ、`/setDestIp`を送り直してください。解決の間（数秒まで）は、送信先へのメッセージを捨てます。ブロードキャストの`/booted`は送られます。ボードが動いているかは、`/getVersion`のように返信のあるコマンドで確かめてください。[送信先と`/setDestIp`](../guides/communication-and-messages.md#setdestip)をご覧ください。
-- **同じIPアドレスの別の機器（別のPCやネットワークアダプタ）に替えたクライアント**は、新しい機器から、前の機器の最後のパケットから1.5s以上あとに`/setDestIp`を送ると、使えるようになります。以前は、ボードを再起動するまで古いMACアドレスに送り続けていました。
+- **同じIPアドレスの別の機器（別のPCやネットワークアダプタ）に替えたクライアント**は、前の機器の最後のパケットから1.5s以上あとに、新しい機器から`/setDestIp`を送ると、使えるようになります。以前は、ボードを再起動するまで古いMACアドレスに送り続けていました。
 - ARPに一度も答えない送信先への送信が、メッセージごとに処理を止めることはなくなりました。送信を1s止めてから再試行します（その間のメッセージは捨てられます）。W5500の再送時間は20ms、再試行は2回です。
-- MACアドレスは、起動時、IDの変更の後、Ethernetのリンクが復帰したとき（`destIp`が設定されていれば）にも解決します。ボードはブロードキャストアドレスと`destIp`のUDPポート9に1バイトを送り、その間`destIp`へのメッセージは捨てられます。`destIp`への送信が失敗すると送信を1s止め、`destIp`からのパケットで再開します。
+- MACアドレスは、起動時、IDの変更の後、Ethernetのリンクが復帰したとき（`destIp`が設定されていれば）にも解決します。ボードは、ブロードキャストアドレスのUDPポート9と`destIp`のUDPポート9に、それぞれ1バイトを送り、その間`destIp`へのメッセージは捨てられます。`destIp`への送信が失敗すると送信を1s止め、`destIp`からのパケットで再開します。
 - `isMyIpAddId`や`isOutPortAddId`で、.254を超えるアドレスや65535を超えるポートは使われなくなりました。IDを足さず、USBシリアルに警告を表示します（[ネットワークとDIPスイッチ](../connections/network-and-dip-switch.md)）。
 
 #### microSDカード {#v2-2-0-sd}
@@ -84,7 +84,7 @@ title: 変更履歴
 - 受け付けられなかった設定ファイルの値は適用しません。既定値を使います。最初の`.json`ファイルが無効なら、そこで探索を終えます。優先順位は同じで、`config.txt`、続いて最初の有効な`.json`です。
 - exFATのカードは「カードなし」として扱い、中身には触れません。PlatformIOのビルドもArduino IDEのビルドも同じです。カードはFAT16かFAT32でフォーマットしてください。
 - 保存は、同じフォルダの隠しファイル`.<name>.tmp`に書き込み、書き終えてから保存先のファイルを置き換えます。保存に失敗しても古いファイルが残ります。[カードへの保存](../connections/microsd-card.md#saving)をご覧ください。
-- 設定ツールから受け取った設定は、IDの変更の後でDIPスイッチのIDが2回足されることはなくなりました。受け取ったIPアドレス、ポート、MACアドレスは、再起動で反映されます。
+- ブラウザ設定ツールから受け取った設定は、IDの変更の後でDIPスイッチのIDが2回足されることはなくなりました。受け取ったIPアドレス、ポート、MACアドレスは、再起動で反映されます。
 
 ### 追加 {#v2-2-0-added}
 
@@ -102,8 +102,8 @@ OSCクライアントからは見えない、または処理時間にだけ現�
 
 ### 修正 {#v2-2-0-fixed}
 
-- **原点復帰がすぐ`ReleaseSwTimeout`で終わる不具合。** `/homing`が、スイッチを見つけた約1ms後に、3の代わりに`/homingStatus`の4と`ReleaseSwTimeout`で終わることがよくありました。起動ごとに、ほとんど毎回起きるか、ほとんど起きないかが決まっていました。タイムアウトの判定の時間の誤りです（v2.1.0以前）。同じ比較をほかの箇所でも直し、2^31ms以上のタイムアウトは発生しなくなりました。[原点復帰がすぐ`ReleaseSwTimeout`で終わる](troubleshooting.md#release-sw-timeout)をご覧ください。
-- **CPU動作異常（HardFault）。** すべてのブレーキをすぐに保持状態にし、移行時間の後に再起動して、`resetCause`は6です。STEP400（R1基板）では、Ethernetをつないだ状態でUSBケーブルを抜くとCPU動作異常になることがあります。これは基板のハードウェアの問題で、v2.1.0でも起きるので、動作異常そのものは直っていません。変わったのは扱いです。先にブレーキを保持状態にし、再起動を通知します。[USBを抜くとSTEP400が再起動する](troubleshooting.md#usb-unplug)をご覧ください。
+- **原点復帰がすぐ`ReleaseSwTimeout`で終わる不具合。** `/homing`が、スイッチを見つけた約1ms後に、3の代わりに`/homingStatus`の4と`ReleaseSwTimeout`で終わることがよくありました。起動ごとに、ほとんど毎回起きるか、ほとんど起きないかが決まっていました。タイムアウトの判定で、経過時間の計算が誤っていたためです（v2.1.0以前）。同じ比較をほかの箇所でも直し、2^31ms以上のタイムアウトは発生しなくなりました。[原点復帰がすぐに`ReleaseSwTimeout`で終わる](troubleshooting.md#release-sw-timeout)をご覧ください。
+- **CPU動作異常（HardFault）。** すべてのブレーキをすぐに保持状態にし、移行時間の後に再起動して、`resetCause`は6です。STEP400（R1）では、Ethernetをつないだ状態でUSBケーブルを抜くとCPU動作異常になることがあります。これはボードのハードウェアの問題で、v2.1.0でも起きるので、動作異常そのものは直っていません。変わったのは扱いです。先にブレーキを保持状態にし、再起動を通知します。[USBを抜くとSTEP400が再起動する](troubleshooting.md#usb-unplug)をご覧ください。
 - `/setStallThreshold`が保存されない、位置レポートの間隔が32768以上でレポートが無効になる、`/setConfigName`が文字列以外を受け付ける（今は`WrongDataType`を返します）という不具合を直しました。[設定と値](#v2-2-0-settings)と[引数の検査とエラー](#v2-2-0-arguments)をご覧ください。
 - サーボモード: 位置レポートがあると更新周期が約7〜13msの間で揺れていました。ブレーキが無効なとき、ドライバが自分で無励磁になっても、次の更新で再び励磁されていました。
 - ボードの送信LED（TX）が、位置レポートの送信でも点滅するようになりました（以前はすぐに消えていました）。見た目だけの変更です。
@@ -125,7 +125,7 @@ OSCクライアントからは見えない、または処理時間にだけ現�
 
 - **`canSendMsgBeforeDestIp`は、「`/setDestIp`を受信したか」と値を共有しています。** `/setDestIp`を受信した後に設定を保存する（`/saveConfig`、またはブラウザ設定ツール）と、カードに`true`が書き込まれます。ブラウザ設定ツールが`false`を書き込むと、`/setDestIp`をもう一度送るまで、ボードは返信を送りません。保存の後で`/setDestIp`をもう一度送り、保存したファイルの値を確かめてください。[`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip)と[`canSendMsgBeforeDestIp`の既知の問題](../connections/browser-config-tool.md#known-issue)をご覧ください。
 - **設定ファイルなしでの保存。** 設定ファイルなしで起動した（カードがない、または有効なファイルがない）ボードで保存すると、書き込むバージョンと製品名がないので、ファイルは`information.configVersion`が`[-1, 0]`、`information.targetProduct`が`"---"`で書き込まれます。値は保存されます。正しいバージョンと製品名のファイルが必要なときは、ブラウザ設定ツールで作ってください（**Download JSON**）。[カードへの保存](../connections/microsd-card.md#save-target)をご覧ください。
-- **STEP400（R1基板）は、Ethernetをつないだ状態でUSBケーブルを抜くと再起動することがあります。** ハードウェアの問題で、v2.1.0と同じです。[STEP400](../hardware/step400.md#usb-unplug)をご覧ください。
+- **STEP400（R1）は、Ethernetをつないだ状態でUSBケーブルを抜くと再起動することがあります。** ハードウェアの問題で、v2.1.0と同じです。[STEP400](../hardware/step400.md#usb-unplug)をご覧ください。
 
 ## v2.1.0 {#v2-1-0}
 

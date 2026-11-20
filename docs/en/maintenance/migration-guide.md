@@ -102,7 +102,7 @@ With `255`, each motor is judged alone: the motors in the state are changed and 
 
 **What changed.**
 
-- `/getKval`, `/getTval` and `/getTval_mA` (STEP400) return the settings (what `/setKval` and `/setTval` set, and `/saveConfig` saves), not the registers. In the current mode the KVAL registers keep the value from before, and in the voltage mode the TVAL registers do. For a motor with the brake, the raised KVAL_HOLD (TVAL_HOLD) is returned. The STEP800 is unchanged.
+- `/getKval`, `/getTval` and `/getTval_mA` (STEP400) return the settings (what `/setKval` and `/setTval` set, and `/saveConfig` saves), not the registers. `/setKval` changes the KVAL registers only in the voltage mode, and `/setTval` the TVAL registers only in the current mode; the registers of the mode that is not in use keep the earlier value. For a motor with the brake, the raised KVAL_HOLD (TVAL_HOLD) is returned. The STEP800 is unchanged.
 - `/getSpeedProfile` reports an acceleration and deceleration about 4.9% smaller than v2.1.0 for the same motion. They now match the datasheet. `/setAcc`, `/setDec` and `/setSpeedProfile` round to the nearest register value, so the value written can differ by 1 LSB.
 - `/getMinSpeed` returns `0.0` for a motor with the low speed optimization enabled, for one motor and for `255` alike.
 - `/getDir 255` returns the direction (it returned the HiZ state).
@@ -114,11 +114,9 @@ With `255`, each motor is judged alone: the motors in the state are changed and 
 
 ### `/setDestIp` and `/destIp` {#destip}
 
-**What changed.** When `/setDestIp` starts the resolution of the MAC address of the destination (the first one, one from another address than the current destination, or one 1.5 s or more after the last packet from the destination), the reply `/destIp` is sent once the address is resolved. It takes a few ms on a wired network and up to a few seconds on Wi-Fi. While the address is being resolved, the messages to the destination (replies, reports, errors) are dropped, not sent later; the broadcast `/booted` is sent. In exchange, a client replaced by another device with the same IP address is now served after a `/setDestIp` from the new device.
+**What changed.** When `/setDestIp` starts the resolution of the MAC address of the destination (the first one, one from another address than the current destination, or one 1.5 s or more after the last packet from the destination), the reply `/destIp` is sent once the address is resolved. It takes a few ms on a wired network and up to a few seconds on Wi-Fi. While the address is being resolved, the messages to the destination (replies, reports, errors) are dropped, not sent later; the broadcast `/booted` is sent. In exchange, a client replaced by another device with the same IP address is now served after a `/setDestIp` from the new device. The same resolution also runs at start-up, after a change of the ID and when the link comes up again, and a destination that never answers ARP pauses the sends for 1 s; messages in that time are dropped.
 
 **Who is affected.** Clients that wait for `/destIp` with a short time-out; clients on Wi-Fi; clients that send `/setDestIp` every second as a heartbeat; setups that change the PC or the network adapter.
-
-The same resolution also runs at start-up, after a change of the ID and when the link comes up again, and a destination that never answers ARP pauses the sends for 1 s; messages in that time are dropped.
 
 **What to do.** Wait a few seconds for `/destIp`; if it does not come, send `/setDestIp` again. Send `/setDestIp` at the start of the connection and after a change of the network or the PC, at least 1.5 s after the last packet of the old one. Send it while the motors are stopped, because the resolution on Wi-Fi can stop the board's processing for up to about 41 ms at a time. To check that the board is alive, use a command with a reply, such as `/getVersion`, not `/setDestIp`. Details: [The destination and `/setDestIp`](../guides/communication-and-messages.md#setdestip), [`/setDestIp`](../reference/system-settings.md#setdestip).
 
@@ -174,7 +172,7 @@ The same resolution also runs at start-up, after a change of the ID and when the
 
 ### Homing no longer ends at once with `ReleaseSwTimeout` {#homing-timeout}
 
-**What changed.** In v2.1.0 and earlier, `/homing` often ended with `/homingStatus` 4 and `ReleaseSwTimeout` about 1 ms after the switch was found, instead of 3. It happened in almost every homing or almost never, depending on the start-up. It was a timing error of the timeout check, and v2.2.0 fixes it.
+**What changed.** In v2.1.0 and earlier, `/homing` often ended with `/homingStatus` 4 and `ReleaseSwTimeout` about 1 ms after the switch was found, instead of 3. It happened in almost every homing or almost never, depending on the start-up. It was an error in the calculation of the elapsed time of the timeout, and v2.2.0 fixes it.
 
 **Who is affected.** Clients that retried the homing, or treated `/homingStatus` 4 as success, to get around the error.
 
@@ -257,6 +255,7 @@ This section is for a motor with the brake enabled (`/enableElectromagnetBrake`)
 
 **What changed.** The brake follows a new state machine with six states, which `/getBrakeStatus` returns. In short:
 
+- On the STEP800, the brake outputs change as soon as the brake state changes (within 0.3 ms of the command), not 10-20 ms later.
 - `/activate 1` while the brake is released does nothing (it sent a hard stop). It releases the brake only if a status read after the command shows the driver energized; otherwise the brake stays engaged and `BrakeReleaseFailed` is sent. Before, the brake was released after `brakeTransitionDuration` in any case.
 - `/activate 0` on a turning motor decelerates it and engages the brake when it has stopped, like `/softHiZ`. It engaged the brake without stopping the motor.
 - `/softStop`, `/hardStop` and `/enableServoMode 0` while the brake is engaged or after `/free` do nothing. `/enableServoMode 1` and `/homing` while the brake is not released reply `BrakeEngaged` and do nothing.
@@ -264,7 +263,7 @@ This section is for a motor with the brake enabled (`/enableElectromagnetBrake`)
 - After `/free`, a motion command or `/activate 1` energizes the motor and returns it to Released.
 - `/resetMotorDriver` is accepted only while the brake is engaged or after `/free`; `/enableElectromagnetBrake` changes the setting only while the driver is HiZ. Otherwise `CommandIgnored`.
 - When the driver goes HiZ by itself, the brake engages at the next status read and `BrakeEngagedOnHiZ` is sent.
-- `/activate 1` or a motion command during the deceleration for `/softHiZ` or `/activate 0` cancels the engaging (it sent a hard stop before). On the STEP800 the brake outputs now change within 0.3 ms of the command, not 10-20 ms later.
+- `/activate 1` or a motion command during the deceleration for `/softHiZ` or `/activate 0` cancels the engaging (it sent a hard stop before).
 - Homing at startup (`homingAtStartup`) releases the brake first and starts the homing when the brake is released.
 - The brake times are counted in 5 ms steps: the release comes 0-5 ms after `brakeTransitionDuration`.
 
@@ -325,7 +324,7 @@ v2.1.0 added the following. Read them, and then go through the items of this pag
 
 ## Going back to v2.1.0 {#downgrade}
 
-To go back from v2.2.0 to v2.1.0, build and upload v2.1.0 with the driver libraries **1.1.x** (the libraries 1.2.0 are for v2.2.0; make sure that PlatformIO or the Library Manager installs 1.1.x, because the entry `^1.1.0` of the `platformio.ini` of v2.1.0 can resolve to a later version; see [Libraries](#libraries)).
+To go back from v2.2.0 to v2.1.0, build and upload v2.1.0 with the driver libraries **1.1.x**. The libraries 1.2.0 are for v2.2.0. Make sure that PlatformIO or the Library Manager installs 1.1.x. The entry `^1.1.0` of the `platformio.ini` of v2.1.0 can resolve to a later version (see [Libraries](#libraries)).
 
 - **Configuration files.** The configuration saved by v2.2.0 has the same keys and the same applicable configuration version as v2.1.0, so v2.1.0 can read it. The Raw settings are saved as the same keys as the normal settings.
 - **The `.tmp` file** that a failed save leaves is not a candidate for the configuration file in v2.1.0 either.

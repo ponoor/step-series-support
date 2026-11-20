@@ -24,7 +24,7 @@ Released 2026-10-20. The OSC addresses are compatible with v2.1.0, but the behav
 #### Messages that the board sends {#v2-2-0-messages}
 
 - **`/booted` has a second argument**, `resetCause`: `/booted myId resetCause`. Clients that check the exact number of arguments must be updated. The numbers: 0 unknown, 1 power-on, 2 brown-out, 3 reset pin, 4 watchdog, 5 software reset, 6 CPU fault. Treat 1 and 2 both as a reset by the power supply (on the SAMD21 a normal power-up is often reported as 2), and an unknown number as "other". See [`/booted`](../reference/automatically-sent-messages.md#booted).
-- **Boolean arguments sent as `T` / `F` are now integers 0 / 1** (type tag `i`): the `/uvlo` notification ([`/uvlo`](../reference/automatically-sent-messages.md#uvlo)) and the third argument of `/lowSpeedOptimizeThreshold` ([`/getLowSpeedOptimizeThreshold`](../reference/motor-driver-settings.md#setlowspeedoptimizethreshold)).
+- **Boolean arguments sent as `T` / `F` are now integers 0 / 1** (type tag `i`): the `/uvlo` notification ([`/uvlo`](../reference/automatically-sent-messages.md#uvlo)) and the third argument of `/lowSpeedOptimizeThreshold` ([`/getLowSpeedOptimizeThreshold`](../reference/motor-driver-settings.md#getlowspeedoptimizethreshold)).
 - **[`/overCurrent`](../reference/automatically-sent-messages.md#overcurrent) and [`/stall`](../reference/automatically-sent-messages.md#stall)** are sent at once when the condition starts and, while it lasts, at most every 200 ms per motor and kind. Before, they were sent at every status read.
 - **The status of the drivers is read every 5 ms** (it was 10 ms). The status notifications (`/busy`, `/HiZ`, `/homeSw`, `/dir`, `/motorStatus`, `/swEvent`, `/uvlo`, `/thermalStatus`, `/limitSw`) arrive up to 5 ms earlier and are still sent only on a change. Position reports and the other 10 ms tasks are unchanged. See [Timing of the notifications](../guides/alarms-and-protection.md#timing).
 - **[`/getStatus`](../reference/motor-driver-settings.md#getstatus) and [`/getStatusList`](../reference/motor-driver-settings.md#getstatuslist) no longer clear the latched flags** of the driver, so a report can no longer be lost because a `/getStatus` cleared its flag. Only the status poll clears them, so a second `/getStatus` right after the first can still show a flag.
@@ -84,7 +84,7 @@ Released 2026-10-20. The OSC addresses are compatible with v2.1.0, but the behav
 - The values of a configuration file that is not accepted are no longer applied: the defaults are used. A first `.json` file that is invalid ends the search. The priority is unchanged: `config.txt`, then the first valid `.json`.
 - An exFAT card is reported as "No SD card" and is not touched, with the PlatformIO build and the Arduino IDE build alike. Format the card as FAT16 or FAT32.
 - Saving writes a hidden temporary file `.<name>.tmp` in the same folder and replaces the saved file only after it is written, so a failed save leaves the old file. See [Saving to the card](../connections/microsd-card.md#saving).
-- Config received from the configuration tool no longer has the DIP switch ID added twice after an ID change. The received IP address, port and MAC address are applied by a reboot.
+- Config received from the browser configuration tool no longer has the DIP switch ID added twice after an ID change. The received IP address, port and MAC address are applied by a reboot.
 
 ### Added {#v2-2-0-added}
 
