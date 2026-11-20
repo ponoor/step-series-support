@@ -36,8 +36,8 @@ PlatformIOでは、`platformio.ini`の**環境**でボードを選びます。`s
 
 Arduino IDEは、PlatformIOより手作業が多くなります。
 
-1. IDEのボードマネージャーで、**Arduino SAMD Boards**のコアをインストールします。<https://docs.arduino.cc/hardware/zero>の「Quick Start」をご覧ください。
-2. ライブラリ（下記）を、ライブラリマネージャーでインストールします。インストールの方法は<https://www.arduino.cc/en/guide/libraries>にあります。
+1. IDEのボードマネージャで、**Arduino SAMD Boards**のコアをインストールします。<https://docs.arduino.cc/hardware/zero>の「Quick Start」をご覧ください。
+2. ライブラリ（下記）を、ライブラリマネージャでインストールします。インストールの方法は<https://www.arduino.cc/en/guide/libraries>にあります。
 3. 最新の[リリース](https://github.com/ponoor/step-series-universal-firmware/releases)の「Assets」から`step-series-universal-firmware.zip`をダウンロードして解凍します。フォルダの中にスケッチがあるので、`.ino`ファイルをArduino IDEで開きます。
 
    ![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643348613641.png)
@@ -58,7 +58,7 @@ Arduino IDEは、PlatformIOより手作業が多くなります。
 
 ### ライブラリ {#libraries}
 
-次のライブラリを、ライブラリマネージャーでインストールします。
+次のライブラリを、ライブラリマネージャでインストールします。
 
 | ライブラリ | バージョン | 使う製品 |
 | --- | --- | --- |
