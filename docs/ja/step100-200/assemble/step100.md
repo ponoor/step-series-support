@@ -1,14 +1,14 @@
 ---
-title: X-Nucleoの準備 - STEP100
+title: X-NUCLEOボードの準備 - STEP100
 ---
 
-# X-Nucleoの準備 - STEP100
+# X-NUCLEOボードの準備 - STEP100
 
 X-NUCLEO-IHM03A1を、Ethernetシールドに重ねられるように改造する方法です。
 
 ## STEP100（X-NUCLEO-IHM03A1） {#step100}
 
-この表は初期のビルドの場合です。`MZERO_WITH_ZERO_BOOTLOADER`を定義すると、SD CSはD2になります（[スケッチの書き込み](../upload-the-sketch.md#m0)）。IHM03A1とEthernetシールドでは、使うピンが次のように重なりますので、IHM03A1側でピンを変更します。
+この表は、`MZERO_WITH_ZERO_BOOTLOADER`を定義しない通常のビルドの場合です。定義すると、SD CSはD2になります（[スケッチの書き込み](../upload-the-sketch.md#m0)）。IHM03A1とEthernetシールドでは、使うピンが次のように重なりますので、IHM03A1側でピンを変更します。
 
 | Arduino | (Ethernet) | 初期状態 | 変更後 | ファームウェア | 備考 |
 | --- | --- | --- | --- | --- | --- |

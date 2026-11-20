@@ -20,7 +20,7 @@ Compatible boards can be used too. The Arduino Zero is based on the Microchip `A
 
 ### Arduino Zero or M0? {#zero-or-m0}
 
-These two models were separated when Arduino was divided into two companies, but they are almost identical and either can be used. There are some differences, however, and you must take them into account when you build and upload the firmware (see [Upload the Arduino sketch](upload-the-sketch.md#m0)).
+These two models are almost identical, and either can be used. There are some differences, however, and you must take them into account when you build and upload the firmware (see [Upload the Arduino sketch](upload-the-sketch.md#m0)).
 
 In terms of hardware, the D2 and D4 pins are swapped between the two models. Confusingly, some compatible products have the Arduino Zero bootloader written on Arduino M0 equivalent hardware. Even if the board is recognized as an Arduino Zero, it is safer to upload a sketch that blinks D2 and see whether D2 or D4 blinks.
 

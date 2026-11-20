@@ -1,8 +1,8 @@
 ---
-title: X-Nucleoの準備 - STEP200
+title: X-NUCLEOボードの準備 - STEP200
 ---
 
-# X-Nucleoの準備 - STEP200
+# X-NUCLEOボードの準備 - STEP200
 
 X-NUCLEO-IHM02A1を、Ethernetシールドに重ねられるように改造する方法です。
 

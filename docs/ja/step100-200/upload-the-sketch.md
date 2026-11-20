@@ -17,11 +17,11 @@ STEP100またはSTEP200向けにファームウェアをビルドして、Arduin
 
 STEP100なら環境`step100`、STEP200なら環境`step200`を選びます。選び方は[ボードの選択](../maintenance/compile-the-arduino-sketch.md#select-board)にあります。`boardsDef.h`のボードの行は、すべてコメントアウトしたままにしてください。
 
-どちらの環境も、ボード`zeroUSB`（Arduino Zero）向けにビルドします。製品に合ったドライバのライブラリが必要です。STEP100はPonoor PowerSTEP01 Library、STEP200はPonoor L6470 Libraryで、`platformio.ini`がGitHubのタグのZIPから取得します。
+どちらの環境も、ボード`zeroUSB`（Arduino Zero）向けにビルドします。Ethernetのライブラリと、製品に合ったドライバのライブラリが必要です。STEP100はPonoor PowerSTEP01 Library、STEP200はPonoor L6470 Libraryで、`platformio.ini`がGitHubのタグのZIPから取得します。
 
 ### Arduino M0とMETRO M0 Expressの場合 {#m0}
 
-v2.2.0の`platformio.ini`には、Arduino M0のボード定義（`mzeroUSB`）やMETRO M0 Express用の環境はありません。以前の版の設定例がコメントアウトされて残っているだけで、v2.2.0ではそのままでは動きません。環境`step100`または`step200`を使って、Arduino Zeroとしてビルドしてください。METRO M0 Expressについては、このボード専用の定義ではUSBシリアルの挙動が異なり、[USBシリアル診断](../maintenance/usb-serial-diagnosis.md)がうまく動かないと、`platformio.ini`のコメントにも書かれています。
+v2.2.0の`platformio.ini`には、Arduino M0のボード定義（`mzeroUSB`）やMETRO M0 Express用の環境はありません。以前の版の設定例がコメントアウトされて残っているだけで、v2.2.0ではそのままでは動きません。環境`step100`または`step200`を使って、Arduino Zeroとしてビルドしてください。METRO M0 Expressも、Arduino Zeroとしてビルドします。このボード専用の定義ではUSBシリアルの挙動が異なり、[USBシリアル診断](../maintenance/usb-serial-diagnosis.md)がうまく動かないためです。`platformio.ini`でも、`zeroUSB`を使うようにしています。
 
 Arduino M0のハードウェア（D2とD4が入れ替わっています）のボードでは、`MZERO_WITH_ZERO_BOOTLOADER`を定義します（[Arduino ZeroかM0か](get-the-materials.md#zero-or-m0)）。定義すると、microSDカードのCSピンが、Arduino Zeroの番号でD2になります。これは、M0ではD4にあたります。PlatformIOでは、環境のビルドフラグに足します。
 

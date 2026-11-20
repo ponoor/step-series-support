@@ -1,8 +1,8 @@
 ---
-title: Prepare X-Nucleo - STEP200
+title: Prepare the X-NUCLEO board - STEP200
 ---
 
-# Prepare X-Nucleo - STEP200
+# Prepare the X-NUCLEO board - STEP200
 
 How to modify the X-NUCLEO-IHM02A1 so that it can be stacked on the Ethernet shield.
 
@@ -36,7 +36,7 @@ How to modify the X-NUCLEO-IHM02A1 so that it can be stacked on the Ethernet shi
 
 ### 1: Move L6470 SCK {#sck}
 
-Initially the SCK pin of the L6470 on the IHM02A1 is D3, but move it to D13 to fit the SPI pin layout of the Arduino. Remove the 0 Ω resistor at `SB34` of the IHM02A1, and move it to the `SB12` pad. This is difficult without two soldering irons. Alternatively, you can crush the `SB34` resistor with cutting pliers and short the `SB12` pad with solder.
+Initially the SCK pin of the L6470 on the IHM02A1 is D3, but move it to D13 to fit the SPI pin layout of the Arduino. Remove the 0 Ω resistor at `SB34` of the IHM02A1, and move it to the `SB12` pad. This is difficult without two soldering irons. Another way might be to crush the `SB34` resistor with cutting pliers and short the `SB12` pad with solder.
 
 ![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643345862191.png)  
 In this photo, I had a hard time reattaching the removed resistor to SB12, and it became dirty.

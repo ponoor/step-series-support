@@ -21,7 +21,7 @@ The brake outputs of the STEP400 and the STEP800 are logic signals, so a driver 
 
 The commands are common to the products, but a command that needs a function that the board does not have is not available on it. The commands that differ between the STEP400 and the STEP800 are listed in [Differences between STEP400 and STEP800](../reference/differences-step400-step800.md). For the voltage mode and the current mode, see [Voltage mode and current mode](../guides/voltage-and-current-mode.md).
 
-The STEP100 and the STEP200 are built from an Arduino Zero, an Ethernet shield and an X-NUCLEO board. The firmware can be built for them, but it has not been tested on real hardware since v2.1.0. See [STEP100 / STEP200](../step100-200/index.md).
+The STEP100 and the STEP200 are built from an Arduino Zero, an Ethernet shield and an X-NUCLEO board. The firmware can be built for them, but it has not been tested on real hardware with v2.1.0 or later. See [STEP100 / STEP200](../step100-200/index.md).
 
 ## What you can do {#features}
 

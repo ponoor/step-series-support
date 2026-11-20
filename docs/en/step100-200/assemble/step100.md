@@ -1,8 +1,8 @@
 ---
-title: Prepare X-Nucleo - STEP100
+title: Prepare the X-NUCLEO board - STEP100
 ---
 
-# Prepare X-Nucleo - STEP100
+# Prepare the X-NUCLEO board - STEP100
 
 How to modify the X-NUCLEO-IHM03A1 so that it can be stacked on the Ethernet shield.
 

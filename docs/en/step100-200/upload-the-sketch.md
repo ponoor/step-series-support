@@ -6,8 +6,8 @@ title: Upload the Arduino sketch
 
 How to build the firmware for the STEP100 or the STEP200 and write it to the Arduino. The steps that are common to all the products are in [Compiling the firmware](../maintenance/compile-the-arduino-sketch.md); this page has what is specific to the STEP100 and the STEP200.
 
-!!! warning "Not tested on real hardware since v2.1.0"
-    The firmware v2.2.0 can be built for the STEP100 and the STEP200, but they have not been tested on real hardware since v2.1.0. The procedures in this section follow the source code of the firmware and the earlier documents.
+!!! warning "Not tested on real hardware with v2.1.0 or later"
+    The firmware v2.2.0 can be built for the STEP100 and the STEP200, but they have not been tested on real hardware with v2.1.0 or later. The procedures in this section follow the source code of the firmware and the earlier documents.
 
 ## Upload with PlatformIO {#platformio}
 
@@ -17,11 +17,11 @@ Get the firmware from <https://github.com/ponoor/step-series-universal-firmware>
 
 Select the environment `step100` for the STEP100 or `step200` for the STEP200, as described in [Selecting the board](../maintenance/compile-the-arduino-sketch.md#select-board). Leave every board line in `boardsDef.h` commented out.
 
-The environments build for the board `zeroUSB` (Arduino Zero). They need the Ethernet shield and the driver library of the model: the Ponoor PowerSTEP01 Library for the STEP100 and the Ponoor L6470 Library for the STEP200, which `platformio.ini` takes from the tag ZIPs on GitHub.
+The environments build for the board `zeroUSB` (Arduino Zero). They need the Ethernet library and the driver library of the model: the Ponoor PowerSTEP01 Library for the STEP100 and the Ponoor L6470 Library for the STEP200, which `platformio.ini` takes from the tag ZIPs on GitHub.
 
 ### Arduino M0 and METRO M0 Express {#m0}
 
-`platformio.ini` of v2.2.0 has no environment for the board definition of the Arduino M0 (`mzeroUSB`) or the METRO M0 Express: they remain in it only as commented-out examples of the earlier versions, which do not work with v2.2.0. Use the environment `step100` or `step200`, that is, build as an Arduino Zero. For the METRO M0 Express this is also what the comment in `platformio.ini` tells, because the USB serial of its own board definition behaves differently and the [USB serial diagnosis](../maintenance/usb-serial-diagnosis.md) does not work well with it.
+`platformio.ini` of v2.2.0 has no environment for the board definition of the Arduino M0 (`mzeroUSB`) or the METRO M0 Express: they remain in it only as commented-out examples of the earlier versions, which do not work with v2.2.0. Use the environment `step100` or `step200`, that is, build as an Arduino Zero. Build the METRO M0 Express as an Arduino Zero too, because the USB serial of its own board definition behaves differently and the [USB serial diagnosis](../maintenance/usb-serial-diagnosis.md) does not work well with it. `platformio.ini` also uses `zeroUSB` for it.
 
 For the board with the hardware of the Arduino M0 (D2 and D4 are swapped), define `MZERO_WITH_ZERO_BOOTLOADER` ([Arduino Zero or M0?](get-the-materials.md#zero-or-m0)). With it, the CS pin of the microSD card is D2 in the numbering of the Arduino Zero, which is D4 on the M0. In PlatformIO, add it to the build flags of the environment:
 

@@ -6,8 +6,8 @@ title: STEP100 / STEP200
 
 The STEP100 and the STEP200 are do-it-yourself motor drivers: you collect the modules and assemble them yourself. This section explains how to get the materials, how to assemble them, how to write the firmware, and how they differ in use.
 
-!!! warning "Not tested on real hardware since v2.1.0"
-    The firmware v2.2.0 can be built for the STEP100 and the STEP200, but they have not been tested on real hardware since v2.1.0. The procedures in this section follow the source code of the firmware and the earlier documents.
+!!! warning "Not tested on real hardware with v2.1.0 or later"
+    The firmware v2.2.0 can be built for the STEP100 and the STEP200, but they have not been tested on real hardware with v2.1.0 or later. The procedures in this section follow the source code of the firmware and the earlier documents.
 
 ## Overview {#overview}
 
