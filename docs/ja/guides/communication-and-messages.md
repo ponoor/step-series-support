@@ -95,7 +95,7 @@ USBシリアルポートで、送信先のMACアドレスなど、接続の詳�
 | [`/getConfigName`](../reference/system-settings.md#getconfigname) | - | `/configName`を返します。設定名、microSDカードを使えたか、設定ファイルを開けたか・解析できたか、設定ファイルのパスが含まれます。 |
 | [`/reportError`](../reference/system-settings.md#reporterror) | (bool)enable | `/error/command`および`/error/osc`メッセージの自動送信の有効/無効を切り替えます。 |
 | [`/setConfigName`](../reference/system-settings.md#setconfigname) | (string)configName | ボードに保存される設定名を設定します。設定を見分けるためにユーザが自由に編集できるラベルで、ディスク上のファイル名とは別のものです。 |
-| [`/saveConfig`](../reference/system-settings.md#saveconfig) | - | 現在動作中の設定を、JSONファイルとしてmicroSDカードに保存します。保存先は、起動時に読み込んだファイルです。ファイルを読み込まなかったときは`/config.txt`です。USBシリアルの`F<path>`で、保存先のパスを変えられます。 |
+| [`/saveConfig`](../reference/system-settings.md#saveconfig) | - | 使用中の設定を、JSONファイルとしてmicroSDカードに保存します。保存先は、起動時に読み込んだファイルです。ファイルを読み込まなかったときは`/config.txt`です。USBシリアルの`F<path>`で、保存先のパスを変えられます。 |
 | [`/resetDevice`](../reference/system-settings.md#resetdevice) | - | ボード全体をリセットします。ボード上のリセットスイッチを押した場合と同じ動作です。 |
 | [`/setPositionReportInterval`](../reference/motor-driver-settings.md#setpositionreportinterval) | (int)motorID (int)interval | 指定したモータの現在位置（`ABS_POS`）を指定間隔で自動送信します。0を指定すると無効化され、送信を停止します。 |
 | [`/setPositionListReportInterval`](../reference/motor-driver-settings.md#setpositionlistreportinterval) | (int)interval | 全モータの現在位置（`ABS_POS`）をひとつのリストにまとめたメッセージを指定間隔で自動送信します。0を指定すると無効化され、送信を停止します。 |

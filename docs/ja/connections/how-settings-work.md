@@ -10,7 +10,7 @@ title: 設定の仕組み
 
 - **microSDカードの設定ファイル。** ボードが起動するときに読みます。ファイルは、PCで作ることも、ブラウザ設定ツールで作ることもできます。
 - **ブラウザ設定ツール。** USBでボードから設定を読み、編集した設定を適用して、カードに保存します。
-- **OSCコマンド。** 動いているボードの値を、すぐに変えます。[`/saveConfig`](../reference/system-settings.md#saveconfig)で、動いている値をカードに保存します。
+- **OSCコマンド。** 動いているボードの値を、すぐに変えます。[`/saveConfig`](../reference/system-settings.md#saveconfig)で、使用中の値をカードに保存します。
 
 設定ファイルのすべての項目は、変更するコマンドとともに、[設定項目一覧](configuration-items.md)にあります。
 
@@ -26,11 +26,11 @@ title: 設定の仕組み
 
 ボードが何を読んだかは、[`/getConfigName`](../reference/system-settings.md#getconfigname)を送ると分かります。返信の`/configName`には、設定名、カードとファイルを読めたか、ファイルのパス（先頭に`/`が付きます）が入っています。USBシリアルの出力でも確かめられます（[USBシリアル診断](../maintenance/usb-serial-diagnosis.md)）。
 
-## 動いている値と保存された値 {#saved-values}
+## 使用中の値と保存された値 {#saved-values}
 
 ボードは、動いている間、設定をメモリに持っています。OSCコマンドで変えた値は、メモリの中で変わります。**保存しないと、電源を切ったときに消えます。**
 
-- [`/saveConfig`](../reference/system-settings.md#saveconfig)は、動いている設定をカードに書きます。
+- [`/saveConfig`](../reference/system-settings.md#saveconfig)は、使用中の設定をカードに書きます。
 - 書き込み先は、起動時に読んだファイルです。ファイルを読んでいないときは、`/config.txt`です。USBシリアルのコマンド`F<path>`で、次に再起動するまで書き込み先を変えられます。[`F<path>`で決めた名前](microsd-card.md#f-path)をご覧ください。
 - ブラウザ設定ツールの**Save to SD**も、編集した値を適用してから、同じように保存します。
 
@@ -47,7 +47,7 @@ title: 設定の仕組み
 | 設定 | 効くとき |
 | --- | --- |
 | 設定名 | すぐ |
-| IPアドレス、サブネットマスク、ゲートウェイ、DNS、ポート、MACアドレス、IDを加算するスイッチ | 次の再起動のとき（またはIDを変えたとき）。動いている値は変わらない |
+| IPアドレス、サブネットマスク、ゲートウェイ、DNS、ポート、MACアドレス、IDを加算するスイッチ | 次の再起動のとき（またはIDを変えたとき）。使用中の値は変わらない |
 | `destIp`、`canSendMsgBeforeDestIp`、`reportError`（送信先を決める通常の方法は[`/setDestIp`](../reference/system-settings.md#setdestip)） | すぐ |
 | レポートのスイッチと間隔、原点復帰（方向、速度、タイムアウト、動作の禁止）、LIMITスイッチの設定、ブレーキの設定（下記）、サーボモード（kP、kI、kD） | すぐ |
 | `bootedMsgEnable`、起動時の原点復帰 | 次の起動のとき |
@@ -84,7 +84,7 @@ title: 設定の仕組み
 | --- | --- | --- |
 | [`/getConfigName`](../reference/system-settings.md#getconfigname) | - | `/configName`を返します。設定名、microSDカードを使えたか、設定ファイルを開けたか・解析できたか、設定ファイルのパスが含まれます。 |
 | [`/setConfigName`](../reference/system-settings.md#setconfigname) | (string)configName | ボードに保存される設定名を設定します。設定を見分けるためにユーザが自由に編集できるラベルで、ディスク上のファイル名とは別のものです。 |
-| [`/saveConfig`](../reference/system-settings.md#saveconfig) | - | 現在動作中の設定を、JSONファイルとしてmicroSDカードに保存します。保存先は、起動時に読み込んだファイルです。ファイルを読み込まなかったときは`/config.txt`です。USBシリアルの`F<path>`で、保存先のパスを変えられます。 |
+| [`/saveConfig`](../reference/system-settings.md#saveconfig) | - | 使用中の設定を、JSONファイルとしてmicroSDカードに保存します。保存先は、起動時に読み込んだファイルです。ファイルを読み込まなかったときは`/config.txt`です。USBシリアルの`F<path>`で、保存先のパスを変えられます。 |
 | [`/resetDevice`](../reference/system-settings.md#resetdevice) | - | ボード全体をリセットします。ボード上のリセットスイッチを押した場合と同じ動作です。 |
 <!-- generated:end osc-related /getConfigName, /setConfigName, /saveConfig, /resetDevice -->
 

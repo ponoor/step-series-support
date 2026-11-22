@@ -30,6 +30,9 @@ terms:
   - use: 送信先
     concept: destination（ボードがOSCメッセージを送る相手。destIp）。「宛先」とは書かない
     avoid: [宛先]
+  - use: 使用中の値
+    concept: running value / running settings（ボードが今メモリで使っている値・設定）。「使用中の設定」も同じ。「動いている値」「動作中の値」「動いている設定」「動作中の設定」とは書かない。モータの動作の意味の「動作中」は別
+    avoid: [動いている値, 動作中の値, 動いている設定, 動作中の設定]
   - use: 解放
     concept: ブレーキを外す。外した状態は「解放中」
     avoid: [開放]

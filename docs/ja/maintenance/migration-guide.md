@@ -309,7 +309,7 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 v2.1.0で加わったものは次のとおりです。読んだうえで、このページの各項目を確かめてください。
 
 - **設定ファイル**: v2.0.0のものと互換です。古いテンプレートから作ったSTEP400のファイルには、綴りの誤ったキー`goUnitlTimeout`が入っていることがあります。v2.0.0はその値を無視し、v2.1.0以降は使います。[`goUnitlTimeout`](#go-until-timeout)をご覧ください。
-- **microSDカード**: ファームウェアは先に`config.txt`を読み、次にアルファベット順で最初の`.json`ファイルを読みます。長いファイル名が使えます。`/saveConfig`とブラウザ設定ツールは、動作中の設定をカードに保存します。[microSDカードでの設定](../connections/microsd-card.md)をご覧ください。
+- **microSDカード**: ファームウェアは先に`config.txt`を読み、次にアルファベット順で最初の`.json`ファイルを読みます。長いファイル名が使えます。`/saveConfig`とブラウザ設定ツールは、使用中の設定をカードに保存します。[microSDカードでの設定](../connections/microsd-card.md)をご覧ください。
 - **新しいメッセージ**: `/setConfigName`、`/saveConfig`、`/getConfigName`の返信の5番目の引数`configFilename`です。`/configName`の引数の数を厳密に確かめるクライアントは、5つを受け付けるようにしてください。
 - **ビルド**: SDライブラリはSdFatです。Arduino IDE用のスケッチのフォルダはリポジトリから削除され、各リリースのアセットの`step-series-universal-firmware.zip`がArduino IDE用のスケッチです。[ファームウェアを自分でビルドしている場合](#building)をご覧ください。
 

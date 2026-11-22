@@ -32,9 +32,9 @@ v2.2.0では、新しいPCから`/setDestIp`を送ります。古いPCの最後�
 v2.2.0では、設定`canSendMsgBeforeDestIp`は、「`/setDestIp`を受信したか」と同じ値です。
 
 - `/setDestIp`を受信したあとに設定を保存する（`/saveConfig`、またはブラウザ設定ツールの**Save to SD**）と、保存したファイルに`true`が書かれます。次の起動から、ボードは`/setDestIp`を受信する前からメッセージを送ります。
-- ツールで`false`を書き込むと、動いている値も`false`になり、`/setDestIp`を送り直すまで、ボードは返信を送りません。
+- ツールで`false`を書き込むと、使用中の値も`false`になり、`/setDestIp`を送り直すまで、ボードは返信を送りません。
 
-保存したあとは`/setDestIp`を送り直し、保存したファイルの値を確かめてください。[`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip)と[動いている値と保存された値](../connections/how-settings-work.md#saved-values)をご覧ください。
+保存したあとは`/setDestIp`を送り直し、保存したファイルの値を確かめてください。[`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip)と[使用中の値と保存された値](../connections/how-settings-work.md#saved-values)をご覧ください。
 
 ## 設定とカード {#settings}
 

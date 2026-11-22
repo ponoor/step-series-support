@@ -201,7 +201,7 @@ settings:
       ja: |-
         初期状態では`/setDestIp`を受信するまではOSCメッセージの送信を行わないようになっていますが、このチェックボックスが入っていると、起動してすぐからOSCメッセージを送信するようにします。
 
-        v2.2.0の既知の問題: 動作中のボードは、「`/setDestIp`を受信したか」をこの設定と同じ値で持っています。`/setDestIp`を受信した後に設定を保存する（[[/saveConfig]]、またはブラウザ設定ツールでの保存）と、カードに`true`が書かれます。ブラウザ設定ツールで`false`を書き込むと、動作中の値も`false`に戻り、`/setDestIp`を送り直すまで、ボードは返信を送りません。回避策: 保存の後に`/setDestIp`を送り直し、保存したファイルの値を確かめてください。
+        v2.2.0の既知の問題: 動作中のボードは、「`/setDestIp`を受信したか」をこの設定と同じ値で持っています。`/setDestIp`を受信した後に設定を保存する（[[/saveConfig]]、またはブラウザ設定ツールでの保存）と、カードに`true`が書かれます。ブラウザ設定ツールで`false`を書き込むと、使用中の値も`false`に戻り、`/setDestIp`を送り直すまで、ボードは返信を送りません。回避策: 保存の後に`/setDestIp`を送り直し、保存したファイルの値を確かめてください。
 
   - key: network.reportError
     section: network
@@ -852,7 +852,7 @@ commands:
 
         The card is checked only at start-up. With no usable card at start-up (a card inserted afterwards, or an exFAT card) the reply is `No SD card`; with a card removed after start-up, a full card or a missing folder it is `SD open failed`. The saved configuration is applied at the next start-up.
       ja: |-
-        現在動作中の設定を、JSONファイルとしてmicroSDカードに保存します。保存先は、起動時に読み込んだファイルです。ファイルを読み込まなかったときは`/config.txt`です。USBシリアルの`F<path>`で、保存先のパスを変えられます。
+        使用中の設定を、JSONファイルとしてmicroSDカードに保存します。保存先は、起動時に読み込んだファイルです。ファイルを読み込まなかったときは`/config.txt`です。USBシリアルの`F<path>`で、保存先のパスを変えられます。
 
         設定は、まず同じフォルダの隠しファイル`.<名前>.tmp`に書き込み、書き込みが終わってから、保存先のファイルを置き換えます。一時ファイルへの書き込みに失敗したときは、保存先のファイルは元のままです。
 

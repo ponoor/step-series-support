@@ -106,5 +106,5 @@ v2.1.0より前のファームウェアが読むのは、ルートフォルダ�
 | コマンド | 引数 | 説明 |
 | --- | --- | --- |
 | [`/getConfigName`](../reference/system-settings.md#getconfigname) | - | `/configName`を返します。設定名、microSDカードを使えたか、設定ファイルを開けたか・解析できたか、設定ファイルのパスが含まれます。 |
-| [`/saveConfig`](../reference/system-settings.md#saveconfig) | - | 現在動作中の設定を、JSONファイルとしてmicroSDカードに保存します。保存先は、起動時に読み込んだファイルです。ファイルを読み込まなかったときは`/config.txt`です。USBシリアルの`F<path>`で、保存先のパスを変えられます。 |
+| [`/saveConfig`](../reference/system-settings.md#saveconfig) | - | 使用中の設定を、JSONファイルとしてmicroSDカードに保存します。保存先は、起動時に読み込んだファイルです。ファイルを読み込まなかったときは`/config.txt`です。USBシリアルの`F<path>`で、保存先のパスを変えられます。 |
 <!-- generated:end osc-related /getConfigName, /saveConfig -->

@@ -134,7 +134,7 @@ OSCクライアントからは見えない、または処理時間にだけ現�
 ### 新機能 {#v2-1-0-new}
 
 - **ブラウザ設定ツールへの対応。** シリアルコマンドの`G`、`T`、`{...}`、`R`、`F`で、[ブラウザ設定ツール](../connections/browser-config-tool.md)がUSB（Web Serial API）で設定を読み書きできます。
-- **[`/saveConfig`](../reference/system-settings.md#saveconfig)**は、カードを抜かずに、動作中の設定をmicroSDカードに保存します。
+- **[`/saveConfig`](../reference/system-settings.md#saveconfig)**は、カードを抜かずに、使用中の設定をmicroSDカードに保存します。
 - **[`/setConfigName`](../reference/system-settings.md#setconfigname)**は設定名を設定します。[`/getConfigName`](../reference/system-settings.md#getconfigname)の返信には、5番目の引数`configFilename`（カード上のファイル名）が付きました。
 - **長いファイル名。** 設定ファイルは8.3形式のファイル名に限られなくなりました。ファームウェアは先に`config.txt`を読み、次にアルファベット順で最初の`.json`ファイルを読みます（[ボードが読むファイル](../connections/microsd-card.md#files)）。
 
