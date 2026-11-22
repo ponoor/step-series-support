@@ -296,7 +296,7 @@ Always
 
 Decelerate according to the speed profile, then stop the motor and release excitation. When the excitation is released, it goes into the High Z state. It remains in the BUSY state until the motor is stopped.  
 If it was in the servo mode, it will be released.  
-if electromagnetic brake mode is enabled, the controller puts the brake into hold state, and then transits to High Z state.
+if the electromagnetic brake is enabled, the controller puts the brake into hold state, and then transits to High Z state.
 
 #### Response
 
@@ -343,7 +343,7 @@ Always
 
 Immediately stops the motor and releases the stepper excitation. When the motor excitation is released, it goes into the High Z state. Remains in the BUSY state until the motor is stopped.  
 If it was in the servo mode, it will be released.  
-if electromagnetic brake mode is enabled, the controller puts the brake into hold state, and then transits to High Z state.
+if the electromagnetic brake is enabled, the controller puts the brake into hold state, and then transits to High Z state.
 
 #### Response
 

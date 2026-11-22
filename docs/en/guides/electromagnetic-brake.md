@@ -140,9 +140,9 @@ If you hang a load on the motor, take these times into account.
 
 | Command | Arguments | Description |
 | --- | --- | --- |
-| [`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake) | (int)motorID (bool)enable | Enables / disables electromagnetic brake mode. |
-| [`/activate`](../reference/brake.md#activate) | (int)motorID (bool)state | Switches motor excitation / release when electromagnetic brake mode is enabled. |
-| [`/free`](../reference/brake.md#free) | (int)motorID | Releases motor axis when the electromagnetic brake mode is active. |
+| [`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake) | (int)motorID (bool)enable | Enables / disables the electromagnetic brake. |
+| [`/activate`](../reference/brake.md#activate) | (int)motorID (bool)state | Switches motor excitation / release when the electromagnetic brake is enabled. |
+| [`/free`](../reference/brake.md#free) | (int)motorID | Releases motor axis when the electromagnetic brake is enabled. |
 | [`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration) | (int)motorID (int)duration | Sets the transitional duration to keep the motor excited when the electromagnetic brake is activated or released. |
 | [`/getBrakeTransitionDuration`](../reference/brake.md#getbraketransitionduration) | (int)motorID | Returns the transitional duration to keep holding the motor axis when the electromagnetic brake is activated or released. |
 | [`/getBrakeStatus`](../reference/brake.md#getbrakestatus) | (int)motorID | Returns the state of the electromagnetic brake of the specified motor. |

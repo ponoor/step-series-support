@@ -30,7 +30,7 @@ Always
 
 #### Description
 
-Enables / disables electromagnetic brake mode.  
+Enables / disables the electromagnetic brake.  
 While in the mode, the controller replies the `BrakeEngaged` ([`/error/command`](automatically-sent-messages.md#error-command)) if motor movement command is sent without releasing the electromagnetic brake.
 
 The setting is changed only while the driver is HiZ, and the brake is disabled only while it is engaged or after [`/free`](brake.md#free); otherwise the command replies `CommandIgnored`. Sending the current value does nothing. After a change, the brake output is engaged and the brake state is engaged. The same rule applies to a configuration loaded over USB serial (a warning is printed for a motor that is not changed).
@@ -76,7 +76,7 @@ Always
 
 #### Description
 
-Switches motor excitation / release when electromagnetic brake mode is enabled. The electromagnetic brake (EM) also works conjunction with the motor. You cannot send motor movement command when the motor is not excited by this command.  
+Switches motor excitation / release when the electromagnetic brake is enabled. The electromagnetic brake (EM) also works conjunction with the motor. You cannot send motor movement command when the motor is not excited by this command.  
 If the EM mode is disabled, this command is ignored: only `CommandIgnored` is sent, and pending motion is not cancelled.
 
 `/activate 1` while the brake is released does nothing. From the engaged state it energizes the driver and releases the brake after `brakeTransitionDuration`, but only if a status read after the command shows the driver energized (during the engaging it goes back to the release sequence (the transition time starts again), during the stopping it only cancels the engaging, after [`/free`](brake.md#free) it releases at once). If the driver stays HiZ (for example without motor power), the brake stays engaged and `BrakeReleaseFailed` is sent.
@@ -135,7 +135,7 @@ Always
 
 #### Description
 
-Releases motor axis when the electromagnetic brake mode is active. It releases motor excitation and keep EM brake in release state.  
+Releases motor axis when the electromagnetic brake is enabled. It releases motor excitation and keep EM brake in release state.  
 Be cautious when sending this command. If some load is hanged to the motor, it will loose the hold and the load may fall down.  
 If the EM mode is disabled, this command is ignored: only `CommandIgnored` is sent, and pending motion is not cancelled.
 

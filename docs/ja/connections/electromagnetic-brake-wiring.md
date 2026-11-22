@@ -85,7 +85,7 @@ STEP800での対策は次のとおりです。
 
 | コマンド | 引数 | 説明 |
 | --- | --- | --- |
-| [`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake) | (int)motorID (bool)enable | 電磁ブレーキモードを有効・無効にします。 |
+| [`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake) | (int)motorID (bool)enable | 電磁ブレーキを有効・無効にします。 |
 <!-- generated:end osc-related /enableElectromagnetBrake -->
 
 <!-- osc-settings: driverSettings.electromagnetBrakeEnable, driverSettings.brakeTransitionDuration -->

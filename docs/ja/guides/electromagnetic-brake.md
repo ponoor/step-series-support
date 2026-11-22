@@ -140,9 +140,9 @@ EthernetをつないだままUSBを抜くと、STEP400（R1）は再起動する
 
 | コマンド | 引数 | 説明 |
 | --- | --- | --- |
-| [`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake) | (int)motorID (bool)enable | 電磁ブレーキモードを有効・無効にします。 |
-| [`/activate`](../reference/brake.md#activate) | (int)motorID (bool)state | 電磁ブレーキモードの場合に、モータの励磁、励磁解除を切り替えます。電磁ブレーキも連動して動作します。このコマンドでモータが励磁状態になっていないと、モータを回転させるコマンドを送ることはできません。 |
-| [`/free`](../reference/brake.md#free) | (int)motorID | 電磁ブレーキモードの場合に、モータ軸を自由に回せる状態にします。モータの励磁を解除し、電磁ブレーキも解放のままになります。 |
+| [`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake) | (int)motorID (bool)enable | 電磁ブレーキを有効・無効にします。 |
+| [`/activate`](../reference/brake.md#activate) | (int)motorID (bool)state | 電磁ブレーキが有効なときに、モータの励磁、励磁解除を切り替えます。電磁ブレーキも連動して動作します。このコマンドでモータが励磁状態になっていないと、モータを回転させるコマンドを送ることはできません。 |
+| [`/free`](../reference/brake.md#free) | (int)motorID | 電磁ブレーキが有効なときに、モータ軸を自由に回せる状態にします。モータの励磁を解除し、電磁ブレーキも解放のままになります。 |
 | [`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration) | (int)motorID (int)duration | 電磁ブレーキの保持・解放時に、モータを励磁したままにしておく移行時間を指定します。これは物理的にブレーキ機構が動作する時間がかかるため、ブレーキの動作が完了するまでモータ軸を励磁したまま保っておくために必要な時間です。 |
 | [`/getBrakeTransitionDuration`](../reference/brake.md#getbraketransitionduration) | (int)motorID | 電磁ブレーキの保持・解放時に、モータを励磁したままにしておく移行時間を取得します。 |
 | [`/getBrakeStatus`](../reference/brake.md#getbrakestatus) | (int)motorID | 指定したモータの電磁ブレーキの状態を返します。ブレーキが無効なモータでは-1です。 |

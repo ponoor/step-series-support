@@ -3026,13 +3026,13 @@ commands:
       en: |
         Decelerate according to the speed profile, then stop the motor and release excitation. When the excitation is released, it goes into the High Z state. It remains in the BUSY state until the motor is stopped.
         If it was in the servo mode, it will be released.
-        if electromagnetic brake mode is enabled, the controller puts the brake into hold state, and then transits to High Z state.
+        if the electromagnetic brake is enabled, the controller puts the brake into hold state, and then transits to High Z state.
       ja: |
         スピードプロファイルに従って減速停止してから、モータを無励磁にします。モータが停止するまではBUSY状態になります。
 
         サーボモードだった場合は解除されます。
 
-        電磁ブレーキモードが有効になっている場合は、電磁ブレーキを保持状態にしてから無励磁状態に移行します。
+        電磁ブレーキが有効なときは、電磁ブレーキを保持状態にしてから無励磁状態に移行します。
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
@@ -3051,13 +3051,13 @@ commands:
       en: |
         Immediately stops the motor and releases the stepper excitation. When the motor excitation is released, it goes into the High Z state. Remains in the BUSY state until the motor is stopped.
         If it was in the servo mode, it will be released.
-        if electromagnetic brake mode is enabled, the controller puts the brake into hold state, and then transits to High Z state.
+        if the electromagnetic brake is enabled, the controller puts the brake into hold state, and then transits to High Z state.
       ja: |
         モータを即座に無励磁にします。モータが停止するまではBUSY状態になります。
 
         サーボモードだった場合は解除されます。
 
-        電磁ブレーキモードが有効になっている場合は、電磁ブレーキを保持状態にしてから無励磁状態に移行します。
+        電磁ブレーキが有効なときは、電磁ブレーキを保持状態にしてから無励磁状態に移行します。
     response:
       - message: /homingStatus
         when: {en: While homing is in progress, ja: 原点復帰動作中のとき}
@@ -3289,13 +3289,13 @@ commands:
     timing: always
     description:
       en: |
-        Enables / disables electromagnetic brake mode.
+        Enables / disables the electromagnetic brake.
         While in the mode, the controller replies the `BrakeEngaged` ([[/error/command]]) if motor movement command is sent without releasing the electromagnetic brake.
 
         The setting is changed only while the driver is HiZ, and the brake is disabled only while it is engaged or after [[/free]]; otherwise the command replies `CommandIgnored`. Sending the current value does nothing. After a change, the brake output is engaged and the brake state is engaged. The same rule applies to a configuration loaded over USB serial (a warning is printed for a motor that is not changed).
       ja: |
-        電磁ブレーキモードを有効・無効にします。
-        電磁ブレーキモードが有効になると、電磁ブレーキを解放しないままモータを回すコマンドを送っても`BrakeEngaged`（[[/error/command]]）エラーになります。
+        電磁ブレーキを有効・無効にします。
+        電磁ブレーキが有効になると、電磁ブレーキを解放しないままモータを回すコマンドを送っても`BrakeEngaged`（[[/error/command]]）エラーになります。
 
         設定を変更できるのは、ドライバが無励磁のときだけです。ブレーキを無効にできるのは、ブレーキが保持状態のときか[[/free]]の後だけで、それ以外では`CommandIgnored`を返します。現在の値を送っても何もしません。変更したあとは、ブレーキ出力は保持状態になり、ブレーキの状態もEngagedになります。USBシリアルで読み込む設定にも同じ決まりが適用されます（変更されないモータには警告が出力されます）。
     errors: [CommandIgnored]
@@ -3315,16 +3315,16 @@ commands:
     timing: always
     description:
       en: |
-        Switches motor excitation / release when electromagnetic brake mode is enabled. The electromagnetic brake (EM) also works conjunction with the motor. You cannot send motor movement command when the motor is not excited by this command.
+        Switches motor excitation / release when the electromagnetic brake is enabled. The electromagnetic brake (EM) also works conjunction with the motor. You cannot send motor movement command when the motor is not excited by this command.
         If the EM mode is disabled, this command is ignored: only `CommandIgnored` is sent, and pending motion is not cancelled.
 
         `/activate 1` while the brake is released does nothing. From the engaged state it energizes the driver and releases the brake after `brakeTransitionDuration`, but only if a status read after the command shows the driver energized (during the engaging it goes back to the release sequence (the transition time starts again), during the stopping it only cancels the engaging, after [[/free]] it releases at once). If the driver stays HiZ (for example without motor power), the brake stays engaged and `BrakeReleaseFailed` is sent.
 
         `/activate 0` on a turning motor decelerates it and engages the brake when it has stopped, like [[/softHiZ]]; on a stopped motor the brake is engaged at the next status read (up to 5 ms later). The driver goes HiZ after `brakeTransitionDuration`. The brake state can be read with [[/getBrakeStatus]].
       ja: |-
-        電磁ブレーキモードの場合に、モータの励磁、励磁解除を切り替えます。電磁ブレーキも連動して動作します。このコマンドでモータが励磁状態になっていないと、モータを回転させるコマンドを送ることはできません。
+        電磁ブレーキが有効なときに、モータの励磁、励磁解除を切り替えます。電磁ブレーキも連動して動作します。このコマンドでモータが励磁状態になっていないと、モータを回転させるコマンドを送ることはできません。
 
-        電磁ブレーキモードが無効の場合は拒否されます。`CommandIgnored`だけが送信され、保留中の動作は取り消されません。
+        電磁ブレーキが無効のときは拒否されます。`CommandIgnored`だけが送信され、保留中の動作は取り消されません。
 
         ブレーキが解放されているときの`/activate 1`は、何もしません。ブレーキが保持されている状態からは、ドライバを励磁し、`brakeTransitionDuration`の後にブレーキを解放しますが、コマンドの後のSTATUSレジスタの読み出しでドライバが励磁されていることを確認できたときだけです（保持への移行中は解放の手順に戻り（移行時間は最初からやり直しです）、停止処理中は保持の取り消しだけを行い、[[/free]]の後はすぐに解放します）。ドライバが無励磁のまま（たとえばモータ電源がない）のときは、ブレーキは保持されたままになり、`BrakeReleaseFailed`が送信されます。
 
@@ -3350,17 +3350,17 @@ commands:
     timing: always
     description:
       en: |
-        Releases motor axis when the electromagnetic brake mode is active. It releases motor excitation and keep EM brake in release state.
+        Releases motor axis when the electromagnetic brake is enabled. It releases motor excitation and keep EM brake in release state.
         Be cautious when sending this command. If some load is hanged to the motor, it will loose the hold and the load may fall down.
         If the EM mode is disabled, this command is ignored: only `CommandIgnored` is sent, and pending motion is not cancelled.
 
         After `/free`, a stop of the motor no longer engages the brake (when `/free` was sent during the deceleration of [[/softHiZ]]). A motion command (`/run`, `/move`, `/goTo`, ...) or `/activate 1` energizes the motor again and returns it to the released state. `/activate 0`, `/softHiZ` and `/hardHiZ` engage the brake at once.
       ja: |-
-        電磁ブレーキモードの場合に、モータ軸を自由に回せる状態にします。モータの励磁を解除し、電磁ブレーキも解放のままになります。
+        電磁ブレーキが有効なときに、モータ軸を自由に回せる状態にします。モータの励磁を解除し、電磁ブレーキも解放のままになります。
 
         負荷を吊り下げている場合は、支えがなくなって負荷が落下する原因になりますので、送信時には十分注意してください。
 
-        電磁ブレーキモードが無効の場合は拒否されます。`CommandIgnored`だけが送信され、保留中の動作は取り消されません。
+        電磁ブレーキが無効のときは拒否されます。`CommandIgnored`だけが送信され、保留中の動作は取り消されません。
 
         `/free`の後は、モータが停止してもブレーキを保持しなくなります（`/softHiZ`の減速中に`/free`を送った場合）。動作コマンド（`/run`、`/move`、`/goTo`など）か`/activate 1`を送ると、モータが再び励磁されて、解放の状態に戻ります。`/activate 0`、`/softHiZ`、`/hardHiZ`は、ブレーキをすぐに保持します。
     response:

@@ -85,7 +85,7 @@ Countermeasures for the STEP800:
 
 | Command | Arguments | Description |
 | --- | --- | --- |
-| [`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake) | (int)motorID (bool)enable | Enables / disables electromagnetic brake mode. |
+| [`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake) | (int)motorID (bool)enable | Enables / disables the electromagnetic brake. |
 <!-- generated:end osc-related /enableElectromagnetBrake -->
 
 <!-- osc-settings: driverSettings.electromagnetBrakeEnable, driverSettings.brakeTransitionDuration -->
