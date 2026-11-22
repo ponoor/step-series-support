@@ -129,8 +129,8 @@ nav:
   - step100-200/index.md
   - step100-200/get-the-materials.md
   - step100-200/assemble/index.md
-  - step100-200/assemble/connections.md
   - step100-200/assemble/step100.md
   - step100-200/assemble/step200.md
+  - step100-200/assemble/connections.md
   - step100-200/upload-the-sketch.md
   - step100-200/usage.md
