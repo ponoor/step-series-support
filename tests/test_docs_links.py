@@ -15,6 +15,9 @@ OLD_DOCS_URL = re.compile(r"https?://(?:www\.)?ponoor\.com/(?:(?:en|ja)/)?docs/[
 # An image or file on WordPress (wp-content/, any host or form of the URL): the pages must not depend on it.
 WORDPRESS_FILE_URL = re.compile(r"[^\s(\"'<]*wp-content/[^\s)\"'>]*", re.IGNORECASE)
 
+# An image whose URL is outside the repository: ![alt](URL) or <img src="URL"> with http://, https:// or //.
+EXTERNAL_IMAGE = re.compile(r"!\[[^\]]*\]\(\s*(?:https?:)?//[^\s)]*|<img\b[^>]*\bsrc\s*=\s*[\"']?(?:https?:)?//[^\s\"'>]*", re.IGNORECASE)
+
 
 class DocsLinkTest(unittest.TestCase):
     def test_no_absolute_url_of_the_old_docs_pages(self):
@@ -34,6 +37,15 @@ class DocsLinkTest(unittest.TestCase):
                     for m in WORDPRESS_FILE_URL.finditer(line):
                         found.append(f"{page.relative_to(ROOT)}:{n}: {m.group(0)}")
         self.assertEqual(found, [], "put the file in docs/assets/ and link to it with a relative path:\n" + "\n".join(found))
+
+    def test_no_external_image(self):
+        found = []
+        for lang in ("en", "ja"):
+            for page in sorted((ROOT / "docs" / lang).rglob("*.md")):
+                for n, line in enumerate(page.read_text(encoding="utf-8").splitlines(), 1):
+                    for m in EXTERNAL_IMAGE.finditer(line):
+                        found.append(f"{page.relative_to(ROOT)}:{n}: {m.group(0)}")
+        self.assertEqual(found, [], "put the image in docs/assets/images/ and link to it with a relative path:\n" + "\n".join(found))
 
 
 if __name__ == "__main__":

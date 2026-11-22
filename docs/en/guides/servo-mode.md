@@ -10,7 +10,7 @@ The servo mode lets the motor follow a target position that changes in real time
 
 The servo mode is not a function of the motor driver IC. Positioning commands of the driver need the target position to be set before the motion starts. In the servo mode, you can define a new target position *while the motor is moving*, like a radio-controlled servo motor. While the mode is active, the other motion commands cannot be sent: they are rejected with `InServoMode`.
 
-![The control of the servo mode](https://python-step-series.readthedocs.io/en/documentation/_images/pid-control.jpg)
+![The control of the servo mode](../../assets/images/pid-control.png)
 
 The firmware updates the speed of the motor every 5 ms. At each update it compares the current position with the target, calculates the speed with the PID control described below, and sends it to the driver as a constant speed command. (Until v2.1.0 the period was 10 ms.) The integral and derivative terms are scaled by the period, so the same gains were designed to give about the same response as before; the response can still differ a little, and you may need to tune the gains again.
 
