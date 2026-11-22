@@ -1,5 +1,5 @@
-# MkDocs configuration (Material). The reference pages are moved (R4-b); the other pages are frames until R4-c.
-# The old pages (docs/connections-and-settings, ...) are excluded with exclude_docs until they are moved.
+# MkDocs configuration (Material). All pages are in docs/en and docs/ja.
+# The old pages are removed (moved to docs/en and docs/ja); docs/_redirects_map.md keeps the old URLs. exclude_docs leaves out the two notes in docs/.
 # site_url is a placeholder: all links are relative. The header design of ponoor.com goes into overrides/.
 site_name: STEP Series
 site_description: Documentation of the STEP400 / STEP800 stepper motor controllers
@@ -49,25 +49,7 @@ markdown_extensions:
 - pymdownx.superfences
 validation:
   anchors: warn   # a link to a heading that does not exist stops the strict build
-exclude_docs: '/connections-and-settings/
-
-  /emb-step400/
-
-  /functional-descriptions/
-
-  /osc-command-references/
-
-  /step100-200/
-
-  /technical-informations/
-
-  /tutorial_en.md
-
-  /tutorial_jp.md
-
-  /README.md
-
-  /UPDATE_PROGRESS.md
+exclude_docs: '/README.md
 
   /_redirects_map.md
 
