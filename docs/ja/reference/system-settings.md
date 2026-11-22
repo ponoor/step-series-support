@@ -106,7 +106,7 @@ MACアドレスの解決のために、ブロードキャストアドレスと�
 | configName | string |  | 設定名です（読み込んだ設定ファイルの`information.configName`）。設定ファイルを読み込まなかったとき、またはファイルに設定名がないときは`Default`です。[`/setConfigName`](system-settings.md#setconfigname)で変わります。 |
 | sdInitializeSucceeded | int | 0-1 | 起動時にmicroSDカードを使えたかどうかです。使えたときは1です。カードがないとき、FAT16またはFAT32でないカード（exFATなど）のときは0です。カードは起動時にしか確認しません。 |
 | configFileOpenSucceeded | int | 0-1 | `config.txt`を開けたとき、または有効な`.json`ファイルを読み込めたときは1です。どちらでもないとき（最初の`.json`ファイルが無効なときを含む）は0です。下の表を参照してください。 |
-| configFileParseSucceeded | int | 0-1 | 設定ファイルを読み込んで、その値を適用したかどうかです。JSONとして解析できた`config.txt`、または有効な`.json`ファイル（`information.configVersion`がある）のときは1です。0のときは既定値で動作しています。 |
+| configFileParseSucceeded | int | 0-1 | 設定ファイルを読み込んで、その値を適用したかどうかです。JSONとして解析できた`config.txt`、または有効な`.json`ファイル（`information.configVersion`がある）のときは1です。0のときは初期値で動作しています。 |
 | configFilename | string |  | 読み込んだ設定ファイルのパスです。先頭に`/`が付きます（例: `/config.txt`、`/STEP400_venue-A.json`）。ファイルを読み込まなかったときは、[`/saveConfig`](system-settings.md#saveconfig)の保存先の`/config.txt`です。USBシリアルの`F<path>`で変わります。パスは63文字までです。ディスク上のパスで、ユーザが編集できるラベルである`configName`とは別のものです。（v2.1.0で追加。） |
 
 ##### configFileOpenSucceededとconfigFileParseSucceededの組み合わせ
@@ -114,13 +114,13 @@ MACアドレスの解決のために、ブロードキャストアドレスと�
 | configFileOpenSucceeded | configFileParseSucceeded | 意味 |
 | --- | --- | --- |
 | 1 | 1 | 設定ファイルを読み込んで、その値を適用しました（`config.txt`、なければ最初の有効な`.json`ファイル）。 |
-| 1 | 0 | `config.txt`を開けましたが解析できず、有効な`.json`ファイルもありませんでした。既定値で動作しています。 |
-| 0 | 0 | `config.txt`がなく、`.json`ファイルもないか、最初の`.json`ファイルが無効です（カードを使えなかったときも同じです）。既定値で動作しています。 |
+| 1 | 0 | `config.txt`を開けましたが解析できず、有効な`.json`ファイルもありませんでした。初期値で動作しています。 |
+| 0 | 0 | `config.txt`がなく、`.json`ファイルもないか、最初の`.json`ファイルが無効です（カードを使えなかったときも同じです）。初期値で動作しています。 |
 
 ##### 変更
 
 - **v2.2.0**: 名前が`.`で始まるファイル（macOSがカードにコピーした各ファイルの隣に書く`._name.json`など）は、設定ファイルの候補になりません。以前は、そのようなファイルが`.json`ファイルの中で先に選ばれ、無効なため、後ろにある有効な`.json`ファイルがすべて使われませんでした。
-- **v2.2.0**: 受け付けなかった設定ファイルの値は、適用されなくなりました。対象は、解析できない、または`information.configVersion`がない最初の`.json`ファイル（そこで検索を終えます）と、途中で解析に失敗した`config.txt`です。今は、カードがないときと同じように既定値で動作します。以前は、受け付けなかったファイルの値も使われていました（`configName`にはそのファイルの設定名が表示されました）。
+- **v2.2.0**: 受け付けなかった設定ファイルの値は、適用されなくなりました。対象は、解析できない、または`information.configVersion`がない最初の`.json`ファイル（そこで検索を終えます）と、途中で解析に失敗した`config.txt`です。今は、カードがないときと同じように初期値で動作します。以前は、受け付けなかったファイルの値も使われていました（`configName`にはそのファイルの設定名が表示されました）。
 
 #### 関連
 

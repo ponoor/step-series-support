@@ -3597,7 +3597,7 @@ messages:
         range: [0, 1]
         description:
           en: 1 if a configuration file was read and its values were applied (a `config.txt` that could be parsed as JSON, or a valid `.json` file, which has `information.configVersion`). 0 if the defaults are used.
-          ja: "設定ファイルを読み込んで、その値を適用したかどうかです。JSONとして解析できた`config.txt`、または有効な`.json`ファイル（`information.configVersion`がある）のときは1です。0のときは既定値で動作しています。"
+          ja: "設定ファイルを読み込んで、その値を適用したかどうかです。JSONとして解析できた`config.txt`、または有効な`.json`ファイル（`information.configVersion`がある）のときは1です。0のときは初期値で動作しています。"
       - name: configFilename
         type: string
         since: "2.1.0"
@@ -3609,11 +3609,11 @@ messages:
         columns: [configFileOpenSucceeded, configFileParseSucceeded, {en: Meaning, ja: 意味}]
         rows:
           - [1, 1, {en: "A configuration file was read and its values were applied (`config.txt`, or else the first valid `.json` file).", ja: "設定ファイルを読み込んで、その値を適用しました（`config.txt`、なければ最初の有効な`.json`ファイル）。"}]
-          - [1, 0, {en: "`config.txt` could be opened but not parsed, and there was no valid `.json` file. The defaults are used.", ja: "`config.txt`を開けましたが解析できず、有効な`.json`ファイルもありませんでした。既定値で動作しています。"}]
-          - [0, 0, {en: "There was no `config.txt`, and there was no `.json` file or the first one is invalid (or the card could not be used). The defaults are used.", ja: "`config.txt`がなく、`.json`ファイルもないか、最初の`.json`ファイルが無効です（カードを使えなかったときも同じです）。既定値で動作しています。"}]
+          - [1, 0, {en: "`config.txt` could be opened but not parsed, and there was no valid `.json` file. The defaults are used.", ja: "`config.txt`を開けましたが解析できず、有効な`.json`ファイルもありませんでした。初期値で動作しています。"}]
+          - [0, 0, {en: "There was no `config.txt`, and there was no `.json` file or the first one is invalid (or the card could not be used). The defaults are used.", ja: "`config.txt`がなく、`.json`ファイルもないか、最初の`.json`ファイルが無効です（カードを使えなかったときも同じです）。初期値で動作しています。"}]
     changes:
       - {version: "2.2.0", en: "A file whose name starts with `.` (for example `._name.json`, which macOS writes next to each file it copies to the card) is no longer a candidate for the configuration file. Before, such a file could come first among the `.json` files and, being invalid, hid every valid `.json` file after it.", ja: "名前が`.`で始まるファイル（macOSがカードにコピーした各ファイルの隣に書く`._name.json`など）は、設定ファイルの候補になりません。以前は、そのようなファイルが`.json`ファイルの中で先に選ばれ、無効なため、後ろにある有効な`.json`ファイルがすべて使われませんでした。"}
-      - {version: "2.2.0", en: "The values of a configuration file that was not accepted are no longer applied: a first `.json` file that cannot be parsed or has no `information.configVersion` (it ends the search), and a `config.txt` that failed to parse in the middle. Now the defaults are used, as with no card. Before, the values of such a file were still used, even when it was reported as not loaded (`configName` showed its name).", ja: "受け付けなかった設定ファイルの値は、適用されなくなりました。対象は、解析できない、または`information.configVersion`がない最初の`.json`ファイル（そこで検索を終えます）と、途中で解析に失敗した`config.txt`です。今は、カードがないときと同じように既定値で動作します。以前は、受け付けなかったファイルの値も使われていました（`configName`にはそのファイルの設定名が表示されました）。"}
+      - {version: "2.2.0", en: "The values of a configuration file that was not accepted are no longer applied: a first `.json` file that cannot be parsed or has no `information.configVersion` (it ends the search), and a `config.txt` that failed to parse in the middle. Now the defaults are used, as with no card. Before, the values of such a file were still used, even when it was reported as not loaded (`configName` showed its name).", ja: "受け付けなかった設定ファイルの値は、適用されなくなりました。対象は、解析できない、または`information.configVersion`がない最初の`.json`ファイル（そこで検索を終えます）と、途中で解析に失敗した`config.txt`です。今は、カードがないときと同じように初期値で動作します。以前は、受け付けなかったファイルの値も使われていました（`configName`にはそのファイルの設定名が表示されました）。"}
 
   - address: /saveConfig
     since: "2.1.0"
