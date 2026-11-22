@@ -15,7 +15,7 @@ STEP100またはSTEP200向けにファームウェアをビルドして、Arduin
 
 ### 環境の選択 {#select-env}
 
-STEP100なら環境`step100`、STEP200なら環境`step200`を選びます。選び方は[ボードの選択](../maintenance/compile-the-arduino-sketch.md#select-board)にあります。`boardsDef.h`のボードの行は、すべてコメントアウトしたままにしてください。
+STEP100なら環境`step100`、STEP200なら環境`step200`を選びます。選び方は[ボードの選び方](../maintenance/compile-the-arduino-sketch.md#select-board)にあります。`boardsDef.h`のボードの行は、すべてコメントアウトしたままにしてください。
 
 どちらの環境も、ボード`zeroUSB`（Arduino Zero）向けにビルドします。Ethernetのライブラリと、製品に合ったドライバのライブラリが必要です。STEP100はPonoor PowerSTEP01 Library、STEP200はPonoor L6470 Libraryで、`platformio.ini`がGitHubのタグのZIPから取得します。
 

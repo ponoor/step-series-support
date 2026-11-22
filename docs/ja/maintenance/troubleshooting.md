@@ -34,7 +34,7 @@ v2.2.0では、設定`canSendMsgBeforeDestIp`は、「`/setDestIp`を受信し�
 - `/setDestIp`を受信したあとに設定を保存する（`/saveConfig`、またはブラウザ設定ツールの**Save to SD**）と、保存したファイルに`true`が書かれます。次の起動から、ボードは`/setDestIp`を受信する前からメッセージを送ります。
 - ツールで`false`を書き込むと、動作中の値も`false`に戻り、`/setDestIp`を送り直すまで、ボードは返信を送りません。
 
-保存したあとは`/setDestIp`を送り直し、保存したファイルの値を確かめてください。[`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip)と[動作中の値と保存した値](../connections/how-settings-work.md#saved-values)をご覧ください。
+保存したあとは`/setDestIp`を送り直し、保存したファイルの値を確かめてください。[`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip)と[動いている値と保存された値](../connections/how-settings-work.md#saved-values)をご覧ください。
 
 ## 設定とカード {#settings}
 
@@ -64,7 +64,7 @@ ChromeまたはEdgeと、データ通信ができるUSBケーブルを使い、�
 
 - **USBだけをつないでいる。** USBでは、ドライバICに電源が入りません。モータの電源を入れてください。[接続](usb-serial-diagnosis.md#connection)をご覧ください。
 - **コマンドに`/error/command`が返ってくる。** エラーが理由を示します。たとえば、`BrakeEngaged`（ブレーキが解放されていない）、`MotorNotHiZ`、`MotorNotStopped`、`InServoMode`です。[`/error/command`](../reference/automatically-sent-messages.md#error-command)と[エラー](../guides/communication-and-messages.md#errors)をご覧ください。動作を始める条件は[動作開始条件](../reference/index.md#motion-start-condition)に、ブレーキの場合は[電磁ブレーキ](../guides/electromagnetic-brake.md#commands)にあります。エラーが届かないときは、[`/reportError`](../reference/system-settings.md#reporterror)で`/error/command`と`/error/osc`の送信をオフにしていないか確認してください。
-- **スイッチが動作を禁止している。** [動作を禁止するスイッチ](../guides/alarms-and-protection.md#switches)をご覧ください。
+- **スイッチが動作を禁止している。** [スイッチによる動作の禁止](../guides/alarms-and-protection.md#switches)をご覧ください。
 - **ドライバが自分で無励磁になった**（過電流、過熱、電源電圧の低下）。[ドライバが自分で無励磁になったとき](../guides/alarms-and-protection.md#hiz-by-itself)をご覧ください。
 
 ### 原点復帰がすぐに`ReleaseSwTimeout`で終わる {#release-sw-timeout}
