@@ -14,14 +14,14 @@ STEP400のハードウェアです。基板、主な部品、ピン割り振り�
 
 M3用の取付穴が、基板の各隅と中央付近の5か所にあります。
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/08/step400-dimension-800x661.png)  
+![](../../assets/images/step400-dimension-800x661.png)  
 この画像の上下の細長い部分は捨て基板で、製造後に切り離されています。
 
 原寸PDF: [step400_r1_dimension.pdf](https://github.com/ponoor/STEP400/blob/master/hardware/step400_r1_dimension.pdf)
 
 ### 構成 {#system}
 
-![diagram](https://ponoor.com/cms/wp-content/uploads/2020/08/image-1648386258465.png)
+![diagram](../../assets/images/image-1648386258465.png)
 
 回路図: [step400_r1_schematics.pdf](https://github.com/ponoor/STEP400/blob/master/hardware/step400_r1_schematics.pdf)
 
@@ -75,7 +75,7 @@ PowerSTEP01_RESETとW5500_RESETは、それぞれPowerSTEP01とW5500のリセッ
 
 これらのピンは、ファームウェアでは何も処理していません。使うには、ファームウェアの追加や書き換えが必要です。
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/08/step400-pads-800x533.jpg)
+![](../../assets/images/step400-pads-800x533.jpg)
 
 6つのパッドは、回路図のコネクタJ8です。Ethernetコネクタを下側にして、上からの信号は次のとおりです。
 

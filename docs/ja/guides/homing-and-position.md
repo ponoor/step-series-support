@@ -18,7 +18,7 @@ title: 原点復帰と位置管理
 
 ## センサとスイッチ {#switches}
 
-![原点センサの2つの構成](http://ponoor.com/manage/wp-content/uploads/2020/10/two-homing-sensors.png)
+![原点センサの2つの構成](../../assets/images/two-homing-sensors.jpg)
 
 原点センサには、フォトインタラプタがよく使われます。左は、スライダに取り付けた白い樹脂がフォトインタラプタの発光部と受光部の間を遮る構成です。右は回転テーブルの例で、フォトインタラプタが黒いねじに反応します。ほかにも、マイクロスイッチや光電センサが使われます。
 
@@ -50,7 +50,7 @@ HOMEスイッチやLIMITスイッチがオンのときに、モータが回転�
 
 `homingDirection`は、[`/setHomingDirection`](../reference/homing.md#sethomingdirection)か[ブラウザ設定ツール](../connections/browser-config-tool.md)で設定します。[`/homing`](../reference/homing.md#homing)でも使われます。
 
-![原点復帰の方向](https://ponoor.com/cms/wp-content/uploads/2020/08/homingDirection-800x533.jpg)
+![原点復帰の方向](../../assets/images/homingDirection-800x533.jpg)
 
 ## 原点復帰コマンド {#homing-commands}
 

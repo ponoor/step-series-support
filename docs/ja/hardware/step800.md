@@ -14,14 +14,14 @@ STEP800のハードウェアです。基板、主な部品、ピン割り振り�
 
 M3用の取付穴が、基板の各隅と中央付近の5か所にあります。
 
-![](https://ponoor.com/cms/wp-content/uploads/2021/09/step800_r1_0_0_dimension-1.png)  
+![](../../assets/images/step800_r1_0_0_dimension-1.png)  
 この画像の上下の細長い部分は捨て基板で、製造後に切り離されています。
 
 原寸PDF: [step800_r1_0_0_dimension.pdf](https://github.com/ponoor/STEP800/blob/main/hardware/step800_r1_0_0_dimension.pdf)
 
 ### 構成 {#system}
 
-![file](https://ponoor.com/cms/wp-content/uploads/2021/09/image-1648468983329.png)
+![file](../../assets/images/image-1648468983329.png)
 
 回路図: [step800_r1_0_0_schematics.pdf](https://github.com/ponoor/STEP800/blob/main/hardware/step800_r1_0_0_schematics.pdf)
 
@@ -75,7 +75,7 @@ L6470_RESETとW5500_RESETは、それぞれL6470とW5500のリセットピンに
 
 これらのピンは、ファームウェアでは何も処理していません。使うには、ファームウェアの追加や書き換えが必要です。
 
-![](https://ponoor.com/cms/wp-content/uploads/2021/09/step800_reserved_pads.jpg)
+![](../../assets/images/step800_reserved_pads.jpg)
 
 ## ブレーキ出力（J2） {#brake-output}
 

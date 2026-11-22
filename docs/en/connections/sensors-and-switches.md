@@ -58,7 +58,7 @@ The settings `/setHomeSwMode` and `/setLimitSwMode` do not invert the signal; th
 
 The connection of the photo interrupter [EE-SX671A](http://www.ia.omron.com/product/item/2219/) of Omron is as follows.
 
-![EE-SX671A Diagram](http://ponoor.com/manage/wp-content/uploads/2020/10/ee-sx67.jpeg)
+![EE-SX671A Diagram](../../assets/images/ee-sx67.jpeg)
 
 | Pin number | Function | Sensor pin |
 | --- | --- | --- |
@@ -70,7 +70,7 @@ The connection of the photo interrupter [EE-SX671A](http://www.ia.omron.com/prod
 
 Think about this carefully before you buy a sensor.
 
-![Dark on or Light on](http://ponoor.com/manage/wp-content/uploads/2020/10/sensor_dark_light.png)
+![Dark on or Light on](../../assets/images/sensor_dark_light.jpg)
 
 In the left picture, the light enters the sensor at the home position. In the right picture, the light is blocked at the home position.
 

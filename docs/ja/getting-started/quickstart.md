@@ -31,15 +31,15 @@ LANケーブルでボードとPCを直接つなぎます（一対一の接続）
 
 使えるのは、4線のバイポーラ型ステッピングモータだけです。`SM-42BYG011-25`（MERCURY MOTOR）は、型番で探せば、電子部品の通販サイトなどで入手できます。
 
-![](http://ponoor.com/manage/wp-content/uploads/2020/10/09238-01.jpg)
+![](../../assets/images/09238-01.jpg)
 
 モータの1つのコイルの2本の線を端子の1組に、もう1つのコイルの2本の線をもう1組につなぎます。このモータの[データシート](https://www.sparkfun.com/datasheets/Robotics/SM-42BYG011-25.pdf)の配線図を見ると、コイルのペアは`Red - Green`と`Yellow - Blue`です。
 
-[![](https://ponoor.com/cms/wp-content/uploads/2020/08/motor-wiring-diagram-sample.png)](https://ponoor.com/cms/wp-content/uploads/2020/08/motor-wiring-diagram-sample.png)
+[![](../../assets/images/motor-wiring-diagram-sample.png)](https://ponoor.com/cms/wp-content/uploads/2020/08/motor-wiring-diagram-sample.png)
 
 端子台へは次のようにつなぎます。
 
-[![](https://ponoor.com/cms/wp-content/uploads/2020/08/SM-42BYG-wiring-700x525.jpg)](https://ponoor.com/cms/wp-content/uploads/2020/08/SM-42BYG-wiring.jpg)
+[![](../../assets/images/SM-42BYG-wiring-700x525.jpg)](https://ponoor.com/cms/wp-content/uploads/2020/08/SM-42BYG-wiring.jpg)
 
 ほかのモータでコイルのペアを見つける方法と端子については、[モータの端子](../connections/power-supply-and-motor.md#motor-terminals)をご覧ください。
 
@@ -47,7 +47,7 @@ LANケーブルでボードとPCを直接つなぎます（一対一の接続）
 
 ACアダプタをDCジャックにつなぎます。プラグは、外径5.5mm、内径2.1mmで、センタープラスのものです。電源はオフにしておきます。
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/08/image-1609563897700.png)
+![](../../assets/images/image-1609563897700.jpg)
 
 このサイズのモータなら、DCジャックからの給電で十分です。より大きなモータで、高電圧や大電流が必要な場合は、ジャックの隣のねじ式端子を使います。**両方に電源をつながないでください。**詳しくは、[電源の端子](../connections/power-supply-and-motor.md#power-terminals)をご覧ください。
 
@@ -57,7 +57,7 @@ ACアダプタをDCジャックにつなぎます。プラグは、外径5.5mm�
 
 DIPスイッチを1にします。一番左のスイッチだけをON側にスライドさせ、ほかはOFF側にします。DIPスイッチに印刷された数字が読める向きにしたとき、一番左が最も下の桁です。[DIPスイッチの設定](../connections/network-and-dip-switch.md#dip-switch)をご覧ください。
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/10/step400-dipSw.jpg)  
+![](../../assets/images/step400-dipSw.jpg)  
 DIPスイッチを1にした状態です（STEP400）。
 
 DIPスイッチが1で、初期設定のとき、ボードのネットワーク設定は次のとおりです。IDは、ボードのIPアドレスと送信ポートに加算されます。

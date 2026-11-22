@@ -8,7 +8,7 @@ The STEP100 and the STEP200 are made of an Arduino Zero (or a compatible board),
 
 ## Arduino Zero or M0 {#arduino}
 
-![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643342497869.png)![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643342518306.png)
+![](../../assets/images/image-1643342497869.jpg)![](../../assets/images/image-1643342518306.jpg)
 
 The firmware is compatible with:
 
@@ -38,19 +38,19 @@ The Leonardo and the MEGA do not have the SPI function on D11-D13, so they canno
 
 ## Ethernet shield {#ethernet-shield}
 
-![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643342683554.png)![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643702336632.png)
+![](../../assets/images/image-1643342683554.jpg)![](../../assets/images/image-1643702336632.jpg)
 
 The firmware has been tested with the [Arduino Ethernet Shield 2](https://docs.arduino.cc/hardware/ethernet-shield-rev2), which is based on the Wiznet W5500. Its official name is "Arduino Ethernet Shield 2" and the part number of the manufacturer is `A000024`. Major distributors of electronic components carry it.
 
 There are also many compatible products of the older shield based on the W5100 at online shops. In our test they did not work for the STEP100 (X-NUCLEO-IHM03A1). They worked for the STEP200 (X-NUCLEO-IHM02A1).
 
-![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643702118944.png)
+![file](../../assets/images/image-1643702118944.jpg)
 
 A shield of this type cannot be used because you cannot put more shields on top of it. The Arduino and the Ethernet shield communicate through the 6-pin SPI connector, which the X-NUCLEO boards do not have. So you must always put the Ethernet shield on the Arduino, and then put the X-NUCLEO board on top of them.
 
 ## X-NUCLEO board {#x-nucleo}
 
-![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643342852324.png)![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643342863866.png)
+![](../../assets/images/image-1643342852324.jpg)![](../../assets/images/image-1643342863866.jpg)
 
 These are evaluation boards of STMicroelectronics.
 
@@ -72,6 +72,6 @@ To start experimenting, prepare a power supply of about 24 V and 4 to 5 A for bo
 
 The X-NUCLEO board has a screw terminal, so a cable with a DC jack is useful when you supply the power with an AC adapter.
 
-![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643347656810.png)
+![file](../../assets/images/image-1643347656810.jpg)
 
 The motor power supply does not power the Arduino, so the Arduino needs its own power. You can supply it from a PC or a USB charger through USB.

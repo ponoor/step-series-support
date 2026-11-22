@@ -8,7 +8,7 @@ The DIP switch sets the ID of the board. This page explains how the ID is used, 
 
 ## DIP switch settings {#dip-switch}
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/10/step400-dipSw.jpg)
+![](../../assets/images/step400-dipSw.jpg)
 
 The DIP switch on the board sets the ID. The ID is used in the replies to the OSC (Open Sound Control) messages, and it is added to the IP address, the destination port and the MAC address (see below).
 
@@ -59,7 +59,7 @@ If it would, the board does not add the ID, uses the configured value as it is, 
 
 Each board has its own MAC address, but the initial value is not that address: it is a MAC address of ours for tests. The MAC address of the board is printed on the sticker on the back of the board, under the sticker with the serial number. The number that starts with P is the serial number, and the 12 hexadecimal digits under it are the MAC address.
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/10/step400-solderside-mac-800x533.jpg)
+![](../../assets/images/step400-solderside-mac-800x533.jpg)
 
 To use it, set it as the MAC address in the configuration file or with the [browser configuration tool](browser-config-tool.md), save the configuration, and restart the board. See [How the settings work](how-settings-work.md). You can also change the initial value in the source of the firmware and build it; see [Compiling the firmware](../maintenance/compile-the-arduino-sketch.md).
 

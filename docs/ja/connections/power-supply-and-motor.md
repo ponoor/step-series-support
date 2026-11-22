@@ -18,7 +18,7 @@ USB-Cコネクタにパソコンなどをつないだときは、制御電源だ
 
 ボードには、DCジャック（4）とねじ式端子（5）の2種類の電源入力があります。
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/10/step400_connectors_numbering.jpg)
+![](../../assets/images/step400_connectors_numbering.jpg)
 
 | 番号 | 説明 |
 | --- | --- |
@@ -68,7 +68,7 @@ DCジャックとねじ式端子は、ボード上で並列につながってい
 
 ### モータの端子 {#motor-terminals}
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/10/image-1604122105179.png)
+![](../../assets/images/image-1604122105179.jpg)
 
 ボード上の端子は、3.81mm（0.150インチ）ピッチのユーロスタイル・ターミナルブロックです。適合するコネクタには次のものがあります。
 
@@ -79,7 +79,7 @@ DCジャックとねじ式端子は、ボード上で並列につながってい
 
 2つのコイルから出ている線を、次のように接続します。この配線は、STEP400とSTEP800で共通です。
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/10/coil-wiring.png)
+![](../../assets/images/coil-wiring.jpg)
 
 どちらのコイルをAにしても構いません。1つのコイルの中で2本の線をつなぐ順序も、どちらでも構いません。入れ替えても、モータの動作自体には問題ありませんが、回転方向が逆になります。複数のモータを使うときは、接続のルールをそろえておくと便利です。
 
@@ -95,7 +95,7 @@ DCジャックとねじ式端子は、ボード上で並列につながってい
 
 下のグラフは、ST社のアプリケーションノートにある、電圧と電流の関係の例です。モータによって実際の値は異なりますが、電源電圧が低いと、回転が速くなったときにドライバが十分な電流を流せなくなる様子が分かります。
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/10/motor_current_example_graph-800x570.png)
+![](../../assets/images/motor_current_example_graph-800x570.png)
 
 必要な電圧は、モータの定格、必要な速度、必要なトルクによって大きく変わります。おおまかには次のとおりです。
 
@@ -106,7 +106,7 @@ DCジャックとねじ式端子は、ボード上で並列につながってい
 
 STEP400は12Vでも動作します。ただし、12VはボードのDC-DCコンバータの動作電圧の下限なので、モータが回り始める瞬間の突入電流で、電源からの配線で電圧が下がり、STEP400がリセットされることがあります。小さなモータを軽い負荷で回す場合を除いて、12Vはおすすめしません。
 
-![24Vの電源2台を直列にして48Vで動作しているSTEP400](https://ponoor.com/cms/wp-content/uploads/2020/10/update-48V-configuration-800x533.jpg)
+![24Vの電源2台を直列にして48Vで動作しているSTEP400](../../assets/images/update-48V-configuration-800x533.jpg)
 
 24Vの電源2台を直列にして、STEP400を48Vで駆動している例です。
 

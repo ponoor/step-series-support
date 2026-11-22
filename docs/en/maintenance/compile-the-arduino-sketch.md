@@ -12,7 +12,7 @@ The source code is in the [GitHub repository](https://github.com/ponoor/step-ser
 
 The firmware is developed with [PlatformIO](https://platformio.org/) (the Arduino framework). Clone the repository, or download it as a ZIP and extract it, and open the folder in PlatformIO. The dependencies are installed automatically from `platformio.ini` when you compile for the first time.
 
-![file](https://ponoor.com/cms/wp-content/uploads/2020/08/image-1648187813165.png)
+![file](../../assets/images/image-1648187813165.png)
 
 ### Selecting the board {#select-board}
 
@@ -40,7 +40,7 @@ The Arduino IDE needs more manual work than PlatformIO.
 2. Install the libraries (see below) with the Library Manager. How to install libraries: <https://www.arduino.cc/en/guide/libraries>.
 3. Download `step-series-universal-firmware.zip` from the "Assets" of the latest [release](https://github.com/ponoor/step-series-universal-firmware/releases) and extract it. The folder has the sketch; open its `.ino` file in the Arduino IDE.
 
-   ![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643348613641.png)
+   ![file](../../assets/images/image-1643348613641.png)
 
 4. Select the board in `boardsDef.h`: remove the comment `//` of one board at the beginning of the file. For the STEP400 it looks like this. If you do not select any board, the STEP400 (`STEP400_R1`) is used.
 

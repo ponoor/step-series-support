@@ -31,15 +31,15 @@ Connect the board to your PC directly with the Ethernet cable (peer-to-peer). A 
 
 Only bipolar stepper motors with 4 wires can be used. The `SM-42BYG011-25` (Mercury Motor) can be found by its part number at online shops for electronic components.
 
-![](http://ponoor.com/manage/wp-content/uploads/2020/10/09238-01.jpg)
+![](../../assets/images/09238-01.jpg)
 
 Connect the two wires of one coil to a pair of the terminals, and the two wires of the other coil to the other pair. The wiring diagram in the [datasheet](https://www.sparkfun.com/datasheets/Robotics/SM-42BYG011-25.pdf) of this motor shows that the pairs are `Red - Green` and `Yellow - Blue`.
 
-[![](https://ponoor.com/cms/wp-content/uploads/2020/08/motor-wiring-diagram-sample.png)](https://ponoor.com/cms/wp-content/uploads/2020/08/motor-wiring-diagram-sample.png)
+[![](../../assets/images/motor-wiring-diagram-sample.png)](https://ponoor.com/cms/wp-content/uploads/2020/08/motor-wiring-diagram-sample.png)
 
 Connect the wires to the terminal block like this:
 
-[![](https://ponoor.com/cms/wp-content/uploads/2020/08/SM-42BYG-wiring-700x525.jpg)](https://ponoor.com/cms/wp-content/uploads/2020/08/SM-42BYG-wiring.jpg)
+[![](../../assets/images/SM-42BYG-wiring-700x525.jpg)](https://ponoor.com/cms/wp-content/uploads/2020/08/SM-42BYG-wiring.jpg)
 
 How to find the pairs of another motor, and the terminal, are explained in [Motor terminals](../connections/power-supply-and-motor.md#motor-terminals).
 
@@ -47,7 +47,7 @@ How to find the pairs of another motor, and the terminal, are explained in [Moto
 
 Connect the AC adapter to the DC barrel jack. The plug must be 5.5 mm in outer diameter and 2.1 mm in inner diameter, with the center positive. Make sure the power supply is off.
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/08/image-1609563897700.png)
+![](../../assets/images/image-1609563897700.jpg)
 
 The DC barrel jack is enough for a motor of this size. For a larger motor with a higher voltage or a higher current, use the screw terminal next to the jack. **Never connect a power supply to both of them.** See [Power terminals](../connections/power-supply-and-motor.md#power-terminals).
 
@@ -57,7 +57,7 @@ This page uses the default settings, so leave the microSD card slot empty. When 
 
 Set the DIP switch to 1: slide only the leftmost switch to the ON side, and the others to the OFF side. With the board turned so that the digits printed on the DIP switch can be read, the leftmost switch is the lowest digit. See [DIP switch settings](../connections/network-and-dip-switch.md#dip-switch).
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/10/step400-dipSw.jpg)  
+![](../../assets/images/step400-dipSw.jpg)  
 The DIP switch set to 1 (STEP400).
 
 With the DIP switch at 1 and the initial settings, the network settings of the board are as follows. The ID is added to the IP address of the board and to the sending port.

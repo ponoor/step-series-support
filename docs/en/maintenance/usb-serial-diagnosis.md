@@ -24,19 +24,19 @@ The board is seen by the computer as an Arduino Zero and is a virtual serial por
 
 From "Tools" -> "Port", choose "Arduino Zero (Native USB Port)".
 
-![file](https://ponoor.com/cms/wp-content/uploads/2021/03/image-1616473811329.png)
+![file](../../assets/images/image-1616473811329.png)
 
 ### Opening the serial monitor {#open-monitor}
 
 Click the magnifying glass icon. The window of the serial monitor opens.
 
-[![](https://ponoor.com/cms/wp-content/uploads/2021/03/openserialmonitor-486x525.png)](https://ponoor.com/cms/wp-content/uploads/2021/03/openserialmonitor.png)
+[![](../../assets/images/openserialmonitor-486x525.png)](https://ponoor.com/cms/wp-content/uploads/2021/03/openserialmonitor.png)
 
 ### Showing the menu {#menu}
 
 Type `m` in the text box at the top and press the Send button (or the Return key). If the connection works, the menu of the diagnosis is shown.
 
-![file](https://ponoor.com/cms/wp-content/uploads/2021/03/image-1616474112646.png)
+![file](../../assets/images/image-1616474112646.png)
 
 The menu of firmware v2.2.0 is:
 

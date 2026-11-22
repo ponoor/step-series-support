@@ -40,12 +40,12 @@ The table is for the default build; with `MZERO_WITH_ZERO_BOOTLOADER` the SD CS 
 
 The D4 pin is the CS pin when the Ethernet shield reads the microSD card, but it is also the BUSY pin of the IHM03A1. Unfortunately neither can be changed easily, so cut the leg of that pin on the IHM03A1. The pin tells that the PowerSTEP01 is in the BUSY state, but the same information is available through SPI, so there is no need to connect it to the Arduino. You can cut it.
 
-![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643345614045.png)
+![file](../../../assets/images/image-1643345614045.jpg)
 
 ### 2: W5500 CS and PowerSTEP01 CS {#cs}
 
 The CS pin of the W5500 (or W5100) on the Ethernet shield and the CS pin of the PowerSTEP01 on the IHM03A1 are both wired to D10, so change the IHM03A1 side. Remove the 0 Ω resistor at `R10` of the IHM03A1, and solder it to the `R9` pad. The CS pin of the PowerSTEP01 is now A2, not D10.
 
-![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643345121196.png)
+![file](../../../assets/images/image-1643345121196.jpg)
 
 When you remove the resistor, you need to heat the pads on both sides at the same time. Two soldering irons make it easiest.

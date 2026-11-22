@@ -14,14 +14,14 @@ The hardware of the STEP800: the board, its main components, the pin assignment,
 
 There are five M3 mounting holes: one at each corner and one near the middle.
 
-![](https://ponoor.com/cms/wp-content/uploads/2021/09/step800_r1_0_0_dimension-1.png)  
+![](../../assets/images/step800_r1_0_0_dimension-1.png)  
 The long parts at the top and the bottom of this picture are waste boards, and are removed after the production.
 
 Actual size PDF: [step800_r1_0_0_dimension.pdf](https://github.com/ponoor/STEP800/blob/main/hardware/step800_r1_0_0_dimension.pdf)
 
 ### System {#system}
 
-![file](https://ponoor.com/cms/wp-content/uploads/2021/09/image-1648468983329.png)
+![file](../../assets/images/image-1648468983329.png)
 
 Schematics: [step800_r1_0_0_schematics.pdf](https://github.com/ponoor/STEP800/blob/main/hardware/step800_r1_0_0_schematics.pdf)
 
@@ -75,7 +75,7 @@ There are pads for unassigned pins and for the power on the rear side of the boa
 
 The firmware does nothing with these pins. To use them, you need to add to or change the firmware.
 
-![](https://ponoor.com/cms/wp-content/uploads/2021/09/step800_reserved_pads.jpg)
+![](../../assets/images/step800_reserved_pads.jpg)
 
 ## Brake output (J2) {#brake-output}
 

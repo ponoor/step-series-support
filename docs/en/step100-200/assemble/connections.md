@@ -15,7 +15,7 @@ So the stacking order must always be:
 1. The Ethernet shield on the Arduino
 2. The X-NUCLEO board on top of them
 
-![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643346463746.png)  
+![file](../../../assets/images/image-1643346463746.jpg)  
 The photo shows the STEP200. The Ethernet shield is on the Arduino M0, and the X-NUCLEO-IHM02A1 is on top of them.
 
 ## Connections {#connections}
@@ -32,7 +32,7 @@ Connect the power supply to the X-NUCLEO board. The positive and negative termin
 | Positive | `Vin` | `VS+` |
 | Negative | `GND` | `-` |
 
-![](https://ponoor.com/cms/wp-content/uploads/2022/01/IMG_4315.jpg)![](https://ponoor.com/cms/wp-content/uploads/2022/01/IMG_4314.jpg)
+![](../../../assets/images/IMG_4315.jpg)![](../../../assets/images/IMG_4314.jpg)
 
 ### Motor {#motor}
 
@@ -45,4 +45,4 @@ The marks of the pairs on the board are as follows, but they are confusing, espe
 | Coil 1 | A+, A- | 1A, 2A |
 | Coil 2 | B+, B- | 1B, 2B |
 
-[![](https://ponoor.com/cms/wp-content/uploads/2022/02/step200_wiring-700x510.png)](https://ponoor.com/cms/wp-content/uploads/2022/02/step200_wiring.png)
+[![](../../../assets/images/step200_wiring-700x510.png)](https://ponoor.com/cms/wp-content/uploads/2022/02/step200_wiring.png)

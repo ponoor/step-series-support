@@ -8,7 +8,7 @@ DIPスイッチでボードのIDを設定します。このページでは、ID�
 
 ## DIPスイッチの設定 {#dip-switch}
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/10/step400-dipSw.jpg)
+![](../../assets/images/step400-dipSw.jpg)
 
 ボード上のDIPスイッチでIDを設定します。IDはOSCメッセージの返信に使われるほか、IPアドレス、送信先のポート番号、MACアドレスに加算されます（下記）。
 
@@ -59,7 +59,7 @@ IDは8桁の2進数で、0から255です。ON側にスライドさせたスイ�
 
 ボードにはそれぞれ固有のMACアドレスがありますが、初期値はそのアドレスではありません。弊社がテスト用に使っているMACアドレスです。ボードのMACアドレスは、ボードの裏面のシールで確認できます。シリアル番号のシールの下にあります。Pで始まる番号がシリアル番号で、その下の12桁の16進数がMACアドレスです。
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/10/step400-solderside-mac-800x533.jpg)
+![](../../assets/images/step400-solderside-mac-800x533.jpg)
 
 このアドレスを使うには、設定ファイルまたは[ブラウザ設定ツール](browser-config-tool.md)でMACアドレスに設定して設定を保存し、ボードを再起動します。[設定の仕組み](how-settings-work.md)をご覧ください。ファームウェアのソースの初期値を書き換えてビルドする方法もあります。[ファームウェアのコンパイル](../maintenance/compile-the-arduino-sketch.md)をご覧ください。
 

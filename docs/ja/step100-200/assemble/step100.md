@@ -40,12 +40,12 @@ X-NUCLEO-IHM03A1を、Ethernetシールドに重ねられるように改造す�
 
 D4ピンは、EthernetシールドがmicroSDカードを読み取るときのCSピンですが、IHM03A1ではBUSYピンとしても使われています。残念ながら、どちらも簡単にはピンを変更できませんので、IHM03A1のほうで脚をカットします。BUSYピンは、PowerSTEP01がBUSY状態であることを表すピンですが、同じ情報をSPI経由で取得できますので、Arduinoにつなぐ必要はありません。切ってしまってかまいません。
 
-![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643345614045.png)
+![file](../../../assets/images/image-1643345614045.jpg)
 
 ### 2: W5500のCSとPowerSTEP01のCS {#cs}
 
 Ethernetシールドに載っているW5500（またはW5100）のCSピンと、IHM03A1に載っているPowerSTEP01のCSピンが、どちらもD10に配線されていますので、IHM03A1側を変更します。IHM03A1の`R10`についている0Ω抵抗を取り外し、`R9`のパッドに取り付けます。これで、PowerSTEP01のCSピンは、D10からA2ピンに変わります。
 
-![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643345121196.png)
+![file](../../../assets/images/image-1643345121196.jpg)
 
 抵抗を取り外すときは、両側のパッドを同時に加熱する必要があります。はんだごてを2本使うのが最もやりやすい方法です。

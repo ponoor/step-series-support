@@ -8,7 +8,7 @@ STEP100とSTEP200は、Arduino Zero（または互換ボード）、Ethernetシ�
 
 ## Arduino ZeroまたはM0 {#arduino}
 
-![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643342497869.png)![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643342518306.png)
+![](../../assets/images/image-1643342497869.jpg)![](../../assets/images/image-1643342518306.jpg)
 
 ファームウェアが対応しているのは、次のボードです。
 
@@ -38,19 +38,19 @@ LeonardoやMEGAでは、D11-D13にSPIの機能が割り当てられていない�
 
 ## Ethernetシールド {#ethernet-shield}
 
-![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643342683554.png)![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643702336632.png)
+![](../../assets/images/image-1643342683554.jpg)![](../../assets/images/image-1643702336632.jpg)
 
 ファームウェアは、Wiznet W5500を使った[Arduino Ethernet Shield 2](https://docs.arduino.cc/hardware/ethernet-shield-rev2)で動作を確かめています。正式な名前は「Arduino Ethernet Shield 2」で、メーカーの品番は`A000024`です。大手の電子部品のディストリビューターで取り扱いがあります。
 
 通販サイトなどには、W5100を使った古いタイプの互換品もたくさんあります。これは、実機でテストしたところ、STEP100（X-NUCLEO-IHM03A1）では動作しませんでした。STEP200（X-NUCLEO-IHM02A1）では動きます。
 
-![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643702118944.png)
+![file](../../assets/images/image-1643702118944.jpg)
 
 このタイプは、上にさらにシールドを載せることができないので使えません。ArduinoとEthernetシールドは6ピンのSPIコネクタを介して通信しますが、X-NUCLEOボードにはこのコネクタがありません。そのため、Arduinoの上には必ずEthernetシールドを重ね、その上にX-NUCLEOボードを差し込みます。
 
 ## X-NUCLEOボード {#x-nucleo}
 
-![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643342852324.png)![](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643342863866.png)
+![](../../assets/images/image-1643342852324.jpg)![](../../assets/images/image-1643342863866.jpg)
 
 STMicroelectronics社から発売されている評価ボードです。
 
@@ -72,6 +72,6 @@ X-NUCLEOボードのデータシートによると、モータ電源の電圧は
 
 X-NUCLEOボードにはねじ式端子があるので、ACアダプタから給電するときは、DCジャックのケーブルがあると便利です。
 
-![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643347656810.png)
+![file](../../assets/images/image-1643347656810.jpg)
 
 モータ電源を供給しても、Arduinoには給電されませんので、Arduino用の電源も必要です。USB経由でPCやUSB充電器から給電してください。

@@ -81,7 +81,7 @@ The brake needs a short time to work mechanically, so the motor and the brake mu
 - To release: the board energizes the motor, waits for the transition duration, then releases the brake.
 - To engage: the board engages the brake, waits for the transition duration, then makes the motor HiZ.
 
-[![Brake transition duration](https://ponoor.com/cms/wp-content/uploads/2021/03/brakeTransition.png)](https://ponoor.com/cms/wp-content/uploads/2021/03/brakeTransition.png)
+[![Brake transition duration](../../assets/images/brakeTransition.png)](https://ponoor.com/cms/wp-content/uploads/2021/03/brakeTransition.png)
 
 The duration does not change how long the brake takes to lock; it changes how long the board waits before it makes the motor HiZ or releases the brake. The wait is counted in 5 ms steps, so the actual time is 0 to 5 ms longer than the setting.
 
@@ -124,11 +124,11 @@ If you hang a load on the motor, take these times into account.
 
 ## Examples of motors with an electromagnetic brake {#examples}
 
-[![Stepper motor with brake](https://ponoor.com/cms/wp-content/uploads/2021/03/nema-23-stepper-19nm269ozin-w-brake-friction-torque-20nm283ozin-52372-1000x1000-1.jpg)](https://ponoor.com/cms/wp-content/uploads/2021/03/nema-23-stepper-19nm269ozin-w-brake-friction-torque-20nm283ozin-52372-1000x1000-1.jpg)
+[![Stepper motor with brake](../../assets/images/nema-23-stepper-19nm269ozin-w-brake-friction-torque-20nm283ozin-52372-1000x1000-1.jpg)](https://ponoor.com/cms/wp-content/uploads/2021/03/nema-23-stepper-19nm269ozin-w-brake-friction-torque-20nm283ozin-52372-1000x1000-1.jpg)
 
 [STEPPER ONLINE](https://www.omc-stepperonline.com/stepper-motor-brake/nema-23-stepper-19nm269ozin-w-brake-friction-torque-20nm283ozin-23hs30-2804d-b200.html)
 
-[![PKP243D23M2](https://ponoor.com/cms/wp-content/uploads/2021/03/pkp243d-700x525.jpg)](https://ponoor.com/cms/wp-content/uploads/2021/03/pkp243d.jpg)
+[![PKP243D23M2](../../assets/images/pkp243d-700x525.jpg)](https://ponoor.com/cms/wp-content/uploads/2021/03/pkp243d.jpg)
 
 [Oriental Motor](https://www.orientalmotor.co.jp/) PKP243D23M2
 

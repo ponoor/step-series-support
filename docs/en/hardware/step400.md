@@ -14,14 +14,14 @@ The hardware of the STEP400: the board, its main components, the pin assignment,
 
 There are five M3 mounting holes: one at each corner and one near the middle.
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/08/step400-dimension-800x661.png)  
+![](../../assets/images/step400-dimension-800x661.png)  
 The long parts at the top and the bottom of this picture are waste boards, and are removed after the production.
 
 Actual size PDF: [step400_r1_dimension.pdf](https://github.com/ponoor/STEP400/blob/master/hardware/step400_r1_dimension.pdf)
 
 ### System {#system}
 
-![diagram](https://ponoor.com/cms/wp-content/uploads/2020/08/image-1648386258465.png)
+![diagram](../../assets/images/image-1648386258465.png)
 
 Schematics: [step400_r1_schematics.pdf](https://github.com/ponoor/STEP400/blob/master/hardware/step400_r1_schematics.pdf)
 
@@ -75,7 +75,7 @@ There are pads for unassigned pins and for the power on the rear side of the boa
 
 The firmware does nothing with these pins. To use them, you need to add to or change the firmware.
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/08/step400-pads-800x533.jpg)
+![](../../assets/images/step400-pads-800x533.jpg)
 
 The six pads form the connector J8 of the schematics. With the Ethernet connector at the bottom, the signals from the top are:
 

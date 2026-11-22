@@ -66,7 +66,7 @@ On the STEP400 and the STEP800, the connector of the HOME switch is wired to the
 
 The red test terminal labeled `TP1` of the X-NUCLEO-IHM03A1 is the SW pin. You have to solder the wire directly to this terminal.
 
-![](https://ponoor.com/cms/wp-content/uploads/2022/01/IMG_4317.jpg)
+![](../../assets/images/IMG_4317.jpg)
 
 It is inconvenient to attach the cable of the sensor directly here, so it is better to put a connector in between.
 
@@ -74,11 +74,11 @@ It is inconvenient to attach the cable of the sensor directly here, so it is bet
 
 On the IHM02A1, the `J2` connector is the SW pin. The white circle (●) on the board is pin 1 of the circuit diagram.
 
-![](https://ponoor.com/cms/wp-content/uploads/2022/01/IMG_4312.jpg)![](https://ponoor.com/cms/wp-content/uploads/2022/02/image.png)
+![](../../assets/images/IMG_4312.jpg)![](../../assets/images/image.png)
 
 This is an example of the connection to the SW terminal of the first driver. A jump wire is used instead of a switch to test the function.
 
-![](https://ponoor.com/cms/wp-content/uploads/2022/02/IMG_4321.jpg)
+![](../../assets/images/IMG_4321.jpg)
 
 ## LIMIT switch {#limit}
 

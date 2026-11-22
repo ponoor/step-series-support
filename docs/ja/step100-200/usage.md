@@ -66,7 +66,7 @@ STEP400とSTEP800では、HOMEスイッチ用のコネクタは、ドライバIC
 
 X-NUCLEO-IHM03A1の`TP1`と書かれた赤いテストピンが、SWピンです。この端子に、直接はんだ付けして線を取り出す必要があります。
 
-![](https://ponoor.com/cms/wp-content/uploads/2022/01/IMG_4317.jpg)
+![](../../assets/images/IMG_4317.jpg)
 
 ここにセンサのケーブルを直接つけると不便ですので、途中にコネクタを入れたほうがよいでしょう。
 
@@ -74,11 +74,11 @@ X-NUCLEO-IHM03A1の`TP1`と書かれた赤いテストピンが、SWピンです
 
 IHM02A1では、`J2`コネクタがSWピンです。基板上の白丸（●）が、回路図の1番ピンを表しています。
 
-![](https://ponoor.com/cms/wp-content/uploads/2022/01/IMG_4312.jpg)![](https://ponoor.com/cms/wp-content/uploads/2022/02/image.png)
+![](../../assets/images/IMG_4312.jpg)![](../../assets/images/image.png)
 
 1番目のドライバのSW端子につなぐ例です。スイッチの代わりに、ジャンパーワイヤで動作を試しています。
 
-![](https://ponoor.com/cms/wp-content/uploads/2022/02/IMG_4321.jpg)
+![](../../assets/images/IMG_4321.jpg)
 
 ## LIMITスイッチ {#limit}
 

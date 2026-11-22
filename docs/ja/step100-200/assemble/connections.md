@@ -15,7 +15,7 @@ ArduinoとEthernetシールドは6ピンのSPIコネクタを介して通信し�
 1. Arduinoの上にEthernetシールド
 2. その上にX-NUCLEOボード
 
-![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643346463746.png)  
+![file](../../../assets/images/image-1643346463746.jpg)  
 写真はSTEP200です。Arduino M0の上にEthernetシールド、その上にX-NUCLEO-IHM02A1が載っています。
 
 ## 接続 {#connections}
@@ -32,7 +32,7 @@ X-NUCLEOボードに電源をつなぎます。基板上の表示との対応は
 | プラス | `Vin` | `VS+` |
 | マイナス | `GND` | `-` |
 
-![](https://ponoor.com/cms/wp-content/uploads/2022/01/IMG_4315.jpg)![](https://ponoor.com/cms/wp-content/uploads/2022/01/IMG_4314.jpg)
+![](../../../assets/images/IMG_4315.jpg)![](../../../assets/images/IMG_4314.jpg)
 
 ### モータ {#motor}
 
@@ -45,4 +45,4 @@ X-NUCLEOボードに電源をつなぎます。基板上の表示との対応は
 | コイル1 | A+, A- | 1A, 2A |
 | コイル2 | B+, B- | 1B, 2B |
 
-[![](https://ponoor.com/cms/wp-content/uploads/2022/02/step200_wiring-700x510.png)](https://ponoor.com/cms/wp-content/uploads/2022/02/step200_wiring.png)
+[![](../../../assets/images/step200_wiring-700x510.png)](https://ponoor.com/cms/wp-content/uploads/2022/02/step200_wiring.png)

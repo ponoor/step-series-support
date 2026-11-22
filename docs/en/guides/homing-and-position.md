@@ -18,7 +18,7 @@ After the board restarts, and after the motor has been HiZ, do homing again: the
 
 ## Switches and sensors {#switches}
 
-![Two configurations of homing sensors](http://ponoor.com/manage/wp-content/uploads/2020/10/two-homing-sensors.png)
+![Two configurations of homing sensors](../../assets/images/two-homing-sensors.jpg)
 
 Photointerrupters are often used as home sensors. On the left, a piece of white plastic attached to the slider blocks the light between the emitter and the receiver of the photointerrupter. The right side is an example of a rotary table where the photointerrupter responds to the black screw. Microswitches and photoelectric sensors are also used.
 
@@ -50,7 +50,7 @@ For [`/goTo`](../reference/motor-control.md#goto), [`/goHome`](../reference/posi
 
 `homingDirection` is set with [`/setHomingDirection`](../reference/homing.md#sethomingdirection) or with the [browser configuration tool](../connections/browser-config-tool.md). It is also used for [`/homing`](../reference/homing.md#homing).
 
-![Homing direction](https://ponoor.com/cms/wp-content/uploads/2020/08/homingDirection-800x533.jpg)
+![Homing direction](../../assets/images/homingDirection-800x533.jpg)
 
 ## Homing commands {#homing-commands}
 

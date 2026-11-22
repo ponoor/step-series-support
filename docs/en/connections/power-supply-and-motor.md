@@ -18,7 +18,7 @@ When a PC is connected to the USB-C connector, only the control circuits are pow
 
 The board has two power inputs: a DC barrel jack (4) and a screw terminal (5).
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/10/step400_connectors_numbering.jpg)
+![](../../assets/images/step400_connectors_numbering.jpg)
 
 | Number | Description |
 | --- | --- |
@@ -70,7 +70,7 @@ We measured some motors and made configuration files with the register values th
 
 ### Motor terminals {#motor-terminals}
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/10/image-1604122105179.png)
+![](../../assets/images/image-1604122105179.jpg)
 
 The motor terminal is a 3.81 mm (0.150") pitch Euro-style terminal block. Mating connectors include:
 
@@ -81,7 +81,7 @@ A bipolar stepper motor has two coils. To connect it, find out which two of the 
 
 Connect the wires of the two coils as follows. The wiring is the same for the STEP400 and the STEP800.
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/10/coil-wiring.png)
+![](../../assets/images/coil-wiring.jpg)
 
 It does not matter which coil is A and which is B, nor in which order the two wires of a coil are connected. If you swap them, the motor works as before, but the direction of the rotation is reversed. It is convenient to use the same wiring rule for all the motors.
 
@@ -97,7 +97,7 @@ To overcome the inductance and drive the current into the motor, use a power sup
 
 The graph below from an application note of ST shows the relation between the supply voltage and the current. The values depend on the motor, but at a low supply voltage the driver cannot supply enough current as the speed rises.
 
-![](https://ponoor.com/cms/wp-content/uploads/2020/10/motor_current_example_graph-800x570.png)
+![](../../assets/images/motor_current_example_graph-800x570.png)
 
 The voltage that you need depends greatly on the rating of the motor, the speed and the torque that you need. As a rough guide:
 
@@ -108,7 +108,7 @@ So the STEP800 may not be suitable for driving larger motors. Some small motors 
 
 The STEP400 works from 12 V. That is the lower limit of its on-board DC-DC converter, so the voltage can drop in the wiring from the power supply at the inrush current when the motor starts, and the STEP400 can reset. We do not recommend 12 V except for a small motor with a low load.
 
-![A STEP400 supplied with 48 V from two 24 V power supplies in series](https://ponoor.com/cms/wp-content/uploads/2020/10/update-48V-configuration-800x533.jpg)
+![A STEP400 supplied with 48 V from two 24 V power supplies in series](../../assets/images/update-48V-configuration-800x533.jpg)
 
 A STEP400 supplied with 48 V from two 24 V power supplies in series.
 

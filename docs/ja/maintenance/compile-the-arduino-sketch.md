@@ -12,7 +12,7 @@ title: ファームウェアのコンパイル
 
 ファームウェアは、[PlatformIO](https://platformio.org/)（Arduinoフレームワーク）で開発しています。リポジトリをクローンするか、ZIPでダウンロードして解凍し、そのフォルダをPlatformIOで開きます。初めてコンパイルするときに、必要なものが`platformio.ini`から自動でインストールされます。
 
-![file](https://ponoor.com/cms/wp-content/uploads/2020/08/image-1648187813165.png)
+![file](../../assets/images/image-1648187813165.png)
 
 ### ボードの選び方 {#select-board}
 
@@ -40,7 +40,7 @@ Arduino IDEは、PlatformIOより手作業が多くなります。
 2. ライブラリ（下記）を、ライブラリマネージャでインストールします。インストールの方法は<https://www.arduino.cc/en/guide/libraries>にあります。
 3. 最新の[リリース](https://github.com/ponoor/step-series-universal-firmware/releases)の「Assets」から`step-series-universal-firmware.zip`をダウンロードして解凍します。フォルダの中にスケッチがあるので、`.ino`ファイルをArduino IDEで開きます。
 
-   ![file](https://ponoor.com/cms/wp-content/uploads/2022/01/image-1643348613641.png)
+   ![file](../../assets/images/image-1643348613641.png)
 
 4. `boardsDef.h`でボードを選びます。ファイルの先頭にあるボードの行のうち、1つの行頭の`//`を外します。STEP400の場合は次のようになります。ボードを何も選ばないと、STEP400（`STEP400_R1`）になります。
 

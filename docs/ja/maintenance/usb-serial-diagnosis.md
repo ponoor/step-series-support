@@ -24,19 +24,19 @@ EthernetをつないだままUSBケーブルを抜くと、STEP400（R1）は再
 
 「Tools」->「Port」から、「Arduino Zero（Native USB Port）」を選びます。
 
-![file](https://ponoor.com/cms/wp-content/uploads/2021/03/image-1616473811329.png)
+![file](../../assets/images/image-1616473811329.png)
 
 ### シリアルモニタを開く {#open-monitor}
 
 虫眼鏡のアイコンをクリックすると、シリアルモニタのウィンドウが開きます。
 
-[![](https://ponoor.com/cms/wp-content/uploads/2021/03/openserialmonitor-486x525.png)](https://ponoor.com/cms/wp-content/uploads/2021/03/openserialmonitor.png)
+[![](../../assets/images/openserialmonitor-486x525.png)](https://ponoor.com/cms/wp-content/uploads/2021/03/openserialmonitor.png)
 
 ### メニューを表示する {#menu}
 
 上のテキストボックスに`m`と入力して、Sendボタン（またはReturnキー）を押します。接続できていれば、診断のメニューが表示されます。
 
-![file](https://ponoor.com/cms/wp-content/uploads/2021/03/image-1616474112646.png)
+![file](../../assets/images/image-1616474112646.png)
 
 ファームウェアv2.2.0のメニューは次のとおりです。
 

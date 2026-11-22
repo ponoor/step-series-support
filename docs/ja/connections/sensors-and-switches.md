@@ -58,7 +58,7 @@ STEP400とSTEP800の各軸には、スイッチやセンサをつなぐHOME端�
 
 オムロンのフォトマイクロセンサ[EE-SX671A](http://www.ia.omron.com/product/item/2219/)をつなぐ例です。
 
-![EE-SX671Aの接続図](http://ponoor.com/manage/wp-content/uploads/2020/10/ee-sx67.jpeg)
+![EE-SX671Aの接続図](../../assets/images/ee-sx67.jpeg)
 
 | ピン番号 | 機能 | センサのピン |
 | --- | --- | --- |
@@ -70,7 +70,7 @@ STEP400とSTEP800の各軸には、スイッチやセンサをつなぐHOME端�
 
 センサを買う前によく考えてください。
 
-![入光時オンと遮光時オンのセンサ](http://ponoor.com/manage/wp-content/uploads/2020/10/sensor_dark_light.png)
+![入光時オンと遮光時オンのセンサ](../../assets/images/sensor_dark_light.jpg)
 
 左の図では、原点位置でセンサに光が入ります。右の図では、原点位置でセンサの光が遮られます。
 
