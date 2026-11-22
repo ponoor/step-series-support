@@ -1,6 +1,6 @@
 # STEP Series
 
-> Documentation of the STEP400 / STEP800 stepper motor controllers. The controllers are controlled over Ethernet with OSC (Open Sound Control) messages; this is the documentation of the firmware v2.2.0 of STEP400 and STEP800 (and of the do-it-yourself STEP100 and STEP200).
+> Documentation of the STEP400 / STEP800 stepper motor controllers, which you control over Ethernet with OSC (Open Sound Control) messages: the firmware v2.2.0 of the STEP400 and the STEP800 (and of the do-it-yourself STEP100 and STEP200).
 
 This file lists the pages of the English documentation. Every link is a path relative to the top of the site, which is https://example.invalid/step-series/; the Japanese pages are under `ja/` and are not listed here. The full text of the functional guides and the specification of every OSC command, message and configuration item are in llms-full.txt.
 
@@ -41,18 +41,18 @@ This file lists the pages of the English documentation. Every link is a path rel
 
 - [OSC command reference: common rules](reference/)
 - [Command list](reference/command-list/): All OSC commands in the order of the reference pages.
-- [System settings](reference/system-settings/): For how the board communicates and how the messages work, see Communication and messages.
-- [Motor driver settings](reference/motor-driver-settings/)
-- [Alarm settings](reference/alarm-settings/): For how the alarms and the protection work, see Alarms and protection.
-- [Voltage and current mode settings](reference/voltage-and-current-mode-settings/): For how to decide the KVAL and TVAL values, see Voltage mode and current mode.
-- [Speed profile](reference/speed-profile/): For how the speed profile and the motions work, see Speed profile and types of motor motion.
-- [Homing](reference/homing/): For how homing and the position work, see Homing and position management.
-- [HOME and LIMIT switches](reference/home-and-limit-sensors/): For how the HOME and LIMIT switches are used in homing, see Homing and position management.
-- [Position management](reference/position-management/): For how the position is managed, see Homing and position management.
-- [Motor control](reference/motor-control/): For how the motions work, see Speed profile and types of motor motion.
-- [Electromagnetic brake](reference/brake/): For how the electromagnetic brake works, see Electromagnetic brake.
-- [Servo mode](reference/servo-mode_reference/): For how the servo mode works, see Servo mode.
-- [Automatically sent messages](reference/automatically-sent-messages/)
+- [System settings](reference/system-settings/): OSC commands `/setDestIp`, `/getVersion`, `/getConfigName`, `/reportError`, `/setConfigName`, `/saveConfig`, `/resetDevice`.
+- [Motor driver settings](reference/motor-driver-settings/): OSC commands `/setMicrostepMode`, `/getMicrostepMode`, `/enableLowSpeedOptimize`, `/setLowSpeedOptimizeThreshold`, `/getLowSpeedOptimizeThreshold`, `/enableBusyReport`, `/getBusy`, `/enableHizReport`, `/getHiZ`, `/enableDirReport`, `/getDir`, `/enableMotorStatusReport`, `/getMotorStatus`, `/setPositionReportInterval`, `/setPositionListReportInterval`, `/getAdcVal`, `/getStatus`, `/getConfigRegister`, `/resetMotorDriver`, `/getStatusList`.
+- [Alarm settings](reference/alarm-settings/): OSC commands `/enableUvloReport`, `/getUvlo`, `/enableThermalStatusReport`, `/getThermalStatus`, `/enableOverCurrentReport`, `/setOverCurrentThreshold`, `/getOverCurrentThreshold`, `/enableStallReport`, `/setStallThreshold`, `/getStallThreshold`, `/setProhibitMotionOnHomeSw`, `/getProhibitMotionOnHomeSw`, `/setProhibitMotionOnLimitSw`, `/getProhibitMotionOnLimitSw`.
+- [Voltage and current mode settings](reference/voltage-and-current-mode-settings/): OSC commands `/setVoltageMode`, `/setKval`, `/getKval`, `/setBemfParam`, `/getBemfParam`, `/setHoldKval`, `/setRunKval`, `/setAccKval`, `/setDecKval`, `/setCurrentMode`, `/setTval`, `/getTval`, `/getTval_mA`, `/setDecayModeParam`, `/getDecayModeParam`, `/setHoldTval`, `/setRunTval`, `/setAccTval`, `/setDecTval`.
+- [Speed profile](reference/speed-profile/): OSC commands `/setSpeedProfile`, `/getSpeedProfile`, `/setFullstepSpeed`, `/getFullstepSpeed`, `/setMaxSpeed`, `/setAcc`, `/setDec`, `/setMinSpeed`, `/getMinSpeed`, `/getSpeed`, `/setSpeedProfileRaw`, `/getSpeedProfileRaw`, `/setMaxSpeedRaw`, `/setMinSpeedRaw`, `/setFullstepSpeedRaw`, `/setAccRaw`, `/setDecRaw`.
+- [Homing](reference/homing/): OSC commands `/homing`, `/getHomingStatus`, `/setHomingDirection`, `/getHomingDirection`, `/setHomingSpeed`, `/getHomingSpeed`, `/goUntil`, `/setGoUntilTimeout`, `/getGoUntilTimeout`, `/releaseSw`, `/setReleaseSwTimeout`, `/getReleaseSwTimeout`.
+- [HOME and LIMIT switches](reference/home-and-limit-sensors/): OSC commands `/enableHomeSwReport`, `/enableSwEventReport`, `/getHomeSw`, `/enableLimitSwReport`, `/getLimitSw`, `/setHomeSwMode`, `/getHomeSwMode`, `/setLimitSwMode`, `/getLimitSwMode`.
+- [Position management](reference/position-management/): OSC commands `/setPosition`, `/getPosition`, `/getPositionList`, `/resetPos`, `/setElPos`, `/getElPos`, `/setMark`, `/getMark`, `/goHome`, `/goMark`.
+- [Motor control](reference/motor-control/): OSC commands `/run`, `/move`, `/goTo`, `/goToDir`, `/softStop`, `/hardStop`, `/softHiZ`, `/hardHiZ`, `/combine/run`, `/combine/move`, `/combine/goTo`, `/combine/goToDir`, `/combine/softStop`, `/combine/hardStop`, `/combine/softHiZ`, `/combine/hardHiZ`, `/runRaw`, `/goUntilRaw`, `/combine/runRaw`.
+- [Electromagnetic brake](reference/brake/): OSC commands `/enableElectromagnetBrake`, `/activate`, `/free`, `/setBrakeTransitionDuration`, `/getBrakeTransitionDuration`, `/getBrakeStatus`.
+- [Servo mode](reference/servo-mode_reference/): OSC commands `/enableServoMode`, `/setServoParam`, `/getServoParam`, `/setTargetPosition`, `/setTargetPositionList`.
+- [Automatically sent messages](reference/automatically-sent-messages/): Messages `/booted`, `/error/osc`, `/error/command`, `/busy`, `/HiZ`, `/dir`, `/motorStatus`, `/homingStatus`, `/position`, `/positionList`, `/homeSw`, `/swEvent`, `/limitSw`, `/uvlo`, `/thermalStatus`, `/overCurrent`, `/stall`.
 - [Differences between STEP400 and STEP800](reference/differences-step400-step800/)
 
 ## Hardware

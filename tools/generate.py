@@ -1235,13 +1235,30 @@ def read_nav_pages(docs: Path, mk: dict, errors: list[str]) -> list[tuple[str, l
     return out
 
 
+def reference_page_description(text: str) -> str:
+    """For a reference page with markers: the commands (or messages) it describes, instead of the first sentence
+    (which on these pages points to the guide)."""
+    found = [(m.group(1), m.group(2)) for m in MARKER_RE.finditer(text) if m.group(1) in ("osc", "osc-message")]
+    if not found:
+        return ""
+    cmds = [a for k, a in found if k == "osc"]
+    msgs = [a for k, a in found if k == "osc-message"]
+    parts = []
+    if cmds:
+        parts.append("OSC commands " + ", ".join(f"`{a}`" for a in cmds))
+    if msgs:
+        parts.append("messages " + ", ".join(f"`{a}`" for a in msgs))
+    text = " and ".join(parts)
+    return text[0].upper() + text[1:] + "."
+
+
 def render_llms_txt(spec: Spec, mk: dict, sections: list[tuple[str, list[tuple[str, str]]]]) -> str:
     desc = str(mk.get("site_description", "")).strip().rstrip(".")
     site_url = str(mk.get("site_url", "")).strip()
     fw = spec.data.get("firmware", "")
     out = [f"# {mk.get('site_name', 'STEP Series')}", "",
-           f"> {desc}. The controllers are controlled over Ethernet with OSC (Open Sound Control) messages; this is the "
-           f"documentation of the firmware v{fw} of STEP400 and STEP800 (and of the do-it-yourself STEP100 and STEP200).", "",
+           f"> {desc}, which you control over Ethernet with OSC (Open Sound Control) messages: the firmware v{fw} "
+           f"of the STEP400 and the STEP800 (and of the do-it-yourself STEP100 and STEP200).", "",
            f"This file lists the pages of the English documentation. Every link is a path relative to the top of the site, "
            f"which is {site_url}; the Japanese pages are under `ja/` and are not listed here. "
            f"The full text of the functional guides and the specification of every OSC command, message and "
@@ -1250,6 +1267,8 @@ def render_llms_txt(spec: Spec, mk: dict, sections: list[tuple[str, list[tuple[s
         out += [f"## {name}", ""]
         for page, text in items:
             title, d = page_title_and_description(text)
+            if page.startswith("reference/"):
+                d = reference_page_description(text) or d
             out.append(f"- [{title}]({page_url(page)})" + (f": {d}" if d else ""))
         out.append("")
     out += ["## Optional", "",
