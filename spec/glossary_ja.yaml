@@ -14,9 +14,9 @@ terms:
     concept: センサ（長音なし）
     avoid: [センサー]
   - use: マネージャ
-    concept: マネージャ（長音なし）。OS・アプリの画面の表示の名前（Windows の「デバイスマネージャー」）は画面どおり
+    concept: マネージャ（長音なし）。Arduino IDE のボードマネージャ・ライブラリマネージャも長音なし。Windows の「デバイスマネージャー」だけ長音つき（画面の表示の名前。空白は入れない）
     avoid: [マネージャー]
-    unless_sentence: ["デバイスマネージャー"]
+    allow: ["デバイスマネージャー"]
   - use: ルータ
     concept: ルータ（長音なし）
     avoid: [ルーター]

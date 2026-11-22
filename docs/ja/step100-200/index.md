@@ -29,7 +29,7 @@ STEP100とSTEP200は、市販のモジュールを集めてご自身で組み立
 
 ## 関連の情報 {#resources}
 
-- [製品: STEP100-200](https://ponoor.com/products/step100-200/)
+- [製品: STEP100 / STEP200](https://ponoor.com/products/step100-200/)
 - [Updates: ステッピングモータについて](https://ponoor.com/updates/2020/10/step400-weekly-update-01/)
 - [Updates: OSCとプログラミング環境](https://ponoor.com/updates/2020/10/step400-weekly-update-02/)
 - [Updates: 機構部品の第一歩](https://ponoor.com/updates/2020/10/get-started-with-mechanical-parts/)
