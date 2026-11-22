@@ -318,7 +318,7 @@ Always
 
 #### Description
 
-Resets the entire device. A programmatic version of physically pressing the RESET button.
+Resets the entire device. A programmatic version of physically pressing the RESET switch.
 
 After the restart, [`/booted`](automatically-sent-messages.md#booted) is sent with `resetCause` 5 (software reset).
 

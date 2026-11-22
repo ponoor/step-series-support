@@ -12,7 +12,7 @@ You can connect a computer to the USB connector of the board to check its status
 
 Connect the board and the computer with a USB Type-C cable. USB powers only the MCU and its peripheral circuits. In this state the driver ICs are not powered, so the board cannot talk to them. Supply the motor power as well.
 
-If you connect the USB cable first and the motor power later, the driver ICs are not initialized: the board initializes them only when it starts. Turn on the motor power first and then connect USB, or push the RESET button after you turn on the motor power. You can also send [`/resetMotorDriver`](../reference/motor-driver-settings.md#resetmotordriver) for all the motors (255).
+If you connect the USB cable first and the motor power later, the driver ICs are not initialized: the board initializes them only when it starts. Turn on the motor power first and then connect USB, or push the RESET switch after you turn on the motor power. You can also send [`/resetMotorDriver`](../reference/motor-driver-settings.md#resetmotordriver) for all the motors (255).
 
 When the USB cable is pulled out while the Ethernet cable is connected, the STEP400 (R1 board) can restart. This is a hardware problem; stop the motors before you pull out the cable. See [STEP400](../hardware/step400.md#usb-unplug).
 
