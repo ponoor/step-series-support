@@ -54,7 +54,7 @@ Arduino IDEは、PlatformIOより手作業が多くなります。
    // #define STEP200_R1 // X-NUCLEO-IHM02A1, L6470 x2
    ```
 
-5. 「Tools」->「Board」から「Arduino Zero（Native USB Port）」を選んで、コンパイルします。エラーがなければ、ボードとパソコンをUSBでつなぎ、「Tools」->「Port」からシリアルポートを選んで、書き込みます。
+5. 「Tools」->「Board」から「Arduino Zero（Native USB Port）」を選んで、コンパイルします。エラーがなければ、ボードとPCをUSBでつなぎ、「Tools」->「Port」からシリアルポートを選んで、書き込みます。
 
 ### ライブラリ {#libraries}
 

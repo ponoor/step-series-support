@@ -24,6 +24,9 @@ terms:
     avoid: [ユーザー]
   - use: センタープラス
     concept: 長音なしの決まりの例外。DC ジャックの極性の名前（center positive）。「センタ」とは書かない（avoid なし）
+  - use: PC
+    concept: personal computer。「パソコン」とは書かない
+    avoid: [パソコン]
   - use: 解放
     concept: ブレーキを外す。外した状態は「解放中」
     avoid: [開放]
