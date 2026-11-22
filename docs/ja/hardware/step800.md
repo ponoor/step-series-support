@@ -27,7 +27,7 @@ M3用の取付穴が、基板の各隅と中央付近の5か所にあります�
 
 主な構成要素は次のとおりです。
 
-| 部品 | メーカ | 型番 |
+| 部品 | メーカー | 型番 |
 | --- | --- | --- |
 | MCU | Microchip | [ATSAMD21G18A](https://www.microchip.com/wwwproducts/en/ATsamd21g18) |
 | Ethernet Controller | Wiznet | [W5500](https://www.wiznet.io/product-item/w5500/) |

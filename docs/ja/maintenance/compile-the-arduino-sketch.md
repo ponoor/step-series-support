@@ -68,7 +68,7 @@ Arduino IDEは、PlatformIOより手作業が多くなります。
 | [SdFat](https://github.com/greiman/SdFat)（Bill Greiman） | 2.2.3以降 | |
 | [ArduinoJson](https://arduinojson.org/) | 7.4.1以降（7.x） | |
 
-OSCのパーサとウォッチドッグはファームウェアに入っているので、CNMATのOSCライブラリとAdafruit SleepyDogライブラリは、もう要りません。
+OSCのパーサとウォッチドッグはファームウェアに入っているので、CNMAT OSCライブラリとAdafruit SleepyDogライブラリは、もう要りません。
 
 ドライバのライブラリのバージョンは、ファームウェアのバージョンに合わせる必要があります。
 

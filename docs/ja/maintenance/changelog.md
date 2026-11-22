@@ -81,7 +81,7 @@ title: 変更履歴
 #### microSDカード {#v2-2-0-sd}
 
 - 名前が`.`で始まるファイル（macOSが書き込む`._name.json`など）は、設定ファイルの候補にしません。
-- 受け付けられなかった設定ファイルの値は適用しません。既定値を使います。最初の`.json`ファイルが無効なら、そこで探索を終えます。優先順位は同じで、`config.txt`、続いて最初の有効な`.json`です。
+- 受け付けられなかった設定ファイルの値は適用しません。初期値を使います。最初の`.json`ファイルが無効なら、そこで探索を終えます。優先順位は同じで、`config.txt`、続いて最初の有効な`.json`です。
 - exFATのカードは「カードなし」として扱い、中身には触れません。PlatformIOのビルドもArduino IDEのビルドも同じです。カードはFAT16かFAT32でフォーマットしてください。
 - 保存は、同じフォルダの隠しファイル`.<name>.tmp`に書き込み、書き終えてから保存先のファイルを置き換えます。保存に失敗しても古いファイルが残ります。[カードへの保存](../connections/microsd-card.md#saving)をご覧ください。
 - ブラウザ設定ツールから受け取った設定は、IDの変更の後でDIPスイッチのIDが2回足されることはなくなりました。受け取ったIPアドレス、ポート、MACアドレスは、再起動で反映されます。
@@ -141,7 +141,7 @@ OSCクライアントからは見えない、または処理時間にだけ現�
 ### 変更 {#v2-1-0-changes}
 
 - SDライブラリを`arduino-libraries/SD`から`greiman/SdFat`v2に変えました（長いファイル名のため）。Arduino IDE用のスケッチのフォルダはリポジトリから削除しました。Arduino IDE用のスケッチは、各リリースのアセットの`step-series-universal-firmware.zip`です。
-- STEP400の設定のキー`goUnitlTimeout`（テンプレートの綴りの誤り）を受け付けます。ファームウェアは`goUntilTimeout`を読み、なければ`goUnitlTimeout`を読みます。以前（v2.0.0）は`goUntilTimeout`しか読まなかったので、綴りの誤ったキーの値は黙って無視され、既定値（10000ms）が使われていました。
+- STEP400の設定のキー`goUnitlTimeout`（テンプレートの綴りの誤り）を受け付けます。ファームウェアは`goUntilTimeout`を読み、なければ`goUnitlTimeout`を読みます。以前（v2.0.0）は`goUntilTimeout`しか読まなかったので、綴りの誤ったキーの値は黙って無視され、初期値（10000ms）が使われていました。
 
 ### 移行時の注意 {#v2-1-0-migration}
 
@@ -158,4 +158,4 @@ OSCクライアントからは見えない、または処理時間にだけ現�
 
 ## それ以前のバージョン {#earlier}
 
-STEPシリーズ（STEP400、STEP800、およびSTEP100/STEP200の派生）のファームウェアは、v2.0.0より前は、リポジトリ[step-series-universal-firmware](https://github.com/ponoor/step-series-universal-firmware)でv0.xとv1.xとして開発されていました。これらのバージョンの詳しい変更履歴はありません。GitHubの[Releases](https://github.com/ponoor/step-series-universal-firmware/releases)とタグをご覧ください。それより前のSTEP400とSTEP800のファームウェアは、リポジトリ[ponoor/STEP400](https://github.com/ponoor/STEP400)と[ponoor/STEP800](https://github.com/ponoor/STEP800)にあります。
+STEPシリーズ（STEP400、STEP800、およびSTEP100 / STEP200の派生）のファームウェアは、v2.0.0より前は、リポジトリ[step-series-universal-firmware](https://github.com/ponoor/step-series-universal-firmware)でv0.xとv1.xとして開発されていました。これらのバージョンの詳しい変更履歴はありません。GitHubの[Releases](https://github.com/ponoor/step-series-universal-firmware/releases)とタグをご覧ください。それより前のSTEP400とSTEP800のファームウェアは、リポジトリ[ponoor/STEP400](https://github.com/ponoor/STEP400)と[ponoor/STEP800](https://github.com/ponoor/STEP800)にあります。

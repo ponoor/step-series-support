@@ -16,7 +16,7 @@ STEP100とSTEP200は、Arduino Zero（または互換ボード）、Ethernetシ�
 - Arduino M0
 - [Adafruit METRO M0 Express](https://www.adafruit.com/product/3505)
 
-互換ボードも使えます。Arduino Zeroは、Microchip社のMCU`ATSAMD21G18`を使っています（ファームウェアが使うPlatformIOのボード定義`zeroUSB`は、`ATSAMD21G18A`のものです）。互換ボードを探すときは、このMCUを使った、Arduino Zero型のボードを探してください。互換ボードには、Arduino Zeroのブートローダのものと、Arduino M0のブートローダのものがあります。見分けかたは、[Arduino ZeroかM0か](#zero-or-m0)をご覧ください。
+互換ボードも使えます。Arduino Zeroは、Microchip社のMCU`ATSAMD21G18`を使っています（ファームウェアが使うPlatformIOのボード定義`zeroUSB`は、`ATSAMD21G18A`のものです）。互換ボードを探すときは、このMCUを使った、Arduino Zero型のボードを探してください。互換ボードには、Arduino Zeroのブートローダのものと、Arduino M0のブートローダのものがあります。見分け方は、[Arduino ZeroかM0か](#zero-or-m0)をご覧ください。
 
 ### Arduino ZeroかM0か {#zero-or-m0}
 
@@ -32,7 +32,7 @@ Arduino Zeroとして認識されるボードでD2とD4が入れ替わってい�
 
 ### そのほかのArduino {#other-arduinos}
 
-STEP100/200で使うX-NUCLEOボードのSPIピンは、SPIコネクタではなく、D11、D12、D13を使っています。Arduino ZeroとM0では、これらのピンにSPIの機能が割り当てられています。Arduino UNOでもこれらのピンはSPIのピンとして使われていますので、X-NUCLEOボードを制御することはできますが、UNOはRAMとフラッシュのサイズが小さいので、STEPシリーズのファームウェアは動かせません。
+STEP100とSTEP200で使うX-NUCLEOボードのSPIピンは、SPIコネクタではなく、D11、D12、D13を使っています。Arduino ZeroとM0では、これらのピンにSPIの機能が割り当てられています。Arduino UNOでもこれらのピンはSPIのピンとして使われていますので、X-NUCLEOボードを制御することはできますが、UNOはRAMとフラッシュのサイズが小さいので、STEPシリーズのファームウェアは動かせません。
 
 LeonardoやMEGAでは、D11-D13にSPIの機能が割り当てられていないので、使えません。
 
