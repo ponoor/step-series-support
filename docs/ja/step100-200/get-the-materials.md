@@ -68,7 +68,7 @@ X-NUCLEOボードのデータシートによると、モータ電源の電圧は
 - IHM03A1（PowerSTEP01）: 10.5V〜50V
 - IHM02A1（L6470）: 8V〜45V
 
-どちらも、24Vで4〜5A程度の電源を用意して実験を始めるとよいでしょう。電源とモータの選び方は、[電源とモータの定格](../connections/power-supply-and-motor.md#ratings)をご覧ください。
+どちらも、24Vで4〜5A程度の電源を用意して実験を始めるとよいでしょう。電源とモータの選び方は、[電源とモータの定格の関係](../connections/power-supply-and-motor.md#ratings)をご覧ください。
 
 X-NUCLEOボードにはねじ式端子があるので、ACアダプタから給電するときは、DCジャックのケーブルがあると便利です。
 

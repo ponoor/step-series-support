@@ -4,7 +4,7 @@ title: Connections and settings
 
 # Connections and settings
 
-This section covers what you do before the first motion: wiring the power supply, motors, switches and the network, and setting up the board. It has the procedures and the wiring; how the functions work is explained in the [function guides](../guides/index.md).
+This section covers what you do before the first motion: wiring the power supply, motors, switches and the network, and setting up the board. It has the procedures and the wiring; how the functions work is explained in the [functional guides](../guides/index.md).
 
 ## Pages {#pages}
 

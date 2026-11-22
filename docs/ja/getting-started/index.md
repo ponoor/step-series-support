@@ -25,7 +25,7 @@ STEP100とSTEP200は、Arduino Zero、Ethernetシールド、X-NUCLEOボード�
 
 ## できること {#features}
 
-- **モータを指定の速度で回す、指定の位置まで動かす:** [スピードプロファイルと動作の種類](../guides/speed-profile-and-motions.md)。
+- **モータを指定の速度で回す、指定の位置まで動かす:** [スピードプロファイルと動作](../guides/speed-profile-and-motions.md)。
 - **基準の位置を見つける:** [原点復帰と位置管理](../guides/homing-and-position.md)。HOMEスイッチとLIMITスイッチを使います。
 - **リアルタイムに変わる目標にモータを追従させる:** [サーボモード](../guides/servo-mode.md)。
 - **モータの駆動方式を選ぶ:** [電圧モードと電流モード](../guides/voltage-and-current-mode.md)。KVALとTVALの決め方も説明しています。

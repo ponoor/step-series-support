@@ -124,7 +124,7 @@ OSCクライアントからは見えない、または処理時間にだけ現�
 ### v2.2.0の既知の問題 {#v2-2-0-known-issues}
 
 - **`canSendMsgBeforeDestIp`は、「`/setDestIp`を受信したか」と値を共有しています。** `/setDestIp`を受信した後に設定を保存する（`/saveConfig`、またはブラウザ設定ツール）と、カードに`true`が書き込まれます。ブラウザ設定ツールが`false`を書き込むと、`/setDestIp`をもう一度送るまで、ボードは返信を送りません。保存の後で`/setDestIp`をもう一度送り、保存したファイルの値を確かめてください。[`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip)と[`canSendMsgBeforeDestIp`の既知の問題](../connections/browser-config-tool.md#known-issue)をご覧ください。
-- **設定ファイルなしでの保存。** 設定ファイルなしで起動した（カードがない、または有効なファイルがない）ボードで保存すると、書き込むバージョンと製品名がないので、ファイルは`information.configVersion`が`[-1, 0]`、`information.targetProduct`が`"---"`で書き込まれます。値は保存されます。正しいバージョンと製品名のファイルが必要なときは、ブラウザ設定ツールで作ってください（**Download JSON**）。[カードへの保存](../connections/microsd-card.md#save-target)をご覧ください。
+- **設定ファイルなしでの保存。** 設定ファイルなしで起動した（カードがない、または有効なファイルがない）ボードで保存すると、書き込むバージョンと製品名がないので、ファイルは`information.configVersion`が`[-1, 0]`、`information.targetProduct`が`"---"`で書き込まれます。値は保存されます。正しいバージョンと製品名のファイルが必要なときは、ブラウザ設定ツールで作ってください（**Download JSON**）。[保存先](../connections/microsd-card.md#save-target)をご覧ください。
 - **STEP400（R1）は、Ethernetをつないだ状態でUSBケーブルを抜くと再起動することがあります。** ハードウェアの問題で、v2.1.0と同じです。[STEP400](../hardware/step400.md#usb-unplug)をご覧ください。
 
 ## v2.1.0 {#v2-1-0}

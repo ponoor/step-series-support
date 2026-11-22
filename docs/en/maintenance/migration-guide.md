@@ -221,7 +221,7 @@ With `255`, each motor is judged alone: the motors in the state are changed and 
 
 **Who is affected.** Setups with many boards whose IDs reach the limit.
 
-**What to do.** Choose `myIp` and the IDs so that the sum stays within the limit. Details: [Network and DIP switch](../connections/network-and-dip-switch.md).
+**What to do.** Choose `myIp` and the IDs so that the sum stays within the limit. Details: [Network and the DIP switch](../connections/network-and-dip-switch.md).
 
 ### `goUnitlTimeout` {#go-until-timeout}
 

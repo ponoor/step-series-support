@@ -62,7 +62,7 @@ title: ブラウザ設定ツール
 
 ### `canSendMsgBeforeDestIp`の既知の問題 {#known-issue}
 
-ファームウェアv2.2.0では、ツールで保存すると、設定[`network.canSendMsgBeforeDestIp`](configuration-items.md#network-cansendmsgbeforedestip)が変わることがあります。OSCを使っていて`/setDestIp`を送ってあると、保存したファイルに`true`が書かれます。また、ツールが`false`を書き込むと、ボードは`/setDestIp`をもう一度受け取るまで、返信を送りません。保存したあとは、`/setDestIp`を送り直してください。詳しくは[設定項目](configuration-items.md#network-cansendmsgbeforedestip)をご覧ください。
+ファームウェアv2.2.0では、ツールで保存すると、設定[`network.canSendMsgBeforeDestIp`](configuration-items.md#network-cansendmsgbeforedestip)が変わることがあります。OSCを使っていて`/setDestIp`を送ってあると、保存したファイルに`true`が書かれます。また、ツールが`false`を書き込むと、ボードは`/setDestIp`をもう一度受け取るまで、返信を送りません。保存したあとは、`/setDestIp`を送り直してください。詳しくは[設定項目一覧](configuration-items.md#network-cansendmsgbeforedestip)をご覧ください。
 
 保存に失敗したときは、ツールが、ボードの返信を、考えられる原因とともに表示します。`No SD card`と`SD open failed`の原因は、[エラー](microsd-card.md#errors)にあります。
 
@@ -145,4 +145,4 @@ IPアドレス、ポート、MACアドレス、ボードがドライバに書く
 
 ## 古いファームウェア {#legacy}
 
-v2.1.0より前のファームウェアには、製品ごとの設定ツールを使います。[古いファームウェア](microsd-card.md#legacy)をご覧ください。
+v2.1.0より前のファームウェアには、製品ごとの設定ツールを使います。[古いファームウェア（v2.1.0より前）](microsd-card.md#legacy)をご覧ください。

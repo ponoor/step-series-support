@@ -49,7 +49,7 @@ ACアダプタをDCジャックにつなぎます。プラグは、外径5.5mm�
 
 ![](../../assets/images/image-1609563897700.jpg)
 
-このサイズのモータなら、DCジャックからの給電で十分です。より大きなモータで、高電圧や大電流が必要な場合は、ジャックの隣のねじ式端子を使います。**両方に電源をつながないでください。**詳しくは、[電源の端子](../connections/power-supply-and-motor.md#power-terminals)をご覧ください。
+このサイズのモータなら、DCジャックからの給電で十分です。より大きなモータで、高電圧や大電流が必要な場合は、ジャックの隣のねじ式端子を使います。**両方に電源をつながないでください。**詳しくは、[電源端子](../connections/power-supply-and-motor.md#power-terminals)をご覧ください。
 
 ## ボードの設定 {#board-settings}
 
@@ -72,7 +72,7 @@ DIPスイッチが1で、初期設定のとき、ボードのネットワーク�
 | PCが受信するポート | 50101 <!-- qs-network: pcPort --> |
 <!-- quickstart-network:end -->
 
-これは、IDが1で、ファームウェアの初期値のときの値です。初期値の一覧とIDの加算は、[初期設定](../connections/network-and-dip-switch.md#initial)と[IDの加算](../connections/network-and-dip-switch.md#adding-id)をご覧ください。
+これは、IDが1で、ファームウェアの初期値のときの値です。初期値の一覧とIDの加算は、[初期設定](../connections/network-and-dip-switch.md#initial)と[IPアドレスとポートへのIDの加算](../connections/network-and-dip-switch.md#adding-id)をご覧ください。
 
 ここで電源を入れます。ボードの裏側には、電源電圧や大電流がかかる端子があります。ボードを壊したり、けがをしたりしないように、電気を通さない台の上に置くか、基板の穴にスペーサを取り付けてください。
 
@@ -111,7 +111,7 @@ PCを替えたときやネットワークを変えたときは、`/setDestIp`を
 /run 1 200.
 ```
 
-最初の引数はモータIDで、モータをつないだコネクタの横に、ボードに印刷されている番号です。255はすべてのモータを表します。[モータID](../reference/index.md#motor-id)をご覧ください。2番目の引数は速度で、単位はstep/sです。マイナスの値を指定すると、逆向きに回ります。1回転が200stepのモータ（`SM-42BYG011-25`など）では、`200.`で1秒に1回転します。速度の範囲は、[`/run`](../reference/motor-control.md#run)のリファレンスにあります。
+最初の引数はモータIDで、モータをつないだコネクタの横に、ボードに印刷されている番号です。255はすべてのモータを表します。[モータのID](../reference/index.md#motor-id)をご覧ください。2番目の引数は速度で、単位はstep/sです。マイナスの値を指定すると、逆向きに回ります。1回転が200stepのモータ（`SM-42BYG011-25`など）では、`200.`で1秒に1回転します。速度の範囲は、[`/run`](../reference/motor-control.md#run)のリファレンスにあります。
 
 モータは回りましたか？止めるときは、`/run 1 0`を送るか、[`/softStop`](../reference/motor-control.md#softstop)（減速して止めます）または[`/hardHiZ`](../reference/motor-control.md#hardhiz)で、すべてのモータを止めます。
 
@@ -158,7 +158,7 @@ KVALを上げるとトルクが上がりますが、モータの発熱が大き�
 ## 次のステップ {#next-steps}
 
 - 調整した設定を、ボードを再起動しても残るように保存する: [`/saveConfig`](../reference/system-settings.md#saveconfig)と[設定の仕組み](../connections/how-settings-work.md)。
-- 複数のボードを使う: DIPスイッチでIDを変えます。[IDの加算](../connections/network-and-dip-switch.md#adding-id)。
+- 複数のボードを使う: DIPスイッチでIDを変えます。[IPアドレスとポートへのIDの加算](../connections/network-and-dip-switch.md#adding-id)。
 - モータの基準の位置を見つける: [原点復帰と位置管理](../guides/homing-and-position.md)。
 - 各機能の仕組みを知る: [機能ガイド](../guides/index.md)。
 - コマンドを調べる: [OSCリファレンス](../reference/index.md)。

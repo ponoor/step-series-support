@@ -4,7 +4,7 @@ title: Functional guides
 
 # Functional guides
 
-The functional guides explain how each function of the STEP Series works: the concepts, the states and how they change, and which commands to use in which order. They describe what happens and why. The arguments, the ranges and the replies of each command are in the [OSC command reference](../reference/index.md), which the guides link to.
+The functional guides explain how each function of the STEP Series works: the concepts, the states and how they change, and which commands to use in which order. They describe what happens and why. The arguments, the ranges and the replies of each command are in the [OSC reference](../reference/index.md), which the guides link to.
 
 ## Guides {#guides}
 

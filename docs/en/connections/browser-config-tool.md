@@ -145,4 +145,4 @@ The console of the browser (the developer tools) shows what the tool does. A lin
 
 ## Older firmware {#legacy}
 
-For firmware before v2.1.0, use the configuration tools of the products; see [Older firmware](microsd-card.md#legacy).
+For firmware before v2.1.0, use the configuration tools of the products; see [Older firmware (before v2.1.0)](microsd-card.md#legacy).

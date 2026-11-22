@@ -21,7 +21,7 @@ The environments build for the board `zeroUSB` (Arduino Zero). They need the Eth
 
 ### Arduino M0 and METRO M0 Express {#m0}
 
-`platformio.ini` of v2.2.0 has no environment for the board definition of the Arduino M0 (`mzeroUSB`) or the METRO M0 Express: they remain in it only as commented-out examples of the earlier versions, which do not work with v2.2.0. Use the environment `step100` or `step200`, that is, build as an Arduino Zero. Build the METRO M0 Express as an Arduino Zero too, because the USB serial of its own board definition behaves differently and the [USB serial diagnosis](../maintenance/usb-serial-diagnosis.md) does not work well with it. `platformio.ini` also uses `zeroUSB` for it.
+`platformio.ini` of v2.2.0 has no environment for the board definition of the Arduino M0 (`mzeroUSB`) or the METRO M0 Express: they remain in it only as commented-out examples of the earlier versions, which do not work with v2.2.0. Use the environment `step100` or `step200`, that is, build as an Arduino Zero. Build the METRO M0 Express as an Arduino Zero too, because the USB serial of its own board definition behaves differently and the [Diagnosis via USB serial port](../maintenance/usb-serial-diagnosis.md) does not work well with it. `platformio.ini` also uses `zeroUSB` for it.
 
 For the board with the hardware of the Arduino M0 (D2 and D4 are swapped), define `MZERO_WITH_ZERO_BOOTLOADER` ([Arduino Zero or M0?](get-the-materials.md#zero-or-m0)). With it, the CS pin of the microSD card is D2 in the numbering of the Arduino Zero, which is D4 on the M0. In PlatformIO, add it to the build flags of the environment:
 

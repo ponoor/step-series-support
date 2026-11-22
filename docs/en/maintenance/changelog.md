@@ -76,7 +76,7 @@ Released 2026-10-20. The OSC addresses are compatible with v2.1.0, but the behav
 - **A client replaced by another device with the same IP address** (another PC or network adapter) is now served after `/setDestIp` from the new device, sent 1.5 s or more after the last packet from the old one. Before, the board kept sending to the old MAC address until it was restarted.
 - A send to a destination that never answers ARP no longer stops the processing for every message: the sends are paused for 1 s and then retried (the messages in between are dropped). The retransmission time of the W5500 is 20 ms with 2 retries.
 - The MAC address is also resolved at start-up, after a change of the ID and when the Ethernet link comes up again (once `destIp` is set); the board sends one byte of UDP to port 9 of the broadcast address and of `destIp`, and the messages to `destIp` are dropped meanwhile. When a send to `destIp` fails, the sends are paused for 1 s and a packet from `destIp` resumes them.
-- With `isMyIpAddId` or `isOutPortAddId`, an address beyond .254 or a port beyond 65535 is no longer used: the ID is not added and a warning is printed on the USB serial port ([Network and DIP switch](../connections/network-and-dip-switch.md)).
+- With `isMyIpAddId` or `isOutPortAddId`, an address beyond .254 or a port beyond 65535 is no longer used: the ID is not added and a warning is printed on the USB serial port ([Network and the DIP switch](../connections/network-and-dip-switch.md)).
 
 #### microSD card {#v2-2-0-sd}
 
@@ -124,7 +124,7 @@ These changes are not visible to OSC clients, or only in timing.
 ### Known issues in v2.2.0 {#v2-2-0-known-issues}
 
 - **`canSendMsgBeforeDestIp` shares its value with "`/setDestIp` has been received".** After `/setDestIp` was received, saving the configuration (`/saveConfig`, or with the browser configuration tool) writes `true` to the card, and when the browser configuration tool writes `false`, the board sends no reply until `/setDestIp` is sent again. Send `/setDestIp` again after saving, and check the value in the saved file. See [`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip) and [A known issue with `canSendMsgBeforeDestIp`](../connections/browser-config-tool.md#known-issue).
-- **Saving without a configuration file.** If the board started without a configuration file (no card, or no valid file) and you save, the file is written with `information.configVersion` `[-1, 0]` and `information.targetProduct` `"---"`, because the board has no version and product to write. The values are saved. To get a file with the right version and product, make it with the browser configuration tool (**Download JSON**). See [Saving to the card](../connections/microsd-card.md#save-target).
+- **Saving without a configuration file.** If the board started without a configuration file (no card, or no valid file) and you save, the file is written with `information.configVersion` `[-1, 0]` and `information.targetProduct` `"---"`, because the board has no version and product to write. The values are saved. To get a file with the right version and product, make it with the browser configuration tool (**Download JSON**). See [Where it is saved](../connections/microsd-card.md#save-target).
 - **The STEP400 (R1 board) can restart when the USB cable is unplugged while the Ethernet cable is connected.** It is a hardware issue, the same as with v2.1.0. See [STEP400](../hardware/step400.md#usb-unplug).
 
 ## v2.1.0 {#v2-1-0}

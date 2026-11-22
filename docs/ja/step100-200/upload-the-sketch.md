@@ -11,7 +11,7 @@ STEP100またはSTEP200向けにファームウェアをビルドして、Arduin
 
 ## PlatformIOを使う場合 {#platformio}
 
-<https://github.com/ponoor/step-series-universal-firmware>からファームウェアを入手し、[PlatformIOでのコンパイル](../maintenance/compile-the-arduino-sketch.md#platformio)のとおりにPlatformIOで開きます。ライブラリは自動でインストールされます。
+<https://github.com/ponoor/step-series-universal-firmware>からファームウェアを入手し、[PlatformIOでコンパイルする](../maintenance/compile-the-arduino-sketch.md#platformio)のとおりにPlatformIOで開きます。ライブラリは自動でインストールされます。
 
 ### 環境の選択 {#select-env}
 
@@ -38,7 +38,7 @@ v2.2.0を、この設定で`step100`と`step200`の両方についてビルド�
 
 ## Arduino IDEを使う場合 {#arduino-ide}
 
-手順は[Arduino IDEでのコンパイル](../maintenance/compile-the-arduino-sketch.md#arduino-ide)にあります。SAMDコアをインストールし、ライブラリをインストールし、最新のリリースのスケッチ（"Assets"にある`step-series-universal-firmware.zip`）を開きます。STEP100とSTEP200では、次の点に注意してください。
+手順は[Arduino IDEでコンパイルする](../maintenance/compile-the-arduino-sketch.md#arduino-ide)にあります。SAMDコアをインストールし、ライブラリをインストールし、最新のリリースのスケッチ（"Assets"にある`step-series-universal-firmware.zip`）を開きます。STEP100とSTEP200では、次の点に注意してください。
 
 - **ライブラリ:** 共通のライブラリに加えて、STEP100は[Ponoor PowerSTEP01 Library](https://github.com/ponoor/Ponoor_PowerSTEP01_Library)、STEP200は[Ponoor L6470 Library](https://github.com/ponoor/Ponoor_L6470_Library)をインストールします。バージョンは[ライブラリ](../maintenance/compile-the-arduino-sketch.md#libraries)にあります。
 - **`boardsDef.h`でボードを選ぶ:** ファイルの冒頭にある、使う製品のコメント`//`を外します。STEP100の場合は次のようになります。

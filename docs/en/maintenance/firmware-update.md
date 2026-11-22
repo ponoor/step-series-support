@@ -6,7 +6,7 @@ title: Firmware update
 
 The firmware is updated to fix bugs and to add features. Check the version of the firmware on the board first. If it is older than the [latest release on GitHub](https://github.com/ponoor/step-series-universal-firmware/releases), update it.
 
-The changes of each version are in the [Changelog](changelog.md). Before you update a system that is running, read the notes for the new version in the [Migration guide](migration-guide.md): some versions change the behavior of OSC commands or add error replies.
+The changes of each version are in the [Firmware changelog](changelog.md). Before you update a system that is running, read the notes for the new version in the [Migration guide](migration-guide.md): some versions change the behavior of OSC commands or add error replies.
 
 ## Checking the version of the firmware on the board {#checking}
 

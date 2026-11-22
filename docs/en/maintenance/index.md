@@ -12,5 +12,5 @@ How to keep the firmware up to date, how to build it, and how to find the cause 
 - [Compiling the firmware](compile-the-arduino-sketch.md): how to build the firmware with PlatformIO or the Arduino IDE and upload it.
 - [Diagnosis via USB serial port](usb-serial-diagnosis.md): the status, the configuration and the commands of the USB serial port.
 - [Troubleshooting](troubleshooting.md): symptoms, their causes, and what to do.
-- [Changelog](changelog.md): the changes of each version of the firmware, v2.0.0 to v2.2.0.
+- [Firmware changelog](changelog.md): the changes of each version of the firmware, v2.0.0 to v2.2.0.
 - [Migration guide](migration-guide.md): what to check when you update from v2.1.0 to v2.2.0, and how to go back.

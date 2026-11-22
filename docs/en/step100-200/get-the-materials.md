@@ -68,7 +68,7 @@ According to the datasheets of the X-NUCLEO boards, the voltage of the motor pow
 - IHM03A1 (PowerSTEP01): 10.5 V to 50 V
 - IHM02A1 (L6470): 8 V to 45 V
 
-To start experimenting, prepare a power supply of about 24 V and 4 to 5 A for both. For how to choose a power supply and a motor, see [Power supply and motor](../connections/power-supply-and-motor.md#ratings).
+To start experimenting, prepare a power supply of about 24 V and 4 to 5 A for both. For how to choose a power supply and a motor, see [Power supply and motor ratings](../connections/power-supply-and-motor.md#ratings).
 
 The X-NUCLEO board has a screw terminal, so a cable with a DC jack is useful when you supply the power with an AC adapter.
 

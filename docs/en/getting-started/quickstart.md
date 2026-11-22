@@ -72,7 +72,7 @@ With the DIP switch at 1 and the initial settings, the network settings of the b
 | Port that the PC receives on | 50101 <!-- qs-network: pcPort --> |
 <!-- quickstart-network:end -->
 
-These are the values for ID 1 with the initial values of the firmware. The list of the initial values and the way the ID is added are in [Initial settings](../connections/network-and-dip-switch.md#initial) and [Adding the ID](../connections/network-and-dip-switch.md#adding-id).
+These are the values for ID 1 with the initial values of the firmware. The list of the initial values and the way the ID is added are in [Initial settings](../connections/network-and-dip-switch.md#initial) and [Adding the ID to the IP address and the port](../connections/network-and-dip-switch.md#adding-id).
 
 Turn on the power supply now. The back of the board has pins that carry the supply voltage and a large current. Put the board on an insulator, or attach spacers to the holes of the board, so that you do not damage the board or hurt yourself.
 

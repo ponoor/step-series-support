@@ -22,7 +22,7 @@ STEP400とSTEP800の[クイックスタート](../getting-started/quickstart.md)
 | STEP100 | STEP400 | 1, 255 |
 | STEP200 | STEP800 | 1-2, 255 |
 
-範囲外のモータIDには、`MotorIdNotMatch`が返ります（[ボードへのメッセージ](../reference/index.md#messages-to-the-board)）。
+範囲外のモータIDには、`MotorIdNotMatch`が返ります（[ボードへ送信するメッセージ](../reference/index.md#messages-to-the-board)）。
 
 ## 起動 {#start-up}
 
@@ -60,7 +60,7 @@ Ethernetシールドには、microSDカードのスロットがあるものが�
 
 ## HOMEスイッチ {#home}
 
-STEP400とSTEP800では、HOMEスイッチ用のコネクタは、ドライバICのSWピンにつながっています。STEP100とSTEP200でも、同じように、X-NUCLEOボード上のSWピンにスイッチをつなぎます。このピンはプルアップされていますので、スイッチやセンサがオンになったときに、ピンがGNDにつながるようにします。電気的な接続は、[スイッチやセンサの配線](../connections/sensors-and-switches.md#wiring)で説明しています。
+STEP400とSTEP800では、HOMEスイッチ用のコネクタは、ドライバICのSWピンにつながっています。STEP100とSTEP200でも、同じように、X-NUCLEOボード上のSWピンにスイッチをつなぎます。このピンはプルアップされていますので、スイッチやセンサがオンになったときに、ピンがGNDにつながるようにします。電気的な接続は、[スイッチとセンサの配線](../connections/sensors-and-switches.md#wiring)で説明しています。
 
 ### STEP100（X-NUCLEO-IHM03A1） {#home-step100}
 
