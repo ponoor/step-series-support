@@ -43,7 +43,7 @@ To resolve the MAC address, the board sends one byte of UDP to port 9 (discard) 
 
 ##### Changes
 
-- **v2.2.0**: When the `/setDestIp` starts the resolution of the MAC address (the first one, one from another address, or one 1.5 s or more after the last packet from the destination), the message is sent once it has been resolved, so it can come up to about 2 s later; otherwise it is sent at once. If it does not come, send `/setDestIp` again.
+- **v2.2.0**: When the `/setDestIp` starts the resolution of the MAC address (the first one, one from another address, or one 1.5 s or more after the last packet from the destination), the message is sent once it has been resolved, so it can come a few seconds later (it depends on the route, such as Wi-Fi); otherwise it is sent at once. If it does not come, send `/setDestIp` again.
 
 #### Changes
 

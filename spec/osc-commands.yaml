@@ -3566,7 +3566,7 @@ messages:
           en: Indicates if destIp has been changed. 1 if it has been changed, or 0 if the same address has already been set.
           ja: destIpが変更されたかどうかを示します。変更されていると1, すでに同じアドレスが設定されていた場合は0
     changes:
-      - {version: "2.2.0", en: "When the [[/setDestIp]] starts the resolution of the MAC address (the first one, one from another address, or one 1.5 s or more after the last packet from the destination), the message is sent once it has been resolved, so it can come up to about 2 s later; otherwise it is sent at once. If it does not come, send `/setDestIp` again.", ja: "[[/setDestIp]]がMACアドレスの解決を始めるとき（最初の1回、別のアドレスからのとき、送信先からの最後のパケットから1.5秒以上後のとき）は、解決が終わってからこのメッセージを送信するため、最大約2秒遅れることがあります。それ以外のときはすぐに送信されます。届かないときは、もう一度`/setDestIp`を送ってください。"}
+      - {version: "2.2.0", en: "When the [[/setDestIp]] starts the resolution of the MAC address (the first one, one from another address, or one 1.5 s or more after the last packet from the destination), the message is sent once it has been resolved, so it can come a few seconds later (it depends on the route, such as Wi-Fi); otherwise it is sent at once. If it does not come, send `/setDestIp` again.", ja: "[[/setDestIp]]がMACアドレスの解決を始めるとき（最初の1回、別のアドレスからのとき、送信先からの最後のパケットから1.5秒以上後のとき）は、解決が終わってからこのメッセージを送信するため、数秒（Wi-Fiなど経路によって変わります）遅れることがあります。それ以外のときはすぐに送信されます。届かないときは、もう一度`/setDestIp`を送ってください。"}
 
   - address: /version
     args:
