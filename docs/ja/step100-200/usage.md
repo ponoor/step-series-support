@@ -40,7 +40,7 @@ STEP400とSTEP800では、モータ電源を供給すれば、Arduino部分もEt
 
 Ethernetシールドには、microSDカードのスロットがあるものが多くあります。これを使って、[microSDカードでの設定](../connections/microsd-card.md)のとおりに設定ファイルを使えます。ボードがカードを読むのは、起動時だけです。
 
-[ブラウザ設定ツール](../connections/browser-config-tool.md)は、STEP100とSTEP200も使えるボードとして扱います。ボードから製品名を受け取り、**Current Mode**のパネルは、STEP100では表示し、STEP200では表示しません。LIMITスイッチとブレーキの項目は表示しません（`HAVE_LIMIT_GPIO`を有効にすると、LIMITスイッチの項目が表示されます。下をご覧ください）。実際のSTEP100やSTEP200では試していません。
+[ブラウザ設定ツール](../connections/browser-config-tool.md)は、STEP100とSTEP200も使えるボードとして扱います。ボードから製品名を受け取ります。**Current Mode**のパネルは、STEP100では表示し、STEP200では表示しません。LIMITスイッチとブレーキの項目は、どちらでも表示しません（`HAVE_LIMIT_GPIO`を有効にすると、LIMITスイッチの項目が表示されます。下をご覧ください）。実際のSTEP100やSTEP200では試していません。
 
 設定ファイルは、対応する製品のものも使えます。STEP100にはSTEP400の設定ファイルを、STEP200にはSTEP800の設定ファイルを使います。ファイルの製品名が異なっていても、ファームウェアは読み込みます（USBシリアルの`s`に、ファイルと製品が一致しないと表示されます）。ボードのモータの数を超える設定は適用されません。LIMITスイッチの設定も、`HAVE_LIMIT_GPIO`を有効にしていなければ適用されません（[LIMITスイッチ](#limit)）。
 

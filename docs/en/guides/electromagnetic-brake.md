@@ -108,7 +108,7 @@ When the USB cable is pulled out while the Ethernet cable is connected, the STEP
 The firmware cannot prevent these times in which the load is not held:
 
 - **Power-on of the STEP800**: all the brakes stay released for about 250 ms after the power is applied, mostly the time of the bootloader. **Depending on the power supply and the conditions, it can be longer: with 24 V, the brakes stayed released for about 2 s in a measurement.** This depends on the hardware, not on the firmware.
-- **The reset button and a drop of the supply voltage**: the drivers are in standby and the brakes (STEP800) stay released for about 0.5 s, until the firmware starts.
+- **The RESET switch and a drop of the supply voltage**: the drivers are in standby and the brakes (STEP800) stay released for about 0.5 s, until the firmware starts.
 - On the STEP400 with the EMB-STEP400, the brakes engage at once also at a reset (the brake board pulls them down).
 - Even when the brake is engaged electrically first, the shaft is held only after the brake has locked mechanically, which takes tens of ms.
 

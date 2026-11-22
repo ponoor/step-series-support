@@ -12,7 +12,7 @@ How to connect a power supply and a motor to the STEP400 and the STEP800, and ho
 
 The two boards have different power ratings, and the power goes directly to the driver ICs. The control circuits get 5 V and 3.3 V from it through on-board converters.
 
-When a PC is connected to the USB-C connector, only the control circuits are powered. The USB-C connector is for communication: USB supplies at most 5 V, which cannot drive the motor drivers. It is safe to connect USB while the power is supplied to one of the two power inputs below.
+When a PC is connected to the USB Type-C connector, only the control circuits are powered. The USB Type-C connector is for communication: USB supplies at most 5 V, which cannot drive the motor drivers. It is safe to connect USB while the power is supplied to one of the two power inputs below.
 
 ### Power terminals {#power-terminals}
 

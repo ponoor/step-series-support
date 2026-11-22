@@ -4,9 +4,9 @@ title: モータドライバの設定
 
 # モータドライバの設定
 
-マイクロステップモードや低速最適化など、モータドライバの設定と、モータドライバの状態を取得するコマンドです。
+マイクロステップモードや低速最適化など、モータドライバを設定するコマンドと、モータドライバの状態を取得するコマンドです。
 
-## マイクロステップと低速時の補正 {#motor-driver-settings-group}
+## マイクロステップと低速最適化 {#motor-driver-settings-group}
 
 <!-- osc: /setMicrostepMode -->
 <!-- generated:begin osc /setMicrostepMode -->
