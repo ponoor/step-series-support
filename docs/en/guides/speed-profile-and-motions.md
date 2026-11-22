@@ -21,7 +21,7 @@ The firmware has default values, but you need to set the values for your own env
 
 ### Setting the profile {#setting}
 
-Use [`/setSpeedProfile`](../reference/speed-profile.md#setspeedprofile) to set the three values. Acceleration and deceleration can be set only while the motor is stopped (or HiZ). While the motor is turning, the board replies `/error/command MotorNotStopped` and keeps the old values. The maximum speed can be set at any time.
+Use [`/setSpeedProfile`](../reference/speed-profile.md#setspeedprofile) to set the three values. Acceleration and deceleration can be set only while the motor is stopped (or HiZ). While the motor is turning, the board replies `/error/command MotorNotStopped` and keeps the old values. The maximum speed can be set at any time with [`/setMaxSpeed`](../reference/speed-profile.md#setmaxspeed).
 
 The same applies to the other settings that are written to the driver only when the motor is stopped: [`/setAcc`](../reference/speed-profile.md#setacc), [`/setDec`](../reference/speed-profile.md#setdec), [`/setMinSpeed`](../reference/speed-profile.md#setminspeed) and [`/enableLowSpeedOptimize`](../reference/motor-driver-settings.md#enablelowspeedoptimize), and the Raw versions of them. Which commands need which state is shown in each command as the executable timing; see also [Command executable timing](../reference/index.md#command-executable-timing).
 

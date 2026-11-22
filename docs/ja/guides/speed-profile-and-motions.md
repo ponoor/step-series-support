@@ -21,7 +21,7 @@ title: スピードプロファイルと動作
 
 ### 設定の方法 {#setting}
 
-[`/setSpeedProfile`](../reference/speed-profile.md#setspeedprofile)で、3つの値を設定します。加速度と減速度は、モータが停止している（または無励磁の）ときしか設定できません。モータが回転している間は、`/error/command MotorNotStopped`を返し、元の値のままです。最大速度は、いつでも設定できます。
+[`/setSpeedProfile`](../reference/speed-profile.md#setspeedprofile)で、3つの値を設定します。加速度と減速度は、モータが停止している（または無励磁の）ときしか設定できません。モータが回転している間は、`/error/command MotorNotStopped`を返し、元の値のままです。最大速度は、[`/setMaxSpeed`](../reference/speed-profile.md#setmaxspeed)でいつでも設定できます。
 
 モータの停止中にしかドライバに書き込めない設定は、ほかにもあります。[`/setAcc`](../reference/speed-profile.md#setacc)、[`/setDec`](../reference/speed-profile.md#setdec)、[`/setMinSpeed`](../reference/speed-profile.md#setminspeed)、[`/enableLowSpeedOptimize`](../reference/motor-driver-settings.md#enablelowspeedoptimize)と、それぞれのRaw版です。どのコマンドがどの状態で実行できるかは、各コマンドの「実行可能タイミング」に載せています。[コマンドを実行可能なタイミング](../reference/index.md#command-executable-timing)もご覧ください。
 

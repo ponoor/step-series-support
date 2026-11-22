@@ -64,7 +64,7 @@ First the motor moves toward the home sensor with [`/goUntil`](../reference/homi
 
 [`/releaseSw`](../reference/homing.md#releasesw) moves the motor slowly in the opposite direction from the current position, and stops it immediately when the sensor turns off. The position where the motor stops is the home position. Strictly speaking, `/goUntil` does not stop at the moment the sensor turns on; the motor decelerates first, so it stops a little away from the point where the sensor responded. The firmware does not correct this, because every environment is different.
 
-Both commands can be set to reset the current position to 0 at the moment the sensor turns on, with [`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode).
+With the argument `ACT`, both commands reset the current position to 0 (`ACT` 0) or copy it to the MARK register (`ACT` 1) when the sensor changes: [`/goUntil`](../reference/homing.md#gountil) when it turns on, [`/releaseSw`](../reference/homing.md#releasesw) when it turns off. [`/homing`](../reference/homing.md#homing) resets it to 0.
 
 A demonstration video of `/goUntil` and `/releaseSw`: [Homing demo (Vimeo)](https://vimeo.com/1239729741)
 

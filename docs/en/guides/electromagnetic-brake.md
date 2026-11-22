@@ -20,7 +20,7 @@ The setting can be changed only while the driver is HiZ and, to disable the brak
 
 ## States of the brake {#states}
 
-The brake of each motor is in one of six states. [`/getBrakeStatus`](../reference/brake.md#getbrakestatus) returns the number. The numbers are part of the specification; new states will only be added as 6, 7, ...  A motor whose brake is disabled has the state -1.
+The brake of each motor is in one of six states. [`/getBrakeStatus`](../reference/brake.md#getbrakestatus) returns the number. The numbers are part of the specification; new states will only be added as 6, 7, ... A motor whose brake is disabled has the state -1.
 
 | State | Name | Brake output | Driver | Meaning |
 | --- | --- | --- | --- | --- |

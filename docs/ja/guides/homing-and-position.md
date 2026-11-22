@@ -64,7 +64,7 @@ HOMEスイッチやLIMITスイッチがオンのときに、モータが回転�
 
 [`/releaseSw`](../reference/homing.md#releasesw)は、現在位置から逆向きにゆっくり移動し、センサがオフになったところで即座に停止します。モータが停止した位置が原点です。ただし厳密には、`/goUntil`はセンサがオンになった瞬間に停止するのではなく、減速して停止します。このため、センサが反応した点から少しずれた位置で止まります。これはファームウェアでは補正しません。環境によって異なるためです。
 
-どちらのコマンドも、センサがオンになった瞬間に現在位置を0にリセットする設定にできます。[`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode)をご覧ください。
+どちらのコマンドも、引数`ACT`で、センサが変化したとき（[`/goUntil`](../reference/homing.md#gountil)はオンになったとき、[`/releaseSw`](../reference/homing.md#releasesw)はオフになったとき）に、現在位置を0にリセットする（`ACT`が0）か、MARKレジスタにコピーする（`ACT`が1）かを選べます。[`/homing`](../reference/homing.md#homing)は0にリセットします。
 
 `/goUntil`と`/releaseSw`のデモ動画: [原点復帰のデモ（Vimeo）](https://vimeo.com/1239729741)
 
@@ -76,7 +76,7 @@ HOMEスイッチやLIMITスイッチがオンのときに、モータが回転�
 
 モータがサーボモードのときは、[`/goUntil`](../reference/homing.md#gountil)、[`/goUntilRaw`](../reference/motor-control.md#gountilraw)、[`/releaseSw`](../reference/homing.md#releasesw)は`InServoMode`で拒否されます。モータのブレーキが解放されていないときは、[`/homing`](../reference/homing.md#homing)は`BrakeEngaged`で拒否されます。
 
-### タイムアウト {#timeouts}
+### 原点復帰のタイムアウト {#timeouts}
 
 `/goUntil`と`/releaseSw`には、それぞれタイムアウトを設定できます（[`/setGoUntilTimeout`](../reference/homing.md#setgountiltimeout)、[`/setReleaseSwTimeout`](../reference/homing.md#setreleaseswtimeout)）。この時間内にセンサの状態が変わらなかったときは、ボードはモータを即停止し、`/error/command GoUntilTimeout`か`ReleaseSwTimeout`を送ります。センサが反応しなくなったときに、機構が行き止まりに押し当てられ続けるのを防ぎます。
 
