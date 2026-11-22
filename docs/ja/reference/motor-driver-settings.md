@@ -765,7 +765,7 @@ STEP400のみです。ファームウェアはSTEP800でもこのコマンドを
 | UVLO_ADC | - | この機能はSTEP400では使えませんので常時無効になっています。 |
 | OCD | OCD | [`/enableOverCurrentReport`](alarm-settings.md#enableovercurrentreport) |
 | STALL_A, STALL_B | STEP_LOSS_A, STEP_LOSS_B | [`/enableStallReport`](alarm-settings.md#enablestallreport) |
-| CMD_ERROR | WRONG_CMD, NOTPREF_CMD | [`/reportError`](system-settings.md#reporterror) |
+| CMD_ERROR | WRONG_CMD, NOTPERF_CMD | [`/reportError`](system-settings.md#reporterror) |
 | TH_STATUS | TH_WRN, TH_SD | [`/enableThermalStatusReport`](alarm-settings.md#enablethermalstatusreport) |
 | SW_EVN | SW_EVN | [`/enableSwEventReport`](home-and-limit-sensors.md#enablesweventreport) |
 | MOT_STATUS | MOT_STATUS | [`/enableMotorStatusReport`](motor-driver-settings.md#enablemotorstatusreport) |

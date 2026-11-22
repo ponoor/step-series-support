@@ -766,7 +766,7 @@ This command does not clear the latched flags; only the status poll of the firmw
 | UVLO_ADC | - | This feature is not available in STEP400 and is always disabled. |
 | OCD | OCD | [`/enableOverCurrentReport`](alarm-settings.md#enableovercurrentreport) |
 | STALL_A, STALL_B | STEP_LOSS_A, STEP_LOSS_B | [`/enableStallReport`](alarm-settings.md#enablestallreport) |
-| CMD_ERROR | WRONG_CMD, NOTPREF_CMD | [`/reportError`](system-settings.md#reporterror) |
+| CMD_ERROR | WRONG_CMD, NOTPERF_CMD | [`/reportError`](system-settings.md#reporterror) |
 | TH_STATUS | TH_WRN, TH_SD | [`/enableThermalStatusReport`](alarm-settings.md#enablethermalstatusreport) |
 | SW_EVN | SW_EVN | [`/enableSwEventReport`](home-and-limit-sensors.md#enablesweventreport) |
 | MOT_STATUS | MOT_STATUS | [`/enableMotorStatusReport`](motor-driver-settings.md#enablemotorstatusreport) |

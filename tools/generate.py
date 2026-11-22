@@ -40,8 +40,7 @@ the English one; the number of such texts is printed.
 Initial values (`--defaults`): `firmware` shows the built-in value of the firmware, `template`
 the value of configGenerator/configTemplate_*.json, `both` (default) shows both when they differ.
 
-Markers are counted in docs/en/ and docs/ja/ only (the old pages are not counted; the expansion above looks at all of
-`docs/`). The usual run prints one WARNING line per language with the numbers and does not change the exit code;
+Markers are counted in docs/en/ and docs/ja/ only (the expansion above looks at all of `docs/`). The usual run prints one WARNING line per language with the numbers and does not change the exit code;
 `--coverage` (also in the commit hook) lists every missing, duplicated or misplaced marker as an error.
 
 Ids of the headings: every `##` and `###` that this script writes has an id `{#...}` that is the same in English and

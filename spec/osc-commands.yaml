@@ -1176,7 +1176,7 @@ commands:
           - [UVLO_ADC, "-", {en: This feature is not available in STEP400 and is always disabled., ja: この機能はSTEP400では使えませんので常時無効になっています。}]
           - [OCD, OCD, "[[/enableOverCurrentReport]]"]
           - ["STALL_A, STALL_B", "STEP_LOSS_A, STEP_LOSS_B", "[[/enableStallReport]]"]
-          - [CMD_ERROR, "WRONG_CMD, NOTPREF_CMD", "[[/reportError]]"]
+          - [CMD_ERROR, "WRONG_CMD, NOTPERF_CMD", "[[/reportError]]"]
           - [TH_STATUS, "TH_WRN, TH_SD", "[[/enableThermalStatusReport]]"]
           - [SW_EVN, SW_EVN, "[[/enableSwEventReport]]"]
           - [MOT_STATUS, MOT_STATUS, "[[/enableMotorStatusReport]]"]
