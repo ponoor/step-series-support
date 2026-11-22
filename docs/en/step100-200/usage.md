@@ -76,7 +76,7 @@ On the IHM02A1, the `J2` connector is the SW pin. The white circle (●) on the 
 
 ![](../../assets/images/IMG_4312.jpg)![](../../assets/images/image.png)
 
-This is an example of the connection to the SW terminal of the first driver. A jump wire is used instead of a switch to test the function.
+This is an example of the connection to the SW terminal of the first driver. A jumper wire is used instead of a switch to test the function.
 
 ![](../../assets/images/IMG_4321.jpg)
 
