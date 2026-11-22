@@ -176,6 +176,10 @@ response_cls:
   /resetDevice: [/booted]
   /enableLowSpeedOptimize: [/lowSpeedOptimizeThreshold]
 
+# Commands whose YAML `notifies` the library does not attach as `response_cls` and `callback`
+# (kept as in v1.0.0: adding the fields would change the order of the fields).
+no_notifies: [/homing]
+
 # Arguments that the library accepts as optional (default None) although the YAML lists them as plain arguments.
 optional:
   /error/command: [motorID]

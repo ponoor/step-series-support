@@ -311,7 +311,7 @@ class Gen:
             lines += doc + [""]
         lines.append(f'    address: str = field(default="{addr}", init=False)')
         resp = self.response_classes(self.spec.response_messages(c)) if kind == "Get" else []
-        notifies = c.get("notifies", [])
+        notifies = [] if addr in self.compat.get("no_notifies", []) else c.get("notifies", [])
         if kind == "Set" and notifies:
             resp = self.response_classes(notifies)
         fixed = self.compat.get("response_cls", {}).get(addr)
