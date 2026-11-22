@@ -22,7 +22,7 @@ If this is your first time, read the [Overview](getting-started/index.md), and t
 
 ## Resources {#resources}
 
-- Products: [STEP400](https://ponoor.com/en/products/step400/), [STEP800](https://ponoor.com/en/products/step800/), [STEP100 / STEP200](https://ponoor.com/products/step100-200/)
+- Products: [STEP400](https://ponoor.com/en/products/step400/), [STEP800](https://ponoor.com/en/products/step800/), [STEP100 / STEP200](https://ponoor.com/en/products/step100-200/)
 - [Firmware](https://github.com/ponoor/step-series-universal-firmware) (open source)
 - [Browser configuration tool](https://ponoor.com/tools/step-config/)
 - [Forum](https://github.com/ponoor/step-series-support/discussions) for questions and discussion

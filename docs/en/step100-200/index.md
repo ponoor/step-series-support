@@ -29,7 +29,7 @@ This section mainly describes how to assemble and how to write the firmware. For
 
 ## Resources {#resources}
 
-- [Product: STEP100 / STEP200](https://ponoor.com/products/step100-200/)
+- [Product: STEP100 / STEP200](https://ponoor.com/en/products/step100-200/)
 - [Updates: Pros and Cons of Stepper Motors](https://ponoor.com/en/updates/2020/11/pros-and-cons-of-stepper-motors/)
 - [Updates: OSC and Programming Environments](https://ponoor.com/en/updates/2020/12/video-step400-800-osc-example-files/)
 - [Updates: How To Get Started With Mechanical Parts](https://ponoor.com/en/updates/2021/01/how-to-get-started-with-mechanical-parts/)
