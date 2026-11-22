@@ -108,9 +108,9 @@ HOMEスイッチとLIMITスイッチによる動作の禁止（[`/setProhibitMot
 | [`/enableStallReport`](../reference/alarm-settings.md#enablestallreport) | (int)motorID (bool)enable | 閾値は`/setStallThreshold`で設定できます。 |
 | [`/setStallThreshold`](../reference/alarm-settings.md#setstallthreshold) | (int)motorID (int)STALL_TH | ストール検出の閾値を設定します。STEP400とSTEP800で設定する値の範囲は異なります。 |
 | [`/getStallThreshold`](../reference/alarm-settings.md#getstallthreshold) | (int)motorID | ストール検出の閾値を取得します。 |
-| [`/setProhibitMotionOnHomeSw`](../reference/alarm-settings.md#setprohibitmotiononhomesw) | (int)motorID (bool)enable | HOMEスイッチがオンの状態で、原点復帰方向へのモーションコマンドを禁止します。原点復帰方向はconfigToolや`/setHomingDirection`で設定できます。 |
+| [`/setProhibitMotionOnHomeSw`](../reference/alarm-settings.md#setprohibitmotiononhomesw) | (int)motorID (bool)enable | HOMEスイッチがオンの状態で、原点復帰方向へのモーションコマンドを禁止します。原点復帰方向はブラウザ設定ツールや`/setHomingDirection`で設定できます。 |
 | [`/getProhibitMotionOnHomeSw`](../reference/alarm-settings.md#getprohibitmotiononhomesw) | (int)motorID | HOMEスイッチがオンの状態で、原点復帰方向へのモーションコマンドが禁止されているかどうかを返します。 |
-| [`/setProhibitMotionOnLimitSw`](../reference/alarm-settings.md#setprohibitmotiononlimitsw) | (int)motorID (bool)enable | LIMITスイッチがオンの状態で、原点復帰方向の逆方向へのモーションコマンドを禁止します。原点復帰方向はconfigToolや`/setHomingDirection`で設定できます。 |
+| [`/setProhibitMotionOnLimitSw`](../reference/alarm-settings.md#setprohibitmotiononlimitsw) | (int)motorID (bool)enable | LIMITスイッチがオンの状態で、原点復帰方向の逆方向へのモーションコマンドを禁止します。原点復帰方向はブラウザ設定ツールや`/setHomingDirection`で設定できます。 |
 | [`/getProhibitMotionOnLimitSw`](../reference/alarm-settings.md#getprohibitmotiononlimitsw) | (int)motorID | LIMITスイッチがオンの状態で、原点復帰方向の逆方向へのモーションコマンドが禁止されているかどうかを返します。 |
 | [`/getStatus`](../reference/motor-driver-settings.md#getstatus) | (int)motorID | モータドライバ（PowerSTEP01/L6470）のSTATUSレジスタを取得します。STATUSレジスタにはモータやアラーム、スイッチの状態などが含まれます。 |
 | [`/getStatusList`](../reference/motor-driver-settings.md#getstatuslist) | - | すべてのモータのSTATUSレジスタをまとめて取得します。レジスタの内容は`/getStatus`を参照してください。 |

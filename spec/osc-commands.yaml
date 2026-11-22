@@ -1427,8 +1427,8 @@ commands:
           - {value: 0, en: Allow, ja: 許可}
     timing: always
     description:
-      en: Prohibits any motion commands towards the origin point when the HOME switch is activated. The direction to the origin point can be configured through the configuration tool or by the `/setHomingDirection` command.
-      ja: HOMEスイッチがオンの状態で、原点復帰方向へのモーションコマンドを禁止します。原点復帰方向はconfigToolや`/setHomingDirection`で設定できます。
+      en: Prohibits any motion commands towards the origin point when the HOME switch is activated. The direction to the origin point can be configured through the browser configuration tool or by the `/setHomingDirection` command.
+      ja: HOMEスイッチがオンの状態で、原点復帰方向へのモーションコマンドを禁止します。原点復帰方向はブラウザ設定ツールや`/setHomingDirection`で設定できます。
     changes:
       - {version: "2.2.0", en: "The automatic hard stop at the home switch is not sent to a motor whose driver is HiZ, also with the brake disabled (a hard stop energizes a HiZ driver).", ja: "ドライバが無励磁のモータには、HOMEスイッチでの自動の即停止を送りません。電磁ブレーキが無効でも同じです（即停止は無励磁のドライバを励磁してしまうため）。"}
     see_also: [/getProhibitMotionOnHomeSw, /setHomingDirection]
@@ -1454,8 +1454,8 @@ commands:
     boards: [STEP400]
     timing: always
     description:
-      en: Prohibits any motion commands towards the leaving direction from origin point, when the LIMIT switch is activated. The direction to the origin point can be configured through the configuration tool or by the `/setHomingDirection` command.
-      ja: LIMITスイッチがオンの状態で、原点復帰方向の逆方向へのモーションコマンドを禁止します。原点復帰方向はconfigToolや`/setHomingDirection`で設定できます。
+      en: Prohibits any motion commands towards the leaving direction from origin point, when the LIMIT switch is activated. The direction to the origin point can be configured through the browser configuration tool or by the `/setHomingDirection` command.
+      ja: LIMITスイッチがオンの状態で、原点復帰方向の逆方向へのモーションコマンドを禁止します。原点復帰方向はブラウザ設定ツールや`/setHomingDirection`で設定できます。
     see_also: [/getProhibitMotionOnLimitSw, /setHomingDirection]
 
   - address: /getProhibitMotionOnLimitSw
@@ -2359,7 +2359,7 @@ commands:
 
         This is equivalent to the following actions of executing [[/goUntil]] command, and after the motor stops on HOME switch activation, execute [[/releaseSw]] command.
 
-        The `homingDirection` and the `homingSpeed` can be set by [[/setHomingDirection]] and [[/setHomingSpeed]] commands, as well as configuring from the configuration tool.
+        The `homingDirection` and the `homingSpeed` can be set by [[/setHomingDirection]] and [[/setHomingSpeed]] commands, as well as configuring from the browser configuration tool.
 
         Time-out can be set for each of the `/goUntil` and `/releaseSw` commands. The controller halts the motor movement if the sensor state has not changed during this time frame. The time-out values can be set from [[/setGoUntilTimeout]] and from the [[/setReleaseSwTimeout]] command.
 
@@ -2369,7 +2369,7 @@ commands:
 
         これは[[/goUntil]]コマンドを実行し、HOMEスイッチがオンになると停止して[[/releaseSw]]コマンドを実行することに相当します。
 
-        原点復帰方向`homingDirection`と原点復帰の速度`homingSpeed`はそれぞれ[[/setHomingDirection]]と[[/setHomingSpeed]]で設定できるほか、configToolからも設定できます。
+        原点復帰方向`homingDirection`と原点復帰の速度`homingSpeed`はそれぞれ[[/setHomingDirection]]と[[/setHomingSpeed]]で設定できるほか、ブラウザ設定ツールからも設定できます。
 
         `/goUntil`と`/releaseSw`それぞれにタイムアウト時間が設定可能で、この時間内にスイッチの状態に変化がなかった場合はタイムアウトとして動作を中止します。この時間はそれぞれ[[/setGoUntilTimeout]]、[[/setReleaseSwTimeout]]で設定できます。
 
@@ -2402,8 +2402,8 @@ commands:
           - {value: 0, en: Reverse, ja: Reverse}
     timing: always
     description:
-      en: Sets the `homingDirection` for the [[/homing]] command. It can be also configured from the configuration tool.
-      ja: "[[/homing]]実行時の原点復帰方向`homingDirection`を指定します。configToolからも指定できます。"
+      en: Sets the `homingDirection` for the [[/homing]] command. It can be also configured from the browser configuration tool.
+      ja: "[[/homing]]実行時の原点復帰方向`homingDirection`を指定します。ブラウザ設定ツールからも指定できます。"
     see_also: [/getHomingDirection]
 
   - address: /getHomingDirection
@@ -2428,11 +2428,11 @@ commands:
     timing: always
     description:
       en: |-
-        Sets the `homingSpeed` when executing the command [[/homing]]. It can be configured from the configuration tool.
+        Sets the `homingSpeed` when executing the command [[/homing]]. It can be configured from the browser configuration tool.
 
         A value outside the range is not rejected: it is limited to 0-15610.
       ja: |-
-        [[/homing]]実行時の原点復帰の速度`homingSpeed`を指定します。configToolからも指定できます。
+        [[/homing]]実行時の原点復帰の速度`homingSpeed`を指定します。ブラウザ設定ツールからも指定できます。
 
         範囲外の値は拒否されず、0〜15610に制限されます。
     see_also: [/getHomingSpeed]
@@ -2490,11 +2490,11 @@ commands:
     timing: always
     description:
       en: |-
-        Sets the time-out duration when executing [[/goUntil]] command. If the sensor did not detect during this time frame, the controller will regard time-out and halts the movement. Specify 0 to disable the timeout. It can also be configured from the configuration tool.
+        Sets the time-out duration when executing [[/goUntil]] command. If the sensor did not detect during this time frame, the controller will regard time-out and halts the movement. Specify 0 to disable the timeout. It can also be configured from the browser configuration tool.
 
         A negative value replies `CommandIgnored` and nothing is applied. The maximum is 2147483647. The automatic hard stop at the timeout is not sent to a motor whose driver is HiZ (the timeout error is still sent).
       ja: |-
-        [[/goUntil]]実行時のタイムアウト時間を指定します。この時間内にスイッチがオンにならなかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。configToolからも指定できます。
+        [[/goUntil]]実行時のタイムアウト時間を指定します。この時間内にスイッチがオンにならなかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。ブラウザ設定ツールからも指定できます。
 
         負の値には`CommandIgnored`を返し、何も適用されません。最大値は2147483647です。タイムアウトでの自動の即停止は、ドライバが無励磁のモータには送られません（タイムアウトのエラーは送信されます）。
     errors: [CommandIgnored]
@@ -2549,11 +2549,11 @@ commands:
     timing: always
     description:
       en: |-
-        Sets the time-out duration when executing [[/releaseSw]] command. If the sensor cannot be released during this time frame, halt the movement as time-out. Specify 0 to disable the timeout. It can be configured from the configuration tool.
+        Sets the time-out duration when executing [[/releaseSw]] command. If the sensor cannot be released during this time frame, halt the movement as time-out. Specify 0 to disable the timeout. It can be configured from the browser configuration tool.
 
         A negative value replies `CommandIgnored` and nothing is applied. The maximum is 2147483647. The automatic hard stop at the timeout is not sent to a motor whose driver is HiZ (the timeout error is still sent).
       ja: |-
-        [[/releaseSw]]実行時のタイムアウト時間を指定します。この時間内にスイッチがオフにならなかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。configToolからも指定できます。
+        [[/releaseSw]]実行時のタイムアウト時間を指定します。この時間内にスイッチがオフにならなかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。ブラウザ設定ツールからも指定できます。
 
         負の値には`CommandIgnored`を返し、何も適用されません。最大値は2147483647です。タイムアウトでの自動の即停止は、ドライバが無励磁のモータには送られません（タイムアウトのエラーは送信されます）。
     errors: [CommandIgnored]
@@ -4200,7 +4200,7 @@ messages:
 
         The message will be sent out one second after the firmware is started up and the ethernet link is established. The message will be sent to `255.255.255.255`, means broadcasting to all nodes within the subnet.
 
-        This message can be disabled from the configuration tool.
+        This message can be disabled from the browser configuration tool.
 
         `resetCause`: the numbers are part of the specification; new causes will only be added as 7, 8, .... A client should treat a number it does not know as "other", and accept 6. If several causes are flagged, the first of CPU fault, brown-out, power-on, watchdog, reset pin, software is reported. After a power-on or a brown-out the CPU fault is never reported, so a fault followed by a power cycle reports 1 or 2. The numbers are those reported by the MCU as they are; with another MCU in the future the same operation may report a different number (the meaning of each number does not change).
       ja: |-
@@ -4208,7 +4208,7 @@ messages:
 
         ファームウェアが起動して、Ethernetがリンク状態になった1秒後に送信されます。サブネット内のすべてのノード（`255.255.255.255`）へブロードキャストされます。
 
-        Config Toolの設定を用いて、このメッセージを送信しないようにも設定できます。
+        ブラウザ設定ツールの設定を用いて、このメッセージを送信しないようにも設定できます。
 
         `resetCause`: 番号は仕様の一部です。新しい原因は7、8、... として追加されます。クライアントは、知らない番号を「その他」として扱い、6を受け付けてください。複数の原因が記録されているときは、CPU動作異常、電源電圧の低下（ブラウンアウト）、電源投入、ウォッチドッグ、リセットピン、ソフトウェアの順で最初のものが`resetCause`になります。電源投入やブラウンアウトの後にはCPU動作異常は記録されないため、CPU動作異常の後に電源を入れ直すと1か2になります。番号はMCUが返したものがそのまま使われます。将来別のMCUを使うと、同じ操作でも別の番号になることがあります（各番号の意味は変わりません）。
     changes:

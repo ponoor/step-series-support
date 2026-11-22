@@ -26,7 +26,7 @@ title: 原点復帰
 
 これは[`/goUntil`](homing.md#gountil)コマンドを実行し、HOMEスイッチがオンになると停止して[`/releaseSw`](homing.md#releasesw)コマンドを実行することに相当します。
 
-原点復帰方向`homingDirection`と原点復帰の速度`homingSpeed`はそれぞれ[`/setHomingDirection`](homing.md#sethomingdirection)と[`/setHomingSpeed`](homing.md#sethomingspeed)で設定できるほか、configToolからも設定できます。
+原点復帰方向`homingDirection`と原点復帰の速度`homingSpeed`はそれぞれ[`/setHomingDirection`](homing.md#sethomingdirection)と[`/setHomingSpeed`](homing.md#sethomingspeed)で設定できるほか、ブラウザ設定ツールからも設定できます。
 
 `/goUntil`と`/releaseSw`それぞれにタイムアウト時間が設定可能で、この時間内にスイッチの状態に変化がなかった場合はタイムアウトとして動作を中止します。この時間はそれぞれ[`/setGoUntilTimeout`](homing.md#setgountiltimeout)、[`/setReleaseSwTimeout`](homing.md#setreleaseswtimeout)で設定できます。
 
@@ -119,7 +119,7 @@ title: 原点復帰
 
 #### 説明
 
-[`/homing`](homing.md#homing)実行時の原点復帰方向`homingDirection`を指定します。configToolからも指定できます。
+[`/homing`](homing.md#homing)実行時の原点復帰方向`homingDirection`を指定します。ブラウザ設定ツールからも指定できます。
 
 #### 初期値
 
@@ -184,7 +184,7 @@ title: 原点復帰
 
 #### 説明
 
-[`/homing`](homing.md#homing)実行時の原点復帰の速度`homingSpeed`を指定します。configToolからも指定できます。
+[`/homing`](homing.md#homing)実行時の原点復帰の速度`homingSpeed`を指定します。ブラウザ設定ツールからも指定できます。
 
 範囲外の値は拒否されず、0〜15610に制限されます。
 
@@ -291,7 +291,7 @@ title: 原点復帰
 
 #### 説明
 
-[`/goUntil`](homing.md#gountil)実行時のタイムアウト時間を指定します。この時間内にスイッチがオンにならなかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。configToolからも指定できます。
+[`/goUntil`](homing.md#gountil)実行時のタイムアウト時間を指定します。この時間内にスイッチがオンにならなかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。ブラウザ設定ツールからも指定できます。
 
 負の値には`CommandIgnored`を返し、何も適用されません。最大値は2147483647です。タイムアウトでの自動の即停止は、ドライバが無励磁のモータには送られません（タイムアウトのエラーは送信されます）。
 
@@ -410,7 +410,7 @@ title: 原点復帰
 
 #### 説明
 
-[`/releaseSw`](homing.md#releasesw)実行時のタイムアウト時間を指定します。この時間内にスイッチがオフにならなかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。configToolからも指定できます。
+[`/releaseSw`](homing.md#releasesw)実行時のタイムアウト時間を指定します。この時間内にスイッチがオフにならなかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。ブラウザ設定ツールからも指定できます。
 
 負の値には`CommandIgnored`を返し、何も適用されません。最大値は2147483647です。タイムアウトでの自動の即停止は、ドライバが無励磁のモータには送られません（タイムアウトのエラーは送信されます）。
 

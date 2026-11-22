@@ -489,7 +489,7 @@ Always
 
 #### Description
 
-Prohibits any motion commands towards the origin point when the HOME switch is activated. The direction to the origin point can be configured through the configuration tool or by the `/setHomingDirection` command.
+Prohibits any motion commands towards the origin point when the HOME switch is activated. The direction to the origin point can be configured through the browser configuration tool or by the `/setHomingDirection` command.
 
 #### Initial value
 
@@ -567,7 +567,7 @@ Always
 
 #### Description
 
-Prohibits any motion commands towards the leaving direction from origin point, when the LIMIT switch is activated. The direction to the origin point can be configured through the configuration tool or by the `/setHomingDirection` command.
+Prohibits any motion commands towards the leaving direction from origin point, when the LIMIT switch is activated. The direction to the origin point can be configured through the browser configuration tool or by the `/setHomingDirection` command.
 
 #### Initial value
 

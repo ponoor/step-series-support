@@ -104,15 +104,15 @@ HOMEスイッチやLIMITスイッチがオンのときに、モータが回転�
 | --- | --- | --- |
 | [`/homing`](../reference/homing.md#homing) | (int)motorID | 原点復帰動作を行います。原点復帰方向に移動し、HOMEスイッチがオンになると停止し、方向を反転してゆっくり移動し、HOMEスイッチがオフになった時点で停止し、現在位置を0にします。 |
 | [`/getHomingStatus`](../reference/homing.md#gethomingstatus) | (int)motorID | 原点復帰の現在の状態を返します。 |
-| [`/setHomingDirection`](../reference/homing.md#sethomingdirection) | (int)motorID (bool)direction | `/homing`実行時の原点復帰方向`homingDirection`を指定します。configToolからも指定できます。 |
+| [`/setHomingDirection`](../reference/homing.md#sethomingdirection) | (int)motorID (bool)direction | `/homing`実行時の原点復帰方向`homingDirection`を指定します。ブラウザ設定ツールからも指定できます。 |
 | [`/getHomingDirection`](../reference/homing.md#gethomingdirection) | (int)motorID | `homingDirection`を取得します。 |
-| [`/setHomingSpeed`](../reference/homing.md#sethomingspeed) | (int)motorID (float)speed | `/homing`実行時の原点復帰の速度`homingSpeed`を指定します。configToolからも指定できます。 |
+| [`/setHomingSpeed`](../reference/homing.md#sethomingspeed) | (int)motorID (float)speed | `/homing`実行時の原点復帰の速度`homingSpeed`を指定します。ブラウザ設定ツールからも指定できます。 |
 | [`/getHomingSpeed`](../reference/homing.md#gethomingspeed) | (int)motorID | `homingSpeed`を取得します。 |
 | [`/goUntil`](../reference/homing.md#gountil) | (int)motorID (bool)ACT (float)speed | 指定の速度で回転し、HOMEスイッチがオンになるとACTの値に応じた処理を行います。 |
-| [`/setGoUntilTimeout`](../reference/homing.md#setgountiltimeout) | (int)motorID (int)timeOut | `/goUntil`実行時のタイムアウト時間を指定します。この時間内にスイッチがオンにならなかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。configToolからも指定できます。 |
+| [`/setGoUntilTimeout`](../reference/homing.md#setgountiltimeout) | (int)motorID (int)timeOut | `/goUntil`実行時のタイムアウト時間を指定します。この時間内にスイッチがオンにならなかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。ブラウザ設定ツールからも指定できます。 |
 | [`/getGoUntilTimeout`](../reference/homing.md#getgountiltimeout) | (int)motorID | `/goUntil`実行時のタイムアウト時間を取得します。 |
 | [`/releaseSw`](../reference/homing.md#releasesw) | (int)motorID (bool)ACT (bool)DIR | 指定方向にminimum speed（初期状態では5[step/s]）で回転し、HOMEスイッチがオフになると、ACTの値に応じた処理を行います。ACTの処理内容は`/goUntil`と同じです。その後hardStopします。 |
-| [`/setReleaseSwTimeout`](../reference/homing.md#setreleaseswtimeout) | (int)motorID (int)timeOut | `/releaseSw`実行時のタイムアウト時間を指定します。この時間内にスイッチがオフにならなかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。configToolからも指定できます。 |
+| [`/setReleaseSwTimeout`](../reference/homing.md#setreleaseswtimeout) | (int)motorID (int)timeOut | `/releaseSw`実行時のタイムアウト時間を指定します。この時間内にスイッチがオフにならなかった場合にはtimeoutとして動作を中止します。0を指定するとタイムアウトが無効になります。ブラウザ設定ツールからも指定できます。 |
 | [`/getReleaseSwTimeout`](../reference/homing.md#getreleaseswtimeout) | (int)motorID | `/releaseSw`実行時のタイムアウト時間を取得します。 |
 | [`/enableHomeSwReport`](../reference/home-and-limit-sensors.md#enablehomeswreport) | (int)motorID (bool)enable | 指定したモータのHOME端子の状態に変化があったら自動でメッセージを送信する設定を行います。送信されるメッセージは`/getHomeSw`の返信と同じです。 |
 | [`/enableSwEventReport`](../reference/home-and-limit-sensors.md#enablesweventreport) | (int)motorID (bool)enable | 指定したモータのHOME端子の状態がHIGHレベルからLOWレベルに遷移した際（Falling Edge）に自動でメッセージを送信する設定を行います。 |
@@ -133,8 +133,8 @@ HOMEスイッチやLIMITスイッチがオンのときに、モータが回転�
 | [`/getMark`](../reference/position-management.md#getmark) | (int)motorID | MARKの位置を取得します。 |
 | [`/goHome`](../reference/position-management.md#gohome) | (int)motorID | HOME位置までスピードプロファイルに従って移動します。 |
 | [`/goMark`](../reference/position-management.md#gomark) | (int)motorID | MARK位置までスピードプロファイルに従って移動します。 |
-| [`/setProhibitMotionOnHomeSw`](../reference/alarm-settings.md#setprohibitmotiononhomesw) | (int)motorID (bool)enable | HOMEスイッチがオンの状態で、原点復帰方向へのモーションコマンドを禁止します。原点復帰方向はconfigToolや`/setHomingDirection`で設定できます。 |
-| [`/setProhibitMotionOnLimitSw`](../reference/alarm-settings.md#setprohibitmotiononlimitsw) | (int)motorID (bool)enable | LIMITスイッチがオンの状態で、原点復帰方向の逆方向へのモーションコマンドを禁止します。原点復帰方向はconfigToolや`/setHomingDirection`で設定できます。 |
+| [`/setProhibitMotionOnHomeSw`](../reference/alarm-settings.md#setprohibitmotiononhomesw) | (int)motorID (bool)enable | HOMEスイッチがオンの状態で、原点復帰方向へのモーションコマンドを禁止します。原点復帰方向はブラウザ設定ツールや`/setHomingDirection`で設定できます。 |
+| [`/setProhibitMotionOnLimitSw`](../reference/alarm-settings.md#setprohibitmotiononlimitsw) | (int)motorID (bool)enable | LIMITスイッチがオンの状態で、原点復帰方向の逆方向へのモーションコマンドを禁止します。原点復帰方向はブラウザ設定ツールや`/setHomingDirection`で設定できます。 |
 <!-- generated:end osc-related homing, sensors, position, /setProhibitMotionOnHomeSw, /setProhibitMotionOnLimitSw -->
 
 <!-- osc-settings: driverSettings.homingAtStartup, driverSettings.homingDirection, driverSettings.homingSpeed, driverSettings.homeSwMode, driverSettings.prohibitMotionOnHomeSw, driverSettings.limitSwMode, driverSettings.prohibitMotionOnLimitSw, driverSettings.goUntilTimeout, driverSettings.releaseSwTimeout, alarmAndReport.reportHomeSwStatus, alarmAndReport.reportLimitSwStatus, alarmAndReport.reportSwEvn -->

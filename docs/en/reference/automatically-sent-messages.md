@@ -39,7 +39,7 @@ This message is automatically sent out when the device has (re)started. By watch
 
 The message will be sent out one second after the firmware is started up and the ethernet link is established. The message will be sent to `255.255.255.255`, means broadcasting to all nodes within the subnet.
 
-This message can be disabled from the configuration tool.
+This message can be disabled from the browser configuration tool.
 
 `resetCause`: the numbers are part of the specification; new causes will only be added as 7, 8, .... A client should treat a number it does not know as "other", and accept 6. If several causes are flagged, the first of CPU fault, brown-out, power-on, watchdog, reset pin, software is reported. After a power-on or a brown-out the CPU fault is never reported, so a fault followed by a power cycle reports 1 or 2. The numbers are those reported by the MCU as they are; with another MCU in the future the same operation may report a different number (the meaning of each number does not change).
 

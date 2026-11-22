@@ -26,7 +26,7 @@ Start the homing movement. Move towards origin direction, stop when the HOME swi
 
 This is equivalent to the following actions of executing [`/goUntil`](homing.md#gountil) command, and after the motor stops on HOME switch activation, execute [`/releaseSw`](homing.md#releasesw) command.
 
-The `homingDirection` and the `homingSpeed` can be set by [`/setHomingDirection`](homing.md#sethomingdirection) and [`/setHomingSpeed`](homing.md#sethomingspeed) commands, as well as configuring from the configuration tool.
+The `homingDirection` and the `homingSpeed` can be set by [`/setHomingDirection`](homing.md#sethomingdirection) and [`/setHomingSpeed`](homing.md#sethomingspeed) commands, as well as configuring from the browser configuration tool.
 
 Time-out can be set for each of the `/goUntil` and `/releaseSw` commands. The controller halts the motor movement if the sensor state has not changed during this time frame. The time-out values can be set from [`/setGoUntilTimeout`](homing.md#setgountiltimeout) and from the [`/setReleaseSwTimeout`](homing.md#setreleaseswtimeout) command.
 
@@ -119,7 +119,7 @@ Always
 
 #### Description
 
-Sets the `homingDirection` for the [`/homing`](homing.md#homing) command. It can be also configured from the configuration tool.
+Sets the `homingDirection` for the [`/homing`](homing.md#homing) command. It can be also configured from the browser configuration tool.
 
 #### Initial value
 
@@ -184,7 +184,7 @@ Always
 
 #### Description
 
-Sets the `homingSpeed` when executing the command [`/homing`](homing.md#homing). It can be configured from the configuration tool.
+Sets the `homingSpeed` when executing the command [`/homing`](homing.md#homing). It can be configured from the browser configuration tool.
 
 A value outside the range is not rejected: it is limited to 0-15610.
 
@@ -291,7 +291,7 @@ Always
 
 #### Description
 
-Sets the time-out duration when executing [`/goUntil`](homing.md#gountil) command. If the sensor did not detect during this time frame, the controller will regard time-out and halts the movement. Specify 0 to disable the timeout. It can also be configured from the configuration tool.
+Sets the time-out duration when executing [`/goUntil`](homing.md#gountil) command. If the sensor did not detect during this time frame, the controller will regard time-out and halts the movement. Specify 0 to disable the timeout. It can also be configured from the browser configuration tool.
 
 A negative value replies `CommandIgnored` and nothing is applied. The maximum is 2147483647. The automatic hard stop at the timeout is not sent to a motor whose driver is HiZ (the timeout error is still sent).
 
@@ -410,7 +410,7 @@ Always
 
 #### Description
 
-Sets the time-out duration when executing [`/releaseSw`](homing.md#releasesw) command. If the sensor cannot be released during this time frame, halt the movement as time-out. Specify 0 to disable the timeout. It can be configured from the configuration tool.
+Sets the time-out duration when executing [`/releaseSw`](homing.md#releasesw) command. If the sensor cannot be released during this time frame, halt the movement as time-out. Specify 0 to disable the timeout. It can be configured from the browser configuration tool.
 
 A negative value replies `CommandIgnored` and nothing is applied. The maximum is 2147483647. The automatic hard stop at the timeout is not sent to a motor whose driver is HiZ (the timeout error is still sent).
 
