@@ -8,7 +8,7 @@ title: センサとスイッチ
 
 ## HOME端子とLIMIT端子 {#terminals}
 
-STEP400とSTEP800の各軸には、スイッチやセンサをつなぐHOME端子があります。STEP400には、それに加えてLIMIT端子もあります。端子につないだセンサも、HOMEスイッチ、LIMITスイッチと呼びます。
+STEP400とSTEP800の各軸には、スイッチやセンサをつなぐHOME端子があります。STEP400には、それに加えて各軸にLIMIT端子もあります。端子につないだセンサも、HOMEスイッチ、LIMITスイッチと呼びます。
 
 ### HOME {#home}
 

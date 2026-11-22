@@ -4,7 +4,7 @@ title: Automatically sent messages
 
 # Automatically sent messages
 
-## Summary {#summary}
+## Overview {#summary}
 
 Most messages the board sends are replies to commands. For example, when you send [`/getPosition`](position-management.md#getposition) to get the current position of a motor, the board replies with [`/position`](#position). Some messages, however, are not replies to a specific command: the board sends them automatically, for example when its state changes. This page describes these automatically sent messages. A message that is only a reply is shown in the "Response" field of each command.
 

@@ -82,7 +82,7 @@ Released 2026-10-20. The OSC addresses are compatible with v2.1.0, but the behav
 
 - Files whose name starts with `.` (for example the `._name.json` files that macOS writes) are no longer candidates for the configuration file.
 - The values of a configuration file that is not accepted are no longer applied: the defaults are used. A first `.json` file that is invalid ends the search. The priority is unchanged: `config.txt`, then the first valid `.json`.
-- An exFAT card is reported as "No SD card" and is not touched, with the PlatformIO build and the Arduino IDE build alike. Format the card as FAT16 or FAT32.
+- An exFAT card is reported as `No SD card` and is not touched, with the PlatformIO build and the Arduino IDE build alike. Format the card as FAT16 or FAT32.
 - Saving writes a hidden temporary file `.<name>.tmp` in the same folder and replaces the saved file only after it is written, so a failed save leaves the old file. See [Saving to the card](../connections/microsd-card.md#saving).
 - Config received from the browser configuration tool no longer has the DIP switch ID added twice after an ID change. The received IP address, port and MAC address are applied by a reboot.
 

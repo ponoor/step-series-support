@@ -30,7 +30,7 @@ Go through the list and read the items that apply to you.
 **If you make configuration files or use the microSD card:**
 
 - [ ] You use `/setAccRaw` and the other Raw commands, with `/saveConfig` or `/resetMotorDriver` → [Raw settings are kept](#raw-saved)
-- [ ] Your card is an SDXC card of 64 GB or more, or was formatted on a Mac → [exFAT cards and hidden files](#exfat)
+- [ ] Your card is an SDXC card of 64 GB or more, or files were copied to it on a Mac → [exFAT cards and hidden files](#exfat)
 - [ ] Your card can hold a configuration file that is not valid → [Invalid files are not applied](#invalid-files)
 - [ ] You use `myIp` or the send port with the ID added → [Address and port with the ID](#id-limits)
 - [ ] You have a STEP400 configuration with `goUnitlTimeout` → [`goUnitlTimeout`](#go-until-timeout)
@@ -201,7 +201,7 @@ With `255`, each motor is judged alone: the motors in the state are changed and 
 **What changed.**
 
 - Files whose name starts with `.` are no longer candidates for the configuration file. A Mac writes a hidden `._name.json` next to each file it copies to a FAT card; in v2.1.0 these sorted first, were not JSON, and hid every valid `.json` file after them.
-- An exFAT card (SDXC, 64 GB or more by default) is treated as "No SD card" and nothing on it is touched. In v2.1.0, the Arduino IDE build deleted the configuration file on an exFAT card when it saved.
+- An exFAT card (SDXC, 64 GB or more by default) is treated as `No SD card` and nothing on it is touched. In v2.1.0, the Arduino IDE build deleted the configuration file on an exFAT card when it saved.
 
 **Who is affected.** Users of SDXC cards, and of cards copied on a Mac.
 

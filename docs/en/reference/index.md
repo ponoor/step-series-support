@@ -36,7 +36,7 @@ The motor IDs that can be used in a command are:
 
 ### Messages from the board {#messages-from-the-board}
 
-The [OSC specification](https://opensoundcontrol.stanford.edu/spec-1_0.html) defines the argument types integer (int32), floating-point number (float32), string (OSC-string) and others, as well as non-standard types such as the logical values True / False. The STEP series always sends a logical value as the integer 0 or 1 (type tag `i`), never as True / False. Before v2.2.0, a few messages still used True / False (see the [Migration guide](../maintenance/migration-guide.md)).
+The [OSC specification](https://opensoundcontrol.stanford.edu/spec-1_0.html) defines the argument types integer (int32), floating-point number (float32), string (OSC-string) and others, as well as non-standard types such as the logical values True / False. The STEP Series always sends a logical value as the integer 0 or 1 (type tag `i`), never as True / False. Before v2.2.0, a few messages still used True / False (see the [Migration guide](../maintenance/migration-guide.md)).
 
 ### Messages to the board {#messages-to-the-board}
 
@@ -84,8 +84,8 @@ Both of the following must be true:
 
 In addition, the values of the command you send must meet the following conditions:
 
-- The command does not move toward `homingDirection` while [`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw) is set and the HOME switch is on.
-- The command does not move against `homingDirection` while [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw) is set and the LIMIT switch is on.
+- The command does not move toward `homingDirection` while [`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw) is enabled and the HOME switch is on.
+- The command does not move against `homingDirection` while [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw) is enabled and the LIMIT switch is on (STEP400 only).
 
 A motion command that does not meet the conditions is rejected with an error such as `BrakeEngaged`, `InServoMode`, `HomeSwActivating` or `LimitSwActivating`. The errors of each command are listed in its reference.
 

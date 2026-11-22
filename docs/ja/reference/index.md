@@ -84,8 +84,8 @@ OSCコマンドのモータIDは、基板に印刷してある番号と一致し
 
 また、送ろうとしているコマンドの値は、次の条件を満たしている必要があります。
 
-- [`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw)が設定されていて、HOMEスイッチがオンのときに、原点復帰方向（`homingDirection`）へ動作しようとしていない
-- [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)が設定されていて、LIMITスイッチがオンのときに、原点復帰方向の逆方向へ動作しようとしていない
+- [`/setProhibitMotionOnHomeSw`](alarm-settings.md#setprohibitmotiononhomesw)が有効で、HOMEスイッチがオンのときに、原点復帰方向（`homingDirection`）へ動作しようとしていない
+- [`/setProhibitMotionOnLimitSw`](alarm-settings.md#setprohibitmotiononlimitsw)が有効で、LIMITスイッチがオンのときに、原点復帰方向の逆方向へ動作しようとしていない（STEP400のみ）
 
 条件を満たさない動作コマンドは、`BrakeEngaged`、`InServoMode`、`HomeSwActivating`、`LimitSwActivating`などのエラーで拒否されます。コマンドごとのエラーは、各コマンドのリファレンスに載せています。
 

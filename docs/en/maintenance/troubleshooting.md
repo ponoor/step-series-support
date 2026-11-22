@@ -69,7 +69,7 @@ Use Chrome or Edge, a USB cable for data, and check the list of the serial ports
 
 ### Homing ends at once with `ReleaseSwTimeout` {#release-sw-timeout}
 
-With firmware up to v2.1.0, the homing sometimes ended at once with the status `ReleaseSwTimeout` (`/homingStatus` 4), at almost every start or almost never. This was fixed in v2.2.0. Update the firmware: [Firmware update](firmware-update.md).
+With firmware up to v2.1.0, the homing sometimes ended at once with the status `ReleaseSwTimeout` (`/homingStatus` 4): in almost every homing or almost never, depending on the start-up. This was fixed in v2.2.0. Update the firmware: [Firmware update](firmware-update.md).
 
 ## The board and the firmware {#board}
 
