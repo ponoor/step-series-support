@@ -20,7 +20,7 @@ The board reads the DIP switch not only at the start. If you change the ID while
 
 ### Initial settings {#initial}
 
-The board uses these values when there is no configuration file or when the file does not have the key. "firmware" is the value in the firmware, and "template" is the value in the template files of the configuration tool; they are shown when they differ.
+The board uses these values when there is no configuration file or when the file does not have the key. "firmware" is the value in the firmware, and "template" is the value in the template files of the browser configuration tool; they are shown when they differ.
 
 <!-- osc-settings-values: network -->
 <!-- generated:begin osc-settings-values network -->
