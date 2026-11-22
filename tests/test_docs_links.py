@@ -12,6 +12,9 @@ ROOT = Path(__file__).resolve().parent.parent
 # An absolute URL of a page of the old docs on ponoor.com (https://ponoor.com/en/docs/..., /ja/docs/..., /docs/...).
 OLD_DOCS_URL = re.compile(r"https?://(?:www\.)?ponoor\.com/(?:(?:en|ja)/)?docs/[^\s)\"'>]*")
 
+# An image or file on ponoor.com's WordPress (wp-content/): the pages must not depend on it.
+WORDPRESS_FILE_URL = re.compile(r"https?://(?:www\.)?ponoor\.com/[^\s)\"'>]*wp-content/[^\s)\"'>]*")
+
 
 class DocsLinkTest(unittest.TestCase):
     def test_no_absolute_url_of_the_old_docs_pages(self):
@@ -22,6 +25,15 @@ class DocsLinkTest(unittest.TestCase):
                     for m in OLD_DOCS_URL.finditer(line):
                         found.append(f"{page.relative_to(ROOT)}:{n}: {m.group(0)}")
         self.assertEqual(found, [], "link to the new pages with a relative link:\n" + "\n".join(found))
+
+    def test_no_image_or_file_on_wordpress(self):
+        found = []
+        for lang in ("en", "ja"):
+            for page in sorted((ROOT / "docs" / lang).rglob("*.md")):
+                for n, line in enumerate(page.read_text(encoding="utf-8").splitlines(), 1):
+                    for m in WORDPRESS_FILE_URL.finditer(line):
+                        found.append(f"{page.relative_to(ROOT)}:{n}: {m.group(0)}")
+        self.assertEqual(found, [], "put the file in docs/assets/ and link to it with a relative path:\n" + "\n".join(found))
 
 
 if __name__ == "__main__":
