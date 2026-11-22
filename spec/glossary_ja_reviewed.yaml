@@ -131,8 +131,12 @@
   note: 保持電流（KVAL_HOLD/TVAL_HOLD のパラメータ）。用語として使う
 - where: "docs/ja/maintenance/changelog.md"
   term: 応答
-  text: "でほぼ同じ応答になるはずで"
+  text: "でほぼ同じ応答になるように"
   note: サーボの制御としての応答（ステップ応答など）。ネットワークの応答ではない
+- where: "docs/ja/maintenance/changelog.md"
+  term: 応答
+  text: "応答が変わることがある"
+  note: サーボの制御としての応答。ネットワークの応答ではない
 - where: "docs/ja/maintenance/changelog.md"
   term: 無視
   text: "0はこの値を無視し、v2.1"
@@ -147,7 +151,7 @@
   note: 余分な引数はエラーを送らずに捨てる
 - where: "docs/ja/maintenance/changelog.md"
   term: 無視
-  text: "の値は黙って無視され、既定値"
+  text: "の値は黙って無視され、初期値"
   note: ファイルや設定ファイルのキーを読み飛ばす。エラーを送らない
 - where: "docs/ja/maintenance/changelog.md"
   term: 無視
@@ -187,7 +191,7 @@
   note: ファイルや設定ファイルのキーを読み飛ばす。エラーを送らない
 - where: "docs/ja/maintenance/migration-guide.md"
   term: 無視
-  text: "たキーの値は無視され、既定値"
+  text: "たキーの値は無視され、初期値"
   note: ファイルや設定ファイルのキーを読み飛ばす。エラーを送らない
 - where: "docs/ja/maintenance/migration-guide.md"
   term: 無視
@@ -223,7 +227,7 @@
   note: 余分な引数はエラーを送らずに捨てる
 - where: "docs/ja/step100-200/assemble/connections.md"
   term: 基板
-  text: "つなぎます。基板上の表示との"
+  text: "つなぎます。基板上の表記との"
   note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
 - where: "docs/ja/step100-200/assemble/connections.md"
   term: 基板
