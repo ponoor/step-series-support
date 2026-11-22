@@ -30,9 +30,9 @@ M3用の取付穴が、基板の各隅と中央付近の5か所にあります�
 | 部品 | メーカー | 型番 |
 | --- | --- | --- |
 | MCU | Microchip | [ATSAMD21G18A](https://www.microchip.com/wwwproducts/en/ATsamd21g18) |
-| Ethernet Controller | Wiznet | [W5500](https://www.wiznet.io/product-item/w5500/) |
-| Stepper Driver | STMicroelectronics | [L6470](https://www.st.com/ja/motor-drivers/L6470.html) |
-| DC-DC Converter | CUI | [P78E05-1000](https://www.jp.cui.com/product/dc-dc-converters/non-isolated/p78e-1000-series) |
+| Ethernetコントローラ | Wiznet | [W5500](https://www.wiznet.io/product-item/w5500/) |
+| ステッピングモータドライバ | STMicroelectronics | [L6470](https://www.st.com/ja/motor-drivers/L6470.html) |
+| DC-DCコンバータ | CUI | [P78E05-1000](https://www.jp.cui.com/product/dc-dc-converters/non-isolated/p78e-1000-series) |
 
 ### ピン割り振り {#pins}
 

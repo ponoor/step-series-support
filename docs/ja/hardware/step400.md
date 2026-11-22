@@ -30,9 +30,9 @@ M3用の取付穴が、基板の各隅と中央付近の5か所にあります�
 | 部品 | メーカー | 型番 |
 | --- | --- | --- |
 | MCU | Microchip | [ATSAMD21G18A](https://www.microchip.com/wwwproducts/en/ATsamd21g18) |
-| Ethernet Controller | Wiznet | [W5500](https://www.wiznet.io/product-item/w5500/) |
-| Stepper Driver | STMicroelectronics | [PowerSTEP01](https://www.st.com/ja/motor-drivers/powerstep01.html) |
-| DC-DC Converter | ROHM | [BD9G341AEFJ](https://www.rohm.com/products/power-management/switching-regulators/integrated-fet/buck-converters-nonsynchronous/bd9g341aefj-product) |
+| Ethernetコントローラ | Wiznet | [W5500](https://www.wiznet.io/product-item/w5500/) |
+| ステッピングモータドライバ | STMicroelectronics | [PowerSTEP01](https://www.st.com/ja/motor-drivers/powerstep01.html) |
+| DC-DCコンバータ | ROHM | [BD9G341AEFJ](https://www.rohm.com/products/power-management/switching-regulators/integrated-fet/buck-converters-nonsynchronous/bd9g341aefj-product) |
 
 ### ピン割り振り {#pins}
 

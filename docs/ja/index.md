@@ -22,7 +22,7 @@ STEPシリーズは、EthernetでOSC（Open Sound Control）メッセージを�
 
 ## 関連の情報 {#resources}
 
-- 製品: [STEP400](https://ponoor.com/products/step400/)、[STEP800](https://ponoor.com/products/step800/)、[STEP100 / STEP200](https://ponoor.com/products/step100-200/)
+- 製品: [STEP400](https://ponoor.com/products/step400/)、[STEP800](https://ponoor.com/products/step800/)、[STEP100 / STEP200](https://ponoor.com/products/step100-200/)、[EMB-STEP400](https://ponoor.com/products/brakeboard-for-step400/)
 - [ファームウェア](https://github.com/ponoor/step-series-universal-firmware)（オープンソース）
 - [ブラウザ設定ツール](https://ponoor.com/tools/step-config/)
 - [フォーラム](https://github.com/ponoor/step-series-support/discussions)（質問と議論）

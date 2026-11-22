@@ -30,7 +30,7 @@ STEP100とSTEP200は、Arduino Zero、Ethernetシールド、X-NUCLEOボード�
 - **リアルタイムに変わる目標にモータを追従させる:** [サーボモード](../guides/servo-mode.md)。
 - **モータの駆動方式を選ぶ:** [電圧モードと電流モード](../guides/voltage-and-current-mode.md)。KVALとTVALの決め方も説明しています。
 - **モータに通電していないときに負荷を保持する:** [電磁ブレーキ](../guides/electromagnetic-brake.md)。
-- **ボードの保護と通知を知る:** [アラームと保護](../guides/alarms-and-protection.md)。ボードが返す返信と、ボードが自分から送るメッセージは[通信とメッセージ](../guides/communication-and-messages.md)で説明しています。
+- **ボードの保護と通知を知る:** [アラームと保護](../guides/alarms-and-protection.md)。コマンドへの返信と、ボードが自分から送るメッセージは[通信とメッセージ](../guides/communication-and-messages.md)で説明しています。
 - **設定を保存する:** [設定の仕組み](../connections/how-settings-work.md)。ボードは起動時にmicroSDカードから設定を読みます。設定は[ブラウザ設定ツール](../connections/browser-config-tool.md)で編集できます。
 
 ## OSCを送るソフトウェア {#software}
