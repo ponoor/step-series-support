@@ -9,7 +9,7 @@ The STEP100 and the STEP200 are used in the same way as the STEP400 and the STEP
 !!! warning "Not tested on real hardware with v2.1.0 or later"
     The firmware v2.2.0 can be built for the STEP100 and the STEP200, but they have not been tested on real hardware with v2.1.0 or later. The procedures in this section follow the source code of the firmware and the earlier documents.
 
-## Usage {#usage}
+## Commands and example files {#usage}
 
 Read the [Quick start](../getting-started/quickstart.md) and the [OSC reference](../reference/index.md) of the STEP400 and the STEP800. The STEP100 can use the commands of the STEP400, and the STEP200 can use the commands of the STEP800. The example files are used in the same way. The commands of a function that the board does not have are not available (see [the brake](#brake) and [the LIMIT switch](#limit) below).
 
@@ -40,7 +40,7 @@ On the STEP400 and the STEP800, the Arduino part and the Ethernet part always st
 
 Many Ethernet shields have a microSD card slot. You can use it for the configuration file, as described in [Configuration with a microSD card](../connections/microsd-card.md). The board reads it only at the start.
 
-The [browser configuration tool](../connections/browser-config-tool.md) lists the STEP100 and the STEP200 as boards that it supports: it takes the product from the board, shows the panel **Current Mode** only for the STEP100, and has no items of the LIMIT switch and the brake for them (the items of the LIMIT switch appear if you enable `HAVE_LIMIT_GPIO`, see below). We have not tried it with a real STEP100 or STEP200.
+The [browser configuration tool](../connections/browser-config-tool.md) lists the STEP100 and the STEP200 as boards that it supports: it takes the product from the board, shows the panel **Current Mode** for the STEP100 but not for the STEP200, and has no items of the LIMIT switch and the brake for them (the items of the LIMIT switch appear if you enable `HAVE_LIMIT_GPIO`, see below). We have not tried it with a real STEP100 or STEP200.
 
 You can also use the configuration file of the corresponding board: the file of the STEP400 for the STEP100, and the file of the STEP800 for the STEP200. The firmware reads it even if the product in the file is different (the USB serial `s` shows that the file and the product do not match). The settings for more motors than the board has are ignored, and so are the settings of the LIMIT switch unless you have enabled `HAVE_LIMIT_GPIO` (see [LIMIT switch](#limit)).
 

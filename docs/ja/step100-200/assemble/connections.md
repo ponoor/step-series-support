@@ -18,7 +18,7 @@ ArduinoとEthernetシールドは6ピンのSPIコネクタを介して通信し�
 ![file](../../../assets/images/image-1643346463746.jpg)  
 写真はSTEP200です。Arduino M0の上にEthernetシールド、その上にX-NUCLEO-IHM02A1が載っています。
 
-## 接続 {#connections}
+## 電源とモータ {#connections}
 
 ### 電源 {#power-supply}
 

@@ -18,7 +18,7 @@ So the stacking order must always be:
 ![file](../../../assets/images/image-1643346463746.jpg)  
 The photo shows the STEP200. The Ethernet shield is on the Arduino M0, and the X-NUCLEO-IHM02A1 is on top of them.
 
-## Connections {#connections}
+## Power supply and motor {#connections}
 
 ### Power supply {#power-supply}
 
