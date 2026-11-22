@@ -31,7 +31,7 @@ title: 通信とメッセージ
 
 この解決を始める`/setDestIp`の返信[`/destIp`](../reference/system-settings.md#setdestip)は、解決が終わってから送られます。有線では、コマンドの数ms後に返ります。**コンピュータがWi-Fiでつながっているときは、最大で数秒かかります。** [`/destIp`](../reference/system-settings.md#setdestip)が返らなければ、`/setDestIp`を送り直してください。
 
-MACアドレスを解決している間は、送信先へのメッセージは**破棄されます**。解決が行われるのは、このような`/setDestIp`の後と、リンクが再び上がった後です。[`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip)を設定しているときは、起動後にも解決が行われます。あとで送られることはありません。返信も通知も届きません。ブロードキャストの`/booted`は送られます。
+MACアドレスを解決している間は、送信先へのメッセージは**破棄されます**。再送されることはなく、返信も通知も届きません。ブロードキャストの`/booted`は送られます。解決が行われるのは、このような`/setDestIp`の後と、リンクが再び上がった後です。[`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip)を設定しているときは、起動後にも解決が行われます。
 
 ARPの要求に答えない送信先を待っている間、ボードはOSCメッセージを処理できません。失敗したプローブ1回ごとに最大で約41ms、処理が止まり、プローブは150msごとに送られます。有線のコンピュータは最初のプローブにすぐ答えますが、Wi-Fiのコンピュータは何回か必要なことが多く、解決の間に処理が何度も止まります。このため、電磁ブレーキの監視とサーボモードが乱れます。**`/setDestIp`は、モータを止めた状態で送ることをお勧めします。**
 

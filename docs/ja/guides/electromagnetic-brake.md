@@ -99,7 +99,7 @@ title: 電磁ブレーキ
 - **ウォッチドッグ**: 処理が約250ms止まると、すべてのブレーキを保持状態にし、移行時間の最大値（最大1s）を待ってから、ウォッチドッグがボードを再起動します。ドライバには何も送りません。回転中のモータは、そのままブレーキで止まります。`/booted`はリセットの原因を4として通知します。
 - **CPU動作異常**（CPUの例外）: すべてのブレーキをすぐに保持状態にし、同じように待ってから再起動します。`/booted`はリセットの原因を6として通知します。
 
-リセットの原因は、[`/booted`](../reference/automatically-sent-messages.md#booted)の2番目の引数です。番号は[`/booted`](../reference/automatically-sent-messages.md#booted)をご覧ください。
+リセットの原因は、[`/booted`](../reference/automatically-sent-messages.md#booted)の2番目の引数です。番号はそちらをご覧ください。
 
 EthernetをつないだままUSBを抜くと、STEP400（R1）は再起動することがあります（ハードウェアの問題です）。先にブレーキは保持状態になりますが、抜くのはモータを止めているときにしてください。
 
@@ -122,9 +122,9 @@ EthernetをつないだままUSBを抜くと、STEP400（R1）は再起動する
 - モータが回るのは、ブレーキが解放されているときだけです。上の動作開始条件をご覧ください。
 - ドライバが自分で無励磁になったときは、ボードがブレーキを保持状態にします（`BrakeEngagedOnHiZ`）。[アラームと保護](alarms-and-protection.md#hiz-by-itself)をご覧ください。
 
-## 電磁ブレーキのついたステッピングモータの例 {#examples}
+## 電磁ブレーキ付きステッピングモータの例 {#examples}
 
-[![ブレーキ付きステッピングモータ](../../assets/images/nema-23-stepper-19nm269ozin-w-brake-friction-torque-20nm283ozin-52372-1000x1000-1.jpg)](../../assets/images/nema-23-stepper-19nm269ozin-w-brake-friction-torque-20nm283ozin-52372-1000x1000-1.jpg)
+[![電磁ブレーキ付きステッピングモータ](../../assets/images/nema-23-stepper-19nm269ozin-w-brake-friction-torque-20nm283ozin-52372-1000x1000-1.jpg)](../../assets/images/nema-23-stepper-19nm269ozin-w-brake-friction-torque-20nm283ozin-52372-1000x1000-1.jpg)
 
 [STEPPER ONLINE](https://www.omc-stepperonline.com/stepper-motor-brake/nema-23-stepper-19nm269ozin-w-brake-friction-torque-20nm283ozin-23hs30-2804d-b200.html)
 

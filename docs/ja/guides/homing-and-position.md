@@ -54,15 +54,15 @@ HOMEスイッチやLIMITスイッチがオンのときに、モータが回転�
 
 ## 原点復帰コマンド {#homing-commands}
 
-原点復帰のコマンドは[`/homing`](../reference/homing.md#homing)です。モータドライバから引き継いだ[`/goUntil`](../reference/homing.md#gountil)と[`/releaseSw`](../reference/homing.md#releasesw)の2つのコマンドを組み合わせたものです。まず、この2つのコマンドの動きを見ます。
+原点復帰のコマンドは[`/homing`](../reference/homing.md#homing)です。モータドライバのコマンドである[`/goUntil`](../reference/homing.md#gountil)と[`/releaseSw`](../reference/homing.md#releasesw)の2つを組み合わせたものです。まず、この2つのコマンドの動きを見ます。
 
 ### `/goUntil` {#gountil}
 
-最初に、[`/goUntil`](../reference/homing.md#gountil)で原点センサに向かって移動します。センサがオンになると、（そのように設定している場合は）モータが減速して停止します。
+最初に、[`/goUntil`](../reference/homing.md#gountil)で原点センサに向かって移動します。センサがオンになると、モータは減速して停止します（[`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode)が`SW_HARD_STOP`のときは即停止します）。
 
 ### `/releaseSw` {#releasesw}
 
-[`/releaseSw`](../reference/homing.md#releasesw)は、現在位置から逆向きにゆっくり移動し、センサがオフになったところで即座に停止します。モータが停止した位置が原点です。ただし厳密には、`/goUntil`はセンサがオンになった瞬間に停止するのではなく、減速して停止します。このため、センサが反応した点から少しずれた位置で止まります。これはファームウェアでは補正しません。環境によって異なるためです。
+[`/releaseSw`](../reference/homing.md#releasesw)は、現在位置から逆向きにゆっくり移動し、センサがオフになったところで即座に停止します。モータが停止した位置が原点です。ただし厳密には、`SW_USER`のときは、`/goUntil`はセンサがオンになった瞬間に停止するのではなく、減速して停止します。このため、センサが反応した点から少しずれた位置で止まります。これはファームウェアでは補正しません。環境によって異なるためです。
 
 どちらのコマンドも、引数`ACT`で、センサが変化したとき（[`/goUntil`](../reference/homing.md#gountil)はオンになったとき、[`/releaseSw`](../reference/homing.md#releasesw)はオフになったとき）に、現在位置を0にリセットする（`ACT`が0）か、MARKレジスタにコピーする（`ACT`が1）かを選べます。[`/homing`](../reference/homing.md#homing)は0にリセットします。
 
