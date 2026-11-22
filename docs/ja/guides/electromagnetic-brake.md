@@ -81,7 +81,7 @@ title: 電磁ブレーキ
 - 解放するとき: ボードはモータを励磁し、移行時間を待ってから、ブレーキを解放します。
 - 保持状態にするとき: ボードはブレーキを保持状態にし、移行時間を待ってから、モータを無励磁にします。
 
-[![ブレーキの移行時間](../../assets/images/brakeTransition.png)](https://ponoor.com/cms/wp-content/uploads/2021/03/brakeTransition.png)
+[![ブレーキの移行時間](../../assets/images/brakeTransition.png)](../../assets/images/brakeTransition.png)
 
 移行時間は、ブレーキがロックするまでの時間は変えません。変わるのは、ボードの待ち時間です。ブレーキを保持状態にしてからモータを無励磁にするまで、またはモータを励磁してからブレーキを解放するまで、ボードは移行時間だけ待ちます。待ち時間は5ms単位で数えるため、実際の時間は、設定値より0〜5ms長くなります。
 
@@ -124,11 +124,11 @@ EthernetをつないだままUSBを抜くと、STEP400（R1）は再起動する
 
 ## 電磁ブレーキのついたステッピングモータの例 {#examples}
 
-[![ブレーキ付きステッピングモータ](../../assets/images/nema-23-stepper-19nm269ozin-w-brake-friction-torque-20nm283ozin-52372-1000x1000-1.jpg)](https://ponoor.com/cms/wp-content/uploads/2021/03/nema-23-stepper-19nm269ozin-w-brake-friction-torque-20nm283ozin-52372-1000x1000-1.jpg)
+[![ブレーキ付きステッピングモータ](../../assets/images/nema-23-stepper-19nm269ozin-w-brake-friction-torque-20nm283ozin-52372-1000x1000-1.jpg)](../../assets/images/nema-23-stepper-19nm269ozin-w-brake-friction-torque-20nm283ozin-52372-1000x1000-1.jpg)
 
 [STEPPER ONLINE](https://www.omc-stepperonline.com/stepper-motor-brake/nema-23-stepper-19nm269ozin-w-brake-friction-torque-20nm283ozin-23hs30-2804d-b200.html)
 
-[![PKP243D23M2](../../assets/images/pkp243d-700x525.jpg)](https://ponoor.com/cms/wp-content/uploads/2021/03/pkp243d.jpg)
+[![PKP243D23M2](../../assets/images/pkp243d-700x525.jpg)](../../assets/images/pkp243d.jpg)
 
 [Oriental Motor](https://www.orientalmotor.co.jp/) PKP243D23M2
 

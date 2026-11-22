@@ -41,7 +41,7 @@ EMB-STEP400には、DCジャックとユーロブロックの2種類の電源端
 
 3.81mmピッチ、2ピンのユーロブロックです。EMB-STEP400に表示してある極性のとおりに接続してください。
 
-[![](../../assets/images/brake-power-700x525.jpg)](https://ponoor.com/cms/wp-content/uploads/2021/03/brake-power.jpg)
+[![](../../assets/images/brake-power-700x525.jpg)](../../assets/images/brake-power.jpg)
 
 ### ブレーキの接続 {#connecting-brake}
 
@@ -53,7 +53,7 @@ EMB-STEP400には、DCジャックとユーロブロックの2種類の電源端
 
 STEP400とEMB-STEP400は、付属の6ピンのリボンケーブルでつなぎます。
 
-[![](../../assets/images/brake-riboncable-700x525.jpg)](https://ponoor.com/cms/wp-content/uploads/2021/03/brake-riboncable.jpg)
+[![](../../assets/images/brake-riboncable-700x525.jpg)](../../assets/images/brake-riboncable.jpg)
 
 ## STEP800 {#step800}
 

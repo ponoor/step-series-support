@@ -30,7 +30,7 @@ From "Tools" -> "Port", choose "Arduino Zero (Native USB Port)".
 
 Click the magnifying glass icon. The window of the serial monitor opens.
 
-[![](../../assets/images/openserialmonitor-486x525.png)](https://ponoor.com/cms/wp-content/uploads/2021/03/openserialmonitor.png)
+[![](../../assets/images/openserialmonitor-486x525.png)](../../assets/images/openserialmonitor.png)
 
 ### Showing the menu {#menu}
 

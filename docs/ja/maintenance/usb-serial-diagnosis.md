@@ -30,7 +30,7 @@ EthernetをつないだままUSBケーブルを抜くと、STEP400（R1）は再
 
 虫眼鏡のアイコンをクリックすると、シリアルモニタのウィンドウが開きます。
 
-[![](../../assets/images/openserialmonitor-486x525.png)](https://ponoor.com/cms/wp-content/uploads/2021/03/openserialmonitor.png)
+[![](../../assets/images/openserialmonitor-486x525.png)](../../assets/images/openserialmonitor.png)
 
 ### メニューを表示する {#menu}
 

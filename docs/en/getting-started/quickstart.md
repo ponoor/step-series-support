@@ -35,11 +35,11 @@ Only bipolar stepper motors with 4 wires can be used. The `SM-42BYG011-25` (Merc
 
 Connect the two wires of one coil to a pair of the terminals, and the two wires of the other coil to the other pair. The wiring diagram in the [datasheet](https://www.sparkfun.com/datasheets/Robotics/SM-42BYG011-25.pdf) of this motor shows that the pairs are `Red - Green` and `Yellow - Blue`.
 
-[![](../../assets/images/motor-wiring-diagram-sample.png)](https://ponoor.com/cms/wp-content/uploads/2020/08/motor-wiring-diagram-sample.png)
+[![](../../assets/images/motor-wiring-diagram-sample.png)](../../assets/images/motor-wiring-diagram-sample.png)
 
 Connect the wires to the terminal block like this:
 
-[![](../../assets/images/SM-42BYG-wiring-700x525.jpg)](https://ponoor.com/cms/wp-content/uploads/2020/08/SM-42BYG-wiring.jpg)
+[![](../../assets/images/SM-42BYG-wiring-700x525.jpg)](../../assets/images/SM-42BYG-wiring.jpg)
 
 How to find the pairs of another motor, and the terminal, are explained in [Motor terminals](../connections/power-supply-and-motor.md#motor-terminals).
 

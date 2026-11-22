@@ -35,11 +35,11 @@ LANケーブルでボードとPCを直接つなぎます（一対一の接続）
 
 モータの1つのコイルの2本の線を端子の1組に、もう1つのコイルの2本の線をもう1組につなぎます。このモータの[データシート](https://www.sparkfun.com/datasheets/Robotics/SM-42BYG011-25.pdf)の配線図を見ると、コイルのペアは`Red - Green`と`Yellow - Blue`です。
 
-[![](../../assets/images/motor-wiring-diagram-sample.png)](https://ponoor.com/cms/wp-content/uploads/2020/08/motor-wiring-diagram-sample.png)
+[![](../../assets/images/motor-wiring-diagram-sample.png)](../../assets/images/motor-wiring-diagram-sample.png)
 
 端子台へは次のようにつなぎます。
 
-[![](../../assets/images/SM-42BYG-wiring-700x525.jpg)](https://ponoor.com/cms/wp-content/uploads/2020/08/SM-42BYG-wiring.jpg)
+[![](../../assets/images/SM-42BYG-wiring-700x525.jpg)](../../assets/images/SM-42BYG-wiring.jpg)
 
 ほかのモータでコイルのペアを見つける方法と端子については、[モータの端子](../connections/power-supply-and-motor.md#motor-terminals)をご覧ください。
 

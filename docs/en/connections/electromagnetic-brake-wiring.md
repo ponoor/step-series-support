@@ -41,7 +41,7 @@ A plug with these dimensions fits the jack:
 
 The terminal block is a 3.81 mm pitch, 2 pin block. Connect the polarity as printed on the EMB-STEP400.
 
-[![](../../assets/images/brake-power-700x525.jpg)](https://ponoor.com/cms/wp-content/uploads/2021/03/brake-power.jpg)
+[![](../../assets/images/brake-power-700x525.jpg)](../../assets/images/brake-power.jpg)
 
 ### Connecting the brake {#connecting-brake}
 
@@ -53,7 +53,7 @@ Most electromagnetic brakes have a polarity. Connect them as the signs on the EM
 
 Connect the STEP400 and the EMB-STEP400 with the supplied 6-pin ribbon cable.
 
-[![](../../assets/images/brake-riboncable-700x525.jpg)](https://ponoor.com/cms/wp-content/uploads/2021/03/brake-riboncable.jpg)
+[![](../../assets/images/brake-riboncable-700x525.jpg)](../../assets/images/brake-riboncable.jpg)
 
 ## STEP800 {#step800}
 

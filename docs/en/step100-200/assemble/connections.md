@@ -45,4 +45,4 @@ The marks of the pairs on the board are as follows, but they are confusing, espe
 | Coil 1 | A+, A- | 1A, 2A |
 | Coil 2 | B+, B- | 1B, 2B |
 
-[![](../../../assets/images/step200_wiring-700x510.png)](https://ponoor.com/cms/wp-content/uploads/2022/02/step200_wiring.png)
+[![](../../../assets/images/step200_wiring-700x510.png)](../../../assets/images/step200_wiring.png)

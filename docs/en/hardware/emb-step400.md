@@ -24,15 +24,15 @@ The gate of each MOSFET is pulled down with a resistor (10 kΩ, in the circuit d
 
 ## PCB drawing {#drawing}
 
-[![](../../assets/images/step400-emb-dimension.png)](https://ponoor.com/cms/wp-content/uploads/2021/03/step400-emb-dimension.png)
+[![](../../assets/images/step400-emb-dimension.png)](../../assets/images/step400-emb-dimension.png)
 
-[step400-emb-dimension.pdf](https://ponoor.com/cms/wp-content/uploads/2021/03/step400-emb-dimension.pdf)
+[step400-emb-dimension.pdf](../../assets/files/step400-emb-dimension.pdf)
 
 ## Circuit diagram {#schematic}
 
-[![](../../assets/images/stem400-emb-schematic.png)](https://ponoor.com/cms/wp-content/uploads/2021/03/stem400-emb-schematic.png)
+[![](../../assets/images/stem400-emb-schematic.png)](../../assets/images/stem400-emb-schematic.png)
 
-[step400-brakeBoard-schematic.pdf](https://ponoor.com/cms/wp-content/uploads/2021/03/step400-brakeBoard-schematic.pdf)
+[step400-brakeBoard-schematic.pdf](../../assets/files/step400-brakeBoard-schematic.pdf)
 
 ## Accessories {#accessories}
 
