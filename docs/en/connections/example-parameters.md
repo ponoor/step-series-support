@@ -31,4 +31,4 @@ The maximum speed and the acceleration and deceleration of a motor depend greatl
 
 ## Using the files {#using}
 
-Copy the file as it is to the root folder of the microSD card. The board reads the first `.json` file in the root folder in alphabetical order. You do not need to rename the file, but another `.json` file may be read first, so put only the file that you use on the card. (Firmware before v2.1.0 reads only a file named `config.txt`.) See [The file that the board reads](microsd-card.md#files) for the rules.
+Copy the file as it is to the root folder of the microSD card. The board reads the first `.json` file in the root folder in alphabetical order. You do not need to rename the file, but `config.txt` or another `.json` file may be read first, so put only the file that you use on the card. (Firmware before v2.1.0 reads only a file named `config.txt`.) See [The file that the board reads](microsd-card.md#files) for the rules.

@@ -12,7 +12,7 @@ Each axis of the STEP400 and the STEP800 has a HOME terminal for a switch or a s
 
 ### HOME {#home}
 
-A stepper motor cannot detect its own position, so a sensor is needed to find the home position at the start. The HOME terminal is connected directly to the driver IC and can be used for the position management of the driver. The input is pulled up to 3.3 V. What it is used for is explained in [Homing and position management](../guides/homing-and-position.md#home).
+This is the input for the homing. A stepper motor cannot detect its own position, so a sensor is needed to find the home position at the start. The HOME terminal is connected directly to the driver IC and can be used for the position management of the driver. The input is pulled up to 3.3 V. What it is used for is explained in [Homing and position management](../guides/homing-and-position.md#home).
 
 ### LIMIT (STEP400 only) {#limit}
 

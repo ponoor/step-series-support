@@ -90,8 +90,8 @@ Firmware before v2.1.0 reads only a file named `config.txt` in the root folder; 
 
 | Model | URL | Source (GitHub) |
 | --- | --- | --- |
-| STEP400 | <http://ponoor.com/tools/step400-config/> | [/configTool](https://github.com/ponoor/STEP400/tree/master/configTool) |
-| STEP800 | <http://ponoor.com/tools/step800-config/> | [/configTool](https://github.com/ponoor/STEP800/tree/master/configTool) |
+| STEP400 | <https://ponoor.com/tools/step400-config/> | [/configTool](https://github.com/ponoor/STEP400/tree/master/configTool) |
+| STEP800 | <https://ponoor.com/tools/step800-config/> | [/configTool](https://github.com/ponoor/STEP800/tree/master/configTool) |
 
 ## Configuration items {#items}
 
