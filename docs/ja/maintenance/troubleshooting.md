@@ -63,7 +63,7 @@ ChromeまたはEdgeと、データ通信ができるUSBケーブルを使い、�
 ### モータが動かない {#motor-not-moving}
 
 - **USBだけをつないでいる。** USBでは、ドライバICに電源が入りません。モータの電源を入れてください。[接続](usb-serial-diagnosis.md#connection)をご覧ください。
-- **コマンドに`/error/command`が返ってくる。** エラーが理由を示します。たとえば、`BrakeEngaged`（ブレーキが解放されていない）、`MotorNotHiZ`、`MotorNotStopped`、`InServoMode`です。[`/error/command`](../reference/automatically-sent-messages.md#error-command)と[エラー](../guides/communication-and-messages.md#errors)をご覧ください。動作を始める条件は[動作開始条件](../reference/index.md#motion-start-condition)に、ブレーキの場合は[電磁ブレーキ](../guides/electromagnetic-brake.md#commands)にあります。エラーが届かないときは、[`/reportError`](../reference/system-settings.md#reporterror)で`/error/command`の送信をオフにしていないか確認してください。
+- **コマンドに`/error/command`が返ってくる。** エラーが理由を示します。たとえば、`BrakeEngaged`（ブレーキが解放されていない）、`MotorNotHiZ`、`MotorNotStopped`、`InServoMode`です。[`/error/command`](../reference/automatically-sent-messages.md#error-command)と[エラー](../guides/communication-and-messages.md#errors)をご覧ください。動作を始める条件は[動作開始条件](../reference/index.md#motion-start-condition)に、ブレーキの場合は[電磁ブレーキ](../guides/electromagnetic-brake.md#commands)にあります。エラーが届かないときは、[`/reportError`](../reference/system-settings.md#reporterror)で`/error/command`と`/error/osc`の送信をオフにしていないか確認してください。
 - **スイッチが動作を禁止している。** [動作を禁止するスイッチ](../guides/alarms-and-protection.md#switches)をご覧ください。
 - **ドライバが自分で無励磁になった**（過電流、過熱、電源電圧の低下）。[ドライバが自分で無励磁になったとき](../guides/alarms-and-protection.md#hiz-by-itself)をご覧ください。
 
