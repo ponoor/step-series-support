@@ -1695,7 +1695,6 @@ See also: `/getHomingStatus`
 Changes:
 
 - v2.2.0: While the brake is engaged, releasing or engaging (not while stopping or after `/free`), replies `/error/command BrakeEngaged` and does nothing. Before, it set the homing state although it did not start.
-- v2.2.0: The homing no longer often ends with `/homingStatus` 4 and `ReleaseSwTimeout` about 1 ms after the switch was found, instead of 3 (a timing error of the timeout check; it happened in almost every homing or almost never, depending on the start-up).
 
 #### /getHomingStatus
 

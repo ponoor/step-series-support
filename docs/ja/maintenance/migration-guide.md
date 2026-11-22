@@ -25,7 +25,6 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 - [ ] `/setProhibitMotionOnHomeSw`や`/setProhibitMotionOnLimitSw`を`/goTo`、`/goHome`、`/goMark`と一緒に使っている → [スイッチの近くでの回転方向](#switch-direction)
 - [ ] 1つのモータへの`/hardHiZ`、または`/goTo`の待機中の停止コマンドを送っている → [停止コマンド](#stop-commands)
 - [ ] 位置レポートの間隔を32767より大きくしている → [位置レポートの間隔](#report-interval)
-- [ ] クライアントが原点復帰を再試行する、または`/homingStatus`の4を成功として扱っている → [原点復帰がすぐ`ReleaseSwTimeout`で終わらなくなりました](#homing-timeout)
 
 **設定ファイルを作る、またはmicroSDカードを使う場合:**
 
@@ -169,14 +168,6 @@ v2.0.0から更新する場合は、先に[v2.0.0からの更新](#from-v2-0-0)�
 **影響を受けるのは。** 32768ms以上の間隔を設定するクライアントです。
 
 **何をすればよいか。** 65535までの値を使ってください（0や負の値でレポートを無効にするのは、以前と同じです）。詳しくは[`/setPositionReportInterval`](../reference/motor-driver-settings.md#setpositionreportinterval)をご覧ください。
-
-### 原点復帰がすぐ`ReleaseSwTimeout`で終わらなくなりました {#homing-timeout}
-
-**何が変わったか。** v2.1.0以前では、`/homing`がスイッチを見つけた約1ms後に、3ではなく`/homingStatus`の4と`ReleaseSwTimeout`で終わることがよくありました。ほとんどの原点復帰で起きるか、ほとんど起きないかは、起動のたびに決まっていました。タイムアウトの経過時間の計算の誤りで、v2.2.0で直りました。
-
-**影響を受けるのは。** この誤りを避けるために、原点復帰を再試行したり、`/homingStatus`の4を成功として扱ったりしていたクライアントです。
-
-**何をすればよいか。** 再試行をやめてください。3を原点復帰の終了、4を`/releaseSw`の本当のタイムアウトとして扱ってください。詳しくは[原点復帰がすぐに`ReleaseSwTimeout`で終わる](troubleshooting.md#release-sw-timeout)と[修正](changelog.md#v2-2-0-fixed)をご覧ください。
 
 ## 設定ファイルとmicroSDカード {#config-files}
 

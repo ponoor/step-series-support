@@ -67,10 +67,6 @@ ChromeまたはEdgeと、データ通信ができるUSBケーブルを使い、�
 - **スイッチが動作を禁止している。** [スイッチによる動作の禁止](../guides/alarms-and-protection.md#switches)をご覧ください。
 - **ドライバが自分で無励磁になった**（過電流、過熱、電源電圧の低下）。[ドライバが自分で無励磁になったとき](../guides/alarms-and-protection.md#hiz-by-itself)をご覧ください。
 
-### 原点復帰がすぐに`ReleaseSwTimeout`で終わる {#release-sw-timeout}
-
-v2.1.0までのファームウェアでは、原点復帰がすぐに`ReleaseSwTimeout`（`/homingStatus`の4）で終わることがありました。起動のたびに、ほとんど毎回起きるか、ほとんど起きないかのどちらかでした。v2.2.0で修正されています。ファームウェアを更新してください（[ファームウェアの更新](firmware-update.md)）。
-
 ## ボードとファームウェア {#board}
 
 ### USBを抜くとSTEP400が再起動する {#usb-unplug}

@@ -25,7 +25,6 @@ Go through the list and read the items that apply to you.
 - [ ] You use `/setProhibitMotionOnHomeSw` or `/setProhibitMotionOnLimitSw` with `/goTo`, `/goHome` or `/goMark` → [Direction near a switch](#switch-direction)
 - [ ] You send `/hardHiZ` to one motor, or stop commands while a `/goTo` is waiting → [Stop commands](#stop-commands)
 - [ ] You set the position report interval above 32767 → [Position report interval](#report-interval)
-- [ ] Your client retries the homing or treats `/homingStatus` 4 as success → [Homing no longer ends at once with `ReleaseSwTimeout`](#homing-timeout)
 
 **If you make configuration files or use the microSD card:**
 
@@ -169,14 +168,6 @@ With `255`, each motor is judged alone: the motors in the state are changed and 
 **Who is affected.** Clients that set an interval of 32768 ms or more.
 
 **What to do.** Use values up to 65535 (0 or a negative value disables the report, as before). Details: [`/setPositionReportInterval`](../reference/motor-driver-settings.md#setpositionreportinterval).
-
-### Homing no longer ends at once with `ReleaseSwTimeout` {#homing-timeout}
-
-**What changed.** In v2.1.0 and earlier, `/homing` often ended with `/homingStatus` 4 and `ReleaseSwTimeout` about 1 ms after the switch was found, instead of 3. It happened in almost every homing or almost never, depending on the start-up. It was an error in the calculation of the elapsed time of the timeout, and v2.2.0 fixes it.
-
-**Who is affected.** Clients that retried the homing, or treated `/homingStatus` 4 as success, to get around the error.
-
-**What to do.** Remove the retry. Treat 3 as the end of the homing, and 4 as a real timeout of `/releaseSw`. Details: [Homing ends at once with `ReleaseSwTimeout`](troubleshooting.md#release-sw-timeout), [Fixed](changelog.md#v2-2-0-fixed).
 
 ## Configuration files and the microSD card {#config-files}
 

@@ -67,10 +67,6 @@ Use Chrome or Edge, a USB cable for data, and check the list of the serial ports
 - **A switch prohibits the motion.** See [Switches that prohibit a motion](../guides/alarms-and-protection.md#switches).
 - **The driver went HiZ by itself** (overcurrent, overtemperature, undervoltage). See [When the driver goes HiZ by itself](../guides/alarms-and-protection.md#hiz-by-itself).
 
-### Homing ends at once with `ReleaseSwTimeout` {#release-sw-timeout}
-
-With firmware up to v2.1.0, the homing sometimes ended at once with the status `ReleaseSwTimeout` (`/homingStatus` 4): in almost every homing or almost never, depending on the start-up. This was fixed in v2.2.0. Update the firmware: [Firmware update](firmware-update.md).
-
 ## The board and the firmware {#board}
 
 ### The STEP400 restarts when USB is unplugged {#usb-unplug}

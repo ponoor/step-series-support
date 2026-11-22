@@ -102,7 +102,7 @@ These changes are not visible to OSC clients, or only in timing.
 
 ### Fixed {#v2-2-0-fixed}
 
-- **Homing ended at once with `ReleaseSwTimeout`.** `/homing` often ended with `/homingStatus` 4 and `ReleaseSwTimeout` about 1 ms after the switch was found, instead of 3. It happened in almost every homing or almost never, depending on the start-up. This was a timing error of the timeout check (v2.1.0 and earlier). The same comparison is fixed in other places, and a timeout of 2^31 ms or more no longer fires. See [Homing ends at once with `ReleaseSwTimeout`](troubleshooting.md#release-sw-timeout).
+- A timeout (`goUntilTimeout`, `releaseSwTimeout`) of 2^31 ms or more no longer fires; before, it fired after 24.8 days or more.
 - **CPU fault (HardFault).** The firmware engages every brake at once and restarts after the transition duration, with `resetCause` 6. On the STEP400 (R1 board), unplugging the USB cable while the Ethernet cable is connected can cause a CPU fault; this is a hardware issue of the board and also happens with v2.1.0, so the fault itself is not fixed. What changed is how the firmware handles it: the brakes are engaged first, and the restart is reported. See [The STEP400 restarts when USB is unplugged](troubleshooting.md#usb-unplug).
 - `/setStallThreshold` was not saved, the position report interval of 32768 and above disabled the report, and `/setConfigName` accepted a non-string (it now replies `WrongDataType`). See [Settings and values](#v2-2-0-settings) and [Argument checks and errors](#v2-2-0-arguments).
 - Servo mode: the update period varied between about 7 and 13 ms with position reports; with the brake disabled, a driver that went HiZ by itself was energized again by the next update.
