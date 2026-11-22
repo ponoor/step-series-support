@@ -117,7 +117,7 @@ Current outPort : 50101
 - `Ethernet link status`: `LinkON`（リンクしている）、`LinkOff`（リンクしていない）、`Unknown`（状態を取得できない）のどれかです。
 - `isDestIpSet`: 送信先が設定されていて、ボードがOSCメッセージを送信できるときに`Yes`です。つまり、[`/setDestIp`](../reference/system-settings.md#setdestip)を受信している（または、受信前にも送信する設定になっている）ときです。
 - `Destination Ip`、`Current My Ip`、`Current MAC address`、`Current outPort`: 送信先と、ボードが今使っているIPアドレス、MACアドレス、送信ポートです。IDが加算されています。
-- `Destination MAC address`: 最後の送信の宛先のMACアドレスです。最後の送信がブロードキャストだったときは、`FF:FF:FF:FF:FF:FF`です。
+- `Destination MAC address`: 最後の送信の送信先のMACアドレスです。最後の送信がブロードキャストだったときは、`FF:FF:FF:FF:FF:FF`です。
 
 ### microSD {#status-microsd}
 

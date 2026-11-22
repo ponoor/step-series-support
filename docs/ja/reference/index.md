@@ -91,5 +91,5 @@ OSCコマンドのモータIDは、基板に印刷してある番号と一致し
 
 ## 留意点 {#points-to-keep-in-mind}
 
-- ボードは、[`/setDestIp`](system-settings.md#setdestip)を受信するまで、ブロードキャストの[`/booted`](automatically-sent-messages.md#booted)を除いて、OSCメッセージを送信しません。宛先に届かないメッセージを大量に送ると、ボードの挙動がおかしくなることがあるためです（[ブラウザ設定ツール](../connections/browser-config-tool.md)で、`/setDestIp`を待たずに送信を始めるようにもできます。[`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip)をご覧ください）。
-- ボードが宛先のMACアドレスを解決している間（`/setDestIp`の後の最大数秒）も、宛先へのメッセージは破棄されます。詳しくは、[通信とメッセージ](../guides/communication-and-messages.md)をご覧ください。
+- ボードは、[`/setDestIp`](system-settings.md#setdestip)を受信するまで、ブロードキャストの[`/booted`](automatically-sent-messages.md#booted)を除いて、OSCメッセージを送信しません。送信先に届かないメッセージを大量に送ると、ボードの挙動がおかしくなることがあるためです（[ブラウザ設定ツール](../connections/browser-config-tool.md)で、`/setDestIp`を待たずに送信を始めるようにもできます。[`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip)をご覧ください）。
+- ボードが送信先のMACアドレスを解決している間（`/setDestIp`の後の最大数秒）も、送信先へのメッセージは破棄されます。詳しくは、[通信とメッセージ](../guides/communication-and-messages.md)をご覧ください。

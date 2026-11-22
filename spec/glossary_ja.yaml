@@ -27,6 +27,9 @@ terms:
   - use: PC
     concept: personal computer。「パソコン」とは書かない
     avoid: [パソコン]
+  - use: 送信先
+    concept: destination（ボードがOSCメッセージを送る相手。destIp）。「宛先」とは書かない
+    avoid: [宛先]
   - use: 解放
     concept: ブレーキを外す。外した状態は「解放中」
     avoid: [開放]
