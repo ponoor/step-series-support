@@ -130,7 +130,7 @@ If you hang a load on the motor, take these times into account.
 
 [![PKP243D23M2](../../assets/images/pkp243d-700x525.jpg)](../../assets/images/pkp243d.jpg)
 
-[Oriental Motor](https://www.orientalmotor.co.jp/) PKP243D23M2
+[Oriental Motor](https://www.orientalmotor.com/stepper-motors/2-phase-stepper-motors-pkp-series.html) PKP243D23M2
 
 ## Related commands and settings {#related}
 
