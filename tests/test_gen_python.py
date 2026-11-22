@@ -7,6 +7,7 @@ modules with `ast`, so python-osc does not have to be installed.
 """
 
 import ast
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -61,6 +62,8 @@ class TestGenerate(unittest.TestCase):
 
     def test_modules_parse_and_say_they_are_generated(self):
         for name, text in self.out.items():
+            if not name.endswith(".py"):
+                continue
             ast.parse(text)
             self.assertTrue(text.startswith("# This file is generated. Do not edit it directly."), name)
 
@@ -166,6 +169,48 @@ class TestText(unittest.TestCase):
     def test_docstring_is_escaped(self):
         lines = gp.py_doc(['a \\ b """ c'], "")
         self.assertEqual(ast.literal_eval("\n".join(lines)), 'a \\ b """ c')
+
+
+class TestSpecCopy(unittest.TestCase):
+    """docs/osc-commands.yaml of the library: four comment lines, then the spec as it is."""
+
+    def spec_bytes(self) -> bytes:
+        return (ROOT / "spec" / "osc-commands.yaml").read_bytes()
+
+    def test_blob_hash_is_the_same_as_git_hash_object(self):
+        for data in (self.spec_bytes(), b"", b"a\n"):
+            got = subprocess.run(
+                ["git", "hash-object", "--stdin"], input=data, capture_output=True, check=True
+            ).stdout.decode().strip()
+            self.assertEqual(gp.git_blob_hash(data), got)
+
+    def test_copy_is_header_plus_the_original_text(self):
+        text = gp.spec_copy(SPEC)
+        lines = text.split("\n")
+        self.assertTrue(all(line.startswith("#") for line in lines[:4]))
+        self.assertIn("git blob " + gp.git_blob_hash(self.spec_bytes()) + ".", lines[1])
+        self.assertEqual("\n".join(lines[4:]).encode("utf-8"), self.spec_bytes())
+        self.assertEqual(yaml.safe_load(text), yaml.safe_load(self.spec_bytes()))
+
+    def test_other_spec_file_is_hashed_by_its_own_content(self):
+        with tempfile.TemporaryDirectory() as d:
+            other = Path(d) / "other.yaml"
+            other.write_bytes(self.spec_bytes() + b"\n# extra\n")
+            text = gp.spec_copy(Spec.load(other))
+        self.assertIn(gp.git_blob_hash(self.spec_bytes() + b"\n# extra\n"), text.split("\n")[1])
+
+    def test_check_looks_at_the_copy(self):
+        with tempfile.TemporaryDirectory() as d:
+            lib = Path(d)
+            (lib / "src" / "stepseries").mkdir(parents=True)
+            self.assertEqual(gp.main([str(lib)]), 0)
+            copy = lib / "docs" / "osc-commands.yaml"
+            self.assertTrue(copy.exists())
+            self.assertEqual(gp.main([str(lib), "--check"]), 0)
+            copy.write_bytes(copy.read_bytes() + b"# edited\n")
+            self.assertEqual(gp.main([str(lib), "--check"]), 1)
+            self.assertEqual(gp.main([str(lib)]), 0)
+            self.assertEqual(gp.main([str(lib), "--check"]), 0)
 
 
 class TestMigrate(unittest.TestCase):

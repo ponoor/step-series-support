@@ -5,7 +5,9 @@
     python tools/gen_python.py <path> --check                          # write nothing, exit 1 if a file would change
 
 Writes `src/stepseries/commands.py` (one dataclass per command) and `src/stepseries/responses.py`
-(one dataclass per message). Both start with a notice that they are generated.
+(one dataclass per message). Both start with a notice that they are generated. Also writes
+`docs/osc-commands.yaml`, a copy of the spec (four comment lines with the git blob hash of the
+original, then the original text unchanged), which docs/_ext/osc_spec.py of the library reads.
 
 Inputs
 - spec/osc-commands.yaml: addresses, arguments, descriptions (English), timings, notifications.
@@ -24,6 +26,7 @@ Argument tables are not written into the docstrings. The Sphinx extension of the
 from __future__ import annotations
 
 import argparse
+import hashlib
 import keyword
 import re
 import runpy
@@ -35,7 +38,7 @@ from typing import Any
 import yaml
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from spec import LINK_RE, SETTING_LINK_RE, Spec  # noqa: E402
+from spec import LINK_RE, SETTING_LINK_RE, SPEC_PATH, Spec  # noqa: E402
 
 TOOLS = Path(__file__).resolve().parent
 COMPAT_PATH = TOOLS / "python_compat.yaml"
@@ -391,6 +394,25 @@ def load_overrides(lib: Path) -> dict:
     return runpy.run_path(str(path)).get("DOCSTRINGS", {})
 
 
+SPEC_COPY_HEADER = (
+    "# Copy of spec/osc-commands.yaml of the step-series-support repository\n"
+    "# (https://github.com/ponoor/step-series-support), git blob {blob}.\n"
+    "# Do not edit it here. Update it with tools/gen_python.py of step-series-support.\n"
+    "# Read by docs/_ext/osc_spec.py (the argument tables of the API reference).\n"
+)
+
+
+def git_blob_hash(data: bytes) -> str:
+    """The same value as `git hash-object` (sha1 of "blob <size>\\0" + content)."""
+    return hashlib.sha1(b"blob %d\0" % len(data) + data).hexdigest()
+
+
+def spec_copy(spec: Spec) -> str:
+    """Text of docs/osc-commands.yaml: the header, then the spec file as it is (not re-dumped)."""
+    data = Path(spec.path or SPEC_PATH).read_bytes()
+    return SPEC_COPY_HEADER.format(blob=git_blob_hash(data)) + data.decode("utf-8")
+
+
 def generate(spec: Spec, lib: Path) -> dict[Path, str]:
     compat = yaml.safe_load(COMPAT_PATH.read_text(encoding="utf-8"))
     gen = Gen(spec, compat, load_overrides(lib))
@@ -398,7 +420,11 @@ def generate(spec: Spec, lib: Path) -> dict[Path, str]:
     if problems:
         raise SystemExit("\n".join(problems))
     base = lib / "src" / "stepseries"
-    return {base / "commands.py": gen.commands_module(), base / "responses.py": gen.responses_module()}
+    return {
+        base / "commands.py": gen.commands_module(),
+        base / "responses.py": gen.responses_module(),
+        lib / "docs" / "osc-commands.yaml": spec_copy(spec),
+    }
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -414,12 +440,14 @@ def main(argv: list[str] | None = None) -> int:
     spec = Spec.load(args.spec) if args.spec else Spec.load()
     changed = 0
     for path, text in generate(spec, lib).items():
-        old = path.read_text(encoding="utf-8") if path.exists() else None
+        old = path.read_bytes().decode("utf-8") if path.exists() else None
         if old != text:
             changed += 1
             print(("would change " if args.check else "wrote ") + str(path.relative_to(lib)))
             if not args.check:
-                path.write_text(text, encoding="utf-8")
+                path.parent.mkdir(parents=True, exist_ok=True)
+                with path.open("w", encoding="utf-8", newline="") as f:
+                    f.write(text)
     if not changed:
         print("no changes")
     return 1 if (args.check and changed) else 0
