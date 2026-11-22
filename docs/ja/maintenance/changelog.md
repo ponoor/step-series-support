@@ -1,8 +1,8 @@
 ---
-title: 変更履歴
+title: ファームウェアの変更履歴
 ---
 
-# 変更履歴
+# ファームウェアの変更履歴
 
 このページは、ファームウェアの各バージョンの変更点を、OSCクライアントを書く人、設定ファイルを作る人、ボードを使う人、ファームウェアを自分でビルドする人の立場でまとめたものです。全文はリポジトリの[CHANGELOG](https://github.com/ponoor/step-series-universal-firmware/blob/main/CHANGELOG.md)に、各バージョンのリリースはGitHubの[Releases](https://github.com/ponoor/step-series-universal-firmware/releases)にあります。リリースにはArduinoスケッチのソースだけが付いていて、ビルド済みのバイナリファイルはありません。ファームウェアは自分でビルドしてください（[ファームウェアのコンパイル](compile-the-arduino-sketch.md)）。
 
