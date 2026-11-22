@@ -33,7 +33,7 @@ title: 変更履歴
 
 #### 設定と値 {#v2-2-0-settings}
 
-- **Rawコマンドで行った設定が保持されます**。`/setSpeedProfileRaw`、`/setMaxSpeedRaw`、`/setMinSpeedRaw`、`/setFullstepSpeedRaw`、`/setAccRaw`、`/setDecRaw`は、`/saveConfig`が保存し`/resetMotorDriver`が再び適用する設定も変えます。以前はレジスタだけを変えていました。`/setMinSpeedRaw`はビット12を無視します。[`/setAccRaw`](../reference/speed-profile.md#setaccraw)をご覧ください。
+- **Rawコマンドで行った設定は残ります**。`/setSpeedProfileRaw`、`/setMaxSpeedRaw`、`/setMinSpeedRaw`、`/setFullstepSpeedRaw`、`/setAccRaw`、`/setDecRaw`は、`/saveConfig`が保存し`/resetMotorDriver`が再び適用する設定も変えます。以前はレジスタだけを変えていました。`/setMinSpeedRaw`はビット12を無視します。[`/setAccRaw`](../reference/speed-profile.md#setaccraw)をご覧ください。
 - [`/setStallThreshold`](../reference/alarm-settings.md#setstallthreshold)は、保存される値も変えます（以前はレジスタだけを変えていました）。1つのモータへの[`/setPositionReportInterval`](../reference/motor-driver-settings.md#setpositionreportinterval)は、保存されている位置リストレポートの間隔も消します。
 - [`/getKval`](../reference/voltage-and-current-mode-settings.md#getkval)、[`/getTval`](../reference/voltage-and-current-mode-settings.md#gettval)、[`/getTval_mA`](../reference/voltage-and-current-mode-settings.md#gettval_ma)（STEP400）は、レジスタではなく設定を返します。ブレーキのあるモータで引き上げられたKVAL_HOLDも含みます。
 - **[`/getSpeedProfile`](../reference/speed-profile.md#getspeedprofile)が返す加速度と減速度が約4.9%小さくなります**。データシートと一致するようになりました（ドライバライブラリv1.2.0）。[`/setAcc`](../reference/speed-profile.md#setacc)、`/setDec`、`/setSpeedProfile`は最も近いレジスタの値に丸めるので、書き込まれる値が1LSBずれることがあります。

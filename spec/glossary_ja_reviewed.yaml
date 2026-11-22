@@ -130,10 +130,6 @@
   text: "りました（[保持電流]）。"
   note: 保持電流（KVAL_HOLD/TVAL_HOLD のパラメータ）。用語として使う
 - where: "docs/ja/maintenance/changelog.md"
-  term: 保持
-  text: "行った設定が保持されます**"
-  note: 設定値が保存されて残る（persist）の意味。ブレーキの保持ではない
-- where: "docs/ja/maintenance/changelog.md"
   term: 応答
   text: "でほぼ同じ応答になるはずで"
   note: サーボの制御としての応答（ステップ応答など）。ネットワークの応答ではない
