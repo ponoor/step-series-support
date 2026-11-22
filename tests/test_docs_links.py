@@ -12,8 +12,8 @@ ROOT = Path(__file__).resolve().parent.parent
 # An absolute URL of a page of the old docs on ponoor.com (https://ponoor.com/en/docs/..., /ja/docs/..., /docs/...).
 OLD_DOCS_URL = re.compile(r"https?://(?:www\.)?ponoor\.com/(?:(?:en|ja)/)?docs/[^\s)\"'>]*")
 
-# An image or file on ponoor.com's WordPress (wp-content/): the pages must not depend on it.
-WORDPRESS_FILE_URL = re.compile(r"https?://(?:www\.)?ponoor\.com/[^\s)\"'>]*wp-content/[^\s)\"'>]*")
+# An image or file on WordPress (wp-content/, any host or form of the URL): the pages must not depend on it.
+WORDPRESS_FILE_URL = re.compile(r"[^\s(\"'<]*wp-content/[^\s)\"'>]*", re.IGNORECASE)
 
 
 class DocsLinkTest(unittest.TestCase):
