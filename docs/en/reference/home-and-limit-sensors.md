@@ -6,7 +6,7 @@ title: HOME and LIMIT switches
 
 For how the HOME and LIMIT switches are used in homing, see [Homing and position management](../guides/homing-and-position.md).
 
-## Status report {#status-report}
+## Status reports and queries {#status-report}
 
 <!-- osc: /enableHomeSwReport -->
 <!-- generated:begin osc /enableHomeSwReport -->

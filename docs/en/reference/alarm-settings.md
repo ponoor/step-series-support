@@ -463,7 +463,7 @@ Gets the stall detection threshold.
 | stallThreshold | float | 312.5-10000 (STEP400), 31.25-4000 (STEP800) mA | thresholds in [mA] |
 <!-- generated:end osc /getStallThreshold -->
 
-## Sensor {#sensor}
+## HOME and LIMIT switches {#sensor}
 
 <!-- osc: /setProhibitMotionOnHomeSw -->
 <!-- generated:begin osc /setProhibitMotionOnHomeSw -->

@@ -54,7 +54,7 @@ The full list is in [Automatically sent messages](../reference/automatically-sen
 
 The board checks the arguments of a command before it applies the command. When a check fails, **nothing is applied**.
 
-| Case | Message |
+| Case | Error |
 | --- | --- |
 | Fewer arguments than the command needs | [`/error/osc`](../reference/automatically-sent-messages.md#error-osc) `MissingArgument` |
 | An argument of the wrong type (a string where a number is needed, NaN or infinity, or a non-string for `/setConfigName`) | `/error/osc` `WrongDataType` |
@@ -65,7 +65,7 @@ The board checks the arguments of a command before it applies the command. When 
 Before v2.2.0, missing arguments and arguments of the wrong type were applied as 0. For example `/setKval 1` set every KVAL of the motor to 0.
 
 - Arguments beyond the ones that a command needs are ignored.
-- Some commands do not reject a value outside the range but limit it or wrap it around. The reference of each command says which; see also the [common rules](../reference/index.md#messages-to-the-board).
+- Some commands do not reject a value outside the range but limit it or wrap it around. The reference of each command says which; see also the [Common rules: Messages to the board](../reference/index.md#messages-to-the-board).
 - An integer and a floating-point number are converted into each other. **Send a logical value as the integer 0 or 1** (type tag `i`); that is how the STEP Series defines it, and the board always sends logical values this way. The board also accepts a number (an integer greater than 0, or a float of 1.0 or more, is true) and the OSC values True and False.
 - OSC bundles are not supported.
 

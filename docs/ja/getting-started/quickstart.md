@@ -111,7 +111,7 @@ PCを替えたときやネットワークを変えたときは、`/setDestIp`を
 /run 1 200.
 ```
 
-最初の引数はモータIDで、モータをつないだコネクタの横に、ボードに印刷されている番号です。255はすべてのモータを表します。[モータのID](../reference/index.md#motor-id)をご覧ください。2番目の引数は速度で、単位はstep/sです。マイナスの値を指定すると、逆向きに回ります。1回転が200stepのモータ（`SM-42BYG011-25`など）では、`200.`で1秒に1回転します。速度の範囲は、[`/run`](../reference/motor-control.md#run)のリファレンスにあります。
+最初の引数はモータIDで、モータをつないだコネクタの横に、ボードに印刷されている番号です。255はすべてのモータを表します。[モータID](../reference/index.md#motor-id)をご覧ください。2番目の引数は速度で、単位はstep/sです。マイナスの値を指定すると、逆向きに回ります。1回転が200stepのモータ（`SM-42BYG011-25`など）では、`200.`で1秒に1回転します。速度の範囲は、[`/run`](../reference/motor-control.md#run)のリファレンスにあります。
 
 モータは回りましたか？止めるときは、`/run 1 0`を送るか、[`/softStop`](../reference/motor-control.md#softstop)（減速して止めます）または[`/hardHiZ`](../reference/motor-control.md#hardhiz)で、すべてのモータを止めます。
 

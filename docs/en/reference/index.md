@@ -42,7 +42,7 @@ The [OSC specification](https://opensoundcontrol.stanford.edu/spec-1_0.html) def
 
 The board checks the arguments of a command before it applies the command. When a check fails, nothing is applied.
 
-| Case | Reply |
+| Case | Error |
 | --- | --- |
 | Fewer arguments than the command needs | `/error/osc MissingArgument` |
 | An argument of the wrong type: a string for a number, NaN or infinity, or a non-string for `/setConfigName` | `/error/osc WrongDataType` |
@@ -50,7 +50,7 @@ The board checks the arguments of a command before it applies the command. When 
 | A value outside the range of the command | `/error/command CommandIgnored` |
 | More than 16 arguments, or a packet larger than 512 bytes | `/error/osc OscSyntaxError` |
 
-Some commands do not reject a value outside the range but limit or truncate it and apply it. See the description of each command.
+Some commands do not reject a value outside the range but limit it, truncate it or wrap it around, and apply it. See the description of each command.
 
 Arguments beyond the ones a command needs are ignored. The errors are not sent while the error report is disabled ([`/reportError`](system-settings.md#reporterror)). See [Automatically sent messages](automatically-sent-messages.md) for the error messages.
 

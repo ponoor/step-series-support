@@ -4,7 +4,9 @@ title: Motor driver settings
 
 # Motor driver settings
 
-## Motor driver settings {#motor-driver-settings-group}
+Commands for the motor driver settings, such as the microstep mode and the low speed optimization, and for getting the status of the motor driver.
+
+## Microstep and low speed optimization {#motor-driver-settings-group}
 
 <!-- osc: /setMicrostepMode -->
 <!-- generated:begin osc /setMicrostepMode -->
