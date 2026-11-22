@@ -220,7 +220,7 @@ Dest Ip : 10.0.0.10
 
 - **`G`**: `board`（製品、モータの数、ファームウェアのバージョン、設定ファイル名）と、設定の各セクションです。
 - **`T`**: `board`には、製品、MCU（`mcu`）、リセットの原因（`resetCause`と、MCUの`resetCauseRaw`）、ファームウェアのバージョン、IPアドレス、ID、リンク、送信先のMACアドレス（`destMac`、6つの数。ブロードキャストのあとは255が6つ）、`arpPending`（送信先のMACアドレスを解決中かどうか）、カードと設定の状態が入っています。`motors`の各要素には、位置、速度、状態、スイッチの状態などが入っています。`ocd`と`stall`は、常にfalseです。これらにはOSCメッセージを使ってください。`resetCause`の意味は[`/booted`](../reference/automatically-sent-messages.md#booted)にあります。
-- **`{...}`**: ボードは、設定を適用して、カードに書き、`{"result":"ok", ...}`またはエラーを返します。**送る前に、モータを止めてください。** 保存の間、ボードは何も処理しません（[設定の仕組み](../connections/how-settings-work.md#saving)をご覧ください）。効くときは[変更が効くとき](../connections/how-settings-work.md#when)をご覧ください。
+- **`{...}`**: ボードは、設定を適用して、カードに書き、`{"result":"ok", ...}`またはエラーを返します。**送る前に、モータを止めてください。** 保存の間、ボードは何も処理しません（[保存の間](../connections/how-settings-work.md#saving)をご覧ください）。効くときは[変更が効くとき](../connections/how-settings-work.md#when)をご覧ください。
 - **`F<path>`**: 規則と、起動時にボードが読まないファイル名は、[`F<path>`で決めた名前](../connections/microsd-card.md#f-path)をご覧ください。
 - **`R`**: 最初に`{"result":"ok","message":"Rebooting..."}`を返します。ボードは、少なくとも50ms待ちます。次に、ブレーキが有効で、まだ保持されていない状態で回転しているモータを止め、そのブレーキを保持状態にして、移行時間（最大1s）を待ってから、再起動します。[再起動、ウォッチドッグ、CPU動作異常](../guides/electromagnetic-brake.md#restart)をご覧ください。
 - **`p`**: ループと処理の時間（最大、平均、回数。単位はマイクロ秒）と、送信と、送信先のMACアドレスの解決のカウンタ（`udpSendFailed`、`udpSendDropped`、`arpResolve`、`arpProbe`など）です。[MACアドレスの解決](../guides/communication-and-messages.md#arp)をご覧ください。

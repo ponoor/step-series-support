@@ -62,11 +62,11 @@ Arduino IDEは、PlatformIOより手作業が多くなります。
 
 | ライブラリ | バージョン | 使う製品 |
 | --- | --- | --- |
-| [Ponoor PowerSTEP01 Library](https://github.com/ponoor/Ponoor_PowerSTEP01_Library) | 1.2.0以降 | STEP400、STEP100 |
-| [Ponoor L6470 Library](https://github.com/ponoor/Ponoor_L6470_Library) | 1.2.0以降 | STEP800、STEP200 |
-| [Ethernet](https://github.com/arduino-libraries/Ethernet) | 2.0.2以降 | |
-| [SdFat](https://github.com/greiman/SdFat)（Bill Greiman） | 2.2.3以降 | |
-| [ArduinoJson](https://arduinojson.org/) | 7.4.1以降（7.x） | |
+| [Ponoor PowerSTEP01 Library](https://github.com/ponoor/Ponoor_PowerSTEP01_Library) | 1.2.0以上 | STEP400、STEP100 |
+| [Ponoor L6470 Library](https://github.com/ponoor/Ponoor_L6470_Library) | 1.2.0以上 | STEP800、STEP200 |
+| [Ethernet](https://github.com/arduino-libraries/Ethernet) | 2.0.2以上 | |
+| [SdFat](https://github.com/greiman/SdFat)（Bill Greiman） | 2.2.3以上 | |
+| [ArduinoJson](https://arduinojson.org/) | 7.4.1以上（7.x） | |
 
 OSCのパーサとウォッチドッグはファームウェアに入っているので、CNMAT OSCライブラリとAdafruit SleepyDogライブラリは、もう要りません。
 

@@ -40,7 +40,7 @@ Go through the list and read the items that apply to you.
 
 - [ ] You send commands to a motor with the brake enabled → [Commands and states](#brake-commands)
 - [ ] You use `homingAtStartup` or the servo mode with the brake → [Commands and states](#brake-commands)
-- [ ] The motor holds a load → [Holding current](#brake-hold-current), [Restart, watchdog and CPU fault](#brake-restart), [Times in which the load is not held](#brake-unsupported)
+- [ ] The motor holds a load → [Holding current](#brake-hold-current), [Restart, watchdog and CPU fault](#brake-restart), [When the load is not held](#brake-unsupported)
 
 **If you build the firmware yourself:**
 
@@ -278,7 +278,7 @@ This section is for a motor with the brake enabled (`/enableElectromagnetBrake`)
 
 **What to do.** Expect a restart to take up to 1 s longer. The watchdog itself now fires about 250 ms after a hang with or without the brake (v2.1.0: about 62.5 ms); a command that blocks the board longer would restart it, and none is known. Details: [Restart, watchdog and CPU fault](../guides/electromagnetic-brake.md#restart).
 
-### Times in which the load is not held {#brake-unsupported}
+### When the load is not held {#brake-unsupported}
 
 **What changed.** The firmware cannot remove these times, but v2.2.0 engages the brake outputs earlier in `setup()`. On the STEP800, all the brakes stay released for about 250 ms after the power is applied (mostly the bootloader); depending on the power supply it can be longer, and about 2 s was measured with 24 V. After a reset or a drop of the supply voltage, they are released for about 0.5 s. The STEP400 with the EMB-STEP400 engages the brakes at once at a reset. Even then, the shaft is held only after the brake has locked mechanically, which takes tens of ms.
 

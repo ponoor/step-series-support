@@ -17,7 +17,7 @@ title: トラブルシューティング
 - **IPアドレス、サブネット、ポートが違う。** ボードとPCは、同じネットワークにある必要があります。DIPスイッチのIDは、IPアドレスと送信ポートに加算されるので、PCは、IDを加算したポートで受信する必要があります。結果が範囲を超えるときは、ボードはIDを加算せず、USBシリアルに警告を表示します。[ネットワークとDIPスイッチ](../connections/network-and-dip-switch.md#adding-id)をご覧ください。
 - **PCのファイアウォールがメッセージを止めている。**
 - USBで`s`を送り、`Ethernet link status`、`isDestIpSet`、`Destination Ip`を確認してください（[Ethernet](usb-serial-diagnosis.md#status-ethernet)）。
-- **ボードを再起動した直後である**（観察）。再起動の約0.1s後に送った`/setDestIp`は、無視されることがあります。少し待ってから送り直してください。再起動の後の最初のOSCコマンドには、ボードがMACアドレスを解決している間、返信がないことがあります（[MACアドレスの解決](../guides/communication-and-messages.md#arp)をご覧ください）。もう一度送ってください。
+- **ボードを再起動した直後である**（実機で見られた現象）。再起動の約0.1s後に送った`/setDestIp`は、無視されることがあります。少し待ってから送り直してください。再起動の後の最初のOSCコマンドには、ボードがMACアドレスを解決している間、返信がないことがあります（[MACアドレスの解決](../guides/communication-and-messages.md#arp)をご覧ください）。もう一度送ってください。
 - **ボードが設定を保存している。** ボードが保存している間（約0.1sから0.7s）に届いたOSCメッセージは失われます。[保存の間](../connections/how-settings-work.md#saving)をご覧ください。
 - **設定を保存した。** 次の項目をご覧ください。
 

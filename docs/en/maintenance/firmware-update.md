@@ -25,7 +25,7 @@ Send [`/getVersion`](../reference/system-settings.md#getversion) to the board. T
 
 ### Over USB {#usb}
 
-Connect the board to the computer with a USB-C cable, open a serial monitor, and send `s`. The firmware is shown in the first part of the status. For example:
+Connect the board to the computer with a USB Type-C cable, open a serial monitor, and send `s`. The firmware is shown in the first part of the status. For example:
 
 ```
 -------------- Firmware --------------
