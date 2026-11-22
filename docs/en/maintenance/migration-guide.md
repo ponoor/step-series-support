@@ -255,7 +255,7 @@ This section is for a motor with the brake enabled (`/enableElectromagnetBrake`)
 
 **What changed.** The brake follows a new state machine with six states, which `/getBrakeStatus` returns. In short:
 
-- On the STEP800, the brake outputs change as soon as the brake state changes (within 0.3 ms of the command), not 10-20 ms later.
+- On the STEP800, the brake outputs change as soon as the brake state changes (0.2-0.3 ms after the command), not 10-20 ms later.
 - `/activate 1` while the brake is released does nothing (it sent a hard stop). It releases the brake only if a status read after the command shows the driver energized; otherwise the brake stays engaged and `BrakeReleaseFailed` is sent. Before, the brake was released after `brakeTransitionDuration` in any case.
 - `/activate 0` on a turning motor decelerates it and engages the brake when it has stopped, like `/softHiZ`. It engaged the brake without stopping the motor.
 - `/softStop`, `/hardStop` and `/enableServoMode 0` while the brake is engaged or after `/free` do nothing. `/enableServoMode 1` and `/homing` while the brake is not released reply `BrakeEngaged` and do nothing.
