@@ -2911,7 +2911,7 @@ commands:
 
         絶対値が4,194,303（22ビット）を超えるステップ数は拒否されず、ドライバライブラリによって4,194,303に制限されます。
 
-        モータが回転している間は、ドライバがコマンドを無視し、ボードは`MotorNotStopped`ではなく`CommandIgnored`を返します。
+        モータが回転している間は、ボードは`MotorNotStopped`ではなく`CommandIgnored`を返します。
     errors: [BrakeEngaged, HomeSwActivating, LimitSwActivating, InServoMode, CommandIgnored]
     see_also: [/combine/move]
 

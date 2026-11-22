@@ -234,10 +234,6 @@
   text: "Wピンです。基板上の白丸（●"
   note: 物としての基板（寸法・穴・外形・端子・印刷・回路）の話
 # R6（2026-11-20）: 夜2 の判断と直しのあとに残った review
-- where: "commands[/move].description.ja"
-  term: 無視
-  text: "ドライバがコマンドを無視し"
-  note: ドライバの挙動。同じ文でボードが`CommandIgnored`を返すと書いている（1-06）
 - where: "docs/ja/connections/electromagnetic-brake-wiring.md"
   term: 基板
   text: "STEP400用のブレーキ基板EMB-STEP400"
