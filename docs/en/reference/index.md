@@ -91,5 +91,5 @@ A motion command that does not meet the conditions is rejected with an error suc
 
 ## Points to keep in mind {#points-to-keep-in-mind}
 
-- The board sends no OSC message, except the broadcast [`/booted`](automatically-sent-messages.md#booted), until it receives [`/setDestIp`](system-settings.md#setdestip). The board can behave unexpectedly if it sends a large number of messages that do not reach the destination. (With the [browser configuration tool](../connections/browser-config-tool.md) you can make the board send without waiting for `/setDestIp`. See [`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip).)
+- The board sends no OSC message, except the broadcast [`/booted`](automatically-sent-messages.md#booted), until it receives [`/setDestIp`](system-settings.md#setdestip). (With the [browser configuration tool](../connections/browser-config-tool.md) you can make the board send without waiting for `/setDestIp`. See [`network.canSendMsgBeforeDestIp`](../connections/configuration-items.md#network-cansendmsgbeforedestip).)
 - The messages to the destination are also dropped while the board resolves the MAC address of the destination (up to a few seconds after `/setDestIp`). For details, see [Communication and messages](../guides/communication-and-messages.md).
