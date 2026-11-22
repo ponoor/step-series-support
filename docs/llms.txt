@@ -64,7 +64,7 @@ This file lists the pages of the English documentation. Every link is a path rel
 ## Maintenance
 
 - [Maintenance](maintenance/): How to keep the firmware up to date, how to build it, and how to find the cause of a problem.
-- [Firmware update](maintenance/firmware-update/): The firmware is updated to fix bugs and to add features.
+- [Firmware update](maintenance/firmware-update/): We update the firmware to fix bugs and to add features.
 - [Compiling the firmware](maintenance/compile-the-arduino-sketch/): To update or customize the firmware, you build it in your own environment and upload it to the board.
 - [Diagnosis via USB serial port](maintenance/usb-serial-diagnosis/): You can connect a computer to the USB connector of the board to check its status and settings.
 - [Troubleshooting](maintenance/troubleshooting/): Symptoms, their causes, and what to do.

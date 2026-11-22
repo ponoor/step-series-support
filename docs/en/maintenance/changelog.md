@@ -51,7 +51,7 @@ Released 2026-10-20. The OSC addresses are compatible with v2.1.0, but the behav
 
 #### Servo mode {#v2-2-0-servo}
 
-- **The update period is 5 ms** (it was 10 ms, and varied between about 7 and 13 ms when position reports were enabled). The integral and derivative terms are scaled by the period, so the same `kP`, `kI` and `kD` should give about the same response, but retune the gains if needed. See [Servo mode](../guides/servo-mode.md).
+- **The update period is 5 ms** (it was 10 ms, and varied between about 7 and 13 ms when position reports were enabled). The integral and derivative terms are scaled by the period, so the same `kP`, `kI` and `kD` were designed to give about the same response, but the response can differ, so retune the gains if needed. See [Servo mode](../guides/servo-mode.md).
 - Enabling the servo mode resets the integral and the previous error of the PID controller. The position error is wrapped correctly around the ends of the ABS_POS range. STEP400: the HOME switch and the LIMIT switch are judged separately.
 
 #### Electromagnetic brake {#v2-2-0-brake}
