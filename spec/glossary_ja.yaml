@@ -13,6 +13,16 @@ terms:
   - use: センサ
     concept: センサ（長音なし）
     avoid: [センサー]
+  - use: マネージャ
+    concept: マネージャ（長音なし）。OS・アプリの画面の表示の名前（Windows の「デバイス マネージャー」）は画面どおり
+    avoid: [マネージャー]
+    unless_sentence: ["デバイス マネージャー"]
+  - use: ルータ
+    concept: ルータ（長音なし）
+    avoid: [ルーター]
+  - use: ユーザ
+    concept: ユーザ（長音なし）
+    avoid: [ユーザー]
   - use: 解放
     concept: ブレーキを外す。外した状態は「解放中」
     avoid: [開放]

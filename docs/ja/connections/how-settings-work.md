@@ -83,7 +83,7 @@ title: 設定の仕組み
 | コマンド | 引数 | 説明 |
 | --- | --- | --- |
 | [`/getConfigName`](../reference/system-settings.md#getconfigname) | - | `/configName`を返します。設定名、microSDカードを使えたか、設定ファイルを開けたか・解析できたか、設定ファイルのパスが含まれます。 |
-| [`/setConfigName`](../reference/system-settings.md#setconfigname) | (string)configName | ボードに保存される設定名を設定します。設定を見分けるためにユーザーが自由に編集できるラベルで、ディスク上のファイル名とは別のものです。 |
+| [`/setConfigName`](../reference/system-settings.md#setconfigname) | (string)configName | ボードに保存される設定名を設定します。設定を見分けるためにユーザが自由に編集できるラベルで、ディスク上のファイル名とは別のものです。 |
 | [`/saveConfig`](../reference/system-settings.md#saveconfig) | - | 現在動作中の設定を、JSONファイルとしてmicroSDカードに保存します。保存先は、起動時に読み込んだファイルです。ファイルを読み込まなかったときは`/config.txt`です。USBシリアルの`F<path>`で、保存先のパスを変えられます。 |
 | [`/resetDevice`](../reference/system-settings.md#resetdevice) | - | ボード全体をリセットします。ボード上のリセットスイッチを押した場合と同じ動作です。 |
 <!-- generated:end osc-related /getConfigName, /setConfigName, /saveConfig, /resetDevice -->

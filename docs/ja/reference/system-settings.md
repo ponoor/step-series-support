@@ -107,7 +107,7 @@ MACアドレスの解決のために、ブロードキャストアドレスと�
 | sdInitializeSucceeded | int | 0-1 | 起動時にmicroSDカードを使えたかどうかです。使えたときは1です。カードがないとき、FAT16またはFAT32でないカード（exFATなど）のときは0です。カードは起動時にしか確認しません。 |
 | configFileOpenSucceeded | int | 0-1 | `config.txt`を開けたとき、または有効な`.json`ファイルを読み込めたときは1です。どちらでもないとき（最初の`.json`ファイルが無効なときを含む）は0です。下の表を参照してください。 |
 | configFileParseSucceeded | int | 0-1 | 設定ファイルを読み込んで、その値を適用したかどうかです。JSONとして解析できた`config.txt`、または有効な`.json`ファイル（`information.configVersion`がある）のときは1です。0のときは既定値で動作しています。 |
-| configFilename | string |  | 読み込んだ設定ファイルのパスです。先頭に`/`が付きます（例: `/config.txt`、`/STEP400_venue-A.json`）。ファイルを読み込まなかったときは、[`/saveConfig`](system-settings.md#saveconfig)の保存先の`/config.txt`です。USBシリアルの`F<path>`で変わります。パスは63文字までです。ディスク上のパスで、ユーザーが編集できるラベルである`configName`とは別のものです。（v2.1.0で追加。） |
+| configFilename | string |  | 読み込んだ設定ファイルのパスです。先頭に`/`が付きます（例: `/config.txt`、`/STEP400_venue-A.json`）。ファイルを読み込まなかったときは、[`/saveConfig`](system-settings.md#saveconfig)の保存先の`/config.txt`です。USBシリアルの`F<path>`で変わります。パスは63文字までです。ディスク上のパスで、ユーザが編集できるラベルである`configName`とは別のものです。（v2.1.0で追加。） |
 
 ##### configFileOpenSucceededとconfigFileParseSucceededの組み合わせ
 
@@ -225,7 +225,7 @@ v2.1.0で追加。
 
 #### 説明
 
-ボードに保存される設定名を設定します。設定を見分けるためにユーザーが自由に編集できるラベルで、ディスク上のファイル名とは別のものです。
+ボードに保存される設定名を設定します。設定を見分けるためにユーザが自由に編集できるラベルで、ディスク上のファイル名とは別のものです。
 
 設定名は、[`/saveConfig`](system-settings.md#saveconfig)で保存するまで、ボードの中だけで変わります。変更の後すぐに[`/getConfigName`](system-settings.md#getconfigname)が新しい設定名を返しますが、保存する前に再起動すると、設定ファイルにある設定名に戻ります。
 

@@ -835,7 +835,7 @@ commands:
 
         The name changes only in the board until it is saved with [[/saveConfig]]: [[/getConfigName]] returns the new name at once, but a restart before the save brings back the name in the configuration file.
       ja: |-
-        ボードに保存される設定名を設定します。設定を見分けるためにユーザーが自由に編集できるラベルで、ディスク上のファイル名とは別のものです。
+        ボードに保存される設定名を設定します。設定を見分けるためにユーザが自由に編集できるラベルで、ディスク上のファイル名とは別のものです。
 
         設定名は、[[/saveConfig]]で保存するまで、ボードの中だけで変わります。変更の後すぐに[[/getConfigName]]が新しい設定名を返しますが、保存する前に再起動すると、設定ファイルにある設定名に戻ります。
     see_also: [/getConfigName, /saveConfig]
@@ -3604,7 +3604,7 @@ messages:
         since: "2.1.0"
         description:
           en: The path of the configuration file that was read, with a leading `/` (e.g., `/config.txt` or `/STEP400_venue-A.json`). When no file was read, it is `/config.txt`, where [[/saveConfig]] saves. `F<path>` over USB serial changes it. The path is at most 63 characters. This is the on-disk path, distinct from `configName` which is the user-editable label.
-          ja: "読み込んだ設定ファイルのパスです。先頭に`/`が付きます（例: `/config.txt`、`/STEP400_venue-A.json`）。ファイルを読み込まなかったときは、[[/saveConfig]]の保存先の`/config.txt`です。USBシリアルの`F<path>`で変わります。パスは63文字までです。ディスク上のパスで、ユーザーが編集できるラベルである`configName`とは別のものです。"
+          ja: "読み込んだ設定ファイルのパスです。先頭に`/`が付きます（例: `/config.txt`、`/STEP400_venue-A.json`）。ファイルを読み込まなかったときは、[[/saveConfig]]の保存先の`/config.txt`です。USBシリアルの`F<path>`で変わります。パスは63文字までです。ディスク上のパスで、ユーザが編集できるラベルである`configName`とは別のものです。"
     tables:
       - title: {en: Combinations of configFileOpenSucceeded and configFileParseSucceeded, ja: configFileOpenSucceededとconfigFileParseSucceededの組み合わせ}
         columns: [configFileOpenSucceeded, configFileParseSucceeded, {en: Meaning, ja: 意味}]
