@@ -53,6 +53,14 @@ English label of the heading (e.g. `commands-available-on-step400-only`; `{board
 configuration items: the section name in lower case (as before). Blocks of a command, a message and a setting keep
 their own ids. The hand-written headings are checked by tests/test_heading_ids.py.
 
+3. Writes the two files for language models (English only; no Japanese version), in the docs directory:
+   `llms.txt` (the table of contents of the site in the form of https://llmstxt.org: the pages of the `nav` of
+   mkdocs.yml with their titles and the first sentences, links relative to the top of the site) and `llms-full.txt`
+   (the OSC commands, the messages, the configuration items from the YAML, and the full text of the English pages of
+   docs/en/guides/ in the order of the nav). They come out at the top of the site (`site/llms.txt`). mkdocs.yml is
+   the one in the parent of the docs directory, or else the one of the repository. The files contain no date and
+   are the same for the same input. `--check` looks at them too ("would change docs/llms.txt").
+
 Exit code 1 on an error (unknown address, broken `[[link]]`, changes with --check).
 """
 
@@ -1086,11 +1094,410 @@ def generate_markers(docs: Path, spec: Spec, defaults: str, counter: Counter, er
     return out
 
 
+# ---------------------------------------------------------------------------
+# llms.txt and llms-full.txt (English only)
+
+LLMS_FILE = "llms.txt"
+LLMS_FULL_FILE = "llms-full.txt"
+LLMS_FIRST_SECTION = "Overview"      # the pages of the nav that are not in a section (index.md)
+LLMS_GUIDE_DIR = "guides/"           # pages of the nav under this directory are in llms-full.txt
+
+FRONT_MATTER_RE = re.compile(r"\A---\n(.*?)\n---\n", re.S)
+IMAGE_RE = re.compile(r"!\[([^\]]*)\]\((?:[^()]|\([^)]*\))*\)(?:\{[^}]*\})?")
+MD_LINK_RE = re.compile(r"\[([^\]]+)\]\((?:[^()]|\([^)]*\))*\)")
+HEADING_ID_RE = re.compile(r"[ \t]*\{#[^}]*\}[ \t]*$")
+HTML_COMMENT_LINE_RE = re.compile(r"^[ \t]*<!--.*?-->[ \t]*$")
+GENERATED_BLOCK_RE = re.compile(
+    r"^<!--\s*(osc|osc-message|osc-related|osc-settings-values|osc-settings)\s*:\s*(.+?)\s*-->[ \t]*\n"
+    r"(?:<!-- generated:begin [^\n]*-->\n.*?<!-- generated:end [^\n]*-->[ \t]*(?:\n|\Z))?", re.M | re.S)
+# What replaces a generated block of a guide in llms-full.txt (the same information is in the sections above).
+GENERATED_BLOCK_NOTE = {
+    "osc": "Command reference: see the section OSC commands.",
+    "osc-message": "Message reference: see the section Messages from the board.",
+    "osc-related": "Related commands: see the section OSC commands.",
+    "osc-settings": "Related configuration items: see the section Configuration file.",
+    "osc-settings-values": "Related configuration items: see the section Configuration file.",
+}
+
+
+def _yaml_loader():
+    """A safe loader that ignores tags such as `!!python/name:` (mkdocs.yml may have them)."""
+    import yaml
+
+    class Loader(yaml.SafeLoader):
+        pass
+
+    def ignore(loader, suffix, node):
+        if isinstance(node, yaml.MappingNode):
+            return loader.construct_mapping(node)
+        if isinstance(node, yaml.SequenceNode):
+            return loader.construct_sequence(node)
+        return loader.construct_scalar(node)
+
+    Loader.add_multi_constructor("", ignore)
+    return Loader
+
+
+def load_mkdocs(docs: Path) -> dict:
+    """mkdocs.yml in the parent of the docs directory, or else the one of the repository."""
+    import yaml
+    path = docs.resolve().parent / "mkdocs.yml"
+    if not path.exists():
+        path = REPO_ROOT / "mkdocs.yml"
+    with path.open(encoding="utf-8") as f:
+        return yaml.load(f, Loader=_yaml_loader())
+
+
+def nav_sections(nav: list) -> list[tuple[str, list[str]]]:
+    """[(section name, [page path, ...])] of the nav. Pages outside a section come first, in LLMS_FIRST_SECTION."""
+    top: list[str] = []
+    sections: list[tuple[str, list[str]]] = []
+
+    def flat(node) -> list[str]:
+        if isinstance(node, str):
+            return [node]
+        if isinstance(node, list):
+            return [p for n in node for p in flat(n)]
+        if isinstance(node, dict):
+            return [p for v in node.values() for p in flat(v)]
+        return []
+
+    for item in nav:
+        if isinstance(item, str):
+            top.append(item)
+        elif isinstance(item, dict):
+            for name, sub in item.items():
+                pages = flat(sub)
+                if isinstance(sub, str):
+                    top.append(sub)
+                else:
+                    sections.append((str(name), pages))
+    return ([(LLMS_FIRST_SECTION, top)] if top else []) + sections
+
+
+def page_url(page: str) -> str:
+    """URL of a page relative to the top of the site (use_directory_urls: true)."""
+    if page == "index.md":
+        return "./"
+    if page.endswith("/index.md"):
+        return page[: -len("index.md")]
+    return page[: -len(".md")] + "/"
+
+
+def strip_markdown_links(text: str) -> str:
+    """`[text](url)` -> `text`, `![alt](src)` -> `alt` (no URL: a relative path of a page cannot be read here)."""
+    return MD_LINK_RE.sub(r"\1", IMAGE_RE.sub(r"\1", text))
+
+
+def split_front_matter(text: str) -> tuple[dict, str]:
+    import yaml
+    m = FRONT_MATTER_RE.match(text)
+    if not m:
+        return {}, text
+    return (yaml.safe_load(m.group(1)) or {}), text[m.end():]
+
+
+def page_title_and_description(text: str) -> tuple[str, str]:
+    """Title (front matter `title`, else the h1) and the first sentence of the first paragraph after the h1."""
+    fm, body = split_front_matter(text)
+    lines = body.split("\n")
+    h1 = next((i for i, ln in enumerate(lines) if ln.startswith("# ")), None)
+    title = str(fm.get("title") or (HEADING_ID_RE.sub("", lines[h1][2:]).strip() if h1 is not None else ""))
+    desc = ""
+    if h1 is not None:
+        para: list[str] = []
+        for ln in lines[h1 + 1:]:
+            if not para and (not ln.strip() or HTML_COMMENT_LINE_RE.match(ln)):
+                continue
+            if not ln.strip():
+                break
+            para.append(ln.strip())
+        first = para[0] if para else ""
+        if para and not re.match(r"(#|\||- |\* |\d+\. |!!!|\?\?\?|<|```|>)", first):
+            joined = strip_markdown_links(" ".join(para))
+            m = re.search(r"(.+?[.。])(\s|$)", joined)
+            desc = m.group(1) if m else joined
+    return title, desc
+
+
+def read_nav_pages(docs: Path, mk: dict, errors: list[str]) -> list[tuple[str, list[tuple[str, str]]]]:
+    """[(section, [(page path, text)])]; a page that does not exist is an error."""
+    out = []
+    for name, pages in nav_sections(mk.get("nav") or []):
+        items = []
+        for page in pages:
+            f = docs / "en" / page
+            if not f.exists():
+                errors.append(f"llms: page of the nav does not exist: {f}")
+                continue
+            items.append((page, f.read_text(encoding="utf-8")))
+        out.append((name, items))
+    return out
+
+
+def render_llms_txt(spec: Spec, mk: dict, sections: list[tuple[str, list[tuple[str, str]]]]) -> str:
+    desc = str(mk.get("site_description", "")).strip().rstrip(".")
+    site_url = str(mk.get("site_url", "")).strip()
+    fw = spec.data.get("firmware", "")
+    out = [f"# {mk.get('site_name', 'STEP Series')}", "",
+           f"> {desc}. The controllers are controlled over Ethernet with OSC (Open Sound Control) messages; this is the "
+           f"documentation of the firmware v{fw} of STEP400 and STEP800 (and of the do-it-yourself STEP100 and STEP200).", "",
+           f"This file lists the pages of the English documentation. Every link is a path relative to the top of the site, "
+           f"which is {site_url}; the Japanese pages are under `ja/` and are not listed here. "
+           f"The full text of the functional guides and the specification of every OSC command, message and "
+           f"configuration item are in llms-full.txt.", ""]
+    for name, items in sections:
+        out += [f"## {name}", ""]
+        for page, text in items:
+            title, d = page_title_and_description(text)
+            out.append(f"- [{title}]({page_url(page)})" + (f": {d}" if d else ""))
+        out.append("")
+    out += ["## Optional", "",
+            f"- [Full text]({LLMS_FULL_FILE}): The OSC commands, the messages of the board and the configuration items "
+            f"in one file, followed by the full text of the functional guides."]
+    return "\n".join(out) + "\n"
+
+
+# -- llms-full.txt: the spec
+
+def _plain(ctx: Ctx, text: str) -> str:
+    """A description for the plain text: `[[/address]]` and `[[key]]` become code (no link)."""
+    text = SETTING_LINK_RE.sub(lambda m: f"`{m.group(1)}`", LINK_RE.sub(lambda m: f"`{m.group(1)}`", text.strip("\n")))
+    return text
+
+
+def _one(ctx: Ctx, text: str) -> str:
+    return " ".join(strip_markdown_links(_plain(ctx, text)).split())
+
+
+def _boards_note(spec: Spec, item: dict) -> str:
+    boards = item.get("boards")
+    if boards and set(boards) != set(spec.board_names):
+        return f"Available on {', '.join(board_sorted(spec, boards))} only."
+    return ""
+
+
+def _item_notes(ctx: Ctx, item: dict) -> str:
+    """since and changes of a value, on one line."""
+    return strip_markdown_links(" ".join(inline_notes(ctx, item).split()))
+
+
+def _llms_values(ctx: Ctx, a: dict, indent: str) -> list[str]:
+    spec = ctx.spec
+    values = a.get("values")
+    if not values:
+        return []
+    variants = ([(b, values[b]) for b in spec.board_names if b in values] if spec.is_board_map(values) else [(None, values)])
+    lines = []
+    for board, items in variants:
+        pad = indent
+        if board:
+            lines.append(f"{indent}- {board}:")
+            pad = indent + "  "
+        for it in items:
+            text = " ".join(_one(ctx, ctx.item_text(it, "value")).split())
+            only = _boards_note(spec, it)
+            note = _item_notes(ctx, it)
+            lines.append(f"{pad}- `{fmt(it['value'])}`: " + " ".join(x for x in (text, only, note) if x))
+    return lines
+
+
+def _llms_args(ctx: Ctx, item: dict, in_message: bool) -> list[str]:
+    spec = ctx.spec
+    args = spec.args(item)
+    if not args:
+        return ["Arguments: none."]
+    lines = ["Arguments:", ""]
+    for a in args:
+        name = a.get("name", a.get("use", "?"))
+        if a.get("repeat") == "motors":
+            name = f"{name}1 ... {name}N"
+        facts = [arg_type_name(a)]
+        rng = range_text(ctx, a, in_message)
+        if rng:
+            facts.append(f"range {rng}")
+        init = default_texts(ctx, a) if not in_message else None
+        if init and a.get("use") != "motorID":
+            if len(set(init.values())) == 1:
+                facts.append(f"initial value {next(iter(init.values()))}")
+            else:
+                facts.append("initial value " + "; ".join(f"{b}: {t}" for b, t in init.items()))
+        if a.get("setting"):
+            facts.append(f"configuration item `{a['setting']}`")
+        desc = _one(ctx, ctx.tx(a.get("description"), "arg"))
+        if a.get("value") is not None:
+            desc = (desc + f" `{a['value']}`").strip()
+        if a.get("since"):
+            desc = (desc + f" Added in v{a['since']}.").strip()
+        lines.append(f"- `{name}` ({', '.join(facts)})" + (f": {desc}" if desc else ""))
+        lines += _llms_values(ctx, a, "  ")
+    return lines
+
+
+def _llms_changes(ctx: Ctx, item: dict) -> list[str]:
+    ch = item.get("changes")
+    if not ch:
+        return []
+    return ["Changes:", ""] + [f"- v{c['version']}: " + _one(ctx, ctx.item_text(c, "change")) for c in ch]
+
+
+def _sig(spec: Spec, item: dict, addr: str) -> str:
+    return f"{addr} {arg_heading(spec, item)}".strip()
+
+
+def _llms_item(ctx: Ctx, item: dict, kind: str) -> str:
+    """A command or a message: the text under its `#### /address` heading."""
+    spec = ctx.spec
+    addr = item["address"]
+    ctx.where = f"{kind} {addr}"
+    parts = [f"#### {addr}"]
+    head = []
+    if kind == "command":
+        head.append(f"Group: {spec.groups[item['group']]['en']}.")
+    head.append(f"Signature: `{_sig(spec, item, addr)}`.")
+    note = _boards_note(spec, item)
+    if note:
+        head.append(note)
+    if item.get("since"):
+        head.append(f"Added in v{item['since']}.")
+    if kind == "command":
+        timings = item["timing"] if isinstance(item["timing"], list) else [item["timing"]]
+        head.append("Executable timing: " + ", ".join(ctx.tx(spec.timings[t], "timing") for t in timings) + ".")
+    parts.append(" ".join(head))
+    parts.append("\n".join(_llms_args(ctx, item, kind == "message")))
+    desc = ctx.tx(item.get("description"), "description")
+    if desc.strip():
+        parts.append("Description:\n\n" + strip_markdown_links(_plain(ctx, desc)))
+    if kind == "command":
+        resp = item.get("response") or []
+        notif = item.get("notifies") or []
+        lines = []
+        for r in resp:
+            maddr, when = (r, None) if isinstance(r, str) else (r["message"], r.get("when"))
+            msg = spec.message(maddr)
+            lines.append(f"- `{_sig(spec, msg, maddr)}`"
+                         + (f" (when: {_one(ctx, ctx.tx(when, 'when'))})" if when else ""))
+        for n in notif:
+            msg = spec.message(n)
+            lines.append(f"- `{_sig(spec, msg, n)}` (notification)")
+        if lines:
+            parts.append("Replies and notifications (see Messages from the board):\n\n" + "\n".join(lines))
+        errs = item.get("errors") or []
+        if errs:
+            parts.append("Errors:\n\n" + "\n".join(_error_line(ctx, e).replace("\n", " ") for e in errs))
+        see = item.get("see_also") or []
+        if see:
+            parts.append("See also: " + ", ".join(f"`{s}`" for s in see))
+    ch = _llms_changes(ctx, item)
+    if ch:
+        parts.append("\n".join(ch))
+    return "\n\n".join(parts)
+
+
+def _llms_setting(ctx: Ctx, s: dict) -> str:
+    spec = ctx.spec
+    ctx.where = f"setting {s['key']}"
+    facts = [s["type"]]
+    rng = _setting_range(ctx, s).replace("<br>", "; ")
+    if rng:
+        facts.append(f"range {rng}")
+    init = _setting_initial(ctx, s)
+    if init:
+        facts.append(f"initial value {init}")
+    if s.get("per_motor"):
+        facts.append("per motor")
+    only = _boards_note(spec, s)
+    label = ctx.tx(s.get("label"), "label")
+    cmds = s.get("commands", [])
+    parts = [f"- `{s['key']}`" + (f" ({label})" if label else "") + f": {', '.join(facts)}."]
+    desc = _one(ctx, ctx.tx(s.get("description"), "description")) if s.get("description") else ""
+    extra = " ".join(x for x in (only, desc, _item_notes(ctx, s)) if x)
+    if extra:
+        parts.append(f"  {extra}")
+    if cmds:
+        parts.append("  Commands: " + ", ".join(f"`{c}`" for c in cmds) + ".")
+    return "\n".join(parts)
+
+
+def shift_guide(text: str) -> str:
+    """A guide page for llms-full.txt: no front matter, no generated blocks or comments, headings two levels down,
+    links and images as their text."""
+    _, body = split_front_matter(text)
+    body = GENERATED_BLOCK_RE.sub(lambda m: GENERATED_BLOCK_NOTE[m.group(1)] + "\n", body)
+    out, fence = [], False
+    for ln in body.split("\n"):
+        if re.match(r"^\s*(```|~~~)", ln):
+            fence = not fence
+            out.append(ln)
+            continue
+        if fence:
+            out.append(ln)
+            continue
+        if HTML_COMMENT_LINE_RE.match(ln):
+            continue
+        m = re.match(r"^(#{1,6})\s+(.*)$", ln)
+        if m:
+            level = min(len(m.group(1)) + 2, 6)
+            ln = "#" * level + " " + strip_markdown_links(HEADING_ID_RE.sub("", m.group(2)))
+        else:
+            ln = strip_markdown_links(ln)
+        out.append(ln)
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(out)).strip("\n")
+
+
+def render_llms_full(spec: Spec, mk: dict, sections: list[tuple[str, list[tuple[str, str]]]], defaults: str,
+                     errors: list[str]) -> str:
+    site_url = str(mk.get("site_url", "")).strip()
+    fw = spec.data.get("firmware", "")
+    ctx = Ctx(spec, "en", defaults, Counter(), errors)
+    out = [f"# {mk.get('site_name', 'STEP Series')}: full text", "",
+           f"The specification of the OSC commands, the messages sent by the board and the configuration items of the "
+           f"STEP400 / STEP800 firmware v{fw}, followed by the full text of the functional guides. It is generated from "
+           f"spec/osc-commands.yaml and from the English pages of the documentation, which is at {site_url}. "
+           f"llms.txt is the table of contents of the site.", "",
+           "## OSC commands", ""]
+    for key, g in spec.groups.items():
+        cmds = [c for c in spec.commands if c["group"] == key]
+        if not cmds:
+            continue
+        out += [f"### {g['en']}", ""]
+        for c in cmds:
+            out += [_llms_item(ctx, c, "command"), ""]
+    out += ["## Messages from the board", ""]
+    for m in spec.messages:
+        out += [_llms_item(ctx, m, "message"), ""]
+    out += ["## Configuration file", "",
+            "Items of the configuration file (JSON on the microSD card). The initial value is the one used when the file or "
+            "the key is missing.", ""]
+    secs: dict[str, list[dict]] = {}
+    for s in spec.settings:
+        secs.setdefault(s["section"], []).append(s)
+    for sec, items in secs.items():
+        out += [f"### {sec}", ""]
+        for s in items:
+            out.append(_llms_setting(ctx, s))
+        out.append("")
+    out += ["## Functional guides", ""]
+    for _, items in sections:
+        for page, text in items:
+            if page.startswith(LLMS_GUIDE_DIR):
+                out += [shift_guide(text), ""]
+    return re.sub(r"\n{3,}", "\n\n", "\n".join(out)).rstrip("\n") + "\n"
+
+
+def generate_llms(docs: Path, spec: Spec, defaults: str, errors: list[str]) -> dict[Path, str]:
+    mk = load_mkdocs(docs)
+    sections = read_nav_pages(docs, mk, errors)
+    return {docs / LLMS_FILE: render_llms_txt(spec, mk, sections),
+            docs / LLMS_FULL_FILE: render_llms_full(spec, mk, sections, defaults, errors)}
+
+
 def run(docs: Path, spec: Spec, defaults: str = "both", check: bool = False,
-        coverage: bool = False, out=sys.stdout) -> int:
+        coverage: bool = False, out=sys.stdout, llms: bool = False) -> int:
     counter: Counter = Counter()
     errors: list[str] = []
     pages = generate_pages(docs, spec, defaults, counter, errors)
+    llms_files = generate_llms(docs, spec, defaults, errors) if llms else {}
     marked = generate_markers(docs, spec, defaults, counter, errors, set(pages))
     if coverage:
         errors += check_coverage(docs, spec)
@@ -1107,17 +1514,27 @@ def run(docs: Path, spec: Spec, defaults: str = "both", check: bool = False,
             if not check:
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(text, encoding="utf-8")
+    llms_changed = []
+    for path, text in llms_files.items():
+        data = text.encode("utf-8")
+        if not path.exists() or path.read_bytes() != data:
+            llms_changed.append(path)
+            if not check:
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(data)
     ja_missing = sum(counter.values())
     print(f"generated pages: {len(pages)}, pages with markers expanded: {len(marked)}, "
           f"{'would change' if check else 'changed'}: {len(changed)}", file=out)
     for p in changed:
         print(f"  {p.relative_to(docs)}", file=out)
+    for p in llms_changed:
+        print(f"{'would change' if check else 'changed'} {docs.name}/{p.name}", file=out)
     print(f"Japanese texts filled with English: {ja_missing} "
           f"({', '.join(f'{k} {v}' for k, v in sorted(counter.items())) or 'none'})", file=out)
     if not coverage:
         for line in marker_summary(docs, spec):
             print(line, file=out)
-    return 1 if (check and changed) else 0
+    return 1 if (check and (changed or llms_changed)) else 0
 
 
 def standalone_messages(spec: Spec) -> list[str]:
@@ -1224,7 +1641,7 @@ def main(argv: list[str] | None = None) -> int:
                          "list each problem as an error")
     args = ap.parse_args(argv)
     spec = Spec.load(args.spec)
-    return run(Path(args.docs), spec, args.defaults, args.check, args.coverage)
+    return run(Path(args.docs), spec, args.defaults, args.check, args.coverage, llms=True)
 
 
 if __name__ == "__main__":
