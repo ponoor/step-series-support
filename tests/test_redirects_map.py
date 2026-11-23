@@ -1,4 +1,4 @@
-"""docs/_redirects_map.md: every New page exists and New URL is made from it (use_directory_urls, relative to the top of the site)."""
+"""docs/_redirects_map.md: every New page exists and New URL is made from it (use_directory_urls, relative to the top of the site; Japanese has no prefix, English is under en/)."""
 import unittest
 from pathlib import Path
 
@@ -19,7 +19,8 @@ def url_of(page: str) -> str:
     if rest[-1] == "index":
         rest = rest[:-1]
     path = "/".join(rest) + "/" if rest else ""
-    return (path or "./") if lang == "en" else "ja/" + path
+    # Japanese is the default language (no prefix); English is under en/
+    return ("en/" + path) if lang == "en" else (path or "./")
 
 
 class RedirectsMapTest(unittest.TestCase):

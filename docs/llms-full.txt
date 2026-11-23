@@ -1,6 +1,6 @@
 # STEP Series: full text
 
-The specification of the OSC commands, the messages sent by the board and the configuration items of the STEP400 / STEP800 firmware v2.2.0, followed by the full text of the functional guides. It is generated from spec/osc-commands.yaml and from the English pages of the documentation, which is at https://example.invalid/step-series/. llms.txt is the table of contents of the site.
+The specification of the OSC commands, the messages sent by the board and the configuration items of the STEP400 / STEP800 firmware v2.2.0, followed by the full text of the functional guides. It is generated from spec/osc-commands.yaml and from the English pages of the documentation, which is at https://ponoor.com/docs/step-series/en/. llms.txt is the table of contents of the site.
 
 ## OSC commands
 

@@ -17,7 +17,8 @@ from spec import Spec  # noqa: E402
 SPEC = Spec.load()
 DOCS = ROOT / "docs"
 MK = generate.load_mkdocs(DOCS)
-SECTIONS = generate.nav_sections(MK["nav"])
+EN_NAMES = generate.en_nav_names(MK)
+SECTIONS = [(EN_NAMES.get(n, n), pages) for n, pages in generate.nav_sections(MK["nav"])]
 NAV_PAGES = [p for _, pages in SECTIONS for p in pages]
 
 
@@ -33,7 +34,7 @@ class LlmsTest(unittest.TestCase):
         text = make()[generate.LLMS_FILE]
         self.assertTrue(text.startswith("# STEP Series\n\n> "))
         links = re.findall(r"^- \[[^\]]*\]\(([^)]*)\)", text, re.M)
-        expected = [generate.page_url(p) for p in NAV_PAGES] + [generate.LLMS_FULL_FILE]
+        expected = [generate.llms_url(p) for p in NAV_PAGES] + [generate.LLMS_FULL_FILE]
         self.assertEqual(links, expected)
         heads = re.findall(r"^## (.*)$", text, re.M)
         self.assertEqual(heads, [name for name, _ in SECTIONS] + ["Optional"])
