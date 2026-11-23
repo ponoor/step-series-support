@@ -31,6 +31,10 @@ class RedirectsMapTest(unittest.TestCase):
             self.assertTrue(page.startswith(lang + "/"), page)
             self.assertTrue((ROOT / "docs" / page).is_file(), f"missing: {page}")
             self.assertEqual(new_url, url_of(page), page)
+
+    @unittest.skipUnless((ROOT / "wp_export").is_dir(), "wp_export/ (the old WordPress export) is not tracked; it is only on the local machine")
+    def test_old_files_exist(self):
+        for *_, old_file in rows():
             self.assertTrue((ROOT / old_file).is_file(), f"missing: {old_file}")
 
     def test_old_urls_are_unique(self):
