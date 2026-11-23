@@ -724,7 +724,7 @@ STEP400のみです。ファームウェアはSTEP800でもこのコマンドを
 
 | 引数 | 型 | 範囲 | 説明 |
 | --- | --- | --- | --- |
-| motorID | int | 1-4（STEP400）、1-8（STEP800） | モータのID |
+| motorID | int | 1-4 | モータのID |
 | ADC_OUT | int | 0-31 | 5bitのADC_OUTレジスタ |
 <!-- generated:end osc /getAdcVal -->
 

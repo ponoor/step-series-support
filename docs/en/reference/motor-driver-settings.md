@@ -725,7 +725,7 @@ STEP400 only. The firmware also accepts the command on STEP800, but it is not me
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800) | Motor ID |
+| motorID | int | 1-4 | Motor ID |
 | ADC_OUT | int | 0-31 | 5bit reading of ADC_OUT register |
 <!-- generated:end osc /getAdcVal -->
 

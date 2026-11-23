@@ -857,6 +857,12 @@ class BoardRestrictedItemTest(unittest.TestCase):
                     for b in others:
                         self.assertNotIn(b, part, f"{addr} {lang}")
 
+    def test_response_of_a_one_board_command_shows_the_range_of_that_board_only(self):
+        """/adcVal has no `boards` itself, but in the block of /getAdcVal (STEP400 only) its table shows STEP400 only."""
+        for lang in ("en", "ja"):
+            block = self.block(lang, "/getAdcVal")
+            self.assertNotIn("1-8", block, lang)
+
     def test_command_for_both_boards_keeps_both_ranges(self):
         for lang, form in (("en", "1-4 (STEP400), 1-8 (STEP800), 255 (all motors)"), ("ja", "1-4（STEP400）、1-8（STEP800）、255（全モータ）")):
             self.assertIn(form, self.argument_table(lang, "/getMotorStatus"), lang)

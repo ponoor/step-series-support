@@ -459,13 +459,15 @@ def render_values_tables(ctx: Ctx, a: dict, name: str, boards: list[str] | None 
     return out
 
 
-def render_args(ctx: Ctx, item: dict, in_message: bool = False) -> str:
+def render_args(ctx: Ctx, item: dict, in_message: bool = False, only_boards: list[str] | None = None) -> str:
     """Table of the arguments plus the tables of values."""
     L = ctx.L
     args = ctx.spec.args(item)
     if not args:
         return L["none"]
     boards = item_boards(ctx.spec, item)
+    if only_boards:        # a message in the response of a command: the boards of the command too
+        boards = [b for b in boards if b in only_boards] or boards
     rows, extra = [], []
     for a in args:
         name = a.get("name", a.get("use", "?"))
@@ -646,9 +648,9 @@ def render_command_block(ctx: Ctx, addr: str) -> str:
         blocks = []
         for r in resp:
             maddr, when = (r, None) if isinstance(r, str) else (r["message"], r.get("when"))
-            blocks.append(_render_response(ctx, maddr, when))
+            blocks.append(_render_response(ctx, maddr, when, item_boards(spec, cmd)))
         for n in notif:
-            blocks.append(_render_response(ctx, n, None))
+            blocks.append(_render_response(ctx, n, None, item_boards(spec, cmd)))
         parts.append(f"#### {L['response']}\n\n" + "\n\n".join(blocks))
     errs = cmd.get("errors") or []
     if errs:
@@ -671,7 +673,7 @@ def render_command_block(ctx: Ctx, addr: str) -> str:
     return "\n\n".join(parts) + "\n"
 
 
-def _render_response(ctx: Ctx, maddr: str, when: Any) -> str:
+def _render_response(ctx: Ctx, maddr: str, when: Any, boards: list[str] | None = None) -> str:
     """A message in the response of a command. A standalone message: link, form, arguments. Any other message
     is described here in full (description, tables, changes one level below the message block)."""
     spec, L = ctx.spec, ctx.L
@@ -684,7 +686,7 @@ def _render_response(ctx: Ctx, maddr: str, when: Any) -> str:
     code = f"```\n{maddr} {arg_heading(spec, msg)}\n```".replace("  ", " ")
     link = f"[`{maddr}`]({href})\n\n" if href else ""
     note = ctx.join(*_notes(ctx, msg))
-    out = head + link + (note + "\n\n" if note else "") + code + "\n\n" + render_args(ctx, msg, in_message=True)
+    out = head + link + (note + "\n\n" if note else "") + code + "\n\n" + render_args(ctx, msg, in_message=True, only_boards=boards)
     if not standalone:
         where, ctx.where = ctx.where, f"message {maddr} (in the response of {where_name(ctx.where)})"
         extra = []
