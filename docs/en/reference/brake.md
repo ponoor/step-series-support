@@ -8,7 +8,7 @@ For how the electromagnetic brake works, see [Electromagnetic brake](../guides/e
 
 <!-- osc: /enableElectromagnetBrake -->
 <!-- generated:begin osc /enableElectromagnetBrake -->
-### `/enableElectromagnetBrake` (int)motorID (bool)enable {#enableelectromagnetbrake}
+### `/enableElectromagnetBrake` (int)motorID (bool)enable {#enableelectromagnetbrake .osc-command}
 
 #### Argument
 
@@ -54,7 +54,7 @@ The setting is changed only while the driver is HiZ, and the brake is disabled o
 
 <!-- osc: /activate -->
 <!-- generated:begin osc /activate -->
-### `/activate` (int)motorID (bool)state {#activate}
+### `/activate` (int)motorID (bool)state {#activate .osc-command}
 
 #### Argument
 
@@ -89,7 +89,7 @@ When: While homing is in progress
 
 [`/homingStatus`](automatically-sent-messages.md#homingstatus)
 
-```
+``` { .text .osc-signature }
 /homingStatus (int)motorID (int)homingStatus
 ```
 
@@ -121,7 +121,7 @@ When: While homing is in progress
 
 <!-- osc: /free -->
 <!-- generated:begin osc /free -->
-### `/free` (int)motorID {#free}
+### `/free` (int)motorID {#free .osc-command}
 
 #### Argument
 
@@ -147,7 +147,7 @@ When: While homing is in progress
 
 [`/homingStatus`](automatically-sent-messages.md#homingstatus)
 
-```
+``` { .text .osc-signature }
 /homingStatus (int)motorID (int)homingStatus
 ```
 
@@ -174,7 +174,7 @@ When: While homing is in progress
 
 <!-- osc: /setBrakeTransitionDuration -->
 <!-- generated:begin osc /setBrakeTransitionDuration -->
-### `/setBrakeTransitionDuration` (int)motorID (int)duration {#setbraketransitionduration}
+### `/setBrakeTransitionDuration` (int)motorID (int)duration {#setbraketransitionduration .osc-command}
 
 #### Argument
 
@@ -213,7 +213,7 @@ A value outside 0-65535 replies `CommandIgnored` and the setting is kept. The re
 
 <!-- osc: /getBrakeTransitionDuration -->
 <!-- generated:begin osc /getBrakeTransitionDuration -->
-### `/getBrakeTransitionDuration` (int)motorID {#getbraketransitionduration}
+### `/getBrakeTransitionDuration` (int)motorID {#getbraketransitionduration .osc-command}
 
 #### Argument
 
@@ -231,7 +231,7 @@ Returns the transitional duration to keep holding the motor axis when the electr
 
 #### Response
 
-```
+``` { .text .osc-signature }
 /brakeTransitionDuration (int)motorID (int)duration
 ```
 
@@ -243,7 +243,7 @@ Returns the transitional duration to keep holding the motor axis when the electr
 
 <!-- osc: /getBrakeStatus -->
 <!-- generated:begin osc /getBrakeStatus -->
-### `/getBrakeStatus` (int)motorID {#getbrakestatus}
+### `/getBrakeStatus` (int)motorID {#getbrakestatus .osc-command}
 
 Added in v2.2.0.
 
@@ -265,7 +265,7 @@ Returns the state of the electromagnetic brake of the specified motor. The state
 
 Added in v2.2.0.
 
-```
+``` { .text .osc-signature }
 /brakeStatus (int)motorID (int)state
 ```
 

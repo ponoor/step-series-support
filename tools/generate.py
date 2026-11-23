@@ -586,7 +586,7 @@ def render_message_block(ctx: Ctx, addr: str) -> str:
     msg = spec.message(addr)
     ctx.where = f"message {addr}"
     ctx.block_anchor = anchor(addr)
-    parts = [f"### `{addr}` {arg_heading(spec, msg)} {{#{anchor(addr)}}}".replace("  ", " ")]
+    parts = [f"### `{addr}` {arg_heading(spec, msg)} {{#{anchor(addr)} .osc-command}}".replace("  ", " ")]
     parts += _notes(ctx, msg)
     parts.append(f"#### {L['argument']}\n\n" + render_args(ctx, msg, in_message=True))
     if msg.get("description"):
@@ -634,7 +634,7 @@ def render_command_block(ctx: Ctx, addr: str) -> str:
     cmd = spec.command(addr)
     ctx.where = f"command {addr}"
     ctx.block_anchor = anchor(addr)
-    parts = [f"### `{addr}` {arg_heading(spec, cmd)} {{#{anchor(addr)}}}".replace("  ", " ")]
+    parts = [f"### `{addr}` {arg_heading(spec, cmd)} {{#{anchor(addr)} .osc-command}}".replace("  ", " ")]
     parts += _notes(ctx, cmd)
     parts.append(f"#### {L['argument']}\n\n" + render_args(ctx, cmd))
     timings = cmd["timing"] if isinstance(cmd["timing"], list) else [cmd["timing"]]
@@ -683,7 +683,7 @@ def _render_response(ctx: Ctx, maddr: str, when: Any, boards: list[str] | None =
         head = f"{L['when']}: {ctx.tx(when, 'when')}\n\n"
     standalone = maddr in standalone_messages(spec)
     href = ctx.link_to(maddr, prefer="message") if standalone else None
-    code = f"```\n{maddr} {arg_heading(spec, msg)}\n```".replace("  ", " ")
+    code = f"``` {{ .text .osc-signature }}\n{maddr} {arg_heading(spec, msg)}\n```".replace("  ", " ")
     link = f"[`{maddr}`]({href})\n\n" if href else ""
     note = ctx.join(*_notes(ctx, msg))
     out = head + link + (note + "\n\n" if note else "") + code + "\n\n" + render_args(ctx, msg, in_message=True, only_boards=boards)

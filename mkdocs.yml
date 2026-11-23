@@ -11,6 +11,11 @@ hooks:
 theme:
   name: material
   custom_dir: overrides
+  palette:
+    scheme: default
+    primary: custom
+    accent: custom
+  font: false   # no Google Fonts; the font stack is in assets/extra.css (the designer decides the final one)
   features:
   - navigation.sections
   - navigation.top

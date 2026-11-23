@@ -10,7 +10,7 @@ title: HOME/LIMITスイッチ
 
 <!-- osc: /enableHomeSwReport -->
 <!-- generated:begin osc /enableHomeSwReport -->
-### `/enableHomeSwReport` (int)motorID (bool)enable {#enablehomeswreport}
+### `/enableHomeSwReport` (int)motorID (bool)enable {#enablehomeswreport .osc-command}
 
 #### 引数
 
@@ -38,7 +38,7 @@ title: HOME/LIMITスイッチ
 
 [`/homeSw`](automatically-sent-messages.md#homesw)
 
-```
+``` { .text .osc-signature }
 /homeSw (int)motorID (int)swState (int)direction
 ```
 
@@ -69,7 +69,7 @@ title: HOME/LIMITスイッチ
 
 <!-- osc: /enableSwEventReport -->
 <!-- generated:begin osc /enableSwEventReport -->
-### `/enableSwEventReport` (int)motorID (bool)enable {#enablesweventreport}
+### `/enableSwEventReport` (int)motorID (bool)enable {#enablesweventreport .osc-command}
 
 #### 引数
 
@@ -98,7 +98,7 @@ title: HOME/LIMITスイッチ
 
 [`/swEvent`](automatically-sent-messages.md#swevent)
 
-```
+``` { .text .osc-signature }
 /swEvent (int)motorID
 ```
 
@@ -113,7 +113,7 @@ title: HOME/LIMITスイッチ
 
 <!-- osc: /getHomeSw -->
 <!-- generated:begin osc /getHomeSw -->
-### `/getHomeSw` (int)motorID {#gethomesw}
+### `/getHomeSw` (int)motorID {#gethomesw .osc-command}
 
 #### 引数
 
@@ -133,7 +133,7 @@ HOMEスイッチの状態を取得します。
 
 [`/homeSw`](automatically-sent-messages.md#homesw)
 
-```
+``` { .text .osc-signature }
 /homeSw (int)motorID (int)swState (int)direction
 ```
 
@@ -160,7 +160,7 @@ HOMEスイッチの状態を取得します。
 
 <!-- osc: /enableLimitSwReport -->
 <!-- generated:begin osc /enableLimitSwReport -->
-### `/enableLimitSwReport` (int)motorID (bool)enable {#enablelimitswreport}
+### `/enableLimitSwReport` (int)motorID (bool)enable {#enablelimitswreport .osc-command}
 
 STEP400のみ。
 
@@ -192,7 +192,7 @@ STEP400のみ。
 
 STEP400のみ。
 
-```
+``` { .text .osc-signature }
 /limitSw (int)motorID (int)swState (int)direction
 ```
 
@@ -223,7 +223,7 @@ STEP400のみ。
 
 <!-- osc: /getLimitSw -->
 <!-- generated:begin osc /getLimitSw -->
-### `/getLimitSw` (int)motorID {#getlimitsw}
+### `/getLimitSw` (int)motorID {#getlimitsw .osc-command}
 
 STEP400のみ。
 
@@ -247,7 +247,7 @@ LIMITスイッチの状態を取得します。
 
 STEP400のみ。
 
-```
+``` { .text .osc-signature }
 /limitSw (int)motorID (int)swState (int)direction
 ```
 
@@ -276,7 +276,7 @@ STEP400のみ。
 
 <!-- osc: /setHomeSwMode -->
 <!-- generated:begin osc /setHomeSwMode -->
-### `/setHomeSwMode` (int)motorID (bool)SW_MODE {#sethomeswmode}
+### `/setHomeSwMode` (int)motorID (bool)SW_MODE {#sethomeswmode .osc-command}
 
 #### 引数
 
@@ -321,7 +321,7 @@ HOME端子に入力があった際に即停止するかどうか（Switch mode�
 
 <!-- osc: /getHomeSwMode -->
 <!-- generated:begin osc /getHomeSwMode -->
-### `/getHomeSwMode` (int)motorID {#gethomeswmode}
+### `/getHomeSwMode` (int)motorID {#gethomeswmode .osc-command}
 
 #### 引数
 
@@ -339,7 +339,7 @@ HOME端子に入力があった際に即停止するかどうか（Switch mode�
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /homeSwMode (int)motorID (int)swMode
 ```
 
@@ -355,7 +355,7 @@ HOME端子に入力があった際に即停止するかどうか（Switch mode�
 
 <!-- osc: /setLimitSwMode -->
 <!-- generated:begin osc /setLimitSwMode -->
-### `/setLimitSwMode` (int)motorID (bool)SW_MODE {#setlimitswmode}
+### `/setLimitSwMode` (int)motorID (bool)SW_MODE {#setlimitswmode .osc-command}
 
 STEP400のみ。
 
@@ -396,7 +396,7 @@ LIMIT端子に入力があった際に即停止するかどうか（Switch mode�
 
 <!-- osc: /getLimitSwMode -->
 <!-- generated:begin osc /getLimitSwMode -->
-### `/getLimitSwMode` (int)motorID {#getlimitswmode}
+### `/getLimitSwMode` (int)motorID {#getlimitswmode .osc-command}
 
 STEP400のみ。
 
@@ -418,7 +418,7 @@ STEP400のみ。
 
 STEP400のみ。
 
-```
+``` { .text .osc-signature }
 /limitSwMode (int)motorID (int)swMode
 ```
 

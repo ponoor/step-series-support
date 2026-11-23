@@ -90,8 +90,8 @@ class GenerateTest(unittest.TestCase):
         run(self.docs)
         text = (self.docs / "en" / "reference" / "system-settings.md").read_text(encoding="utf-8")
         self.assertIn("<!-- osc: /getVersion -->\n<!-- generated:begin osc /getVersion -->\n### `/getVersion`", text)
-        self.assertIn("{#getversion}", text)
-        self.assertIn("{#setmicrostepmode}", text)
+        self.assertIn("{#getversion .osc-command}", text)
+        self.assertIn("{#setmicrostepmode .osc-command}", text)
         self.assertIn("resetCause", text)               # /booted message block
         self.assertIn("Hand-written text between.", text)
         self.assertIn("Hand-written text after.", text)

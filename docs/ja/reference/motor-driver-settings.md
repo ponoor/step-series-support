@@ -10,7 +10,7 @@ title: モータドライバの設定
 
 <!-- osc: /setMicrostepMode -->
 <!-- generated:begin osc /setMicrostepMode -->
-### `/setMicrostepMode` (int)motorID (int)STEP_SEL {#setmicrostepmode}
+### `/setMicrostepMode` (int)motorID (int)STEP_SEL {#setmicrostepmode .osc-command}
 
 #### 引数
 
@@ -67,7 +67,7 @@ title: モータドライバの設定
 
 <!-- osc: /getMicrostepMode -->
 <!-- generated:begin osc /getMicrostepMode -->
-### `/getMicrostepMode` (int)motorID {#getmicrostepmode}
+### `/getMicrostepMode` (int)motorID {#getmicrostepmode .osc-command}
 
 #### 引数
 
@@ -85,7 +85,7 @@ title: モータドライバの設定
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /microstepMode (int)motorID (int)STEP_SEL
 ```
 
@@ -110,7 +110,7 @@ title: モータドライバの設定
 
 <!-- osc: /enableLowSpeedOptimize -->
 <!-- generated:begin osc /enableLowSpeedOptimize -->
-### `/enableLowSpeedOptimize` (int)motorID (bool)enable {#enablelowspeedoptimize}
+### `/enableLowSpeedOptimize` (int)motorID (bool)enable {#enablelowspeedoptimize .osc-command}
 
 #### 引数
 
@@ -153,7 +153,7 @@ title: モータドライバの設定
 
 <!-- osc: /setLowSpeedOptimizeThreshold -->
 <!-- generated:begin osc /setLowSpeedOptimizeThreshold -->
-### `/setLowSpeedOptimizeThreshold` (int)motorID (float)lowSpeedOptimizationThreshold {#setlowspeedoptimizethreshold}
+### `/setLowSpeedOptimizeThreshold` (int)motorID (float)lowSpeedOptimizationThreshold {#setlowspeedoptimizethreshold .osc-command}
 
 #### 引数
 
@@ -193,7 +193,7 @@ title: モータドライバの設定
 
 <!-- osc: /getLowSpeedOptimizeThreshold -->
 <!-- generated:begin osc /getLowSpeedOptimizeThreshold -->
-### `/getLowSpeedOptimizeThreshold` (int)motorID {#getlowspeedoptimizethreshold}
+### `/getLowSpeedOptimizeThreshold` (int)motorID {#getlowspeedoptimizethreshold .osc-command}
 
 #### 引数
 
@@ -211,7 +211,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /lowSpeedOptimizeThreshold (int)motorID (float)lowSpeedOptimizeThreshold (int)optimizationEnabled
 ```
 
@@ -237,7 +237,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 <!-- osc: /enableBusyReport -->
 <!-- generated:begin osc /enableBusyReport -->
-### `/enableBusyReport` (int)motorID (bool)enable {#enablebusyreport}
+### `/enableBusyReport` (int)motorID (bool)enable {#enablebusyreport .osc-command}
 
 #### 引数
 
@@ -265,7 +265,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 [`/busy`](automatically-sent-messages.md#busy)
 
-```
+``` { .text .osc-signature }
 /busy (int)motorID (int)state
 ```
 
@@ -288,7 +288,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 <!-- osc: /getBusy -->
 <!-- generated:begin osc /getBusy -->
-### `/getBusy` (int)motorID {#getbusy}
+### `/getBusy` (int)motorID {#getbusy .osc-command}
 
 #### 引数
 
@@ -308,7 +308,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 [`/busy`](automatically-sent-messages.md#busy)
 
-```
+``` { .text .osc-signature }
 /busy (int)motorID (int)state
 ```
 
@@ -327,7 +327,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 <!-- osc: /enableHizReport -->
 <!-- generated:begin osc /enableHizReport -->
-### `/enableHizReport` (int)motorID (bool)enable {#enablehizreport}
+### `/enableHizReport` (int)motorID (bool)enable {#enablehizreport .osc-command}
 
 #### 引数
 
@@ -355,7 +355,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 [`/HiZ`](automatically-sent-messages.md#hiz)
 
-```
+``` { .text .osc-signature }
 /HiZ (int)motorID (int)state
 ```
 
@@ -371,7 +371,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 <!-- osc: /getHiZ -->
 <!-- generated:begin osc /getHiZ -->
-### `/getHiZ` (int)motorID {#gethiz}
+### `/getHiZ` (int)motorID {#gethiz .osc-command}
 
 #### 引数
 
@@ -391,7 +391,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 [`/HiZ`](automatically-sent-messages.md#hiz)
 
-```
+``` { .text .osc-signature }
 /HiZ (int)motorID (int)state
 ```
 
@@ -403,7 +403,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 <!-- osc: /enableDirReport -->
 <!-- generated:begin osc /enableDirReport -->
-### `/enableDirReport` (int)motorID (bool)enable {#enabledirreport}
+### `/enableDirReport` (int)motorID (bool)enable {#enabledirreport .osc-command}
 
 #### 引数
 
@@ -431,7 +431,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 [`/dir`](automatically-sent-messages.md#dir)
 
-```
+``` { .text .osc-signature }
 /dir (int)motorID (int)direction
 ```
 
@@ -454,7 +454,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 <!-- osc: /getDir -->
 <!-- generated:begin osc /getDir -->
-### `/getDir` (int)motorID {#getdir}
+### `/getDir` (int)motorID {#getdir .osc-command}
 
 #### 引数
 
@@ -474,7 +474,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 [`/dir`](automatically-sent-messages.md#dir)
 
-```
+``` { .text .osc-signature }
 /dir (int)motorID (int)direction
 ```
 
@@ -497,7 +497,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 <!-- osc: /enableMotorStatusReport -->
 <!-- generated:begin osc /enableMotorStatusReport -->
-### `/enableMotorStatusReport` (int)motorID (bool)enable {#enablemotorstatusreport}
+### `/enableMotorStatusReport` (int)motorID (bool)enable {#enablemotorstatusreport .osc-command}
 
 #### 引数
 
@@ -525,7 +525,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 [`/motorStatus`](automatically-sent-messages.md#motorstatus)
 
-```
+``` { .text .osc-signature }
 /motorStatus (int)motorID (int)MOT_STATUS
 ```
 
@@ -550,7 +550,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 <!-- osc: /getMotorStatus -->
 <!-- generated:begin osc /getMotorStatus -->
-### `/getMotorStatus` (int)motorID {#getmotorstatus}
+### `/getMotorStatus` (int)motorID {#getmotorstatus .osc-command}
 
 #### 引数
 
@@ -570,7 +570,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 [`/motorStatus`](automatically-sent-messages.md#motorstatus)
 
-```
+``` { .text .osc-signature }
 /motorStatus (int)motorID (int)MOT_STATUS
 ```
 
@@ -591,7 +591,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 <!-- osc: /setPositionReportInterval -->
 <!-- generated:begin osc /setPositionReportInterval -->
-### `/setPositionReportInterval` (int)motorID (int)interval {#setpositionreportinterval}
+### `/setPositionReportInterval` (int)motorID (int)interval {#setpositionreportinterval .osc-command}
 
 #### 引数
 
@@ -615,7 +615,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 [`/position`](automatically-sent-messages.md#position)
 
-```
+``` { .text .osc-signature }
 /position (int)motorID (int)ABS_POS
 ```
 
@@ -644,7 +644,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 <!-- osc: /setPositionListReportInterval -->
 <!-- generated:begin osc /setPositionListReportInterval -->
-### `/setPositionListReportInterval` (int)interval {#setpositionlistreportinterval}
+### `/setPositionListReportInterval` (int)interval {#setpositionlistreportinterval .osc-command}
 
 #### 引数
 
@@ -667,7 +667,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 [`/positionList`](automatically-sent-messages.md#positionlist)
 
-```
+``` { .text .osc-signature }
 /positionList (int)position1 ... (int)positionN
 ```
 
@@ -696,7 +696,7 @@ Low speed optimization thresholdの現在の設定値を取得します。
 
 <!-- osc: /getAdcVal -->
 <!-- generated:begin osc /getAdcVal -->
-### `/getAdcVal` (int)motorID {#getadcval}
+### `/getAdcVal` (int)motorID {#getadcval .osc-command}
 
 STEP400のみ。
 
@@ -720,7 +720,7 @@ STEP400のみです。ファームウェアはSTEP800でもこのコマンドを
 
 STEP400のみ。
 
-```
+``` { .text .osc-signature }
 /adcVal (int)motorID (int)ADC_OUT
 ```
 
@@ -732,7 +732,7 @@ STEP400のみ。
 
 <!-- osc: /getStatus -->
 <!-- generated:begin osc /getStatus -->
-### `/getStatus` (int)motorID {#getstatus}
+### `/getStatus` (int)motorID {#getstatus .osc-command}
 
 #### 引数
 
@@ -754,7 +754,7 @@ STEP400のみ。
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /status (int)motorID (int)status
 ```
 
@@ -788,7 +788,7 @@ STEP400のみ。
 
 <!-- osc: /getConfigRegister -->
 <!-- generated:begin osc /getConfigRegister -->
-### `/getConfigRegister` (int)motorID {#getconfigregister}
+### `/getConfigRegister` (int)motorID {#getconfigregister .osc-command}
 
 #### 引数
 
@@ -808,7 +808,7 @@ CONFIGレジスタにはモータドライバの各種設定が収められて�
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /configRegister (int)motorID (int)CONFIG
 ```
 
@@ -820,7 +820,7 @@ CONFIGレジスタにはモータドライバの各種設定が収められて�
 
 <!-- osc: /resetMotorDriver -->
 <!-- generated:begin osc /resetMotorDriver -->
-### `/resetMotorDriver` (int)motorID {#resetmotordriver}
+### `/resetMotorDriver` (int)motorID {#resetmotordriver .osc-command}
 
 #### 引数
 
@@ -851,7 +851,7 @@ CONFIGレジスタにはモータドライバの各種設定が収められて�
 
 <!-- osc: /getStatusList -->
 <!-- generated:begin osc /getStatusList -->
-### `/getStatusList` {#getstatuslist}
+### `/getStatusList` {#getstatuslist .osc-command}
 
 #### 引数
 
@@ -867,7 +867,7 @@ CONFIGレジスタにはモータドライバの各種設定が収められて�
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /statusList (int)status1 ... (int)statusN
 ```
 

@@ -8,7 +8,7 @@ title: サーボモード
 
 <!-- osc: /enableServoMode -->
 <!-- generated:begin osc /enableServoMode -->
-### `/enableServoMode` (int)motorID (bool)enable {#enableservomode}
+### `/enableServoMode` (int)motorID (bool)enable {#enableservomode .osc-command}
 
 #### 引数
 
@@ -46,7 +46,7 @@ title: サーボモード
 
 [`/homingStatus`](automatically-sent-messages.md#homingstatus)
 
-```
+``` { .text .osc-signature }
 /homingStatus (int)motorID (int)homingStatus
 ```
 
@@ -77,7 +77,7 @@ title: サーボモード
 
 <!-- osc: /setServoParam -->
 <!-- generated:begin osc /setServoParam -->
-### `/setServoParam` (int)motorID (float)kP (float)kI (float)kD {#setservoparam}
+### `/setServoParam` (int)motorID (float)kP (float)kI (float)kD {#setservoparam .osc-command}
 
 #### 引数
 
@@ -120,7 +120,7 @@ PID制御のゲインを調整します。
 
 <!-- osc: /getServoParam -->
 <!-- generated:begin osc /getServoParam -->
-### `/getServoParam` (int)motorID {#getservoparam}
+### `/getServoParam` (int)motorID {#getservoparam .osc-command}
 
 #### 引数
 
@@ -138,7 +138,7 @@ PID制御のゲインを調整します。
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /servoParam (int)motorID (float)kP (float)kI (float)kD
 ```
 
@@ -152,7 +152,7 @@ PID制御のゲインを調整します。
 
 <!-- osc: /setTargetPosition -->
 <!-- generated:begin osc /setTargetPosition -->
-### `/setTargetPosition` (int)motorID (int)position {#settargetposition}
+### `/setTargetPosition` (int)motorID (int)position {#settargetposition .osc-command}
 
 #### 引数
 
@@ -176,7 +176,7 @@ PID制御のゲインを調整します。
 
 <!-- osc: /setTargetPositionList -->
 <!-- generated:begin osc /setTargetPositionList -->
-### `/setTargetPositionList` (int)position1 ... (int)positionN {#settargetpositionlist}
+### `/setTargetPositionList` (int)position1 ... (int)positionN {#settargetpositionlist .osc-command}
 
 #### 引数
 

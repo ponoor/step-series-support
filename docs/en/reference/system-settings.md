@@ -8,7 +8,7 @@ For how the board communicates and how the messages work, see [Communication and
 
 <!-- osc: /setDestIp -->
 <!-- generated:begin osc /setDestIp -->
-### `/setDestIp` {#setdestip}
+### `/setDestIp` {#setdestip .osc-command}
 
 #### Argument
 
@@ -29,7 +29,7 @@ To resolve the MAC address, the board sends one byte of UDP to port 9 (discard) 
 
 #### Response
 
-```
+``` { .text .osc-signature }
 /destIp (int)destIp[0] (int)destIp[1] (int)destIp[2] (int)destIp[3] (int)isNewDestIp
 ```
 
@@ -55,7 +55,7 @@ To resolve the MAC address, the board sends one byte of UDP to port 9 (discard) 
 
 <!-- osc: /getVersion -->
 <!-- generated:begin osc /getVersion -->
-### `/getVersion` {#getversion}
+### `/getVersion` {#getversion .osc-command}
 
 #### Argument
 
@@ -71,7 +71,7 @@ Returns the firmware version burnt on the chip.
 
 #### Response
 
-```
+``` { .text .osc-signature }
 /version (string)version
 ```
 
@@ -82,7 +82,7 @@ Returns the firmware version burnt on the chip.
 
 <!-- osc: /getConfigName -->
 <!-- generated:begin osc /getConfigName -->
-### `/getConfigName` {#getconfigname}
+### `/getConfigName` {#getconfigname .osc-command}
 
 #### Argument
 
@@ -98,7 +98,7 @@ Returns `/configName`: the configuration name, whether the microSD card could be
 
 #### Response
 
-```
+``` { .text .osc-signature }
 /configName (string)configName (int)sdInitializeSucceeded (int)configFileOpenSucceeded (int)configFileParseSucceeded (string)configFilename
 ```
 
@@ -130,7 +130,7 @@ Returns `/configName`: the configuration name, whether the microSD card could be
 
 <!-- osc: /reportError -->
 <!-- generated:begin osc /reportError -->
-### `/reportError` (bool)enable {#reporterror}
+### `/reportError` (bool)enable {#reporterror .osc-command}
 
 #### Argument
 
@@ -157,7 +157,7 @@ Enables or disables the automatic message notification for [`/error/command`](au
 
 [`/error/command`](automatically-sent-messages.md#error-command)
 
-```
+``` { .text .osc-signature }
 /error/command (string)errorText (int)motorID
 ```
 
@@ -186,7 +186,7 @@ Enables or disables the automatic message notification for [`/error/command`](au
 
 [`/error/osc`](automatically-sent-messages.md#error-osc)
 
-```
+``` { .text .osc-signature }
 /error/osc (string)errorText
 ```
 
@@ -210,7 +210,7 @@ Enables or disables the automatic message notification for [`/error/command`](au
 
 <!-- osc: /setConfigName -->
 <!-- generated:begin osc /setConfigName -->
-### `/setConfigName` (string)configName {#setconfigname}
+### `/setConfigName` (string)configName {#setconfigname .osc-command}
 
 Added in v2.1.0.
 
@@ -241,7 +241,7 @@ The name changes only in the board until it is saved with [`/saveConfig`](system
 
 <!-- osc: /saveConfig -->
 <!-- generated:begin osc /saveConfig -->
-### `/saveConfig` {#saveconfig}
+### `/saveConfig` {#saveconfig .osc-command}
 
 Added in v2.1.0.
 
@@ -267,7 +267,7 @@ When: Saved
 
 Added in v2.1.0.
 
-```
+``` { .text .osc-signature }
 /saveConfig (string)message
 ```
 
@@ -279,7 +279,7 @@ When: Failed
 
 Added in v2.1.0.
 
-```
+``` { .text .osc-signature }
 /error/saveConfig (string)errorText
 ```
 
@@ -306,7 +306,7 @@ Added in v2.1.0.
 
 <!-- osc: /resetDevice -->
 <!-- generated:begin osc /resetDevice -->
-### `/resetDevice` {#resetdevice}
+### `/resetDevice` {#resetdevice .osc-command}
 
 #### Argument
 
