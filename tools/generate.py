@@ -973,7 +973,7 @@ def page_settings(ctx: Ctx) -> str:
             name = f"<a id=\"{setting_anchor(s['key'])}\"></a>`{key}`"
             label = _setting_label(ctx, s)
             init = _setting_initial(ctx, s, tight=True)
-            cmds = ", ".join(f"[`{c}`]({ctx.link_to(c)})" for c in s.get("commands", []))
+            cmds = ("、" if ctx.lang == "ja" else ", ").join(f"[`{c}`]({ctx.link_to(c)})" for c in s.get("commands", []))
             desc = ctx.tx(s.get("description"), "description") if s.get("description") else ""
             desc = ctx.oneline(ctx.md(desc)) if desc else ""
             notes = inline_notes(ctx, s)

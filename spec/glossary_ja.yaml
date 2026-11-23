@@ -85,6 +85,13 @@ terms:
     concept: STEP400・STEP800 の総称。「本デバイス」「本機」は使わない
     avoid: [本デバイス, 本機]
     allow: ["本機能"]
+  - use: RESETスイッチ
+    concept: STEP400/800 の基板のスイッチ。STEP100/200 の Arduino・シールドのリセットボタンは別
+    avoid: [リセットスイッチ, RESETボタン]
+  - use: ブラウザ設定ツール
+    concept: ponoor.com の設定ツール（v2.1.0 以降のファームウェア用）。単独の「設定ツール」とは書かない。v2.1.0 より前の「製品ごとの設定ツール」と、GitHub のフォルダ名 /configTool は別
+    avoid: [設定ツール, configTool, Config Tool]
+    allow: ["ブラウザ設定ツール", "製品ごとの設定ツール", "/configTool"]
   - use: MCU
     concept: microcontroller
     avoid: [マイコン]

@@ -465,6 +465,21 @@ class JapaneseOutputTest(unittest.TestCase):
         self.assertIn("（ファームウェア）、", text)
         self.assertNotRegex(text, r"。 v\d")
 
+    def test_configuration_items_commands_are_joined_with_the_japanese_comma(self):
+        """The commands of the configuration items table: "、" in Japanese, ", " in English."""
+        import re
+        text = self.texts["configuration-items.md"]
+        self.assertRegex(text, r"コマンド: \[`/\w+`\]\([^)]*\)、\[`/\w+`\]")
+        self.assertNotRegex(text, r"\]\([^)]*\), \[`/")
+        with tempfile.TemporaryDirectory() as tmp:
+            docs = Path(tmp) / "docs"
+            (docs / "en" / "reference").mkdir(parents=True)
+            (docs / "en" / "reference" / "all.md").write_text("# all\n", encoding="utf-8")
+            self.assertEqual(generate.run(docs, SPEC, out=io.StringIO()), 0)
+            en = next((docs / "en").rglob("configuration-items.md")).read_text(encoding="utf-8")
+        self.assertRegex(en, r"Commands: \[`/\w+`\]\([^)]*\), \[`/\w+`\]")
+        self.assertNotIn("]、[", en)
+
     def test_english_is_unchanged(self):
         ctx = generate.Ctx(SPEC, "en", "both", Counter(), [])
         self.assertEqual(ctx.paren("x"), " (x)")

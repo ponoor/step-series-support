@@ -69,7 +69,7 @@ lang: ja
 | <a id="driversettings-gountiltimeout"></a>`goUntilTimeout`<br>goUntil timeout duration（モータごと） | int<br>10000 | 単位: ms。コマンド: [`/setGoUntilTimeout`](../reference/homing.md#setgountiltimeout) |
 | <a id="driversettings-releaseswtimeout"></a>`releaseSwTimeout`<br>releaseSw timeout duration（モータごと） | int<br>10000 | 単位: ms。コマンド: [`/setReleaseSwTimeout`](../reference/homing.md#setreleaseswtimeout) |
 | <a id="driversettings-stepmode"></a>`stepMode`<br>Microstepping mode（モータごと） | int<br>7 | コマンド: [`/setMicrostepMode`](../reference/motor-driver-settings.md#setmicrostepmode) |
-| <a id="driversettings-iscurrentmode"></a>`isCurrentMode`<br>Current mode（モータごと）（STEP400のみ） | bool<br>false | コマンド: [`/setVoltageMode`](../reference/voltage-and-current-mode-settings.md#setvoltagemode), [`/setCurrentMode`](../reference/voltage-and-current-mode-settings.md#setcurrentmode) |
+| <a id="driversettings-iscurrentmode"></a>`isCurrentMode`<br>Current mode（モータごと）（STEP400のみ） | bool<br>false | コマンド: [`/setVoltageMode`](../reference/voltage-and-current-mode-settings.md#setvoltagemode)、[`/setCurrentMode`](../reference/voltage-and-current-mode-settings.md#setcurrentmode) |
 | <a id="driversettings-slewrate"></a>`slewRate`<br>Slew rate（モータごと） | int<br>STEP400: 5（980V/us）<br>STEP800: 2（530V/us） | 範囲: 0-5（STEP400）、0-2（STEP800）<br>STEP400: 0: 114V/us、1: 220V/us、2: 400V/us、3: 520V/us、4: 790V/us、5: 980V/us<br>STEP800: 0: 180V/us、1: 290V/us、2: 530V/us。モータドライバから出力されるモータ制御電流のスリューレート（立ち上がりの鋭さ）をSTEP400では6段階、STEP800では3段階で指定します。設定ファイルの範囲外の値は拒否されず、範囲内に制限されます（負の値は0、大きい値は最大の値になります）。 |
 | <a id="driversettings-electromagnetbrakeenable"></a>`electromagnetBrakeEnable`<br>Electromagnetic brake enable（モータごと） | bool<br>false | コマンド: [`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake) |
 | <a id="driversettings-braketransitionduration"></a>`brakeTransitionDuration`<br>Brake transition duration（モータごと） | int<br>100 | 範囲: 0-65535ms。電磁ブレーキの解放や保持を待つ時間です。[`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration)を参照してください。設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。範囲外の値は、最大値の次を0として数え直した値になります（65536は0、65537は1、-1は65535になります）。[`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration)はこのような値を`CommandIgnored`で拒否します。コマンド: [`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration) |
@@ -78,9 +78,9 @@ lang: ja
 
 | キー / 名称 | 型 / 初期値 | 説明 |
 | --- | --- | --- |
-| <a id="speedprofile-acc"></a>`acc`<br>Acceleration（モータごと） | float<br>1000（ファームウェア）、2000（テンプレート） | 単位: step/s/s。コマンド: [`/setAcc`](../reference/speed-profile.md#setacc), [`/setSpeedProfile`](../reference/speed-profile.md#setspeedprofile) |
-| <a id="speedprofile-dec"></a>`dec`<br>Deceleration（モータごと） | float<br>1000（ファームウェア）、2000（テンプレート） | 単位: step/s/s。コマンド: [`/setDec`](../reference/speed-profile.md#setdec), [`/setSpeedProfile`](../reference/speed-profile.md#setspeedprofile) |
-| <a id="speedprofile-maxspeed"></a>`maxSpeed`<br>Max speed（モータごと） | float<br>650（ファームウェア）、620（テンプレート） | 単位: step/s。コマンド: [`/setMaxSpeed`](../reference/speed-profile.md#setmaxspeed), [`/setSpeedProfile`](../reference/speed-profile.md#setspeedprofile) |
+| <a id="speedprofile-acc"></a>`acc`<br>Acceleration（モータごと） | float<br>1000（ファームウェア）、2000（テンプレート） | 単位: step/s/s。コマンド: [`/setAcc`](../reference/speed-profile.md#setacc)、[`/setSpeedProfile`](../reference/speed-profile.md#setspeedprofile) |
+| <a id="speedprofile-dec"></a>`dec`<br>Deceleration（モータごと） | float<br>1000（ファームウェア）、2000（テンプレート） | 単位: step/s/s。コマンド: [`/setDec`](../reference/speed-profile.md#setdec)、[`/setSpeedProfile`](../reference/speed-profile.md#setspeedprofile) |
+| <a id="speedprofile-maxspeed"></a>`maxSpeed`<br>Max speed（モータごと） | float<br>650（ファームウェア）、620（テンプレート） | 単位: step/s。コマンド: [`/setMaxSpeed`](../reference/speed-profile.md#setmaxspeed)、[`/setSpeedProfile`](../reference/speed-profile.md#setspeedprofile) |
 | <a id="speedprofile-fullstepspeed"></a>`fullStepSpeed`<br>Transit to fullstep threshold speed（モータごと） | float<br>15610（ファームウェア）、15625（テンプレート） | 単位: step/s。コマンド: [`/setFullstepSpeed`](../reference/speed-profile.md#setfullstepspeed) |
 | <a id="speedprofile-minspeed"></a>`minSpeed`<br>Minimum speed（モータごと） | float<br>0 | 単位: step/s。コマンド: [`/setMinSpeed`](../reference/speed-profile.md#setminspeed) |
 
@@ -88,10 +88,10 @@ lang: ja
 
 | キー / 名称 | 型 / 初期値 | 説明 |
 | --- | --- | --- |
-| <a id="voltagemode-kval_hold"></a>`KVAL_HOLD`<br>KVAL_HOLD（モータごと） | int<br>0 | 電磁ブレーキが有効なとき、モータが再び励磁されるたびに、KVAL_HOLDがKVAL_RUNの半分以上に引き上げられます。引き上げられた値は保存されている設定を置き換えるため（`/saveConfig`で保存されます）、[`/getKval`](../reference/voltage-and-current-mode-settings.md#getkval)でも返されます。コマンド: [`/setKval`](../reference/voltage-and-current-mode-settings.md#setkval), [`/setHoldKval`](../reference/voltage-and-current-mode-settings.md#setholdkval) |
-| <a id="voltagemode-kval_run"></a>`KVAL_RUN`<br>KVAL_RUN（モータごと） | int<br>16 | コマンド: [`/setKval`](../reference/voltage-and-current-mode-settings.md#setkval), [`/setRunKval`](../reference/voltage-and-current-mode-settings.md#setrunkval) |
-| <a id="voltagemode-kval_acc"></a>`KVAL_ACC`<br>KVAL_ACC（モータごと） | int<br>16 | コマンド: [`/setKval`](../reference/voltage-and-current-mode-settings.md#setkval), [`/setAccKval`](../reference/voltage-and-current-mode-settings.md#setacckval) |
-| <a id="voltagemode-kval_dec"></a>`KVAL_DEC`<br>KVAL_DEC（モータごと） | int<br>16 | コマンド: [`/setKval`](../reference/voltage-and-current-mode-settings.md#setkval), [`/setDecKval`](../reference/voltage-and-current-mode-settings.md#setdeckval) |
+| <a id="voltagemode-kval_hold"></a>`KVAL_HOLD`<br>KVAL_HOLD（モータごと） | int<br>0 | 電磁ブレーキが有効なとき、モータが再び励磁されるたびに、KVAL_HOLDがKVAL_RUNの半分以上に引き上げられます。引き上げられた値は保存されている設定を置き換えるため（`/saveConfig`で保存されます）、[`/getKval`](../reference/voltage-and-current-mode-settings.md#getkval)でも返されます。コマンド: [`/setKval`](../reference/voltage-and-current-mode-settings.md#setkval)、[`/setHoldKval`](../reference/voltage-and-current-mode-settings.md#setholdkval) |
+| <a id="voltagemode-kval_run"></a>`KVAL_RUN`<br>KVAL_RUN（モータごと） | int<br>16 | コマンド: [`/setKval`](../reference/voltage-and-current-mode-settings.md#setkval)、[`/setRunKval`](../reference/voltage-and-current-mode-settings.md#setrunkval) |
+| <a id="voltagemode-kval_acc"></a>`KVAL_ACC`<br>KVAL_ACC（モータごと） | int<br>16 | コマンド: [`/setKval`](../reference/voltage-and-current-mode-settings.md#setkval)、[`/setAccKval`](../reference/voltage-and-current-mode-settings.md#setacckval) |
+| <a id="voltagemode-kval_dec"></a>`KVAL_DEC`<br>KVAL_DEC（モータごと） | int<br>16 | コマンド: [`/setKval`](../reference/voltage-and-current-mode-settings.md#setkval)、[`/setDecKval`](../reference/voltage-and-current-mode-settings.md#setdeckval) |
 | <a id="voltagemode-int_speed"></a>`INT_SPEED`<br>INT_SPEED（モータごと） | int<br>1032 | コマンド: [`/setBemfParam`](../reference/voltage-and-current-mode-settings.md#setbemfparam) |
 | <a id="voltagemode-st_slp"></a>`ST_SLP`<br>ST_SLP（モータごと） | int<br>25 | コマンド: [`/setBemfParam`](../reference/voltage-and-current-mode-settings.md#setbemfparam) |
 | <a id="voltagemode-fn_slp_acc"></a>`FN_SLP_ACC`<br>FN_SLP_ACC（モータごと） | int<br>41 | コマンド: [`/setBemfParam`](../reference/voltage-and-current-mode-settings.md#setbemfparam) |
@@ -104,10 +104,10 @@ lang: ja
 
 | キー / 名称 | 型 / 初期値 | 説明 |
 | --- | --- | --- |
-| <a id="currentmode-tval_hold"></a>`TVAL_HOLD`<br>TVAL_HOLD（モータごと）（STEP400のみ） | int<br>0（78.125mA） | 電磁ブレーキが有効なとき、モータが再び励磁されるたびに、TVAL_HOLDがTVAL_RUNの半分以上に引き上げられます。引き上げられた値は保存されている設定を置き換えるため（`/saveConfig`で保存されます）、[`/getTval`](../reference/voltage-and-current-mode-settings.md#gettval)でも返されます。コマンド: [`/setTval`](../reference/voltage-and-current-mode-settings.md#settval), [`/setHoldTval`](../reference/voltage-and-current-mode-settings.md#setholdtval) |
-| <a id="currentmode-tval_run"></a>`TVAL_RUN`<br>TVAL_RUN（モータごと）（STEP400のみ） | int<br>16（1.328A） | コマンド: [`/setTval`](../reference/voltage-and-current-mode-settings.md#settval), [`/setRunTval`](../reference/voltage-and-current-mode-settings.md#setruntval) |
-| <a id="currentmode-tval_acc"></a>`TVAL_ACC`<br>TVAL_ACC（モータごと）（STEP400のみ） | int<br>16（1.328A） | コマンド: [`/setTval`](../reference/voltage-and-current-mode-settings.md#settval), [`/setAccTval`](../reference/voltage-and-current-mode-settings.md#setacctval) |
-| <a id="currentmode-tval_dec"></a>`TVAL_DEC`<br>TVAL_DEC（モータごと）（STEP400のみ） | int<br>16（1.328A） | コマンド: [`/setTval`](../reference/voltage-and-current-mode-settings.md#settval), [`/setDecTval`](../reference/voltage-and-current-mode-settings.md#setdectval) |
+| <a id="currentmode-tval_hold"></a>`TVAL_HOLD`<br>TVAL_HOLD（モータごと）（STEP400のみ） | int<br>0（78.125mA） | 電磁ブレーキが有効なとき、モータが再び励磁されるたびに、TVAL_HOLDがTVAL_RUNの半分以上に引き上げられます。引き上げられた値は保存されている設定を置き換えるため（`/saveConfig`で保存されます）、[`/getTval`](../reference/voltage-and-current-mode-settings.md#gettval)でも返されます。コマンド: [`/setTval`](../reference/voltage-and-current-mode-settings.md#settval)、[`/setHoldTval`](../reference/voltage-and-current-mode-settings.md#setholdtval) |
+| <a id="currentmode-tval_run"></a>`TVAL_RUN`<br>TVAL_RUN（モータごと）（STEP400のみ） | int<br>16（1.328A） | コマンド: [`/setTval`](../reference/voltage-and-current-mode-settings.md#settval)、[`/setRunTval`](../reference/voltage-and-current-mode-settings.md#setruntval) |
+| <a id="currentmode-tval_acc"></a>`TVAL_ACC`<br>TVAL_ACC（モータごと）（STEP400のみ） | int<br>16（1.328A） | コマンド: [`/setTval`](../reference/voltage-and-current-mode-settings.md#settval)、[`/setAccTval`](../reference/voltage-and-current-mode-settings.md#setacctval) |
+| <a id="currentmode-tval_dec"></a>`TVAL_DEC`<br>TVAL_DEC（モータごと）（STEP400のみ） | int<br>16（1.328A） | コマンド: [`/setTval`](../reference/voltage-and-current-mode-settings.md#settval)、[`/setDecTval`](../reference/voltage-and-current-mode-settings.md#setdectval) |
 | <a id="currentmode-t_fast"></a>`T_FAST`<br>T_FAST（モータごと）（STEP400のみ） | int<br>25 | コマンド: [`/setDecayModeParam`](../reference/voltage-and-current-mode-settings.md#setdecaymodeparam) |
 | <a id="currentmode-ton_min"></a>`TON_MIN`<br>TON_MIN（モータごと）（STEP400のみ） | int<br>41 | コマンド: [`/setDecayModeParam`](../reference/voltage-and-current-mode-settings.md#setdecaymodeparam) |
 | <a id="currentmode-toff_min"></a>`TOFF_MIN`<br>TOFF_MIN（モータごと）（STEP400のみ） | int<br>41 | コマンド: [`/setDecayModeParam`](../reference/voltage-and-current-mode-settings.md#setdecaymodeparam) |
