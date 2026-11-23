@@ -32,6 +32,7 @@ These commands do not exist on the other board. When one of them is sent to the 
 
 ## Messages sent by STEP400 only {#messages-sent-by-step400-only}
 
+- [`/adcVal`](motor-driver-settings.md#getadcval) (int)motorID (int)ADC_OUT
 - [`/prohibitMotionOnLimitSw`](alarm-settings.md#getprohibitmotiononlimitsw) (int)motorID (int)enable
 - [`/tval`](voltage-and-current-mode-settings.md#gettval) (int)motorID (int)holdTVAL (int)runTVAL (int)accTVAL (int)decTVAL
 - [`/tval_mA`](voltage-and-current-mode-settings.md#gettval_ma) (int)motorID (float)holdTVAL_mA (float)runTVAL_mA (float)accTVAL_mA (float)decTVAL_mA

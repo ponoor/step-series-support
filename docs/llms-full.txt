@@ -3261,11 +3261,11 @@ Arguments:
 
 #### /adcVal
 
-Signature: `/adcVal (int)motorID (int)ADC_OUT`.
+Signature: `/adcVal (int)motorID (int)ADC_OUT`. Available on STEP400 only.
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800)): Motor ID
+- `motorID` (int, range 1-4): Motor ID
 - `ADC_OUT` (int, range 0-31): 5bit reading of ADC_OUT register
 
 #### /status

@@ -719,6 +719,8 @@ STEP400 only. The firmware also accepts the command on STEP800, but it is not me
 
 #### Response
 
+Available on STEP400 only.
+
 ```
 /adcVal (int)motorID (int)ADC_OUT
 ```

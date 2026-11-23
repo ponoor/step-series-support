@@ -718,6 +718,8 @@ STEP400のみです。ファームウェアはSTEP800でもこのコマンドを
 
 #### 返信
 
+STEP400のみ。
+
 ```
 /adcVal (int)motorID (int)ADC_OUT
 ```

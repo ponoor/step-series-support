@@ -3720,6 +3720,7 @@ messages:
         description: {en: "current position of the motor #n", ja: n個目のモータの現在位置}
 
   - address: /adcVal
+    boards: [STEP400]
     args:
       - use: motorID
       - name: ADC_OUT
