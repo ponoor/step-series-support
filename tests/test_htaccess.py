@@ -13,7 +13,7 @@ SITE = g.site_url()
 ORIGIN = SITE.split("/", 3)[0] + "//" + SITE.split("/", 3)[2]
 SITE_PATH = "/" + SITE.split("/", 3)[3]          # /docs/step-series/
 FILES = ("root-snippet.htaccess", "docs.htaccess", "docs-step-series.htaccess")
-RULE_RE = re.compile(r"^RewriteRule (\S+) (\S+) \[NC,R=301,L\]$", re.M)
+RULE_RE = re.compile(r"^RewriteRule (\S+) (\S+) \[R=301,L\]$", re.M)
 
 
 def parsed(name: str) -> list[tuple[str, str]]:
