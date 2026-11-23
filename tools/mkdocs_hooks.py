@@ -1,0 +1,71 @@
+"""mkdocs hooks (mkdocs.yml: hooks:). One search index per language.
+
+mkdocs-static-i18n builds one search/search_index.json with every language in it. Material reads the index from
+<base>/search/search_index.json and opens a result at <base>/<location>. So:
+
+* on_post_page: in a page of a non-default language (en/...), "base" in the __config script is changed from the
+  site root to that language's root (en/). Only that value changes (the assets are read through base_url, not base).
+* on_post_build: the index is split. site/search/search_index.json keeps the default language (no prefix);
+  site/en/search/search_index.json gets the English entries, with `location` relative to en/.
+
+Runs for both mkdocs.yml and mkdocs.preview.yml (it inherits `hooks`).
+"""
+import json
+import re
+from pathlib import Path
+
+from mkdocs.plugins import event_priority
+
+_CONFIG_BASE = re.compile(r'(<script id="__config" type="application/json">\{[^<]*?"base": ")([^"]*)(")')
+
+
+def _non_default_locales(config):
+    i18n = config.plugins.get("i18n")
+    if i18n is None:
+        return []
+    return [lang.locale for lang in i18n.config.languages if not lang.default and lang.build]
+
+
+def _locale_of(page_url, locales):
+    for loc in locales:
+        if page_url.startswith(loc + "/"):
+            return loc
+    return None
+
+
+def on_post_page(output, page, config):
+    loc = _locale_of(page.file.url, _non_default_locales(config))
+    if loc is None:
+        return output
+    # base is relative to the page: "../.." (two levels deep) -> the language root is one level less: "..".
+    def fix(m):
+        base = m.group(2)
+        root = base[:-3] if base.endswith("/..") else "."  # ".." -> "."
+        return m.group(1) + root + m.group(3)
+
+    new, n = _CONFIG_BASE.subn(fix, output, count=1)
+    if n != 1:
+        raise RuntimeError(f"mkdocs_hooks: no __config base in {page.file.url}")
+    return new
+
+
+@event_priority(-100)  # after the i18n plugin has rebuilt the index in its own on_post_build
+def on_post_build(config):
+    locales = _non_default_locales(config)
+    site = Path(config["site_dir"])
+    src = site / "search" / "search_index.json"
+    index = json.loads(src.read_text(encoding="utf-8"))
+    default_docs = []
+    by_locale = {loc: [] for loc in locales}
+    for doc in index["docs"]:
+        loc = _locale_of(doc["location"], locales)
+        if loc is None:
+            default_docs.append(doc)
+        else:
+            by_locale[loc].append({**doc, "location": doc["location"][len(loc) + 1:]})
+    outputs = [(src, default_docs)]
+    for loc, docs in by_locale.items():
+        outputs.append((site / loc / "search" / "search_index.json", docs))
+    for path, docs in outputs:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps({**index, "docs": docs}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")

@@ -6,6 +6,8 @@ site_description: Documentation of the STEP400 / STEP800 stepper motor controlle
 site_url: https://ponoor.com/docs/step-series/
 docs_dir: docs
 use_directory_urls: true
+hooks:
+- tools/mkdocs_hooks.py   # search index per language (see the file)
 theme:
   name: material
   custom_dir: overrides
