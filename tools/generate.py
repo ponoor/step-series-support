@@ -972,7 +972,7 @@ def page_settings(ctx: Ctx) -> str:
             key = s["key"].split(".", 1)[1]
             name = f"<a id=\"{setting_anchor(s['key'])}\"></a>`{key}`"
             label = _setting_label(ctx, s)
-            init = _setting_initial(ctx, s)
+            init = _setting_initial(ctx, s, tight=True)
             cmds = ", ".join(f"[`{c}`]({ctx.link_to(c)})" for c in s.get("commands", []))
             desc = ctx.tx(s.get("description"), "description") if s.get("description") else ""
             desc = ctx.oneline(ctx.md(desc)) if desc else ""
@@ -999,9 +999,11 @@ def _setting_label(ctx: Ctx, s: dict) -> str:
     return label
 
 
-def _values_text(ctx: Ctx, values: list[dict]) -> str:
-    """`0: 114V/us, 1: 220V/us` (the same form as the values of an argument in the difference page)."""
-    return ", ".join(f"{fmt(v['value'])}: {ctx.item_text(v, 'value')}" for v in values)
+def _values_text(ctx: Ctx, values: list[dict], tight: bool = False) -> str:
+    """`0: 114V/us, 1: 220V/us` (the same form as the values of an argument in the difference page).
+    tight (the configuration items page): the Japanese list is joined with "、"."""
+    sep = "、" if (tight and ctx.lang == "ja") else ", "
+    return sep.join(f"{fmt(v['value'])}: {ctx.item_text(v, 'value')}" for v in values)
 
 
 def _setting_range(ctx: Ctx, s: dict, tight: bool = False) -> str:
@@ -1012,13 +1014,13 @@ def _setting_range(ctx: Ctx, s: dict, tight: bool = False) -> str:
     if not values:
         return text
     if spec.is_board_map(values):
-        texts = {b: _values_text(ctx, values[b]) for b in spec.board_names if b in values}
+        texts = {b: _values_text(ctx, values[b], tight) for b in spec.board_names if b in values}
         if len(set(texts.values())) == 1 and len(texts) == len(spec.board_names):
             vtext = next(iter(texts.values()))
         else:
-            vtext = "; ".join(f"{b}: {t}" for b, t in texts.items())
+            vtext = ("<br>" if tight else "; ").join(f"{b}: {t}" for b, t in texts.items())
     else:
-        vtext = _values_text(ctx, values)
+        vtext = _values_text(ctx, values, tight)
     return f"{text}<br>{vtext}" if text else vtext
 
 
@@ -1038,7 +1040,7 @@ def _setting_range_label(ctx: Ctx, s: dict) -> str:
     return f"{label}: {text}{ctx.stop}"
 
 
-def _setting_initial(ctx: Ctx, s: dict) -> str:
+def _setting_initial(ctx: Ctx, s: dict, tight: bool = False) -> str:
     spec, L = ctx.spec, ctx.L
     texts = {}
     for b in spec.board_names:
@@ -1060,7 +1062,7 @@ def _setting_initial(ctx: Ctx, s: dict) -> str:
         return ""
     if len(set(texts.values())) == 1:
         return next(iter(texts.values()))
-    return "; ".join(f"{b}: {t}" for b, t in texts.items())
+    return ("<br>" if tight else "; ").join(f"{b}: {t}" for b, t in texts.items())
 
 
 def _setting_value(ctx: Ctx, s: dict, v: Any, board: str) -> str:

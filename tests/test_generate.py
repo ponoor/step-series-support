@@ -542,7 +542,8 @@ class SettingsValuesMarkerTest(unittest.TestCase):
         text, _ = self.expand("en", "network.mac")
         row = [l for l in text.splitlines() if l.startswith("| [`network.mac`]")][0]
         initial = row.split(" | ")[2]
-        self.assertIn(initial, page)
+        # the settings page splits the boards with <br> (this table keeps "; ")
+        self.assertIn(initial.replace("; STEP800", "<br>STEP800"), page)
         self.assertIn("(firmware)", initial)
 
     def test_order_of_the_items_and_duplicates(self):
@@ -663,8 +664,9 @@ class SettingsValuesInRangeTest(unittest.TestCase):
     def test_slew_rate_values_per_board_in_both_languages(self):
         for lang in ("en", "ja"):
             row = [l for l in self.page(lang).splitlines() if "`slewRate`" in l][0]
-            self.assertIn("STEP400: 0: 114V/us, 1: 220V/us, 2: 400V/us, 3: 520V/us, 4: 790V/us, 5: 980V/us", row)
-            self.assertIn("STEP800: 0: 180V/us, 1: 290V/us, 2: 530V/us", row)
+            comma = "、" if lang == "ja" else ", "
+            self.assertIn(f"STEP400: 0: 114V/us{comma}1: 220V/us{comma}2: 400V/us{comma}3: 520V/us{comma}4: 790V/us{comma}5: 980V/us<br>", row)
+            self.assertIn(f"<br>STEP800: 0: 180V/us{comma}1: 290V/us{comma}2: 530V/us", row)
 
     def test_initial_value_of_a_board_uses_the_values_of_that_board(self):
         row = [l for l in self.page("en").splitlines() if "`slewRate`" in l][0]
@@ -674,7 +676,7 @@ class SettingsValuesInRangeTest(unittest.TestCase):
         row = [l for l in self.page("en").splitlines() if "`homingDirection`" in l][0]
         self.assertIn("Values: 1: Forward, 0: Reverse.", row)
         row = [l for l in self.page("ja").splitlines() if "`homingDirection`" in l][0]
-        self.assertIn("値: 1: 正転方向, 0: 逆転方向。", row)
+        self.assertIn("値: 1: 正転方向、0: 逆転方向。", row)
 
     def test_settings_values_marker_has_the_same_cell(self):
         ctx = generate.Ctx(SPEC, "en", "both", Counter(), [])
@@ -720,6 +722,21 @@ class SettingsTableThreeColumnsTest(unittest.TestCase):
         ja = {l.split("`")[1]: l for l in self.rows("ja")}
         self.assertIn("| 範囲: 0-65535ms。", ja["reportPositionInterval"])
         self.assertIn("| 単位: ms。", ja["goUntilTimeout"])
+
+    def test_ja_values_are_joined_with_a_japanese_comma_and_boards_are_split_with_br(self):
+        ja = {l.split("`")[1]: l for l in self.rows("ja")}
+        self.assertIn("| 値: 1: 正転方向、0: 逆転方向。", ja["homingDirection"])
+        self.assertIn("int<br>STEP400: 5（980V/us）<br>STEP800: 2（530V/us） |", ja["slewRate"])
+        self.assertIn("<br>STEP400: 0: 114V/us、1: 220V/us", ja["slewRate"])
+        self.assertIn("<br>STEP800: 0: 180V/us、1: 290V/us、2: 530V/us", ja["slewRate"])
+        en = {l.split("`")[1]: l for l in self.rows("en")}
+        self.assertIn("int<br>STEP400: 5 (980V/us)<br>STEP800: 2 (530V/us) |", en["slewRate"])
+        self.assertIn("<br>STEP400: 0: 114V/us, 1: 220V/us", en["slewRate"])
+        for lang, rows in (("en", en), ("ja", ja)):
+            for key, row in rows.items():
+                self.assertNotRegex(row, r"; STEP(400|800):", f"{lang} {key}")
+        for key, row in ja.items():
+            self.assertNotRegex(row, r"\d: [^<|]*?, \d+: ", key)
 
     def test_an_item_without_a_range_has_no_range_label(self):
         for lang, label in (("en", "Range:"), ("en", "Unit:"), ("en", "Values:"), ("ja", "範囲:"), ("ja", "単位:"), ("ja", "値:")):
