@@ -55,6 +55,7 @@ ALIASES: dict[str, str] = {
     "/en/docs/step400/": "/en/docs/step-series/",      # the QR code of the STEP400 (WordPress redirect id 2)
     **{f"/en/docs/step400/{p}": f"/en/docs/step-series/{p}" for p in _STEP400_PAGES},
     **{f"/en/docs/step-series/setup/{p}": f"/en/docs/step-series/settings/{p}" for p in _SETUP_PAGES},
+    "/en/docs/step-series/setup/": "/en/docs/step-series/settings/setup-with-a-microsd-card/",
     "/en/docs/step-series/osc-command-reference/absolute-position-management/":
         "/en/docs/step-series/osc-command-reference/position-management/",
     "/en/docs/step-series/osc-command-reference/home-limit-sensors/":
@@ -71,6 +72,7 @@ ALIASES: dict[str, str] = {
         "osc-command-reference/voltage-and-current-mode-settings/",
     ]},
     **{f"/docs/step-series/setup/{p}": f"/docs/step-series/settings/{p}" for p in _SETUP_PAGES},
+    "/docs/step-series/setup/": "/docs/step-series/settings/setup-with-a-microsd-card/",
     "/docs/en/step-series/settings/setup-with-a-microsd-card/":
         "/docs/step-series/settings/setup-with-a-microsd-card/",
     "/docs/step-series/osc-command-reference/motor-driver-settings/":
@@ -181,7 +183,7 @@ def render(name: str, rules: list[Rule], identities: list[str], site: str) -> st
         f, rel = group(r)
         if f != name:
             continue
-        body.append(f"RewriteRule {pattern(rel)} {r.target} [NC,R=301,L]")
+        body.append(f"RewriteRule {pattern(rel)} {r.target} [R=301,L]")
     for old in identities:
         if group(Rule(old, "", ""))[0] == name:
             body.append(f"# {old} is the top page of the new site: no redirect.")

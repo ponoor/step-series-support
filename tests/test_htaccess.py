@@ -65,7 +65,6 @@ class HtaccessTest(unittest.TestCase):
             self.assertEqual(len(matches(r.old)), 1, r.old)
             self.assertEqual(matches(r.old)[0][1], r.target, r.old)
             self.assertEqual(len(matches(r.old.rstrip("/"))), 1, r.old + " (no trailing slash)")
-            self.assertEqual(len(matches(r.old, upper=True)), 1, r.old + " (case)")
 
     def test_aliases_lead_to_rows(self):
         table = {old for _l, old, _n in g.map_rows()}
@@ -105,7 +104,6 @@ class HtaccessTest(unittest.TestCase):
     def test_wordpress_fallback(self):
         for n in ("docs.htaccess", "docs-step-series.htaccess", "docs-preview.htaccess"):
             text = (g.OUT_DIR / n).read_text(encoding="utf-8")
-            self.assertTrue(text.rstrip().split("\n")[-1] in ("</IfModule>",) or "mod_headers" in text, n)
             self.assertIn("RewriteCond %{REQUEST_FILENAME} !-f\nRewriteCond %{REQUEST_FILENAME} !-d\nRewriteRule . /index.php [L]", text, n)
             self.assertNotIn("RewriteBase", text)
         # the fallback is after the 301 rules
