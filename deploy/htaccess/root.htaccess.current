@@ -1,0 +1,26 @@
+# BEGIN WordPress
+# "BEGIN WordPress" から "END WordPress" までのディレクティブ (行) は
+# 動的に生成され、WordPress フィルターによってのみ修正が可能です。
+# これらのマーカー間にあるディレクティブへのいかなる変更も上書きされてしまいます。
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+
+# END WordPress
+
+
+php_value memory_limit 128M
+php_value post_max_size 64M
+php_value upload_max_filesize 20M
+php_value max_execution_time 300
+
+# WAFの誤検知対策
+<IfModule mod_siteguard.c>
+SiteGuard_User_ExcludeSig sqlinj-9,sqlinj-10,sqlinj-13,sqlinj-19,sqlinj-20,sqlinj-21,sqlinj-22,sqlinj-34,oscmd-14,oscmd-16,sqlinj-43,xss-tag-1,xss-tag-filter
+</IfModule>
