@@ -467,7 +467,6 @@ class JapaneseOutputTest(unittest.TestCase):
 
     def test_configuration_items_commands_are_joined_with_the_japanese_comma(self):
         """The commands of the configuration items table: "、" in Japanese, ", " in English."""
-        import re
         text = self.texts["configuration-items.md"]
         self.assertRegex(text, r"コマンド: \[`/\w+`\]\([^)]*\)、\[`/\w+`\]")
         self.assertNotRegex(text, r"\]\([^)]*\), \[`/")
