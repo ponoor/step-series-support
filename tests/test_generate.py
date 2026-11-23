@@ -193,8 +193,8 @@ class GenerateTest(unittest.TestCase):
             outs[mode] = (d / "en" / "connections" / "configuration-items.md").read_text(encoding="utf-8")
         acc = [l for l in outs["both"].splitlines() if "`acc`" in l][0]
         self.assertIn("1000 (firmware) / 2000 (template)", acc)
-        self.assertIn("| 1000 |", [l for l in outs["firmware"].splitlines() if "`acc`" in l][0])
-        self.assertIn("| 2000 |", [l for l in outs["template"].splitlines() if "`acc`" in l][0])
+        self.assertIn("<br>1000 |", [l for l in outs["firmware"].splitlines() if "`acc`" in l][0])
+        self.assertIn("<br>2000 |", [l for l in outs["template"].splitlines() if "`acc`" in l][0])
 
     def test_japanese_falls_back_to_english_and_is_counted(self):
         """A Japanese text that is empty is filled with the English one and counted."""
@@ -655,7 +655,7 @@ class RealDocsTest(unittest.TestCase):
 
 
 class SettingsValuesInRangeTest(unittest.TestCase):
-    """The `values` of a configuration item are in the "Range / Unit" cell, per board."""
+    """The range, unit and `values` of a configuration item are at the head of the description cell, per board."""
 
     def page(self, lang: str) -> str:
         return generate.page_settings(generate.Ctx(SPEC, lang, "both", Counter(), []))
@@ -672,13 +672,65 @@ class SettingsValuesInRangeTest(unittest.TestCase):
 
     def test_values_of_all_boards_are_one_list(self):
         row = [l for l in self.page("en").splitlines() if "`homingDirection`" in l][0]
-        self.assertIn("1: Forward, 0: Reverse", row)
+        self.assertIn("Values: 1: Forward, 0: Reverse.", row)
+        row = [l for l in self.page("ja").splitlines() if "`homingDirection`" in l][0]
+        self.assertIn("値: 1: 正転方向, 0: 逆転方向。", row)
 
     def test_settings_values_marker_has_the_same_cell(self):
         ctx = generate.Ctx(SPEC, "en", "both", Counter(), [])
         ctx.rel_from = Path("connections")
         text = generate.expand_text("<!-- osc-settings-values: driverSettings.slewRate -->\n", ctx, Path("en/connections/x.md"))
         self.assertIn("STEP800: 0: 180V/us, 1: 290V/us, 2: 530V/us", text)
+
+
+class SettingsTableThreeColumnsTest(unittest.TestCase):
+    """The table of the configuration items page: Key / Name, Type / Initial value, Description."""
+
+    def rows(self, lang: str) -> list[str]:
+        page = generate.page_settings(generate.Ctx(SPEC, lang, "both", Counter(), []))
+        return [l for l in page.splitlines() if l.startswith("| <a id=")]
+
+    def test_header_and_three_columns(self):
+        for lang, header in (("en", "| Key / Name | Type / Initial value | Description |"),
+                             ("ja", "| キー / 名称 | 型 / 初期値 | 説明 |")):
+            page = generate.page_settings(generate.Ctx(SPEC, lang, "both", Counter(), []))
+            self.assertIn(header, page)
+            self.assertEqual(page.count(header), len({x["section"] for x in SPEC.settings}))
+            for row in self.rows(lang):
+                self.assertEqual(len(row.split(" | ")), 3, row)
+
+    def test_anchor_is_right_before_the_key(self):
+        for lang in ("en", "ja"):
+            rows = self.rows(lang)
+            self.assertEqual(len(rows), len(SPEC.settings))
+            for s in SPEC.settings:
+                anchor = f'<a id="{generate.setting_anchor(s["key"])}"></a>`{s["key"].split(".", 1)[1]}`'
+                self.assertEqual(len([r for r in rows if r.startswith(f"| {anchor}")]), 1, s["key"])
+
+    def test_commands_are_at_the_end_of_the_cell(self):
+        for lang, label in (("en", "Commands"), ("ja", "コマンド")):
+            row = [l for l in self.rows(lang) if "`destIp`" in l][0]
+            self.assertRegex(row, label + r": \[`/setDestIp`\]\([^)]*system-settings\.md#setdestip\) \|$")
+
+    def test_range_unit_and_values_labels(self):
+        en = {l.split("`")[1]: l for l in self.rows("en")}
+        self.assertIn("| Range: 0-65535 ms.", en["reportPositionInterval"])
+        self.assertIn("| Unit: ms.", en["goUntilTimeout"])
+        self.assertIn("Range: 0-5 (STEP400), 0-2 (STEP800)<br>STEP400: 0: 114V/us", en["slewRate"])
+        ja = {l.split("`")[1]: l for l in self.rows("ja")}
+        self.assertIn("| 範囲: 0-65535ms。", ja["reportPositionInterval"])
+        self.assertIn("| 単位: ms。", ja["goUntilTimeout"])
+
+    def test_an_item_without_a_range_has_no_range_label(self):
+        for lang, label in (("en", "Range:"), ("en", "Unit:"), ("en", "Values:"), ("ja", "範囲:"), ("ja", "単位:"), ("ja", "値:")):
+            rows = {l.split("`")[1]: l for l in self.rows(lang)}
+            for s in SPEC.settings:
+                if not (s.get("range") or s.get("unit") or s.get("values")):
+                    self.assertNotIn(label, rows[s["key"].split(".", 1)[1]].split(" | ")[2], s["key"])
+
+    def test_name_follows_the_key_after_a_line_break(self):
+        row = [l for l in self.rows("en") if "`configName`" in l][0]
+        self.assertTrue(row.split(" | ")[0].endswith("`configName`<br>Configuration name"))
 
 
 if __name__ == "__main__":

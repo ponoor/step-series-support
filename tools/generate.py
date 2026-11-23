@@ -22,7 +22,8 @@ What it does (docs directory: --docs, default `docs/`)
    the two lists are separated by commas. An item of `osc-related` is a group key or a command address
    (it starts with `/`); an item of `osc-settings` and `osc-settings-values` is a section or a setting key
    (`section.key`). `osc-settings-values` makes the columns Key (a link to the configuration items), Name,
-   Initial value and Range / Unit with the same code as the page of the configuration items. The
+   Initial value and Range / Unit with `_setting_range()`, which the configuration items page also uses at the
+   head of its description column (in Japanese without the space before the unit). The
    rows follow the order of the items (inside a group or a section, the order of the YAML); a command or a setting
    that comes twice is listed once. A page without
    markers is never touched. A marker with an unknown address is an error and nothing is written.
@@ -115,6 +116,7 @@ LABELS = {
         "firmware": "firmware", "template": "template", "when": "When",
         "command": "Command", "arguments": "Arguments", "since": "Since", "key": "Key", "label": "Name",
         "unit": "Unit", "initial_col": "Initial value", "commands_col": "Commands", "per_motor": "per motor",
+        "key_label": "Key / Name", "type_initial": "Type / Initial value", "values_label": "Values",
         "list_title": "Command list", "list_intro": "All OSC commands in the order of the reference pages. Click a command to go to its reference.",
         "diff_title": "Differences between STEP400 and STEP800",
         "diff_only": "Commands available on {boards} only", "diff_msg_only": "Messages sent by {boards} only",
@@ -135,6 +137,7 @@ LABELS = {
         "firmware": "ファームウェア", "template": "テンプレート", "when": "条件",
         "command": "コマンド", "arguments": "引数", "since": "追加", "key": "キー", "label": "名称",
         "unit": "単位", "initial_col": "初期値", "commands_col": "コマンド", "per_motor": "モータごと",
+        "key_label": "キー / 名称", "type_initial": "型 / 初期値", "values_label": "値",
         "list_title": "コマンド一覧", "list_intro": "すべてのOSCコマンドを、リファレンスのページの順に並べています。コマンド名から詳細へ移動できます。",
         "diff_title": "STEP400とSTEP800の違い",
         "diff_only": "{boards}のみで使えるコマンド", "diff_msg_only": "{boards}のみが送信するメッセージ",
@@ -210,6 +213,10 @@ class Ctx:
     @property
     def comma(self) -> str:
         return ", " if self.lang == "en" else "、"
+
+    @property
+    def stop(self) -> str:
+        return "." if self.lang == "en" else "。"
 
     def join(self, *parts: str) -> str:
         """The non-empty parts in a row: separated by a space in English; in Japanese by a space only where both
@@ -377,7 +384,7 @@ def arg_heading(spec: Spec, cmd_or_msg: dict) -> str:
     return " ".join(parts)
 
 
-def range_text(ctx: Ctx, a: dict, in_message: bool) -> str:
+def range_text(ctx: Ctx, a: dict, in_message: bool, tight: bool = False) -> str:
     spec = ctx.spec
     rng = a.get("range")
     parts = []
@@ -395,7 +402,8 @@ def range_text(ctx: Ctx, a: dict, in_message: bool) -> str:
         parts.append(f"{all_value}{ctx.paren(ctx.L['all_motors'])}")
     text = ctx.comma.join(parts)
     if text and a.get("unit"):
-        text = ctx.join(text, a["unit"])
+        # tight: inside a Japanese sentence the unit follows the number without a space (the glossary rule)
+        text = text + a["unit"] if (tight and ctx.lang == "ja") else ctx.join(text, a["unit"])
     elif a.get("unit"):
         text = a["unit"]
     return text
@@ -965,15 +973,18 @@ def page_settings(ctx: Ctx) -> str:
             name = f"<a id=\"{setting_anchor(s['key'])}\"></a>`{key}`"
             label = _setting_label(ctx, s)
             init = _setting_initial(ctx, s)
-            rng = _setting_range(ctx, s)
             cmds = ", ".join(f"[`{c}`]({ctx.link_to(c)})" for c in s.get("commands", []))
             desc = ctx.tx(s.get("description"), "description") if s.get("description") else ""
             desc = ctx.oneline(ctx.md(desc)) if desc else ""
             notes = inline_notes(ctx, s)
             if notes:
                 desc = ctx.join(desc, notes)
-            rows.append([name, label, s["type"], init, rng, cmds, desc])
-        out += [table([L["key"], L["label"], L["type"], L["initial_col"], f"{L['range']} / {L['unit']}", L["commands_col"], L["description"]], rows), ""]
+            rng = _setting_range_label(ctx, s)
+            cmd_text = f"{L['commands_col']}: {cmds}" if cmds else ""
+            rows.append([f"{name}<br>{label}" if label else name,
+                         f"{s['type']}<br>{init}" if init else s["type"],
+                         ctx.join(rng, desc, cmd_text)])
+        out += [table([L["key_label"], L["type_initial"], L["description"]], rows), ""]
     return "\n".join(out)
 
 
@@ -993,10 +1004,10 @@ def _values_text(ctx: Ctx, values: list[dict]) -> str:
     return ", ".join(f"{fmt(v['value'])}: {ctx.item_text(v, 'value')}" for v in values)
 
 
-def _setting_range(ctx: Ctx, s: dict) -> str:
+def _setting_range(ctx: Ctx, s: dict, tight: bool = False) -> str:
     """Range, unit and the values of a configuration item (the `changes` of a value are not shown)."""
     spec = ctx.spec
-    text = range_text(ctx, {"range": s.get("range"), "unit": s.get("unit")}, True) if (s.get("range") or s.get("unit")) else ""
+    text = range_text(ctx, {"range": s.get("range"), "unit": s.get("unit")}, True, tight) if (s.get("range") or s.get("unit")) else ""
     values = s.get("values")
     if not values:
         return text
@@ -1009,6 +1020,22 @@ def _setting_range(ctx: Ctx, s: dict) -> str:
     else:
         vtext = _values_text(ctx, values)
     return f"{text}<br>{vtext}" if text else vtext
+
+
+def _setting_range_label(ctx: Ctx, s: dict) -> str:
+    """The range, unit and values of a configuration item for the head of the description cell:
+    "Range: ..." (a range or the values with a range), "Unit: ..." (a unit only) or "Values: ..." (the values only)."""
+    L = ctx.L
+    text = _setting_range(ctx, s, tight=True)
+    if not text:
+        return ""
+    if s.get("range"):
+        label = L["range"]
+    elif s.get("unit"):
+        label = L["unit"]
+    else:
+        label = L["values_label"]
+    return f"{label}: {text}{ctx.stop}"
 
 
 def _setting_initial(ctx: Ctx, s: dict) -> str:
