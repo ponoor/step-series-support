@@ -15,7 +15,6 @@ This file lists the pages of the English documentation. Every link is a path rel
 
 ## Connections and settings
 
-- [Connections and settings](connections/): This section covers what you do before the first motion: wiring the power supply, motors, switches and the network, and setting up the board.
 - [Power supply and motor](connections/power-supply-and-motor/): How to connect a power supply and a motor to the STEP400 and the STEP800, and how to choose them.
 - [Sensors and switches](connections/sensors-and-switches/): The terminals for the switches and the sensors, their pin assignment, and how to wire a switch or a sensor.
 - [Network and the DIP switch](connections/network-and-dip-switch/): The DIP switch sets the ID of the board.
@@ -28,7 +27,6 @@ This file lists the pages of the English documentation. Every link is a path rel
 
 ## Functional guides
 
-- [Functional guides](guides/): The functional guides explain how each function of the STEP Series works: the concepts, the states and how they change, and which commands to use in which order.
 - [Communication and messages](guides/communication-and-messages/): This page explains how the board exchanges OSC (Open Sound Control) messages with your computer: how it learns where to send them, what it sends by itself, and what it does with the arguments it receives.
 - [Voltage mode and current mode](guides/voltage-and-current-mode/): A stepper motor can be driven with a constant voltage (voltage mode) or with a constant current (current mode).
 - [Speed profile and types of motor motion](guides/speed-profile-and-motions/): The speed profile sets how fast the motor accelerates, decelerates and turns.
@@ -39,7 +37,7 @@ This file lists the pages of the English documentation. Every link is a path rel
 
 ## OSC reference
 
-- [OSC command reference: common rules](reference/)
+- [Common rules](reference/)
 - [Command list](reference/command-list/): All OSC commands in the order of the reference pages.
 - [System settings](reference/system-settings/): OSC commands `/setDestIp`, `/getVersion`, `/getConfigName`, `/reportError`, `/setConfigName`, `/saveConfig`, `/resetDevice`.
 - [Motor driver settings](reference/motor-driver-settings/): OSC commands `/setMicrostepMode`, `/getMicrostepMode`, `/enableLowSpeedOptimize`, `/setLowSpeedOptimizeThreshold`, `/getLowSpeedOptimizeThreshold`, `/enableBusyReport`, `/getBusy`, `/enableHizReport`, `/getHiZ`, `/enableDirReport`, `/getDir`, `/enableMotorStatusReport`, `/getMotorStatus`, `/setPositionReportInterval`, `/setPositionListReportInterval`, `/getAdcVal`, `/getStatus`, `/getConfigRegister`, `/resetMotorDriver`, `/getStatusList`.
@@ -63,7 +61,6 @@ This file lists the pages of the English documentation. Every link is a path rel
 
 ## Maintenance
 
-- [Maintenance](maintenance/): How to keep the firmware up to date, how to build it, and how to find the cause of a problem.
 - [Firmware update](maintenance/firmware-update/): We update the firmware to fix bugs and to add features.
 - [Compiling the firmware](maintenance/compile-the-arduino-sketch/): To update or customize the firmware, you build it in your own environment and upload it to the board.
 - [Diagnosis via USB serial port](maintenance/usb-serial-diagnosis/): You can connect a computer to the USB connector of the board to check its status and settings.
@@ -73,7 +70,7 @@ This file lists the pages of the English documentation. Every link is a path rel
 
 ## STEP100 / STEP200
 
-- [STEP100 / STEP200](step100-200/): The STEP100 and the STEP200 are do-it-yourself motor drivers: you collect the modules and assemble them yourself.
+- [Overview](step100-200/): The STEP100 and the STEP200 are do-it-yourself motor drivers: you collect the modules and assemble them yourself.
 - [Get the materials](step100-200/get-the-materials/): The STEP100 and the STEP200 are made of an Arduino Zero (or a compatible board), an Ethernet shield and an X-NUCLEO board.
 - [Assemble](step100-200/assemble/): Assemble the STEP100 or the STEP200 in this order.
 - [Prepare the X-NUCLEO board - STEP100](step100-200/assemble/step100/): How to modify the X-NUCLEO-IHM03A1 so that it can be stacked on the Ethernet shield.

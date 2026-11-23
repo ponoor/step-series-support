@@ -245,7 +245,7 @@ class SignedNumberAndLinkTest(unittest.TestCase):
         self.assertEqual(self.kinds("範囲 - 1つ目"), [])
 
     def test_target_of_a_markdown_link_is_not_text(self):
-        self.assertEqual(self.kinds("詳しくは[機能ガイド](../guides/index.md)をご覧ください。"), [])
+        self.assertEqual(self.kinds("詳しくは[機能ガイド](../guides/communication-and-messages.md)をご覧ください。"), [])
         self.assertEqual(self.kinds("詳しくは[`/x`](a.md#x)をご覧ください。"), [])
         self.assertEqual(self.kinds("詳しくは(ここ)をご覧ください。"), ["space"])
 

@@ -50,8 +50,8 @@ The STEP Series communicate with the Open Sound Control (OSC) protocol, so you n
 The pages are of four kinds, by what you come to do. Each kind has the information for that purpose and leaves the rest to the others, and the pages link to each other.
 
 - **Getting started** (this section): the steps for the first time. One path with the minimum of explanation: [Quick start](quickstart.md).
-- **[Connections and settings](../connections/index.md)**: the procedures. Wiring, the network, and how to set up the board.
-- **[Functional guides](../guides/index.md)**: the explanations. How a function works, which commands to use in which order, and what to be careful about.
+- **[Connections and settings](../connections/power-supply-and-motor.md)**: the procedures. Wiring, the network, and how to set up the board.
+- **[Functional guides](../guides/communication-and-messages.md)**: the explanations. How a function works, which commands to use in which order, and what to be careful about.
 - **[OSC reference](../reference/index.md)**: the reference. The exact specification of each command: the arguments, the ranges, the initial values and the replies. Look here to check a value; the values are written only in the reference.
 
-Besides them, [Hardware](../hardware/step400.md) has the data of the boards, [Maintenance](../maintenance/index.md) has the firmware update, the build, the diagnosis and the troubleshooting, and [STEP100 / STEP200](../step100-200/index.md) is the section for the do-it-yourself versions.
+Besides them, [Hardware](../hardware/step400.md) has the data of the boards, [Maintenance](../maintenance/firmware-update.md) has the firmware update, the build, the diagnosis and the troubleshooting, and [STEP100 / STEP200](../step100-200/index.md) is the section for the do-it-yourself versions.

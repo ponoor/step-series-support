@@ -1,8 +1,8 @@
 ---
-title: STEP100 / STEP200
+title: Overview
 ---
 
-# STEP100 / STEP200
+# Overview
 
 The STEP100 and the STEP200 are do-it-yourself motor drivers: you collect the modules and assemble them yourself. This section explains how to get the materials, how to assemble them, how to write the firmware, and how they differ in use.
 

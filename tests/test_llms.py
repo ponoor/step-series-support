@@ -45,7 +45,7 @@ class LlmsTest(unittest.TestCase):
         # what mkdocs makes of them (use_directory_urls: true)
         self.assertTrue(MK["use_directory_urls"])
         self.assertEqual(generate.page_url("index.md"), "./")
-        self.assertEqual(generate.page_url("guides/index.md"), "guides/")
+        self.assertEqual(generate.page_url("reference/index.md"), "reference/")
         self.assertEqual(generate.page_url("guides/servo-mode.md"), "guides/servo-mode/")
         self.assertTrue((DOCS / generate.LLMS_FULL_FILE).is_file())
 
