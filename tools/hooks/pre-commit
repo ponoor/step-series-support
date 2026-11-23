@@ -1,0 +1,22 @@
+#!/bin/sh
+# Pre-commit check of the spec and the generated pages.
+# Turn on (once per clone):  git config core.hooksPath tools/hooks
+root=$(git rev-parse --show-toplevel) || exit 1
+cd "$root" || exit 1
+py=python3
+# python3 may be missing or lack PyYAML (e.g. the Windows Store stub): then use python.
+python3 -c "import yaml" >/dev/null 2>&1 || py=python
+[ -x .venv/bin/python ] && py=.venv/bin/python
+
+if ! "$py" tools/validate_spec.py -q >/dev/null; then
+    echo "pre-commit: validate_spec.py failed. See the places with: python tools/validate_spec.py --ja" >&2
+    exit 1
+fi
+if ! "$py" tools/generate.py --check --defaults both --coverage >/dev/null; then
+    echo "pre-commit: the generated pages are out of date, or a marker is missing, duplicated or misplaced. Run: python tools/generate.py --defaults both --coverage" >&2
+    exit 1
+fi
+if ! "$py" -m unittest tests.test_heading_ids >/dev/null 2>&1; then
+    echo "pre-commit: a ## or ### heading has no id, or the ids differ between en and ja. See: python -m unittest tests.test_heading_ids -v" >&2
+    exit 1
+fi

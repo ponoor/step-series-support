@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{#
+  Slot for the header of ponoor.com: put the markup in partials/header-slot.html.
+  It is rendered above the Material header. The design is not reproduced yet.
+#}
+{% block header %}
+  {% include "partials/header-slot.html" %}
+  {{ super() }}
+{% endblock %}

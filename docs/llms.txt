@@ -1,0 +1,87 @@
+# STEP Series
+
+> Documentation of the STEP400 / STEP800 stepper motor controllers, which you control over Ethernet with OSC (Open Sound Control) messages: the firmware v2.2.0 of the STEP400 and the STEP800 (and of the do-it-yourself STEP100 and STEP200).
+
+This file lists the pages of the English documentation. Every link is a path relative to the top of the site, which is https://example.invalid/step-series/; the Japanese pages are under `ja/` and are not listed here. The full text of the functional guides and the specification of every OSC command, message and configuration item are in llms-full.txt.
+
+## Overview
+
+- [STEP Series](./): The STEP Series are stepper motor drivers that you control over Ethernet with OSC (Open Sound Control) messages.
+
+## Getting started
+
+- [Overview](getting-started/): This page introduces the products of the STEP Series, what you can do with them, the software that sends OSC messages, and how this documentation is organized.
+- [Quick start](getting-started/quickstart/): This page takes a board just out of the box to a motor turning.
+
+## Connections and settings
+
+- [Connections and settings](connections/): This section covers what you do before the first motion: wiring the power supply, motors, switches and the network, and setting up the board.
+- [Power supply and motor](connections/power-supply-and-motor/): How to connect a power supply and a motor to the STEP400 and the STEP800, and how to choose them.
+- [Sensors and switches](connections/sensors-and-switches/): The terminals for the switches and the sensors, their pin assignment, and how to wire a switch or a sensor.
+- [Network and the DIP switch](connections/network-and-dip-switch/): The DIP switch sets the ID of the board.
+- [Electromagnetic brake wiring](connections/electromagnetic-brake-wiring/): How to wire an electromagnetic brake to the STEP400 and the STEP800.
+- [How the settings work](connections/how-settings-work/): Where the settings of the board are, when a change takes effect, and where it is saved.
+- [Configuration with a microSD card](connections/microsd-card/): If you insert a microSD card with a configuration file and start the board, the board is set up with the settings in the file.
+- [Browser configuration tool](connections/browser-config-tool/): The browser configuration tool reads the settings of the board over USB, lets you edit them, and saves them to the microSD card of the board, without removing the card.
+- [Configuration items](connections/configuration-items/): Items of the configuration file (JSON on the microSD card).
+- [Example parameter values for example steppers](connections/example-parameters/): We publish the parameters that we worked out from the datasheets and our measurements for the motors that we have in our lab, as configuration files.
+
+## Functional guides
+
+- [Functional guides](guides/): The functional guides explain how each function of the STEP Series works: the concepts, the states and how they change, and which commands to use in which order.
+- [Communication and messages](guides/communication-and-messages/): This page explains how the board exchanges OSC (Open Sound Control) messages with your computer: how it learns where to send them, what it sends by itself, and what it does with the arguments it receives.
+- [Voltage mode and current mode](guides/voltage-and-current-mode/): A stepper motor can be driven with a constant voltage (voltage mode) or with a constant current (current mode).
+- [Speed profile and types of motor motion](guides/speed-profile-and-motions/): The speed profile sets how fast the motor accelerates, decelerates and turns.
+- [Homing and position management](guides/homing-and-position/): A stepper motor does not know where it is when the board starts.
+- [Servo mode](guides/servo-mode/): The servo mode lets the motor follow a target position that changes in real time.
+- [Electromagnetic brake](guides/electromagnetic-brake/): An electromagnetic brake locks the shaft of the motor when it is not powered.
+- [Alarms and protection](guides/alarms-and-protection/): The driver ICs detect four kinds of alarms: a drop of the supply voltage (UVLO), overtemperature, overcurrent and stall.
+
+## OSC reference
+
+- [OSC command reference: common rules](reference/)
+- [Command list](reference/command-list/): All OSC commands in the order of the reference pages.
+- [System settings](reference/system-settings/): OSC commands `/setDestIp`, `/getVersion`, `/getConfigName`, `/reportError`, `/setConfigName`, `/saveConfig`, `/resetDevice`.
+- [Motor driver settings](reference/motor-driver-settings/): OSC commands `/setMicrostepMode`, `/getMicrostepMode`, `/enableLowSpeedOptimize`, `/setLowSpeedOptimizeThreshold`, `/getLowSpeedOptimizeThreshold`, `/enableBusyReport`, `/getBusy`, `/enableHizReport`, `/getHiZ`, `/enableDirReport`, `/getDir`, `/enableMotorStatusReport`, `/getMotorStatus`, `/setPositionReportInterval`, `/setPositionListReportInterval`, `/getAdcVal`, `/getStatus`, `/getConfigRegister`, `/resetMotorDriver`, `/getStatusList`.
+- [Alarm settings](reference/alarm-settings/): OSC commands `/enableUvloReport`, `/getUvlo`, `/enableThermalStatusReport`, `/getThermalStatus`, `/enableOverCurrentReport`, `/setOverCurrentThreshold`, `/getOverCurrentThreshold`, `/enableStallReport`, `/setStallThreshold`, `/getStallThreshold`, `/setProhibitMotionOnHomeSw`, `/getProhibitMotionOnHomeSw`, `/setProhibitMotionOnLimitSw`, `/getProhibitMotionOnLimitSw`.
+- [Voltage and current mode settings](reference/voltage-and-current-mode-settings/): OSC commands `/setVoltageMode`, `/setKval`, `/getKval`, `/setBemfParam`, `/getBemfParam`, `/setHoldKval`, `/setRunKval`, `/setAccKval`, `/setDecKval`, `/setCurrentMode`, `/setTval`, `/getTval`, `/getTval_mA`, `/setDecayModeParam`, `/getDecayModeParam`, `/setHoldTval`, `/setRunTval`, `/setAccTval`, `/setDecTval`.
+- [Speed profile](reference/speed-profile/): OSC commands `/setSpeedProfile`, `/getSpeedProfile`, `/setFullstepSpeed`, `/getFullstepSpeed`, `/setMaxSpeed`, `/setAcc`, `/setDec`, `/setMinSpeed`, `/getMinSpeed`, `/getSpeed`, `/setSpeedProfileRaw`, `/getSpeedProfileRaw`, `/setMaxSpeedRaw`, `/setMinSpeedRaw`, `/setFullstepSpeedRaw`, `/setAccRaw`, `/setDecRaw`.
+- [Homing](reference/homing/): OSC commands `/homing`, `/getHomingStatus`, `/setHomingDirection`, `/getHomingDirection`, `/setHomingSpeed`, `/getHomingSpeed`, `/goUntil`, `/setGoUntilTimeout`, `/getGoUntilTimeout`, `/releaseSw`, `/setReleaseSwTimeout`, `/getReleaseSwTimeout`.
+- [HOME and LIMIT switches](reference/home-and-limit-sensors/): OSC commands `/enableHomeSwReport`, `/enableSwEventReport`, `/getHomeSw`, `/enableLimitSwReport`, `/getLimitSw`, `/setHomeSwMode`, `/getHomeSwMode`, `/setLimitSwMode`, `/getLimitSwMode`.
+- [Position management](reference/position-management/): OSC commands `/setPosition`, `/getPosition`, `/getPositionList`, `/resetPos`, `/setElPos`, `/getElPos`, `/setMark`, `/getMark`, `/goHome`, `/goMark`.
+- [Motor control](reference/motor-control/): OSC commands `/run`, `/move`, `/goTo`, `/goToDir`, `/softStop`, `/hardStop`, `/softHiZ`, `/hardHiZ`, `/combine/run`, `/combine/move`, `/combine/goTo`, `/combine/goToDir`, `/combine/softStop`, `/combine/hardStop`, `/combine/softHiZ`, `/combine/hardHiZ`, `/runRaw`, `/goUntilRaw`, `/combine/runRaw`.
+- [Electromagnetic brake](reference/brake/): OSC commands `/enableElectromagnetBrake`, `/activate`, `/free`, `/setBrakeTransitionDuration`, `/getBrakeTransitionDuration`, `/getBrakeStatus`.
+- [Servo mode](reference/servo-mode_reference/): OSC commands `/enableServoMode`, `/setServoParam`, `/getServoParam`, `/setTargetPosition`, `/setTargetPositionList`.
+- [Automatically sent messages](reference/automatically-sent-messages/): Messages `/booted`, `/error/osc`, `/error/command`, `/busy`, `/HiZ`, `/dir`, `/motorStatus`, `/homingStatus`, `/position`, `/positionList`, `/homeSw`, `/swEvent`, `/limitSw`, `/uvlo`, `/thermalStatus`, `/overCurrent`, `/stall`.
+- [Differences between STEP400 and STEP800](reference/differences-step400-step800/)
+
+## Hardware
+
+- [STEP400](hardware/step400/): The hardware of the STEP400: the board, its main components, the pin assignment, and the connectors that are not described elsewhere.
+- [STEP800](hardware/step800/): The hardware of the STEP800: the board, its main components, the pin assignment, and the connectors that are not described elsewhere.
+- [EMB-STEP400](hardware/emb-step400/): The EMB-STEP400 is a brake board for the STEP400.
+
+## Maintenance
+
+- [Maintenance](maintenance/): How to keep the firmware up to date, how to build it, and how to find the cause of a problem.
+- [Firmware update](maintenance/firmware-update/): We update the firmware to fix bugs and to add features.
+- [Compiling the firmware](maintenance/compile-the-arduino-sketch/): To update or customize the firmware, you build it in your own environment and upload it to the board.
+- [Diagnosis via USB serial port](maintenance/usb-serial-diagnosis/): You can connect a computer to the USB connector of the board to check its status and settings.
+- [Troubleshooting](maintenance/troubleshooting/): Symptoms, their causes, and what to do.
+- [Firmware changelog](maintenance/changelog/): This page summarizes what changed in each version of the firmware, from the point of view of the people who write OSC clients, make configuration files, use the board, or build the firmware.
+- [Migration guide](maintenance/migration-guide/): This page is for people who update the firmware from v2.1.0 to v2.2.0.
+
+## STEP100 / STEP200
+
+- [STEP100 / STEP200](step100-200/): The STEP100 and the STEP200 are do-it-yourself motor drivers: you collect the modules and assemble them yourself.
+- [Get the materials](step100-200/get-the-materials/): The STEP100 and the STEP200 are made of an Arduino Zero (or a compatible board), an Ethernet shield and an X-NUCLEO board.
+- [Assemble](step100-200/assemble/): Assemble the STEP100 or the STEP200 in this order.
+- [Prepare the X-NUCLEO board - STEP100](step100-200/assemble/step100/): How to modify the X-NUCLEO-IHM03A1 so that it can be stacked on the Ethernet shield.
+- [Prepare the X-NUCLEO board - STEP200](step100-200/assemble/step200/): How to modify the X-NUCLEO-IHM02A1 so that it can be stacked on the Ethernet shield.
+- [Connections](step100-200/assemble/connections/): How to stack the boards, and how to connect the power supply and the motor to the X-NUCLEO board.
+- [Upload the Arduino sketch](step100-200/upload-the-sketch/): How to build the firmware for the STEP100 or the STEP200 and write it to the Arduino.
+- [Usage](step100-200/usage/): The STEP100 and the STEP200 are used in the same way as the STEP400 and the STEP800.
+
+## Optional
+
+- [Full text](llms-full.txt): The OSC commands, the messages of the board and the configuration items in one file, followed by the full text of the functional guides.
