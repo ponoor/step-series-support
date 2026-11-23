@@ -384,14 +384,21 @@ def arg_heading(spec: Spec, cmd_or_msg: dict) -> str:
     return " ".join(parts)
 
 
-def range_text(ctx: Ctx, a: dict, in_message: bool, tight: bool = False) -> str:
+def item_boards(spec: Spec, item: dict | None) -> list[str]:
+    """The boards an item (command, message, configuration item) is documented for, in the order of the spec."""
+    return board_sorted(spec, spec.boards_of(item or {}))
+
+
+def range_text(ctx: Ctx, a: dict, in_message: bool, tight: bool = False, boards: list[str] | None = None) -> str:
+    """boards: the boards of the item; the ranges of the other boards are not shown. With one board left, no board name."""
     spec = ctx.spec
+    boards = boards or spec.board_names
     rng = a.get("range")
     parts = []
     if rng is not None:
         if spec.is_board_map(rng):
-            texts = {b: _rng(spec.for_board(rng, b)) for b in spec.board_names if spec.for_board(rng, b) is not None}
-            if len(set(texts.values())) == 1 and len(texts) == len(spec.board_names):
+            texts = {b: _rng(spec.for_board(rng, b)) for b in boards if spec.for_board(rng, b) is not None}
+            if len(set(texts.values())) == 1 and (len(texts) == len(boards) or len(boards) == 1):
                 parts.append(next(iter(texts.values())))
             else:
                 parts.append(ctx.comma.join(f"{t}{ctx.paren(b)}" for b, t in texts.items()))
@@ -421,8 +428,9 @@ def values_for_board(spec: Spec, values: Any, board: str | None) -> list[dict]:
     return values
 
 
-def render_values_tables(ctx: Ctx, a: dict, name: str) -> list[str]:
-    """Tables of `values` of an argument (one per board if the values are board-specific)."""
+def render_values_tables(ctx: Ctx, a: dict, name: str, boards: list[str] | None = None) -> list[str]:
+    """Tables of `values` of an argument (one per board if the values are board-specific).
+    boards: the boards of the item; the tables of the other boards are not shown, and with one board left there is no board name."""
     spec, L = ctx.spec, ctx.L
     values = a.get("values")
     if not values:
@@ -430,7 +438,9 @@ def render_values_tables(ctx: Ctx, a: dict, name: str) -> list[str]:
     out = []
     variants: list[tuple[str | None, list[dict]]]
     if spec.is_board_map(values):
-        variants = [(b, values[b]) for b in spec.board_names if b in values]
+        variants = [(b, values[b]) for b in (boards or spec.board_names) if b in values]
+        if boards and len(boards) == 1 and len(variants) == 1:
+            variants = [(None, variants[0][1])]
     else:
         variants = [(None, values)]
     for board, items in variants:
@@ -455,6 +465,7 @@ def render_args(ctx: Ctx, item: dict, in_message: bool = False) -> str:
     args = ctx.spec.args(item)
     if not args:
         return L["none"]
+    boards = item_boards(ctx.spec, item)
     rows, extra = [], []
     for a in args:
         name = a.get("name", a.get("use", "?"))
@@ -466,8 +477,8 @@ def render_args(ctx: Ctx, item: dict, in_message: bool = False) -> str:
         if a.get("since"):
             added = ctx.paren(L['added'].format(v=a['since']))
             desc = ctx.join(desc, added.lstrip()) if ctx.lang == "en" else desc + added
-        rows.append([name, arg_type_name(a), range_text(ctx, a, in_message), desc])
-        extra.extend(render_values_tables(ctx, a, a.get("name", name)))
+        rows.append([name, arg_type_name(a), range_text(ctx, a, in_message, boards=boards), desc])
+        extra.extend(render_values_tables(ctx, a, a.get("name", name), boards))
     out = table([L["argument"], L["type"], L["range"], L["description"]], rows)
     if extra:
         out += "\n\n" + "\n\n".join(extra)
@@ -477,12 +488,13 @@ def render_args(ctx: Ctx, item: dict, in_message: bool = False) -> str:
 # ---------------------------------------------------------------------------
 # initial values
 
-def default_texts(ctx: Ctx, a: dict) -> dict[str, str] | None:
-    """{board: text} of the initial value of an (expanded) argument, or None if it has none."""
+def default_texts(ctx: Ctx, a: dict, boards: list[str] | None = None) -> dict[str, str] | None:
+    """{board: text} of the initial value of an (expanded) argument, or None if it has none.
+    boards: the boards of the item; the other boards are left out."""
     spec, L = ctx.spec, ctx.L
     setting = spec.setting(a["setting"]) if "setting" in a else None
     out: dict[str, str] = {}
-    for b in spec.board_names:
+    for b in (boards or spec.board_names):
         if setting is not None and b not in spec.boards_of(setting):
             continue
         base = spec.arg_default(a, b)
@@ -520,14 +532,15 @@ def _with_meaning(ctx: Ctx, a: dict, v: Any, setting: dict | None, board: str) -
 def render_initial(ctx: Ctx, item: dict) -> str:
     spec, L = ctx.spec, ctx.L
     lines = []
+    boards = item_boards(spec, item)
     for a in spec.args(item):
         if a.get("use") == "motorID":
             continue
-        texts = default_texts(ctx, a)
+        texts = default_texts(ctx, a, boards)
         if not texts:
             continue
         name = a.get("name", a.get("use", "?"))
-        if len(set(texts.values())) == 1 and len(texts) == len(spec.board_names):
+        if len(set(texts.values())) == 1 and len(texts) == len(boards):
             body = next(iter(texts.values()))
         elif len(set(texts.values())) == 1 and len(texts) == 1:
             body = next(iter(texts.values()))
@@ -554,7 +567,10 @@ def render_tables(ctx: Ctx, item: dict, level: int = 5) -> list[str]:
         title = ctx.tx(t.get("title"), "table") if t.get("title") else ""
         cols = [ctx.tx(c, "table") for c in t["columns"]]
         rows = t["rows"]
-        variants = [(None, rows)] if isinstance(rows, list) else [(b, rows[b]) for b in spec.board_names if b in rows]
+        boards = item_boards(spec, item)
+        variants = [(None, rows)] if isinstance(rows, list) else [(b, rows[b]) for b in boards if b in rows]
+        if not isinstance(rows, list) and len(boards) == 1 and len(variants) == 1:
+            variants = [(None, variants[0][1])]
         for board, rws in variants:
             head = title + (f" - {board}" if board else "")
             body = table(cols, [[ctx.md(ctx.tx(c, "table")) if not isinstance(c, (int, float, bool)) else fmt(c) for c in r] for r in rws])
@@ -1009,13 +1025,14 @@ def _values_text(ctx: Ctx, values: list[dict], tight: bool = False) -> str:
 def _setting_range(ctx: Ctx, s: dict, tight: bool = False) -> str:
     """Range, unit and the values of a configuration item (the `changes` of a value are not shown)."""
     spec = ctx.spec
-    text = range_text(ctx, {"range": s.get("range"), "unit": s.get("unit")}, True, tight) if (s.get("range") or s.get("unit")) else ""
+    boards = item_boards(spec, s)
+    text = range_text(ctx, {"range": s.get("range"), "unit": s.get("unit")}, True, tight, boards) if (s.get("range") or s.get("unit")) else ""
     values = s.get("values")
     if not values:
         return text
     if spec.is_board_map(values):
-        texts = {b: _values_text(ctx, values[b], tight) for b in spec.board_names if b in values}
-        if len(set(texts.values())) == 1 and len(texts) == len(spec.board_names):
+        texts = {b: _values_text(ctx, values[b], tight) for b in boards if b in values}
+        if len(set(texts.values())) == 1 and (len(texts) == len(boards) or len(boards) == 1):
             vtext = next(iter(texts.values()))
         else:
             vtext = ("<br>" if tight else "; ").join(f"{b}: {t}" for b, t in texts.items())
@@ -1329,12 +1346,14 @@ def _item_notes(ctx: Ctx, item: dict) -> str:
     return strip_markdown_links(" ".join(inline_notes(ctx, item).split()))
 
 
-def _llms_values(ctx: Ctx, a: dict, indent: str) -> list[str]:
+def _llms_values(ctx: Ctx, a: dict, indent: str, boards: list[str] | None = None) -> list[str]:
     spec = ctx.spec
     values = a.get("values")
     if not values:
         return []
-    variants = ([(b, values[b]) for b in spec.board_names if b in values] if spec.is_board_map(values) else [(None, values)])
+    variants = ([(b, values[b]) for b in (boards or spec.board_names) if b in values] if spec.is_board_map(values) else [(None, values)])
+    if boards and len(boards) == 1 and len(variants) == 1:
+        variants = [(None, variants[0][1])]
     lines = []
     for board, items in variants:
         pad = indent
@@ -1360,10 +1379,10 @@ def _llms_args(ctx: Ctx, item: dict, in_message: bool) -> list[str]:
         if a.get("repeat") == "motors":
             name = f"{name}1 ... {name}N"
         facts = [arg_type_name(a)]
-        rng = range_text(ctx, a, in_message)
+        rng = range_text(ctx, a, in_message, boards=item_boards(spec, item))
         if rng:
             facts.append(f"range {rng}")
-        init = default_texts(ctx, a) if not in_message else None
+        init = default_texts(ctx, a, item_boards(spec, item)) if not in_message else None
         if init and a.get("use") != "motorID":
             if len(set(init.values())) == 1:
                 facts.append(f"initial value {next(iter(init.values()))}")
@@ -1377,7 +1396,7 @@ def _llms_args(ctx: Ctx, item: dict, in_message: bool) -> list[str]:
         if a.get("since"):
             desc = (desc + f" Added in v{a['since']}.").strip()
         lines.append(f"- `{name}` ({', '.join(facts)})" + (f": {desc}" if desc else ""))
-        lines += _llms_values(ctx, a, "  ")
+        lines += _llms_values(ctx, a, "  ", item_boards(spec, item))
     return lines
 
 

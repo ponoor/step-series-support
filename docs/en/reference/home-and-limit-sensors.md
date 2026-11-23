@@ -168,7 +168,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800), 255 (all motors) | Motor ID |
+| motorID | int | 1-4, 255 (all motors) | Motor ID |
 | enable | bool |  |  |
 
 `enable`
@@ -198,7 +198,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800) | Motor ID |
+| motorID | int | 1-4 | Motor ID |
 | swState | int |  | Status |
 | direction | int |  | Direction |
 
@@ -231,7 +231,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800), 255 (all motors) | Motor ID |
+| motorID | int | 1-4, 255 (all motors) | Motor ID |
 
 #### Executable timing
 
@@ -253,7 +253,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800) | Motor ID |
+| motorID | int | 1-4 | Motor ID |
 | swState | int |  | Status |
 | direction | int |  | Direction |
 
@@ -363,7 +363,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800), 255 (all motors) | Motor ID |
+| motorID | int | 1-4, 255 (all motors) | Motor ID |
 | SW_MODE | bool |  | Switch mode |
 
 `SW_MODE`
@@ -404,7 +404,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800), 255 (all motors) | Motor ID |
+| motorID | int | 1-4, 255 (all motors) | Motor ID |
 
 #### Executable timing
 
@@ -424,7 +424,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800) | Motor ID |
+| motorID | int | 1-4 | Motor ID |
 | swMode | int | 0-1 |  |
 
 #### See also

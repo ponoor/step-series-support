@@ -18,7 +18,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800), 255 (all motors) | Motor ID |
+| motorID | int | 1-4, 255 (all motors) | Motor ID |
 
 #### Executable timing
 
@@ -342,7 +342,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800), 255 (all motors) | Motor ID |
+| motorID | int | 1-4, 255 (all motors) | Motor ID |
 
 #### Executable timing
 
@@ -379,7 +379,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800), 255 (all motors) | Motor ID |
+| motorID | int | 1-4, 255 (all motors) | Motor ID |
 | holdTVAL | int | 0-64 | TVAL when stopped |
 | runTVAL | int | 0-64 | TVAL in constant speed operation |
 | accTVAL | int | 0-64 | TVAL during acceleration |
@@ -428,7 +428,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800), 255 (all motors) | Motor ID |
+| motorID | int | 1-4, 255 (all motors) | Motor ID |
 
 #### Executable timing
 
@@ -450,7 +450,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800) | Motor ID |
+| motorID | int | 1-4 | Motor ID |
 | holdTVAL | int | 0-64 | TVAL when stopped |
 | runTVAL | int | 0-64 | TVAL in constant speed operation |
 | accTVAL | int | 0-64 | TVAL during acceleration |
@@ -475,7 +475,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800), 255 (all motors) | Motor ID |
+| motorID | int | 1-4, 255 (all motors) | Motor ID |
 
 #### Executable timing
 
@@ -495,7 +495,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800) | Motor ID |
+| motorID | int | 1-4 | Motor ID |
 | holdTVAL_mA | float | 78.125-5078.12 mA | TVAL when stopped |
 | runTVAL_mA | float | 78.125-5078.12 mA | TVAL in constant speed operation |
 | accTVAL_mA | float | 78.125-5078.12 mA | TVAL during acceleration |
@@ -520,7 +520,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800), 255 (all motors) | Motor ID |
+| motorID | int | 1-4, 255 (all motors) | Motor ID |
 | T_FAST | int | 0-255 | T_FAST register value |
 | TON_MIN | int | 0-127 | TON_MIN register value |
 | TOFF_MIN | int | 0-127 | TOFF_MIN register value |
@@ -568,7 +568,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800), 255 (all motors) | Motor ID |
+| motorID | int | 1-4, 255 (all motors) | Motor ID |
 
 #### Executable timing
 
@@ -588,7 +588,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800) | Motor ID |
+| motorID | int | 1-4 | Motor ID |
 | T_FAST | int | 0-255 | T_FAST register value |
 | TON_MIN | int | 0-127 | TON_MIN register value |
 | TOFF_MIN | int | 0-127 | TOFF_MIN register value |
@@ -604,7 +604,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800), 255 (all motors) | Motor ID |
+| motorID | int | 1-4, 255 (all motors) | Motor ID |
 | holdTVAL | int | 0-64 | TVAL when stopped |
 
 #### Executable timing
@@ -638,7 +638,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800), 255 (all motors) | Motor ID |
+| motorID | int | 1-4, 255 (all motors) | Motor ID |
 | runTVAL | int | 0-64 | TVAL in constant speed operation |
 
 #### Executable timing
@@ -672,7 +672,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800), 255 (all motors) | Motor ID |
+| motorID | int | 1-4, 255 (all motors) | Motor ID |
 | accTVAL | int | 0-64 | TVAL during acceleration |
 
 #### Executable timing
@@ -706,7 +706,7 @@ Available on STEP400 only.
 
 | Argument | Type | Range | Description |
 | --- | --- | --- | --- |
-| motorID | int | 1-4 (STEP400), 1-8 (STEP800), 255 (all motors) | Motor ID |
+| motorID | int | 1-4, 255 (all motors) | Motor ID |
 | decTVAL | int | 0-64 | TVAL during deceleration |
 
 #### Executable timing

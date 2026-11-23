@@ -803,3 +803,68 @@ class DifferencePageRuleTest(unittest.TestCase):
         for lang in ("en", "ja"):
             _, s800 = self.only_sections(lang)
             self.assertEqual(s800.strip(), "None." if lang == "en" else "なし。")
+
+
+class BoardRestrictedItemTest(unittest.TestCase):
+    """An item that is limited to some boards (`boards`) does not show the ranges, values or initial values of the other boards."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.pages: dict[str, str] = {}
+        with tempfile.TemporaryDirectory() as tmp:
+            docs = Path(tmp) / "docs"
+            for lang in ("en", "ja"):
+                page = docs / lang / "reference" / "all.md"
+                page.parent.mkdir(parents=True)
+                marks = [f"<!-- osc: {c['address']} -->" for c in SPEC.commands]
+                marks += [f"<!-- osc-message: {a} -->" for a in generate.standalone_messages(SPEC)]
+                page.write_text("# all\n\n" + "\n\n".join(marks) + "\n", encoding="utf-8")
+            out = io.StringIO()
+            assert generate.run(docs, SPEC, out=out) == 0, out.getvalue()
+            for lang in ("en", "ja"):
+                cls.pages[lang] = (docs / lang / "reference" / "all.md").read_text(encoding="utf-8")
+
+    def block(self, lang: str, addr: str) -> str:
+        """The block of a command: from its heading to the next command."""
+        text = self.pages[lang].split(f"### `{addr}`", 1)[1]
+        text = re.split(r"\n### ", text, maxsplit=1)[0]
+        return text
+
+    def argument_table(self, lang: str, addr: str) -> str:
+        block = self.block(lang, addr)
+        head = "#### Argument" if lang == "en" else "#### 引数"
+        return re.split(r"\n#### ", block.split(head, 1)[1], maxsplit=1)[0]
+
+    def test_step400_only_command_shows_the_range_of_step400_only(self):
+        for lang in ("en", "ja"):
+            table = self.argument_table(lang, "/setCurrentMode")
+            self.assertRegex(table, r"\| motorID \| int \| 1-4(, |、)255", lang)
+            self.assertNotIn("STEP800", table)
+            self.assertNotIn("1-8", table)
+            self.assertNotIn("STEP400", table)
+
+    def test_no_board_name_in_the_argument_and_initial_value_parts_of_a_one_board_item(self):
+        for addr in [c["address"] for c in SPEC.commands if len(SPEC.boards_of(c)) == 1]:
+            only = SPEC.boards_of(SPEC.command(addr))[0]
+            others = [b for b in SPEC.board_names if b != only]
+            for lang in ("en", "ja"):
+                block = self.block(lang, addr)
+                parts = [self.argument_table(lang, addr)]
+                for head in ("#### Initial value", "#### 初期値"):
+                    if head in block:
+                        parts.append(re.split(r"\n#### ", block.split(head, 1)[1], maxsplit=1)[0])
+                for part in parts:
+                    for b in others:
+                        self.assertNotIn(b, part, f"{addr} {lang}")
+
+    def test_command_for_both_boards_keeps_both_ranges(self):
+        for lang, form in (("en", "1-4 (STEP400), 1-8 (STEP800), 255 (all motors)"), ("ja", "1-4（STEP400）、1-8（STEP800）、255（全モータ）")):
+            self.assertIn(form, self.argument_table(lang, "/getMotorStatus"), lang)
+
+    def test_range_text_of_a_board_map(self):
+        ctx = generate.Ctx(SPEC, "en", "both", Counter(), [])
+        a = {"range": {"STEP400": [1, 4], "STEP800": [1, 8]}, "all": 255}
+        self.assertEqual(generate.range_text(ctx, a, False), "1-4 (STEP400), 1-8 (STEP800), 255 (all motors)")
+        self.assertEqual(generate.range_text(ctx, a, False, boards=["STEP400"]), "1-4, 255 (all motors)")
+        self.assertEqual(generate.range_text(ctx, a, False, boards=["STEP800"]), "1-8, 255 (all motors)")
+        self.assertEqual(generate.range_text(ctx, a, True, boards=["STEP400"]), "1-4")

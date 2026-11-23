@@ -296,7 +296,7 @@ STEP400のみ。
 
 | 引数 | 型 | 範囲 | 説明 |
 | --- | --- | --- | --- |
-| motorID | int | 1-4（STEP400）、1-8（STEP800） | モータのID |
+| motorID | int | 1-4 | モータのID |
 | swState | int |  | 状態 |
 | direction | int |  | 方向 |
 

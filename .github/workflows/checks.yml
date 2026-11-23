@@ -27,7 +27,7 @@ jobs:
       - name: Validate the spec and the Japanese texts
         run: python tools/validate_spec.py --ja
       - name: Generated pages are up to date
-        run: python tools/generate.py --check --coverage
+        run: python tools/generate.py --check --defaults both --coverage
       - name: Tests
         run: pytest -q
       - name: Build the site

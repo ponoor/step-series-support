@@ -476,7 +476,7 @@ Group: Motor driver settings. Signature: `/getAdcVal (int)motorID`. Available on
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 
 Description:
 
@@ -820,7 +820,7 @@ Group: Alarm settings. Signature: `/setProhibitMotionOnLimitSw (int)motorID (boo
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 - `enable` (bool, initial value false (Allow), configuration item `driverSettings.prohibitMotionOnLimitSw`)
   - `1`: Prohibit
   - `0`: Allow
@@ -837,7 +837,7 @@ Group: Alarm settings. Signature: `/getProhibitMotionOnLimitSw (int)motorID`. Av
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 
 Description:
 
@@ -855,7 +855,7 @@ Group: Voltage and current mode settings. Signature: `/setVoltageMode (int)motor
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 
 Description:
 
@@ -1048,7 +1048,7 @@ Group: Voltage and current mode settings. Signature: `/setCurrentMode (int)motor
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 
 Description:
 
@@ -1074,7 +1074,7 @@ Group: Voltage and current mode settings. Signature: `/setTval (int)motorID (int
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 - `holdTVAL` (int, range 0-64, initial value 0 (78.125mA), configuration item `currentMode.TVAL_HOLD`): TVAL when stopped
 - `runTVAL` (int, range 0-64, initial value 16 (1.328A), configuration item `currentMode.TVAL_RUN`): TVAL in constant speed operation
 - `accTVAL` (int, range 0-64, initial value 16 (1.328A), configuration item `currentMode.TVAL_ACC`): TVAL during acceleration
@@ -1097,7 +1097,7 @@ Group: Voltage and current mode settings. Signature: `/getTval (int)motorID`. Av
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 
 Description:
 
@@ -1121,7 +1121,7 @@ Group: Voltage and current mode settings. Signature: `/getTval_mA (int)motorID`.
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 
 Description:
 
@@ -1143,7 +1143,7 @@ Group: Voltage and current mode settings. Signature: `/setDecayModeParam (int)mo
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 - `T_FAST` (int, range 0-255, initial value 25, configuration item `currentMode.T_FAST`): T_FAST register value
 - `TON_MIN` (int, range 0-127, initial value 41, configuration item `currentMode.TON_MIN`): TON_MIN register value
 - `TOFF_MIN` (int, range 0-127, initial value 41, configuration item `currentMode.TOFF_MIN`): TOFF_MIN register value
@@ -1174,7 +1174,7 @@ Group: Voltage and current mode settings. Signature: `/getDecayModeParam (int)mo
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 
 Description:
 
@@ -1190,7 +1190,7 @@ Group: Voltage and current mode settings. Signature: `/setHoldTval (int)motorID 
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 - `holdTVAL` (int, range 0-64, initial value 0 (78.125mA), configuration item `currentMode.TVAL_HOLD`): TVAL when stopped
 
 Description:
@@ -1209,7 +1209,7 @@ Group: Voltage and current mode settings. Signature: `/setRunTval (int)motorID (
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 - `runTVAL` (int, range 0-64, initial value 16 (1.328A), configuration item `currentMode.TVAL_RUN`): TVAL in constant speed operation
 
 Description:
@@ -1228,7 +1228,7 @@ Group: Voltage and current mode settings. Signature: `/setAccTval (int)motorID (
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 - `accTVAL` (int, range 0-64, initial value 16 (1.328A), configuration item `currentMode.TVAL_ACC`): TVAL during acceleration
 
 Description:
@@ -1247,7 +1247,7 @@ Group: Voltage and current mode settings. Signature: `/setDecTval (int)motorID (
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 - `decTVAL` (int, range 0-64, initial value 16 (1.328A), configuration item `currentMode.TVAL_DEC`): TVAL during deceleration
 
 Description:
@@ -1989,7 +1989,7 @@ Group: HOME and LIMIT switches. Signature: `/enableLimitSwReport (int)motorID (b
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 - `enable` (bool, initial value false (Disable), configuration item `alarmAndReport.reportLimitSwStatus`)
   - `1`: Enable
   - `0`: Disable
@@ -2008,7 +2008,7 @@ Group: HOME and LIMIT switches. Signature: `/getLimitSw (int)motorID`. Available
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 
 Description:
 
@@ -2069,7 +2069,7 @@ Group: HOME and LIMIT switches. Signature: `/setLimitSwMode (int)motorID (bool)S
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 - `SW_MODE` (bool, initial value true (User disposal (Does not stop)), configuration item `driverSettings.limitSwMode`): Switch mode
   - `0`: HardStop interrupt (Immediate stop)
   - `1`: User disposal (Does not stop)
@@ -2090,7 +2090,7 @@ Group: HOME and LIMIT switches. Signature: `/getLimitSwMode (int)motorID`. Avail
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800), 255 (all motors)): Motor ID
+- `motorID` (int, range 1-4, 255 (all motors)): Motor ID
 
 Description:
 
@@ -3387,7 +3387,7 @@ Signature: `/prohibitMotionOnLimitSw (int)motorID (int)enable`. Available on STE
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800)): Motor ID
+- `motorID` (int, range 1-4): Motor ID
 - `enable` (int)
   - `1`: Prohibited
   - `0`: Allowed
@@ -3422,7 +3422,7 @@ Signature: `/tval (int)motorID (int)holdTVAL (int)runTVAL (int)accTVAL (int)decT
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800)): Motor ID
+- `motorID` (int, range 1-4): Motor ID
 - `holdTVAL` (int, range 0-64): TVAL when stopped
 - `runTVAL` (int, range 0-64): TVAL in constant speed operation
 - `accTVAL` (int, range 0-64): TVAL during acceleration
@@ -3434,7 +3434,7 @@ Signature: `/tval_mA (int)motorID (float)holdTVAL_mA (float)runTVAL_mA (float)ac
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800)): Motor ID
+- `motorID` (int, range 1-4): Motor ID
 - `holdTVAL_mA` (float, range 78.125-5078.12 mA): TVAL when stopped
 - `runTVAL_mA` (float, range 78.125-5078.12 mA): TVAL in constant speed operation
 - `accTVAL_mA` (float, range 78.125-5078.12 mA): TVAL during acceleration
@@ -3446,7 +3446,7 @@ Signature: `/decayModeParam (int)motorID (int)T_FAST (int)TON_MIN (int)TOFF_MIN`
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800)): Motor ID
+- `motorID` (int, range 1-4): Motor ID
 - `T_FAST` (int, range 0-255): T_FAST register value
 - `TON_MIN` (int, range 0-127): TON_MIN register value
 - `TOFF_MIN` (int, range 0-127): TOFF_MIN register value
@@ -3575,7 +3575,7 @@ Signature: `/limitSw (int)motorID (int)swState (int)direction`. Available on STE
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800)): Motor ID
+- `motorID` (int, range 1-4): Motor ID
 - `swState` (int): Status
   - `0`: Open, Undetected state
   - `1`: Closed, Detected state
@@ -3598,7 +3598,7 @@ Signature: `/limitSwMode (int)motorID (int)swMode`. Available on STEP400 only.
 
 Arguments:
 
-- `motorID` (int, range 1-4 (STEP400), 1-8 (STEP800)): Motor ID
+- `motorID` (int, range 1-4): Motor ID
 - `swMode` (int, range 0-1)
 
 #### /elPos
