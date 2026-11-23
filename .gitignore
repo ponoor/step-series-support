@@ -14,3 +14,4 @@ REPORT_*.md
 .venv/
 /site/
 __pycache__/
+/site-preview/
