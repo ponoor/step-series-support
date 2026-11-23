@@ -56,7 +56,7 @@ The settings `/setHomeSwMode` and `/setLimitSwMode` do not invert the signal; th
 
 ### Example: the photo interrupter EE-SX671A {#ee-sx671a}
 
-The connection of the photo interrupter [EE-SX671A](http://www.ia.omron.com/product/item/2219/) of Omron is as follows.
+The connection of the photo interrupter EE-SX671A of Omron is as follows.
 
 ![EE-SX671A Diagram](../../assets/images/ee-sx67.jpeg)
 

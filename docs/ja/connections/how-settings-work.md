@@ -10,7 +10,7 @@ title: 設定の仕組み
 
 - **microSDカードの設定ファイル。** ボードが起動するときに読みます。ファイルは、PCで作ることも、ブラウザ設定ツールで作ることもできます。
 - **ブラウザ設定ツール。** USBでボードから設定を読み、編集した設定を適用して、カードに保存します。
-- **OSCコマンド。** 動いているボードの値を、すぐに変えます。[`/saveConfig`](../reference/system-settings.md#saveconfig)で、使用中の値をカードに保存します。
+- **OSCコマンド。** ボードが使用中の値を、すぐに変えます。[`/saveConfig`](../reference/system-settings.md#saveconfig)で、使用中の値をカードに保存します。
 
 設定ファイルのすべての項目は、変更するコマンドとともに、[設定項目一覧](configuration-items.md)にあります。
 
@@ -51,7 +51,7 @@ title: 設定の仕組み
 | `destIp`、`canSendMsgBeforeDestIp`、`reportError`（送信先を決める通常の方法は[`/setDestIp`](../reference/system-settings.md#setdestip)） | すぐ |
 | レポートのスイッチと間隔、原点復帰（方向、速度、タイムアウト、動作の禁止）、LIMITスイッチの設定、ブレーキの設定（下記）、サーボモード（kP、kI、kD） | すぐ |
 | `bootedMsgEnable`、起動時の原点復帰 | 次の起動のとき |
-| HOMEスイッチのモード | 2つに分かれる。サーボモード中のHOMEスイッチによる停止は、ファームウェアが新しい値をすぐに使う。ドライバは、ボードが起動するときにこの値をドライバのレジスタに書くので（次の行の設定と同じ）、次の再起動から新しい値を使う。従って、サーボモード以外のときのHOMEスイッチによる停止は、次の再起動で変わる |
+| HOMEスイッチのモード | 2つに分かれる。サーボモード中のHOMEスイッチによる停止は、ファームウェアが新しい値をすぐに使う。ボードは起動するときにこの値をドライバのレジスタに書くので（次の行の設定と同じ）、ドライバが新しい値を使うのは次の再起動から。従って、サーボモード以外のときのHOMEスイッチによる停止は、次の再起動で変わる |
 | ボードがドライバに書く設定（スピードプロファイル、電圧モードと電流モード（KVAL、TVAL、BEMFなど）、最小速度と低速最適化、マイクロステップモード、スルーレート、過電流とストールの閾値） | 次の再起動のとき。ボードは、起動するときにドライバのレジスタに書く。[`/resetMotorDriver`](../reference/motor-driver-settings.md#resetmotordriver)でも、もう一度書く |
 
 ブレーキの設定`electromagnetBrakeEnable`は、ドライバが無励磁のときだけオンにできます。オフにできるのは、ドライバが無励磁で、ブレーキが保持されているとき（または`/free`のあと）だけです。そうでないときは、USBシリアルに警告を表示して、古い値のままにします（保存されるのは、変わらなかった値です）。保存したあとに、設定を読み直して確かめてください。
@@ -85,7 +85,7 @@ title: 設定の仕組み
 | [`/getConfigName`](../reference/system-settings.md#getconfigname) | - | `/configName`を返します。設定名、microSDカードを使えたか、設定ファイルを開けたか・解析できたか、設定ファイルのパスが含まれます。 |
 | [`/setConfigName`](../reference/system-settings.md#setconfigname) | (string)configName | ボードに保存される設定名を設定します。設定を見分けるためにユーザが自由に編集できるラベルで、ディスク上のファイル名とは別のものです。 |
 | [`/saveConfig`](../reference/system-settings.md#saveconfig) | - | 使用中の設定を、JSONファイルとしてmicroSDカードに保存します。保存先は、起動時に読み込んだファイルです。ファイルを読み込まなかったときは`/config.txt`です。USBシリアルの`F<path>`で、保存先のパスを変えられます。 |
-| [`/resetDevice`](../reference/system-settings.md#resetdevice) | - | ボード全体をリセットします。ボード上のリセットスイッチを押した場合と同じ動作です。 |
+| [`/resetDevice`](../reference/system-settings.md#resetdevice) | - | ボード全体をリセットします。ボード上のRESETスイッチを押した場合と同じ動作です。 |
 <!-- generated:end osc-related /getConfigName, /setConfigName, /saveConfig, /resetDevice -->
 
 <!-- osc-settings: information -->

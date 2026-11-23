@@ -32,7 +32,7 @@ M3用の取付穴が、基板の各隅と中央付近の5か所にあります�
 | MCU | Microchip | [ATSAMD21G18A](https://www.microchip.com/wwwproducts/en/ATsamd21g18) |
 | Ethernetコントローラ | Wiznet | [W5500](https://www.wiznet.io/product-item/w5500/) |
 | ステッピングモータドライバ | STMicroelectronics | [L6470](https://www.st.com/ja/motor-drivers/L6470.html) |
-| DC-DCコンバータ | CUI | [P78E05-1000](https://www.jp.cui.com/product/dc-dc-converters/non-isolated/p78e-1000-series) |
+| DC-DCコンバータ | CUI | P78E05-1000 |
 
 ### ピン割り振り {#pins}
 

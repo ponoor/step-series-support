@@ -15,7 +15,7 @@ lang: ja
 | --- | --- | --- |
 | <a id="information-configname"></a>`configName`<br>Configuration name | string<br>Default（ファームウェア）、""（テンプレート） | 設定ファイルの名称で、自由に設定できます。コマンド: [`/setConfigName`](../reference/system-settings.md#setconfigname) |
 | <a id="information-configversion"></a>`configVersion`<br>Configuration version | version<br>0.0（ファームウェア）、1.2（テンプレート） | 設定ファイルの形式のバージョンです。これがない`.json`ファイルは受け付けられません（`config.txt`は、これがなくても受け付けられます）。変更できません。 |
-| <a id="information-targetproduct"></a>`targetProduct`<br>Target product | string<br>STEP400: ---（ファームウェア）、STEP400（テンプレート）; STEP800: ---（ファームウェア）、STEP800（テンプレート） | 設定ファイルの対象機種名で、変更できません。 |
+| <a id="information-targetproduct"></a>`targetProduct`<br>Target product | string<br>STEP400: ---（ファームウェア）、STEP400（テンプレート）<br>STEP800: ---（ファームウェア）、STEP800（テンプレート） | 設定ファイルの対象機種名で、変更できません。 |
 
 ## network {#network}
 
@@ -30,7 +30,7 @@ lang: ja
 | <a id="network-inport"></a>`inPort`<br>Incoming port | int<br>50000 | ボードがOSCを受信するポート番号です。 |
 | <a id="network-outport"></a>`outPort`<br>Outgoing port | int<br>50100 | ボードがOSCを送信するポート番号です。`ID adds to Outgoing port`にチェックが入っていると、この数値にIDが加算されます。 |
 | <a id="network-isoutportaddid"></a>`isOutPortAddId`<br>ID adds to Outgoing port | bool<br>true | IDを加算したポート番号が65535を超える場合は、IDを加算せず、設定したポート番号をそのまま使い、USBシリアルにメッセージを表示します。 |
-| <a id="network-mac"></a>`mac`<br>MAC address | mac<br>STEP400: 60:95:CE:10:06:00（ファームウェア）、60:95:CE:10:02:00（テンプレート）; STEP800: 60:95:CE:10:06:00（ファームウェア）、60:95:CE:10:03:00（テンプレート） | `Hex`チェックボックスで、16進数表示と10進数表示を切替できます。 |
+| <a id="network-mac"></a>`mac`<br>MAC address | mac<br>STEP400: 60:95:CE:10:06:00（ファームウェア）、60:95:CE:10:02:00（テンプレート）<br>STEP800: 60:95:CE:10:06:00（ファームウェア）、60:95:CE:10:03:00（テンプレート） | `Hex`チェックボックスで、16進数表示と10進数表示を切替できます。 |
 | <a id="network-ismacaddid"></a>`isMacAddId`<br>ID adds to MAC address | bool<br>true | このチェックボックスが入っていると、MACアドレスの最終バイトにIDが加算されます。 |
 | <a id="network-bootedmsgenable"></a>`bootedMsgEnable`<br>Booted message enable | bool<br>true | 起動時にイーサネットがリンクすると自動で送られる[`/booted`](../reference/automatically-sent-messages.md#booted)メッセージの有効無効を切り替えます。 |
 | <a id="network-cansendmsgbeforedestip"></a>`canSendMsgBeforeDestIp`<br>Allow OSC reply before /setDestIp | bool<br>false | 初期状態では`/setDestIp`を受信するまではOSCメッセージの送信を行わないようになっていますが、このチェックボックスが入っていると、起動してすぐからOSCメッセージを送信するようにします。v2.2.0の既知の問題: 動作中のボードは、「`/setDestIp`を受信したか」をこの設定と同じ値で持っています。`/setDestIp`を受信した後に設定を保存する（[`/saveConfig`](../reference/system-settings.md#saveconfig)、またはブラウザ設定ツールでの保存）と、カードに`true`が書かれます。ブラウザ設定ツールで`false`を書き込むと、使用中の値も`false`に戻り、`/setDestIp`を送り直すまで、ボードは返信を送りません。回避策: 保存の後に`/setDestIp`を送り直し、保存したファイルの値を確かめてください。 |
@@ -53,14 +53,14 @@ lang: ja
 | <a id="alarmandreport-reportstall"></a>`reportStall`<br>Report motor stall detection（モータごと） | bool<br>false | ストール検出は、モータが負荷に負けて回れなくなった状態を、ドライバが電流から検出する機能です。閾値（[`/setStallThreshold`](../reference/alarm-settings.md#setstallthreshold)）は、実際に流れている電流にできるだけ近く、少し上になるように探って決めます。脱調（ステップのずれ）程度の小さなずれは検出できませんが、位置が大きくずれたときには検出できることがあります。コマンド: [`/enableStallReport`](../reference/alarm-settings.md#enablestallreport) |
 | <a id="alarmandreport-reportpositioninterval"></a>`reportPositionInterval`<br>Report position interval（モータごと） | int<br>0 | 範囲: 0-65535ms。各モータの位置を通知する間隔（[`/position`](../reference/automatically-sent-messages.md#position)）です。0にすると通知を止めます。設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。範囲外の値は、最大値の次を0として数え直した値になります（65536は0になって位置レポートが止まり、65537は1、-1は65535になります）。[`/setPositionReportInterval`](../reference/motor-driver-settings.md#setpositionreportinterval)は65535を超える値を`CommandIgnored`で拒否し、負の値では通知を止めます。コマンド: [`/setPositionReportInterval`](../reference/motor-driver-settings.md#setpositionreportinterval) |
 | <a id="alarmandreport-reportpositionlistinterval"></a>`reportPositionListInterval`<br>Report position list interval | int<br>0 | 範囲: 0-65535ms。位置のリスト通知（[`/positionList`](../reference/automatically-sent-messages.md#positionlist)）の間隔です。0にすると通知を止めます。0より大きくすると、モータごとの位置レポート（[`/position`](../reference/automatically-sent-messages.md#position)）は止まります。設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。範囲外の値は、最大値の次を0として数え直した値になります（65536は0、65537は1、-1は65535になります）。[`/setPositionListReportInterval`](../reference/motor-driver-settings.md#setpositionlistreportinterval)は65535を超える値を`CommandIgnored`で拒否します。コマンド: [`/setPositionListReportInterval`](../reference/motor-driver-settings.md#setpositionlistreportinterval) |
-| <a id="alarmandreport-octhreshold"></a>`OCThreshold`<br>Overcurrent threshold（モータごと） | int<br>STEP400: 15（5A）; STEP800: 7（3A） | コマンド: [`/setOverCurrentThreshold`](../reference/alarm-settings.md#setovercurrentthreshold) |
+| <a id="alarmandreport-octhreshold"></a>`OCThreshold`<br>Overcurrent threshold（モータごと） | int<br>STEP400: 15（5A）<br>STEP800: 7（3A） | コマンド: [`/setOverCurrentThreshold`](../reference/alarm-settings.md#setovercurrentthreshold) |
 
 ## driverSettings {#driversettings}
 
 | キー / 名称 | 型 / 初期値 | 説明 |
 | --- | --- | --- |
 | <a id="driversettings-homingatstartup"></a>`homingAtStartup`<br>Homing when the system starts（モータごと） | bool<br>false | このチェックボックスが入っていると、起動すると直ちに原点復帰動作を行います。電磁ブレーキが有効なときは、[`/activate`](../reference/brake.md#activate)と同じようにブレーキを先に解放し、解放が終わってから原点復帰を始めます。**v2.2.0**: 電磁ブレーキが有効なときは、[`/activate`](../reference/brake.md#activate)と同じようにブレーキを先に解放し、解放が終わってから原点復帰を始めます。以前は、ブレーキが保持されたままだったため原点復帰が失敗し、原点復帰のタイムアウトで無励磁のモータに即停止が送られていました。 |
-| <a id="driversettings-homingdirection"></a>`homingDirection`<br>Homing Direction（モータごと） | int<br>0（逆転方向） | 値: 1: 正転方向, 0: 逆転方向。コマンド: [`/setHomingDirection`](../reference/homing.md#sethomingdirection) |
+| <a id="driversettings-homingdirection"></a>`homingDirection`<br>Homing Direction（モータごと） | int<br>0（逆転方向） | 値: 1: 正転方向、0: 逆転方向。コマンド: [`/setHomingDirection`](../reference/homing.md#sethomingdirection) |
 | <a id="driversettings-homingspeed"></a>`homingSpeed`<br>Homing Speed（モータごと） | float<br>50 | 単位: step/s。コマンド: [`/setHomingSpeed`](../reference/homing.md#sethomingspeed) |
 | <a id="driversettings-homeswmode"></a>`homeSwMode`<br>Home switch won't cause HardStop（モータごと） | bool<br>true | コマンド: [`/setHomeSwMode`](../reference/home-and-limit-sensors.md#sethomeswmode) |
 | <a id="driversettings-prohibitmotiononhomesw"></a>`prohibitMotionOnHomeSw`<br>Prohibit motions on HomeSw（モータごと） | bool<br>false | コマンド: [`/setProhibitMotionOnHomeSw`](../reference/alarm-settings.md#setprohibitmotiononhomesw) |
@@ -70,7 +70,7 @@ lang: ja
 | <a id="driversettings-releaseswtimeout"></a>`releaseSwTimeout`<br>releaseSw timeout duration（モータごと） | int<br>10000 | 単位: ms。コマンド: [`/setReleaseSwTimeout`](../reference/homing.md#setreleaseswtimeout) |
 | <a id="driversettings-stepmode"></a>`stepMode`<br>Microstepping mode（モータごと） | int<br>7 | コマンド: [`/setMicrostepMode`](../reference/motor-driver-settings.md#setmicrostepmode) |
 | <a id="driversettings-iscurrentmode"></a>`isCurrentMode`<br>Current mode（モータごと）（STEP400のみ） | bool<br>false | コマンド: [`/setVoltageMode`](../reference/voltage-and-current-mode-settings.md#setvoltagemode), [`/setCurrentMode`](../reference/voltage-and-current-mode-settings.md#setcurrentmode) |
-| <a id="driversettings-slewrate"></a>`slewRate`<br>Slew rate（モータごと） | int<br>STEP400: 5（980V/us）; STEP800: 2（530V/us） | 範囲: 0-5（STEP400）、0-2（STEP800）<br>STEP400: 0: 114V/us, 1: 220V/us, 2: 400V/us, 3: 520V/us, 4: 790V/us, 5: 980V/us; STEP800: 0: 180V/us, 1: 290V/us, 2: 530V/us。モータドライバから出力されるモータ制御電流のスリューレート（立ち上がりの鋭さ）をSTEP400では6段階、STEP800では3段階で指定します。設定ファイルの範囲外の値は拒否されず、範囲内に制限されます（負の値は0、大きい値は最大の値になります）。 |
+| <a id="driversettings-slewrate"></a>`slewRate`<br>Slew rate（モータごと） | int<br>STEP400: 5（980V/us）<br>STEP800: 2（530V/us） | 範囲: 0-5（STEP400）、0-2（STEP800）<br>STEP400: 0: 114V/us、1: 220V/us、2: 400V/us、3: 520V/us、4: 790V/us、5: 980V/us<br>STEP800: 0: 180V/us、1: 290V/us、2: 530V/us。モータドライバから出力されるモータ制御電流のスリューレート（立ち上がりの鋭さ）をSTEP400では6段階、STEP800では3段階で指定します。設定ファイルの範囲外の値は拒否されず、範囲内に制限されます（負の値は0、大きい値は最大の値になります）。 |
 | <a id="driversettings-electromagnetbrakeenable"></a>`electromagnetBrakeEnable`<br>Electromagnetic brake enable（モータごと） | bool<br>false | コマンド: [`/enableElectromagnetBrake`](../reference/brake.md#enableelectromagnetbrake) |
 | <a id="driversettings-braketransitionduration"></a>`brakeTransitionDuration`<br>Brake transition duration（モータごと） | int<br>100 | 範囲: 0-65535ms。電磁ブレーキの解放や保持を待つ時間です。[`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration)を参照してください。設定ファイルの読み込み時（およびUSBシリアルからの書き込み時）には、範囲は検査されません。範囲外の値は、最大値の次を0として数え直した値になります（65536は0、65537は1、-1は65535になります）。[`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration)はこのような値を`CommandIgnored`で拒否します。コマンド: [`/setBrakeTransitionDuration`](../reference/brake.md#setbraketransitionduration) |
 
@@ -96,7 +96,7 @@ lang: ja
 | <a id="voltagemode-st_slp"></a>`ST_SLP`<br>ST_SLP（モータごと） | int<br>25 | コマンド: [`/setBemfParam`](../reference/voltage-and-current-mode-settings.md#setbemfparam) |
 | <a id="voltagemode-fn_slp_acc"></a>`FN_SLP_ACC`<br>FN_SLP_ACC（モータごと） | int<br>41 | コマンド: [`/setBemfParam`](../reference/voltage-and-current-mode-settings.md#setbemfparam) |
 | <a id="voltagemode-fn_slp_dec"></a>`FN_SLP_DEC`<br>FN_SLP_DEC（モータごと） | int<br>41 | コマンド: [`/setBemfParam`](../reference/voltage-and-current-mode-settings.md#setbemfparam) |
-| <a id="voltagemode-stall_th"></a>`STALL_TH`<br>STALL_TH（モータごと） | int<br>STEP400: 31（10A）; STEP800: 127（4A） | コマンド: [`/setStallThreshold`](../reference/alarm-settings.md#setstallthreshold) |
+| <a id="voltagemode-stall_th"></a>`STALL_TH`<br>STALL_TH（モータごと） | int<br>STEP400: 31（10A）<br>STEP800: 127（4A） | コマンド: [`/setStallThreshold`](../reference/alarm-settings.md#setstallthreshold) |
 | <a id="voltagemode-lowspeedoptimizeenable"></a>`lowSpeedOptimizeEnable`<br>Low speed optimize enable（モータごと） | bool<br>false | コマンド: [`/enableLowSpeedOptimize`](../reference/motor-driver-settings.md#enablelowspeedoptimize) |
 | <a id="voltagemode-lowspeedoptimize"></a>`lowSpeedOptimize`<br>lowSpeedOptimize（モータごと） | float<br>20 | 単位: step/s。コマンド: [`/setLowSpeedOptimizeThreshold`](../reference/motor-driver-settings.md#setlowspeedoptimizethreshold) |
 

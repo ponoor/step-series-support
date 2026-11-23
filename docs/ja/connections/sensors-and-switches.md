@@ -56,7 +56,7 @@ STEP400とSTEP800の各軸には、スイッチやセンサをつなぐHOME端�
 
 ### 例: フォトマイクロセンサEE-SX671A {#ee-sx671a}
 
-オムロンのフォトマイクロセンサ[EE-SX671A](http://www.ia.omron.com/product/item/2219/)をつなぐ例です。
+オムロンのフォトマイクロセンサEE-SX671Aをつなぐ例です。
 
 ![EE-SX671Aの接続図](../../assets/images/ee-sx67.jpeg)
 
