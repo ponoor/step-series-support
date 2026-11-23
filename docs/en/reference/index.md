@@ -1,8 +1,8 @@
 ---
-title: "OSC command reference: common rules"
+title: Common rules
 ---
 
-# OSC command reference: common rules
+# Common rules
 
 ## Overview {#overview}
 

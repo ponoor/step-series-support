@@ -160,7 +160,7 @@ KVALを上げるとトルクが上がりますが、モータの発熱が大き�
 - 調整した設定を、ボードを再起動しても残るように保存する: [`/saveConfig`](../reference/system-settings.md#saveconfig)と[設定の仕組み](../connections/how-settings-work.md)。
 - 複数のボードを使う: DIPスイッチでIDを変えます。[IPアドレスとポートへのIDの加算](../connections/network-and-dip-switch.md#adding-id)。
 - モータの基準の位置を見つける: [原点復帰と位置管理](../guides/homing-and-position.md)。
-- 各機能の仕組みを知る: [機能ガイド](../guides/index.md)。
+- 各機能の仕組みを知る: [機能ガイド](../guides/communication-and-messages.md)。
 - コマンドを調べる: [OSCリファレンス](../reference/index.md)。
 
 ## 関連するコマンドと設定項目 {#related}

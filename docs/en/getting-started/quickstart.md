@@ -160,7 +160,7 @@ We calculated the values for some motors and made configuration files of them. S
 - Save the settings that you adjusted so that they are kept after the board restarts: [`/saveConfig`](../reference/system-settings.md#saveconfig) and [How the settings work](../connections/how-settings-work.md).
 - Use more than one board: change the ID with the DIP switch. [Adding the ID to the IP address and the port](../connections/network-and-dip-switch.md#adding-id).
 - Find the reference position of the motor: [Homing and position management](../guides/homing-and-position.md).
-- Know how each function works: [Functional guides](../guides/index.md).
+- Know how each function works: [Functional guides](../guides/communication-and-messages.md).
 - Look up a command: [OSC reference](../reference/index.md).
 
 ## Related commands and settings {#related}

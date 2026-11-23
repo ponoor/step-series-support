@@ -167,7 +167,7 @@
   note: 保持電流（KVAL_HOLD/TVAL_HOLD のパラメータ）。用語として使う
 - where: "docs/ja/maintenance/migration-guide.md"
   term: 保持
-  text: "いか。** 保持電流がモータ"
+  text: "策：** 保持電流がモータ"
   note: 保持電流（KVAL_HOLD/TVAL_HOLD のパラメータ）。用語として使う
 - where: "docs/ja/maintenance/migration-guide.md"
   term: 保持
