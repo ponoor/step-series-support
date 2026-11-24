@@ -10,7 +10,7 @@ For how the motions work, see [Speed profile and types of motor motion](../guide
 
 <!-- osc: /run -->
 <!-- generated:begin osc /run -->
-### `/run` (int)motorID (float)speed {#run .osc-command}
+### `/run` (int)motorID (float)speed {#run .osc-command data-toc-label="/run"}
 
 #### Argument
 
@@ -58,7 +58,7 @@ When: While homing is in progress
 
 <!-- osc: /move -->
 <!-- generated:begin osc /move -->
-### `/move` (int)motorID (int)step {#move .osc-command}
+### `/move` (int)motorID (int)step {#move .osc-command data-toc-label="/move"}
 
 #### Argument
 
@@ -94,7 +94,7 @@ While the motor is turning, the driver ignores the command and the board replies
 
 <!-- osc: /goTo -->
 <!-- generated:begin osc /goTo -->
-### `/goTo` (int)motorID (int)position {#goto .osc-command}
+### `/goTo` (int)motorID (int)position {#goto .osc-command data-toc-label="/goTo"}
 
 #### Argument
 
@@ -148,7 +148,7 @@ When: While homing is in progress
 
 <!-- osc: /goToDir -->
 <!-- generated:begin osc /goToDir -->
-### `/goToDir` (int)motorID (bool)DIR (int)position {#gotodir .osc-command}
+### `/goToDir` (int)motorID (bool)DIR (int)position {#gotodir .osc-command data-toc-label="/goToDir"}
 
 #### Argument
 
@@ -188,7 +188,7 @@ A position outside the range is not rejected. A position above 4,194,303 is limi
 
 <!-- osc: /softStop -->
 <!-- generated:begin osc /softStop -->
-### `/softStop` (int)motorID {#softstop .osc-command}
+### `/softStop` (int)motorID {#softstop .osc-command data-toc-label="/softStop"}
 
 #### Argument
 
@@ -234,7 +234,7 @@ When: While homing is in progress
 
 <!-- osc: /hardStop -->
 <!-- generated:begin osc /hardStop -->
-### `/hardStop` (int)motorID {#hardstop .osc-command}
+### `/hardStop` (int)motorID {#hardstop .osc-command data-toc-label="/hardStop"}
 
 #### Argument
 
@@ -280,7 +280,7 @@ When: While homing is in progress
 
 <!-- osc: /softHiZ -->
 <!-- generated:begin osc /softHiZ -->
-### `/softHiZ` (int)motorID {#softhiz .osc-command}
+### `/softHiZ` (int)motorID {#softhiz .osc-command data-toc-label="/softHiZ"}
 
 #### Argument
 
@@ -327,7 +327,7 @@ When: While homing is in progress
 
 <!-- osc: /hardHiZ -->
 <!-- generated:begin osc /hardHiZ -->
-### `/hardHiZ` (int)motorID {#hardhiz .osc-command}
+### `/hardHiZ` (int)motorID {#hardhiz .osc-command data-toc-label="/hardHiZ"}
 
 #### Argument
 
@@ -375,7 +375,7 @@ When: While homing is in progress
 
 <!-- osc: /combine/run -->
 <!-- generated:begin osc /combine/run -->
-### `/combine/run` (int)motorID1 (int)motorID2 (float)speed {#combine-run .osc-command}
+### `/combine/run` (int)motorID1 (int)motorID2 (float)speed {#combine-run .osc-command data-toc-label="/combine/run"}
 
 #### Argument
 
@@ -422,7 +422,7 @@ When: While homing is in progress
 
 <!-- osc: /combine/move -->
 <!-- generated:begin osc /combine/move -->
-### `/combine/move` (int)motorID1 (int)motorID2 (int)step {#combine-move .osc-command}
+### `/combine/move` (int)motorID1 (int)motorID2 (int)step {#combine-move .osc-command data-toc-label="/combine/move"}
 
 #### Argument
 
@@ -454,7 +454,7 @@ Same as [`/move`](motor-control.md#move) for two motors. A step count whose abso
 
 <!-- osc: /combine/goTo -->
 <!-- generated:begin osc /combine/goTo -->
-### `/combine/goTo` (int)motorID1 (int)motorID2 (int)position {#combine-goto .osc-command}
+### `/combine/goTo` (int)motorID1 (int)motorID2 (int)position {#combine-goto .osc-command data-toc-label="/combine/goTo"}
 
 #### Argument
 
@@ -505,7 +505,7 @@ When: While homing is in progress
 
 <!-- osc: /combine/goToDir -->
 <!-- generated:begin osc /combine/goToDir -->
-### `/combine/goToDir` (int)motorID1 (int)motorID2 (bool)DIR (int)position {#combine-gotodir .osc-command}
+### `/combine/goToDir` (int)motorID1 (int)motorID2 (bool)DIR (int)position {#combine-gotodir .osc-command data-toc-label="/combine/goToDir"}
 
 #### Argument
 
@@ -538,7 +538,7 @@ Same as [`/goToDir`](motor-control.md#gotodir) for two motors. A position outsid
 
 <!-- osc: /combine/softStop -->
 <!-- generated:begin osc /combine/softStop -->
-### `/combine/softStop` (int)motorID1 (int)motorID2 {#combine-softstop .osc-command}
+### `/combine/softStop` (int)motorID1 (int)motorID2 {#combine-softstop .osc-command data-toc-label="/combine/softStop"}
 
 #### Argument
 
@@ -581,7 +581,7 @@ When: While homing is in progress
 
 <!-- osc: /combine/hardStop -->
 <!-- generated:begin osc /combine/hardStop -->
-### `/combine/hardStop` (int)motorID1 (int)motorID2 {#combine-hardstop .osc-command}
+### `/combine/hardStop` (int)motorID1 (int)motorID2 {#combine-hardstop .osc-command data-toc-label="/combine/hardStop"}
 
 #### Argument
 
@@ -624,7 +624,7 @@ When: While homing is in progress
 
 <!-- osc: /combine/softHiZ -->
 <!-- generated:begin osc /combine/softHiZ -->
-### `/combine/softHiZ` (int)motorID1 (int)motorID2 {#combine-softhiz .osc-command}
+### `/combine/softHiZ` (int)motorID1 (int)motorID2 {#combine-softhiz .osc-command data-toc-label="/combine/softHiZ"}
 
 #### Argument
 
@@ -667,7 +667,7 @@ When: While homing is in progress
 
 <!-- osc: /combine/hardHiZ -->
 <!-- generated:begin osc /combine/hardHiZ -->
-### `/combine/hardHiZ` (int)motorID1 (int)motorID2 {#combine-hardhiz .osc-command}
+### `/combine/hardHiZ` (int)motorID1 (int)motorID2 {#combine-hardhiz .osc-command data-toc-label="/combine/hardHiZ"}
 
 #### Argument
 
@@ -714,7 +714,7 @@ The following commands specify the speed with the register value of the driver I
 
 <!-- osc: /runRaw -->
 <!-- generated:begin osc /runRaw -->
-### `/runRaw` (int)motorID (int)speed {#runraw .osc-command}
+### `/runRaw` (int)motorID (int)speed {#runraw .osc-command data-toc-label="/runRaw"}
 
 #### Argument
 
@@ -762,7 +762,7 @@ When: While homing is in progress
 
 <!-- osc: /goUntilRaw -->
 <!-- generated:begin osc /goUntilRaw -->
-### `/goUntilRaw` (int)motorID (bool)ACT (int)speed {#gountilraw .osc-command}
+### `/goUntilRaw` (int)motorID (bool)ACT (int)speed {#gountilraw .osc-command data-toc-label="/goUntilRaw"}
 
 #### Argument
 
@@ -803,7 +803,7 @@ The speed is limited to 20 bits (0xFFFFF) by the firmware and the driver librari
 
 <!-- osc: /combine/runRaw -->
 <!-- generated:begin osc /combine/runRaw -->
-### `/combine/runRaw` (int)motorID1 (int)motorID2 (int)speed {#combine-runraw .osc-command}
+### `/combine/runRaw` (int)motorID1 (int)motorID2 (int)speed {#combine-runraw .osc-command data-toc-label="/combine/runRaw"}
 
 #### Argument
 

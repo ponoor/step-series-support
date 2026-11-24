@@ -8,7 +8,7 @@ title: 電磁ブレーキ
 
 <!-- osc: /enableElectromagnetBrake -->
 <!-- generated:begin osc /enableElectromagnetBrake -->
-### `/enableElectromagnetBrake` (int)motorID (bool)enable {#enableelectromagnetbrake .osc-command}
+### `/enableElectromagnetBrake` (int)motorID (bool)enable {#enableelectromagnetbrake .osc-command data-toc-label="/enableElectromagnetBrake"}
 
 #### 引数
 
@@ -54,7 +54,7 @@ title: 電磁ブレーキ
 
 <!-- osc: /activate -->
 <!-- generated:begin osc /activate -->
-### `/activate` (int)motorID (bool)state {#activate .osc-command}
+### `/activate` (int)motorID (bool)state {#activate .osc-command data-toc-label="/activate"}
 
 #### 引数
 
@@ -122,7 +122,7 @@ title: 電磁ブレーキ
 
 <!-- osc: /free -->
 <!-- generated:begin osc /free -->
-### `/free` (int)motorID {#free .osc-command}
+### `/free` (int)motorID {#free .osc-command data-toc-label="/free"}
 
 #### 引数
 
@@ -177,7 +177,7 @@ title: 電磁ブレーキ
 
 <!-- osc: /setBrakeTransitionDuration -->
 <!-- generated:begin osc /setBrakeTransitionDuration -->
-### `/setBrakeTransitionDuration` (int)motorID (int)duration {#setbraketransitionduration .osc-command}
+### `/setBrakeTransitionDuration` (int)motorID (int)duration {#setbraketransitionduration .osc-command data-toc-label="/setBrakeTransitionDuration"}
 
 #### 引数
 
@@ -216,7 +216,7 @@ title: 電磁ブレーキ
 
 <!-- osc: /getBrakeTransitionDuration -->
 <!-- generated:begin osc /getBrakeTransitionDuration -->
-### `/getBrakeTransitionDuration` (int)motorID {#getbraketransitionduration .osc-command}
+### `/getBrakeTransitionDuration` (int)motorID {#getbraketransitionduration .osc-command data-toc-label="/getBrakeTransitionDuration"}
 
 #### 引数
 
@@ -246,7 +246,7 @@ title: 電磁ブレーキ
 
 <!-- osc: /getBrakeStatus -->
 <!-- generated:begin osc /getBrakeStatus -->
-### `/getBrakeStatus` (int)motorID {#getbrakestatus .osc-command}
+### `/getBrakeStatus` (int)motorID {#getbrakestatus .osc-command data-toc-label="/getBrakeStatus"}
 
 v2.2.0で追加。
 

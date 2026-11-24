@@ -8,7 +8,7 @@ title: 原点復帰
 
 <!-- osc: /homing -->
 <!-- generated:begin osc /homing -->
-### `/homing` (int)motorID {#homing .osc-command}
+### `/homing` (int)motorID {#homing .osc-command data-toc-label="/homing"}
 
 #### 引数
 
@@ -64,7 +64,7 @@ title: 原点復帰
 
 <!-- osc: /getHomingStatus -->
 <!-- generated:begin osc /getHomingStatus -->
-### `/getHomingStatus` (int)motorID {#gethomingstatus .osc-command}
+### `/getHomingStatus` (int)motorID {#gethomingstatus .osc-command data-toc-label="/getHomingStatus"}
 
 #### 引数
 
@@ -96,7 +96,7 @@ title: 原点復帰
 
 <!-- osc: /setHomingDirection -->
 <!-- generated:begin osc /setHomingDirection -->
-### `/setHomingDirection` (int)motorID (bool)direction {#sethomingdirection .osc-command}
+### `/setHomingDirection` (int)motorID (bool)direction {#sethomingdirection .osc-command data-toc-label="/setHomingDirection"}
 
 #### 引数
 
@@ -131,7 +131,7 @@ title: 原点復帰
 
 <!-- osc: /getHomingDirection -->
 <!-- generated:begin osc /getHomingDirection -->
-### `/getHomingDirection` (int)motorID {#gethomingdirection .osc-command}
+### `/getHomingDirection` (int)motorID {#gethomingdirection .osc-command data-toc-label="/getHomingDirection"}
 
 #### 引数
 
@@ -168,7 +168,7 @@ title: 原点復帰
 
 <!-- osc: /setHomingSpeed -->
 <!-- generated:begin osc /setHomingSpeed -->
-### `/setHomingSpeed` (int)motorID (float)speed {#sethomingspeed .osc-command}
+### `/setHomingSpeed` (int)motorID (float)speed {#sethomingspeed .osc-command data-toc-label="/setHomingSpeed"}
 
 #### 引数
 
@@ -198,7 +198,7 @@ title: 原点復帰
 
 <!-- osc: /getHomingSpeed -->
 <!-- generated:begin osc /getHomingSpeed -->
-### `/getHomingSpeed` (int)motorID {#gethomingspeed .osc-command}
+### `/getHomingSpeed` (int)motorID {#gethomingspeed .osc-command data-toc-label="/getHomingSpeed"}
 
 #### 引数
 
@@ -228,7 +228,7 @@ title: 原点復帰
 
 <!-- osc: /goUntil -->
 <!-- generated:begin osc /goUntil -->
-### `/goUntil` (int)motorID (bool)ACT (float)speed {#gountil .osc-command}
+### `/goUntil` (int)motorID (bool)ACT (float)speed {#gountil .osc-command data-toc-label="/goUntil"}
 
 #### 引数
 
@@ -275,7 +275,7 @@ title: 原点復帰
 
 <!-- osc: /setGoUntilTimeout -->
 <!-- generated:begin osc /setGoUntilTimeout -->
-### `/setGoUntilTimeout` (int)motorID (int)timeOut {#setgountiltimeout .osc-command}
+### `/setGoUntilTimeout` (int)motorID (int)timeOut {#setgountiltimeout .osc-command data-toc-label="/setGoUntilTimeout"}
 
 #### 引数
 
@@ -314,7 +314,7 @@ title: 原点復帰
 
 <!-- osc: /getGoUntilTimeout -->
 <!-- generated:begin osc /getGoUntilTimeout -->
-### `/getGoUntilTimeout` (int)motorID {#getgountiltimeout .osc-command}
+### `/getGoUntilTimeout` (int)motorID {#getgountiltimeout .osc-command data-toc-label="/getGoUntilTimeout"}
 
 #### 引数
 
@@ -344,7 +344,7 @@ title: 原点復帰
 
 <!-- osc: /releaseSw -->
 <!-- generated:begin osc /releaseSw -->
-### `/releaseSw` (int)motorID (bool)ACT (bool)DIR {#releasesw .osc-command}
+### `/releaseSw` (int)motorID (bool)ACT (bool)DIR {#releasesw .osc-command data-toc-label="/releaseSw"}
 
 #### 引数
 
@@ -394,7 +394,7 @@ title: 原点復帰
 
 <!-- osc: /setReleaseSwTimeout -->
 <!-- generated:begin osc /setReleaseSwTimeout -->
-### `/setReleaseSwTimeout` (int)motorID (int)timeOut {#setreleaseswtimeout .osc-command}
+### `/setReleaseSwTimeout` (int)motorID (int)timeOut {#setreleaseswtimeout .osc-command data-toc-label="/setReleaseSwTimeout"}
 
 #### 引数
 
@@ -433,7 +433,7 @@ title: 原点復帰
 
 <!-- osc: /getReleaseSwTimeout -->
 <!-- generated:begin osc /getReleaseSwTimeout -->
-### `/getReleaseSwTimeout` (int)motorID {#getreleaseswtimeout .osc-command}
+### `/getReleaseSwTimeout` (int)motorID {#getreleaseswtimeout .osc-command data-toc-label="/getReleaseSwTimeout"}
 
 #### 引数
 

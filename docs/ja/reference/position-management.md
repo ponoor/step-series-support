@@ -10,7 +10,7 @@ title: 位置管理
 
 <!-- osc: /setPosition -->
 <!-- generated:begin osc /setPosition -->
-### `/setPosition` (int)motorID (int)newPosition {#setposition .osc-command}
+### `/setPosition` (int)motorID (int)newPosition {#setposition .osc-command data-toc-label="/setPosition"}
 
 #### 引数
 
@@ -42,7 +42,7 @@ ABS_POSレジスタを指定座標に書き換えます。現在のモータ位�
 
 <!-- osc: /getPosition -->
 <!-- generated:begin osc /getPosition -->
-### `/getPosition` (int)motorID {#getposition .osc-command}
+### `/getPosition` (int)motorID {#getposition .osc-command data-toc-label="/getPosition"}
 
 #### 引数
 
@@ -76,7 +76,7 @@ ABS_POSレジスタの内容（現在位置）を取得します。
 
 <!-- osc: /getPositionList -->
 <!-- generated:begin osc /getPositionList -->
-### `/getPositionList` {#getpositionlist .osc-command}
+### `/getPositionList` {#getpositionlist .osc-command data-toc-label="/getPositionList"}
 
 #### 引数
 
@@ -111,7 +111,7 @@ ABS_POSレジスタの内容（現在位置）を取得します。
 
 <!-- osc: /resetPos -->
 <!-- generated:begin osc /resetPos -->
-### `/resetPos` (int)motorID {#resetpos .osc-command}
+### `/resetPos` (int)motorID {#resetpos .osc-command data-toc-label="/resetPos"}
 
 #### 引数
 
@@ -140,7 +140,7 @@ ABS_POSレジスタを0にリセットします。
 
 <!-- osc: /setElPos -->
 <!-- generated:begin osc /setElPos -->
-### `/setElPos` (int)motorID (int)newFullstep (int)newMicrostep {#setelpos .osc-command}
+### `/setElPos` (int)motorID (int)newFullstep (int)newMicrostep {#setelpos .osc-command data-toc-label="/setElPos"}
 
 #### 引数
 
@@ -177,7 +177,7 @@ ABS_POSレジスタを0にリセットします。
 
 <!-- osc: /getElPos -->
 <!-- generated:begin osc /getElPos -->
-### `/getElPos` (int)motorID {#getelpos .osc-command}
+### `/getElPos` (int)motorID {#getelpos .osc-command data-toc-label="/getElPos"}
 
 #### 引数
 
@@ -210,7 +210,7 @@ ABS_POSレジスタを0にリセットします。
 
 <!-- osc: /setMark -->
 <!-- generated:begin osc /setMark -->
-### `/setMark` (int)motorID (int)MARK {#setmark .osc-command}
+### `/setMark` (int)motorID (int)MARK {#setmark .osc-command data-toc-label="/setMark"}
 
 #### 引数
 
@@ -236,7 +236,7 @@ markを任意の位置に設定します。
 
 <!-- osc: /getMark -->
 <!-- generated:begin osc /getMark -->
-### `/getMark` (int)motorID {#getmark .osc-command}
+### `/getMark` (int)motorID {#getmark .osc-command data-toc-label="/getMark"}
 
 #### 引数
 
@@ -266,7 +266,7 @@ MARKの位置を取得します。
 
 <!-- osc: /goHome -->
 <!-- generated:begin osc /goHome -->
-### `/goHome` (int)motorID {#gohome .osc-command}
+### `/goHome` (int)motorID {#gohome .osc-command data-toc-label="/goHome"}
 
 #### 引数
 
@@ -297,7 +297,7 @@ HOME位置までスピードプロファイルに従って移動します。
 
 <!-- osc: /goMark -->
 <!-- generated:begin osc /goMark -->
-### `/goMark` (int)motorID {#gomark .osc-command}
+### `/goMark` (int)motorID {#gomark .osc-command data-toc-label="/goMark"}
 
 #### 引数
 

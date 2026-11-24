@@ -17,7 +17,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 FENCE = re.compile(r"^\s*(```|~~~)")
 HEADING = re.compile(r"^(#{2,3}) (.*?)\s*$")
-WITH_ID = re.compile(r"^(.*?) \{#([^}\s]+)(?: \.[\w-]+)*\}$")   # {#id} or {#id .class} (.osc-command from tools/generate.py)
+WITH_ID = re.compile(r'^(.*?) \{#([^}\s]+)(?: (?:\.[\w-]+|data-toc-label="[^"]*"))*\}$')   # {#id} or {#id .class} (.osc-command from tools/generate.py)
 ID_RULE = re.compile(r"[a-z0-9_-]+")
 
 

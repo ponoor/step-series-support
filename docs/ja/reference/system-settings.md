@@ -8,7 +8,7 @@ title: ボード全体の設定
 
 <!-- osc: /setDestIp -->
 <!-- generated:begin osc /setDestIp -->
-### `/setDestIp` {#setdestip .osc-command}
+### `/setDestIp` {#setdestip .osc-command data-toc-label="/setDestIp"}
 
 #### 引数
 
@@ -54,7 +54,7 @@ MACアドレスの解決のために、ブロードキャストアドレスと�
 
 <!-- osc: /getVersion -->
 <!-- generated:begin osc /getVersion -->
-### `/getVersion` {#getversion .osc-command}
+### `/getVersion` {#getversion .osc-command data-toc-label="/getVersion"}
 
 #### 引数
 
@@ -81,7 +81,7 @@ MACアドレスの解決のために、ブロードキャストアドレスと�
 
 <!-- osc: /getConfigName -->
 <!-- generated:begin osc /getConfigName -->
-### `/getConfigName` {#getconfigname .osc-command}
+### `/getConfigName` {#getconfigname .osc-command data-toc-label="/getConfigName"}
 
 #### 引数
 
@@ -129,7 +129,7 @@ MACアドレスの解決のために、ブロードキャストアドレスと�
 
 <!-- osc: /reportError -->
 <!-- generated:begin osc /reportError -->
-### `/reportError` (bool)enable {#reporterror .osc-command}
+### `/reportError` (bool)enable {#reporterror .osc-command data-toc-label="/reportError"}
 
 #### 引数
 
@@ -209,7 +209,7 @@ MACアドレスの解決のために、ブロードキャストアドレスと�
 
 <!-- osc: /setConfigName -->
 <!-- generated:begin osc /setConfigName -->
-### `/setConfigName` (string)configName {#setconfigname .osc-command}
+### `/setConfigName` (string)configName {#setconfigname .osc-command data-toc-label="/setConfigName"}
 
 v2.1.0で追加。
 
@@ -240,7 +240,7 @@ v2.1.0で追加。
 
 <!-- osc: /saveConfig -->
 <!-- generated:begin osc /saveConfig -->
-### `/saveConfig` {#saveconfig .osc-command}
+### `/saveConfig` {#saveconfig .osc-command data-toc-label="/saveConfig"}
 
 v2.1.0で追加。
 
@@ -305,7 +305,7 @@ v2.1.0で追加。
 
 <!-- osc: /resetDevice -->
 <!-- generated:begin osc /resetDevice -->
-### `/resetDevice` {#resetdevice .osc-command}
+### `/resetDevice` {#resetdevice .osc-command data-toc-label="/resetDevice"}
 
 #### 引数
 

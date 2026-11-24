@@ -12,7 +12,7 @@ title: 自動送信されるメッセージ
 
 <!-- osc-message: /booted -->
 <!-- generated:begin osc-message /booted -->
-### `/booted` (int)deviceID (int)resetCause {#booted .osc-command}
+### `/booted` (int)deviceID (int)resetCause {#booted .osc-command data-toc-label="/booted"}
 
 #### 引数
 
@@ -55,7 +55,7 @@ title: 自動送信されるメッセージ
 
 <!-- osc-message: /error/osc -->
 <!-- generated:begin osc-message /error/osc -->
-### `/error/osc` (string)errorText {#error-osc .osc-command}
+### `/error/osc` (string)errorText {#error-osc .osc-command data-toc-label="/error/osc"}
 
 #### 引数
 
@@ -88,7 +88,7 @@ title: 自動送信されるメッセージ
 
 <!-- osc-message: /error/command -->
 <!-- generated:begin osc-message /error/command -->
-### `/error/command` (string)errorText (int)motorID {#error-command .osc-command}
+### `/error/command` (string)errorText (int)motorID {#error-command .osc-command data-toc-label="/error/command"}
 
 #### 引数
 
@@ -134,7 +134,7 @@ title: 自動送信されるメッセージ
 
 <!-- osc-message: /busy -->
 <!-- generated:begin osc-message /busy -->
-### `/busy` (int)motorID (int)state {#busy .osc-command}
+### `/busy` (int)motorID (int)state {#busy .osc-command data-toc-label="/busy"}
 
 #### 引数
 
@@ -153,7 +153,7 @@ title: 自動送信されるメッセージ
 
 <!-- osc-message: /HiZ -->
 <!-- generated:begin osc-message /HiZ -->
-### `/HiZ` (int)motorID (int)state {#hiz .osc-command}
+### `/HiZ` (int)motorID (int)state {#hiz .osc-command data-toc-label="/HiZ"}
 
 #### 引数
 
@@ -165,7 +165,7 @@ title: 自動送信されるメッセージ
 
 <!-- osc-message: /dir -->
 <!-- generated:begin osc-message /dir -->
-### `/dir` (int)motorID (int)direction {#dir .osc-command}
+### `/dir` (int)motorID (int)direction {#dir .osc-command data-toc-label="/dir"}
 
 #### 引数
 
@@ -184,7 +184,7 @@ title: 自動送信されるメッセージ
 
 <!-- osc-message: /motorStatus -->
 <!-- generated:begin osc-message /motorStatus -->
-### `/motorStatus` (int)motorID (int)MOT_STATUS {#motorstatus .osc-command}
+### `/motorStatus` (int)motorID (int)MOT_STATUS {#motorstatus .osc-command data-toc-label="/motorStatus"}
 
 #### 引数
 
@@ -205,7 +205,7 @@ title: 自動送信されるメッセージ
 
 <!-- osc-message: /homingStatus -->
 <!-- generated:begin osc-message /homingStatus -->
-### `/homingStatus` (int)motorID (int)homingStatus {#homingstatus .osc-command}
+### `/homingStatus` (int)motorID (int)homingStatus {#homingstatus .osc-command data-toc-label="/homingStatus"}
 
 #### 引数
 
@@ -227,7 +227,7 @@ title: 自動送信されるメッセージ
 
 <!-- osc-message: /position -->
 <!-- generated:begin osc-message /position -->
-### `/position` (int)motorID (int)ABS_POS {#position .osc-command}
+### `/position` (int)motorID (int)ABS_POS {#position .osc-command data-toc-label="/position"}
 
 #### 引数
 
@@ -239,7 +239,7 @@ title: 自動送信されるメッセージ
 
 <!-- osc-message: /positionList -->
 <!-- generated:begin osc-message /positionList -->
-### `/positionList` (int)position1 ... (int)positionN {#positionlist .osc-command}
+### `/positionList` (int)position1 ... (int)positionN {#positionlist .osc-command data-toc-label="/positionList"}
 
 #### 引数
 
@@ -250,7 +250,7 @@ title: 自動送信されるメッセージ
 
 <!-- osc-message: /homeSw -->
 <!-- generated:begin osc-message /homeSw -->
-### `/homeSw` (int)motorID (int)swState (int)direction {#homesw .osc-command}
+### `/homeSw` (int)motorID (int)swState (int)direction {#homesw .osc-command data-toc-label="/homeSw"}
 
 #### 引数
 
@@ -277,7 +277,7 @@ title: 自動送信されるメッセージ
 
 <!-- osc-message: /swEvent -->
 <!-- generated:begin osc-message /swEvent -->
-### `/swEvent` (int)motorID {#swevent .osc-command}
+### `/swEvent` (int)motorID {#swevent .osc-command data-toc-label="/swEvent"}
 
 #### 引数
 
@@ -288,7 +288,7 @@ title: 自動送信されるメッセージ
 
 <!-- osc-message: /limitSw -->
 <!-- generated:begin osc-message /limitSw -->
-### `/limitSw` (int)motorID (int)swState (int)direction {#limitsw .osc-command}
+### `/limitSw` (int)motorID (int)swState (int)direction {#limitsw .osc-command data-toc-label="/limitSw"}
 
 STEP400のみ。
 
@@ -319,7 +319,7 @@ STEP400のみ。
 
 <!-- osc-message: /uvlo -->
 <!-- generated:begin osc-message /uvlo -->
-### `/uvlo` (int)motorID (int)state {#uvlo .osc-command}
+### `/uvlo` (int)motorID (int)state {#uvlo .osc-command data-toc-label="/uvlo"}
 
 #### 引数
 
@@ -342,7 +342,7 @@ STEP400のみ。
 
 <!-- osc-message: /thermalStatus -->
 <!-- generated:begin osc-message /thermalStatus -->
-### `/thermalStatus` (int)motorID (int)thermalStatus {#thermalstatus .osc-command}
+### `/thermalStatus` (int)motorID (int)thermalStatus {#thermalstatus .osc-command data-toc-label="/thermalStatus"}
 
 #### 引数
 
@@ -371,7 +371,7 @@ STEP400のみ。
 
 <!-- osc-message: /overCurrent -->
 <!-- generated:begin osc-message /overCurrent -->
-### `/overCurrent` (int)motorID {#overcurrent .osc-command}
+### `/overCurrent` (int)motorID {#overcurrent .osc-command data-toc-label="/overCurrent"}
 
 #### 引数
 
@@ -390,7 +390,7 @@ STEP400のみ。
 
 <!-- osc-message: /stall -->
 <!-- generated:begin osc-message /stall -->
-### `/stall` (int)motorID {#stall .osc-command}
+### `/stall` (int)motorID {#stall .osc-command data-toc-label="/stall"}
 
 #### 引数
 

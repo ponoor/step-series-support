@@ -10,7 +10,7 @@ For how the HOME and LIMIT switches are used in homing, see [Homing and position
 
 <!-- osc: /enableHomeSwReport -->
 <!-- generated:begin osc /enableHomeSwReport -->
-### `/enableHomeSwReport` (int)motorID (bool)enable {#enablehomeswreport .osc-command}
+### `/enableHomeSwReport` (int)motorID (bool)enable {#enablehomeswreport .osc-command data-toc-label="/enableHomeSwReport"}
 
 #### Argument
 
@@ -69,7 +69,7 @@ Sets the following message to be sent automatically when conditional change of t
 
 <!-- osc: /enableSwEventReport -->
 <!-- generated:begin osc /enableSwEventReport -->
-### `/enableSwEventReport` (int)motorID (bool)enable {#enablesweventreport .osc-command}
+### `/enableSwEventReport` (int)motorID (bool)enable {#enablesweventreport .osc-command data-toc-label="/enableSwEventReport"}
 
 #### Argument
 
@@ -113,7 +113,7 @@ While the [`/enableHomeSwReport`](home-and-limit-sensors.md#enablehomeswreport) 
 
 <!-- osc: /getHomeSw -->
 <!-- generated:begin osc /getHomeSw -->
-### `/getHomeSw` (int)motorID {#gethomesw .osc-command}
+### `/getHomeSw` (int)motorID {#gethomesw .osc-command data-toc-label="/getHomeSw"}
 
 #### Argument
 
@@ -160,7 +160,7 @@ Gets the status of the HOME switch, closed or opened.
 
 <!-- osc: /enableLimitSwReport -->
 <!-- generated:begin osc /enableLimitSwReport -->
-### `/enableLimitSwReport` (int)motorID (bool)enable {#enablelimitswreport .osc-command}
+### `/enableLimitSwReport` (int)motorID (bool)enable {#enablelimitswreport .osc-command data-toc-label="/enableLimitSwReport"}
 
 Available on STEP400 only.
 
@@ -223,7 +223,7 @@ Available on STEP400 only.
 
 <!-- osc: /getLimitSw -->
 <!-- generated:begin osc /getLimitSw -->
-### `/getLimitSw` (int)motorID {#getlimitsw .osc-command}
+### `/getLimitSw` (int)motorID {#getlimitsw .osc-command data-toc-label="/getLimitSw"}
 
 Available on STEP400 only.
 
@@ -276,7 +276,7 @@ Available on STEP400 only.
 
 <!-- osc: /setHomeSwMode -->
 <!-- generated:begin osc /setHomeSwMode -->
-### `/setHomeSwMode` (int)motorID (bool)SW_MODE {#sethomeswmode .osc-command}
+### `/setHomeSwMode` (int)motorID (bool)SW_MODE {#sethomeswmode .osc-command data-toc-label="/setHomeSwMode"}
 
 #### Argument
 
@@ -321,7 +321,7 @@ The outputs must be HiZ; otherwise `MotorNotHiZ` is replied and nothing is appli
 
 <!-- osc: /getHomeSwMode -->
 <!-- generated:begin osc /getHomeSwMode -->
-### `/getHomeSwMode` (int)motorID {#gethomeswmode .osc-command}
+### `/getHomeSwMode` (int)motorID {#gethomeswmode .osc-command data-toc-label="/getHomeSwMode"}
 
 #### Argument
 
@@ -355,7 +355,7 @@ Get the Switch mode described above.
 
 <!-- osc: /setLimitSwMode -->
 <!-- generated:begin osc /setLimitSwMode -->
-### `/setLimitSwMode` (int)motorID (bool)SW_MODE {#setlimitswmode .osc-command}
+### `/setLimitSwMode` (int)motorID (bool)SW_MODE {#setlimitswmode .osc-command data-toc-label="/setLimitSwMode"}
 
 Available on STEP400 only.
 
@@ -396,7 +396,7 @@ Sets the Switch mode whether to stop the motor immediately when the LIMIT switch
 
 <!-- osc: /getLimitSwMode -->
 <!-- generated:begin osc /getLimitSwMode -->
-### `/getLimitSwMode` (int)motorID {#getlimitswmode .osc-command}
+### `/getLimitSwMode` (int)motorID {#getlimitswmode .osc-command data-toc-label="/getLimitSwMode"}
 
 Available on STEP400 only.
 

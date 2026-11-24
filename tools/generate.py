@@ -586,7 +586,7 @@ def render_message_block(ctx: Ctx, addr: str) -> str:
     msg = spec.message(addr)
     ctx.where = f"message {addr}"
     ctx.block_anchor = anchor(addr)
-    parts = [f"### `{addr}` {arg_heading(spec, msg)} {{#{anchor(addr)} .osc-command}}".replace("  ", " ")]
+    parts = [f"### `{addr}` {arg_heading(spec, msg)} {{#{anchor(addr)} .osc-command data-toc-label=\"{addr}\"}}".replace("  ", " ")]
     parts += _notes(ctx, msg)
     parts.append(f"#### {L['argument']}\n\n" + render_args(ctx, msg, in_message=True))
     if msg.get("description"):
@@ -634,7 +634,7 @@ def render_command_block(ctx: Ctx, addr: str) -> str:
     cmd = spec.command(addr)
     ctx.where = f"command {addr}"
     ctx.block_anchor = anchor(addr)
-    parts = [f"### `{addr}` {arg_heading(spec, cmd)} {{#{anchor(addr)} .osc-command}}".replace("  ", " ")]
+    parts = [f"### `{addr}` {arg_heading(spec, cmd)} {{#{anchor(addr)} .osc-command data-toc-label=\"{addr}\"}}".replace("  ", " ")]
     parts += _notes(ctx, cmd)
     parts.append(f"#### {L['argument']}\n\n" + render_args(ctx, cmd))
     timings = cmd["timing"] if isinstance(cmd["timing"], list) else [cmd["timing"]]

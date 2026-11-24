@@ -8,7 +8,7 @@ For how homing and the position work, see [Homing and position management](../gu
 
 <!-- osc: /homing -->
 <!-- generated:begin osc /homing -->
-### `/homing` (int)motorID {#homing .osc-command}
+### `/homing` (int)motorID {#homing .osc-command data-toc-label="/homing"}
 
 #### Argument
 
@@ -64,7 +64,7 @@ Depending on the state change on the homing movement, following response will be
 
 <!-- osc: /getHomingStatus -->
 <!-- generated:begin osc /getHomingStatus -->
-### `/getHomingStatus` (int)motorID {#gethomingstatus .osc-command}
+### `/getHomingStatus` (int)motorID {#gethomingstatus .osc-command data-toc-label="/getHomingStatus"}
 
 #### Argument
 
@@ -96,7 +96,7 @@ Returns current state of homing movement.
 
 <!-- osc: /setHomingDirection -->
 <!-- generated:begin osc /setHomingDirection -->
-### `/setHomingDirection` (int)motorID (bool)direction {#sethomingdirection .osc-command}
+### `/setHomingDirection` (int)motorID (bool)direction {#sethomingdirection .osc-command data-toc-label="/setHomingDirection"}
 
 #### Argument
 
@@ -131,7 +131,7 @@ Sets the `homingDirection` for the [`/homing`](homing.md#homing) command. It can
 
 <!-- osc: /getHomingDirection -->
 <!-- generated:begin osc /getHomingDirection -->
-### `/getHomingDirection` (int)motorID {#gethomingdirection .osc-command}
+### `/getHomingDirection` (int)motorID {#gethomingdirection .osc-command data-toc-label="/getHomingDirection"}
 
 #### Argument
 
@@ -168,7 +168,7 @@ Returns `homingDirection` parameter.
 
 <!-- osc: /setHomingSpeed -->
 <!-- generated:begin osc /setHomingSpeed -->
-### `/setHomingSpeed` (int)motorID (float)speed {#sethomingspeed .osc-command}
+### `/setHomingSpeed` (int)motorID (float)speed {#sethomingspeed .osc-command data-toc-label="/setHomingSpeed"}
 
 #### Argument
 
@@ -198,7 +198,7 @@ A value outside the range is not rejected: it is limited to 0-15610.
 
 <!-- osc: /getHomingSpeed -->
 <!-- generated:begin osc /getHomingSpeed -->
-### `/getHomingSpeed` (int)motorID {#gethomingspeed .osc-command}
+### `/getHomingSpeed` (int)motorID {#gethomingspeed .osc-command data-toc-label="/getHomingSpeed"}
 
 #### Argument
 
@@ -228,7 +228,7 @@ Returns `homingSpeed` parameter.
 
 <!-- osc: /goUntil -->
 <!-- generated:begin osc /goUntil -->
-### `/goUntil` (int)motorID (bool)ACT (float)speed {#gountil .osc-command}
+### `/goUntil` (int)motorID (bool)ACT (float)speed {#gountil .osc-command data-toc-label="/goUntil"}
 
 #### Argument
 
@@ -275,7 +275,7 @@ The sign of the speed is the direction. A speed whose absolute value is above th
 
 <!-- osc: /setGoUntilTimeout -->
 <!-- generated:begin osc /setGoUntilTimeout -->
-### `/setGoUntilTimeout` (int)motorID (int)timeOut {#setgountiltimeout .osc-command}
+### `/setGoUntilTimeout` (int)motorID (int)timeOut {#setgountiltimeout .osc-command data-toc-label="/setGoUntilTimeout"}
 
 #### Argument
 
@@ -314,7 +314,7 @@ A negative value replies `CommandIgnored` and nothing is applied. The maximum is
 
 <!-- osc: /getGoUntilTimeout -->
 <!-- generated:begin osc /getGoUntilTimeout -->
-### `/getGoUntilTimeout` (int)motorID {#getgountiltimeout .osc-command}
+### `/getGoUntilTimeout` (int)motorID {#getgountiltimeout .osc-command data-toc-label="/getGoUntilTimeout"}
 
 #### Argument
 
@@ -344,7 +344,7 @@ Returns the time-out duration when executing [`/goUntil`](homing.md#gountil) com
 
 <!-- osc: /releaseSw -->
 <!-- generated:begin osc /releaseSw -->
-### `/releaseSw` (int)motorID (bool)ACT (bool)DIR {#releasesw .osc-command}
+### `/releaseSw` (int)motorID (bool)ACT (bool)DIR {#releasesw .osc-command data-toc-label="/releaseSw"}
 
 #### Argument
 
@@ -394,7 +394,7 @@ Move at minimum speed (5[step/s] by default) in the specified direction until th
 
 <!-- osc: /setReleaseSwTimeout -->
 <!-- generated:begin osc /setReleaseSwTimeout -->
-### `/setReleaseSwTimeout` (int)motorID (int)timeOut {#setreleaseswtimeout .osc-command}
+### `/setReleaseSwTimeout` (int)motorID (int)timeOut {#setreleaseswtimeout .osc-command data-toc-label="/setReleaseSwTimeout"}
 
 #### Argument
 
@@ -433,7 +433,7 @@ A negative value replies `CommandIgnored` and nothing is applied. The maximum is
 
 <!-- osc: /getReleaseSwTimeout -->
 <!-- generated:begin osc /getReleaseSwTimeout -->
-### `/getReleaseSwTimeout` (int)motorID {#getreleaseswtimeout .osc-command}
+### `/getReleaseSwTimeout` (int)motorID {#getreleaseswtimeout .osc-command data-toc-label="/getReleaseSwTimeout"}
 
 #### Argument
 

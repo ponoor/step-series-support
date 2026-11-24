@@ -10,7 +10,7 @@ For how the alarms and the protection work, see [Alarms and protection](../guide
 
 <!-- osc: /enableUvloReport -->
 <!-- generated:begin osc /enableUvloReport -->
-### `/enableUvloReport` (int)motorID (bool)enable {#enableuvloreport .osc-command}
+### `/enableUvloReport` (int)motorID (bool)enable {#enableuvloreport .osc-command data-toc-label="/enableUvloReport"}
 
 #### Argument
 
@@ -68,7 +68,7 @@ These thresholds are different between STEP400(PowerSTEP01) and STEP800(L6470). 
 
 <!-- osc: /getUvlo -->
 <!-- generated:begin osc /getUvlo -->
-### `/getUvlo` (int)motorID {#getuvlo .osc-command}
+### `/getUvlo` (int)motorID {#getuvlo .osc-command data-toc-label="/getUvlo"}
 
 #### Argument
 
@@ -107,7 +107,7 @@ Gets the current state of UVLO
 
 <!-- osc: /enableThermalStatusReport -->
 <!-- generated:begin osc /enableThermalStatusReport -->
-### `/enableThermalStatusReport` (int)motorID (bool)enable {#enablethermalstatusreport .osc-command}
+### `/enableThermalStatusReport` (int)motorID (bool)enable {#enablethermalstatusreport .osc-command data-toc-label="/enableThermalStatusReport"}
 
 #### Argument
 
@@ -155,7 +155,7 @@ Sends a notification message when a change in the temperature status (thermalSta
 
 <!-- osc: /getThermalStatus -->
 <!-- generated:begin osc /getThermalStatus -->
-### `/getThermalStatus` (int)motorID {#getthermalstatus .osc-command}
+### `/getThermalStatus` (int)motorID {#getthermalstatus .osc-command data-toc-label="/getThermalStatus"}
 
 #### Argument
 
@@ -189,7 +189,7 @@ In the bridge shutdown and device shutdown states, the motor goes into the High 
 
 <!-- osc: /enableOverCurrentReport -->
 <!-- generated:begin osc /enableOverCurrentReport -->
-### `/enableOverCurrentReport` (int)motorID (bool)enable {#enableovercurrentreport .osc-command}
+### `/enableOverCurrentReport` (int)motorID (bool)enable {#enableovercurrentreport .osc-command data-toc-label="/enableOverCurrentReport"}
 
 #### Argument
 
@@ -233,7 +233,7 @@ When overcurrent is detected, the device automatically enters High Z state regar
 
 <!-- osc: /setOverCurrentThreshold -->
 <!-- generated:begin osc /setOverCurrentThreshold -->
-### `/setOverCurrentThreshold` (int)motorID (int)OCD_TH {#setovercurrentthreshold .osc-command}
+### `/setOverCurrentThreshold` (int)motorID (int)OCD_TH {#setovercurrentthreshold .osc-command data-toc-label="/setOverCurrentThreshold"}
 
 #### Argument
 
@@ -294,7 +294,7 @@ A value above the range is not rejected; it wraps around: the value after the ma
 
 <!-- osc: /getOverCurrentThreshold -->
 <!-- generated:begin osc /getOverCurrentThreshold -->
-### `/getOverCurrentThreshold` (int)motorID {#getovercurrentthreshold .osc-command}
+### `/getOverCurrentThreshold` (int)motorID {#getovercurrentthreshold .osc-command data-toc-label="/getOverCurrentThreshold"}
 
 #### Argument
 
@@ -324,7 +324,7 @@ Get the threshold of overcurrent.
 
 <!-- osc: /enableStallReport -->
 <!-- generated:begin osc /enableStallReport -->
-### `/enableStallReport` (int)motorID (bool)enable {#enablestallreport .osc-command}
+### `/enableStallReport` (int)motorID (bool)enable {#enablestallreport .osc-command data-toc-label="/enableStallReport"}
 
 #### Argument
 
@@ -368,7 +368,7 @@ When the stall is detected by the specified motor driver, the following message 
 
 <!-- osc: /setStallThreshold -->
 <!-- generated:begin osc /setStallThreshold -->
-### `/setStallThreshold` (int)motorID (int)STALL_TH {#setstallthreshold .osc-command}
+### `/setStallThreshold` (int)motorID (int)STALL_TH {#setstallthreshold .osc-command data-toc-label="/setStallThreshold"}
 
 #### Argument
 
@@ -435,7 +435,7 @@ A value above the range is not rejected; it wraps around: the value after the ma
 
 <!-- osc: /getStallThreshold -->
 <!-- generated:begin osc /getStallThreshold -->
-### `/getStallThreshold` (int)motorID {#getstallthreshold .osc-command}
+### `/getStallThreshold` (int)motorID {#getstallthreshold .osc-command data-toc-label="/getStallThreshold"}
 
 #### Argument
 
@@ -467,7 +467,7 @@ Gets the stall detection threshold.
 
 <!-- osc: /setProhibitMotionOnHomeSw -->
 <!-- generated:begin osc /setProhibitMotionOnHomeSw -->
-### `/setProhibitMotionOnHomeSw` (int)motorID (bool)enable {#setprohibitmotiononhomesw .osc-command}
+### `/setProhibitMotionOnHomeSw` (int)motorID (bool)enable {#setprohibitmotiononhomesw .osc-command data-toc-label="/setProhibitMotionOnHomeSw"}
 
 #### Argument
 
@@ -506,7 +506,7 @@ Prohibits any motion commands towards the origin point when the HOME switch is a
 
 <!-- osc: /getProhibitMotionOnHomeSw -->
 <!-- generated:begin osc /getProhibitMotionOnHomeSw -->
-### `/getProhibitMotionOnHomeSw` (int)motorID {#getprohibitmotiononhomesw .osc-command}
+### `/getProhibitMotionOnHomeSw` (int)motorID {#getprohibitmotiononhomesw .osc-command data-toc-label="/getProhibitMotionOnHomeSw"}
 
 #### Argument
 
@@ -543,7 +543,7 @@ Returns whether the motion command towards the origin point is prohibited when t
 
 <!-- osc: /setProhibitMotionOnLimitSw -->
 <!-- generated:begin osc /setProhibitMotionOnLimitSw -->
-### `/setProhibitMotionOnLimitSw` (int)motorID (bool)enable {#setprohibitmotiononlimitsw .osc-command}
+### `/setProhibitMotionOnLimitSw` (int)motorID (bool)enable {#setprohibitmotiononlimitsw .osc-command data-toc-label="/setProhibitMotionOnLimitSw"}
 
 Available on STEP400 only.
 
@@ -580,7 +580,7 @@ Prohibits any motion commands towards the leaving direction from origin point, w
 
 <!-- osc: /getProhibitMotionOnLimitSw -->
 <!-- generated:begin osc /getProhibitMotionOnLimitSw -->
-### `/getProhibitMotionOnLimitSw` (int)motorID {#getprohibitmotiononlimitsw .osc-command}
+### `/getProhibitMotionOnLimitSw` (int)motorID {#getprohibitmotiononlimitsw .osc-command data-toc-label="/getProhibitMotionOnLimitSw"}
 
 Available on STEP400 only.
 

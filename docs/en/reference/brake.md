@@ -8,7 +8,7 @@ For how the electromagnetic brake works, see [Electromagnetic brake](../guides/e
 
 <!-- osc: /enableElectromagnetBrake -->
 <!-- generated:begin osc /enableElectromagnetBrake -->
-### `/enableElectromagnetBrake` (int)motorID (bool)enable {#enableelectromagnetbrake .osc-command}
+### `/enableElectromagnetBrake` (int)motorID (bool)enable {#enableelectromagnetbrake .osc-command data-toc-label="/enableElectromagnetBrake"}
 
 #### Argument
 
@@ -54,7 +54,7 @@ The setting is changed only while the driver is HiZ, and the brake is disabled o
 
 <!-- osc: /activate -->
 <!-- generated:begin osc /activate -->
-### `/activate` (int)motorID (bool)state {#activate .osc-command}
+### `/activate` (int)motorID (bool)state {#activate .osc-command data-toc-label="/activate"}
 
 #### Argument
 
@@ -121,7 +121,7 @@ When: While homing is in progress
 
 <!-- osc: /free -->
 <!-- generated:begin osc /free -->
-### `/free` (int)motorID {#free .osc-command}
+### `/free` (int)motorID {#free .osc-command data-toc-label="/free"}
 
 #### Argument
 
@@ -174,7 +174,7 @@ When: While homing is in progress
 
 <!-- osc: /setBrakeTransitionDuration -->
 <!-- generated:begin osc /setBrakeTransitionDuration -->
-### `/setBrakeTransitionDuration` (int)motorID (int)duration {#setbraketransitionduration .osc-command}
+### `/setBrakeTransitionDuration` (int)motorID (int)duration {#setbraketransitionduration .osc-command data-toc-label="/setBrakeTransitionDuration"}
 
 #### Argument
 
@@ -213,7 +213,7 @@ A value outside 0-65535 replies `CommandIgnored` and the setting is kept. The re
 
 <!-- osc: /getBrakeTransitionDuration -->
 <!-- generated:begin osc /getBrakeTransitionDuration -->
-### `/getBrakeTransitionDuration` (int)motorID {#getbraketransitionduration .osc-command}
+### `/getBrakeTransitionDuration` (int)motorID {#getbraketransitionduration .osc-command data-toc-label="/getBrakeTransitionDuration"}
 
 #### Argument
 
@@ -243,7 +243,7 @@ Returns the transitional duration to keep holding the motor axis when the electr
 
 <!-- osc: /getBrakeStatus -->
 <!-- generated:begin osc /getBrakeStatus -->
-### `/getBrakeStatus` (int)motorID {#getbrakestatus .osc-command}
+### `/getBrakeStatus` (int)motorID {#getbrakestatus .osc-command data-toc-label="/getBrakeStatus"}
 
 Added in v2.2.0.
 

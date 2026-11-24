@@ -8,7 +8,7 @@ For how the board communicates and how the messages work, see [Communication and
 
 <!-- osc: /setDestIp -->
 <!-- generated:begin osc /setDestIp -->
-### `/setDestIp` {#setdestip .osc-command}
+### `/setDestIp` {#setdestip .osc-command data-toc-label="/setDestIp"}
 
 #### Argument
 
@@ -55,7 +55,7 @@ To resolve the MAC address, the board sends one byte of UDP to port 9 (discard) 
 
 <!-- osc: /getVersion -->
 <!-- generated:begin osc /getVersion -->
-### `/getVersion` {#getversion .osc-command}
+### `/getVersion` {#getversion .osc-command data-toc-label="/getVersion"}
 
 #### Argument
 
@@ -82,7 +82,7 @@ Returns the firmware version burnt on the chip.
 
 <!-- osc: /getConfigName -->
 <!-- generated:begin osc /getConfigName -->
-### `/getConfigName` {#getconfigname .osc-command}
+### `/getConfigName` {#getconfigname .osc-command data-toc-label="/getConfigName"}
 
 #### Argument
 
@@ -130,7 +130,7 @@ Returns `/configName`: the configuration name, whether the microSD card could be
 
 <!-- osc: /reportError -->
 <!-- generated:begin osc /reportError -->
-### `/reportError` (bool)enable {#reporterror .osc-command}
+### `/reportError` (bool)enable {#reporterror .osc-command data-toc-label="/reportError"}
 
 #### Argument
 
@@ -210,7 +210,7 @@ Enables or disables the automatic message notification for [`/error/command`](au
 
 <!-- osc: /setConfigName -->
 <!-- generated:begin osc /setConfigName -->
-### `/setConfigName` (string)configName {#setconfigname .osc-command}
+### `/setConfigName` (string)configName {#setconfigname .osc-command data-toc-label="/setConfigName"}
 
 Added in v2.1.0.
 
@@ -241,7 +241,7 @@ The name changes only in the board until it is saved with [`/saveConfig`](system
 
 <!-- osc: /saveConfig -->
 <!-- generated:begin osc /saveConfig -->
-### `/saveConfig` {#saveconfig .osc-command}
+### `/saveConfig` {#saveconfig .osc-command data-toc-label="/saveConfig"}
 
 Added in v2.1.0.
 
@@ -306,7 +306,7 @@ Added in v2.1.0.
 
 <!-- osc: /resetDevice -->
 <!-- generated:begin osc /resetDevice -->
-### `/resetDevice` {#resetdevice .osc-command}
+### `/resetDevice` {#resetdevice .osc-command data-toc-label="/resetDevice"}
 
 #### Argument
 

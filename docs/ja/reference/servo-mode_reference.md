@@ -8,7 +8,7 @@ title: サーボモード
 
 <!-- osc: /enableServoMode -->
 <!-- generated:begin osc /enableServoMode -->
-### `/enableServoMode` (int)motorID (bool)enable {#enableservomode .osc-command}
+### `/enableServoMode` (int)motorID (bool)enable {#enableservomode .osc-command data-toc-label="/enableServoMode"}
 
 #### 引数
 
@@ -77,7 +77,7 @@ title: サーボモード
 
 <!-- osc: /setServoParam -->
 <!-- generated:begin osc /setServoParam -->
-### `/setServoParam` (int)motorID (float)kP (float)kI (float)kD {#setservoparam .osc-command}
+### `/setServoParam` (int)motorID (float)kP (float)kI (float)kD {#setservoparam .osc-command data-toc-label="/setServoParam"}
 
 #### 引数
 
@@ -120,7 +120,7 @@ PID制御のゲインを調整します。
 
 <!-- osc: /getServoParam -->
 <!-- generated:begin osc /getServoParam -->
-### `/getServoParam` (int)motorID {#getservoparam .osc-command}
+### `/getServoParam` (int)motorID {#getservoparam .osc-command data-toc-label="/getServoParam"}
 
 #### 引数
 
@@ -152,7 +152,7 @@ PID制御のゲインを調整します。
 
 <!-- osc: /setTargetPosition -->
 <!-- generated:begin osc /setTargetPosition -->
-### `/setTargetPosition` (int)motorID (int)position {#settargetposition .osc-command}
+### `/setTargetPosition` (int)motorID (int)position {#settargetposition .osc-command data-toc-label="/setTargetPosition"}
 
 #### 引数
 
@@ -176,7 +176,7 @@ PID制御のゲインを調整します。
 
 <!-- osc: /setTargetPositionList -->
 <!-- generated:begin osc /setTargetPositionList -->
-### `/setTargetPositionList` (int)position1 ... (int)positionN {#settargetpositionlist .osc-command}
+### `/setTargetPositionList` (int)position1 ... (int)positionN {#settargetpositionlist .osc-command data-toc-label="/setTargetPositionList"}
 
 #### 引数
 

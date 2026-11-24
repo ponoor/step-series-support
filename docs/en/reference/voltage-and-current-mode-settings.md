@@ -10,7 +10,7 @@ For how to decide the KVAL and TVAL values, see [Voltage mode and current mode](
 
 <!-- osc: /setVoltageMode -->
 <!-- generated:begin osc /setVoltageMode -->
-### `/setVoltageMode` (int)motorID {#setvoltagemode .osc-command}
+### `/setVoltageMode` (int)motorID {#setvoltagemode .osc-command data-toc-label="/setVoltageMode"}
 
 Available on STEP400 only.
 
@@ -48,7 +48,7 @@ STEP800 is always in this voltage mode and cannot change.
 
 <!-- osc: /setKval -->
 <!-- generated:begin osc /setKval -->
-### `/setKval` (int)motorID (int)holdKVAL (int)runKVAL (int)accKVAL (int)decKVAL {#setkval .osc-command}
+### `/setKval` (int)motorID (int)holdKVAL (int)runKVAL (int)accKVAL (int)decKVAL {#setkval .osc-command data-toc-label="/setKval"}
 
 #### Argument
 
@@ -86,7 +86,7 @@ On STEP400 in the current mode only the stored setting changes; [`/setVoltageMod
 
 <!-- osc: /getKval -->
 <!-- generated:begin osc /getKval -->
-### `/getKval` (int)motorID {#getkval .osc-command}
+### `/getKval` (int)motorID {#getkval .osc-command data-toc-label="/getKval"}
 
 #### Argument
 
@@ -125,7 +125,7 @@ With the electromagnetic brake enabled and the voltage mode, KVAL_HOLD is raised
 
 <!-- osc: /setBemfParam -->
 <!-- generated:begin osc /setBemfParam -->
-### `/setBemfParam` (int)motorID (int)INT_SPEED (int)ST_SLP (int)FN_SLP_ACC (int)FN_SLP_DEC {#setbemfparam .osc-command}
+### `/setBemfParam` (int)motorID (int)INT_SPEED (int)ST_SLP (int)FN_SLP_ACC (int)FN_SLP_DEC {#setbemfparam .osc-command data-toc-label="/setBemfParam"}
 
 #### Argument
 
@@ -171,7 +171,7 @@ A value outside the range is not rejected: INT_SPEED is limited to 0-16383 and t
 
 <!-- osc: /getBemfParam -->
 <!-- generated:begin osc /getBemfParam -->
-### `/getBemfParam` (int)motorID {#getbemfparam .osc-command}
+### `/getBemfParam` (int)motorID {#getbemfparam .osc-command data-toc-label="/getBemfParam"}
 
 #### Argument
 
@@ -204,7 +204,7 @@ Get register values for the BEMF parameter.
 
 <!-- osc: /setHoldKval -->
 <!-- generated:begin osc /setHoldKval -->
-### `/setHoldKval` (int)motorID (int)holdKVAL {#setholdkval .osc-command}
+### `/setHoldKval` (int)motorID (int)holdKVAL {#setholdkval .osc-command data-toc-label="/setHoldKval"}
 
 #### Argument
 
@@ -236,7 +236,7 @@ On STEP400 in the current mode only the stored setting changes; [`/setVoltageMod
 
 <!-- osc: /setRunKval -->
 <!-- generated:begin osc /setRunKval -->
-### `/setRunKval` (int)motorID (int)runKVAL {#setrunkval .osc-command}
+### `/setRunKval` (int)motorID (int)runKVAL {#setrunkval .osc-command data-toc-label="/setRunKval"}
 
 #### Argument
 
@@ -268,7 +268,7 @@ On STEP400 in the current mode only the stored setting changes; [`/setVoltageMod
 
 <!-- osc: /setAccKval -->
 <!-- generated:begin osc /setAccKval -->
-### `/setAccKval` (int)motorID (int)accKVAL {#setacckval .osc-command}
+### `/setAccKval` (int)motorID (int)accKVAL {#setacckval .osc-command data-toc-label="/setAccKval"}
 
 #### Argument
 
@@ -300,7 +300,7 @@ On STEP400 in the current mode only the stored setting changes; [`/setVoltageMod
 
 <!-- osc: /setDecKval -->
 <!-- generated:begin osc /setDecKval -->
-### `/setDecKval` (int)motorID (int)decKVAL {#setdeckval .osc-command}
+### `/setDecKval` (int)motorID (int)decKVAL {#setdeckval .osc-command data-toc-label="/setDecKval"}
 
 #### Argument
 
@@ -334,7 +334,7 @@ On STEP400 in the current mode only the stored setting changes; [`/setVoltageMod
 
 <!-- osc: /setCurrentMode -->
 <!-- generated:begin osc /setCurrentMode -->
-### `/setCurrentMode` (int)motorID {#setcurrentmode .osc-command}
+### `/setCurrentMode` (int)motorID {#setcurrentmode .osc-command data-toc-label="/setCurrentMode"}
 
 Available on STEP400 only.
 
@@ -371,7 +371,7 @@ The PowerSTEP01 current mode goes up to 1/16 microsteps: a finer microstep mode 
 
 <!-- osc: /setTval -->
 <!-- generated:begin osc /setTval -->
-### `/setTval` (int)motorID (int)holdTVAL (int)runTVAL (int)accTVAL (int)decTVAL {#settval .osc-command}
+### `/setTval` (int)motorID (int)holdTVAL (int)runTVAL (int)accTVAL (int)decTVAL {#settval .osc-command data-toc-label="/setTval"}
 
 Available on STEP400 only.
 
@@ -420,7 +420,7 @@ In the voltage mode only the stored setting changes; [`/setCurrentMode`](voltage
 
 <!-- osc: /getTval -->
 <!-- generated:begin osc /getTval -->
-### `/getTval` (int)motorID {#gettval .osc-command}
+### `/getTval` (int)motorID {#gettval .osc-command data-toc-label="/getTval"}
 
 Available on STEP400 only.
 
@@ -467,7 +467,7 @@ Available on STEP400 only.
 
 <!-- osc: /getTval_mA -->
 <!-- generated:begin osc /getTval_mA -->
-### `/getTval_mA` (int)motorID {#gettval_ma .osc-command}
+### `/getTval_mA` (int)motorID {#gettval_ma .osc-command data-toc-label="/getTval_mA"}
 
 Available on STEP400 only.
 
@@ -512,7 +512,7 @@ Available on STEP400 only.
 
 <!-- osc: /setDecayModeParam -->
 <!-- generated:begin osc /setDecayModeParam -->
-### `/setDecayModeParam` (int)motorID (int)T_FAST (int)TON_MIN (int)TOFF_MIN {#setdecaymodeparam .osc-command}
+### `/setDecayModeParam` (int)motorID (int)T_FAST (int)TON_MIN (int)TOFF_MIN {#setdecaymodeparam .osc-command data-toc-label="/setDecayModeParam"}
 
 Available on STEP400 only.
 
@@ -560,7 +560,7 @@ TON_MIN and TOFF_MIN are 7 bit (0-127): a value outside it replies `CommandIgnor
 
 <!-- osc: /getDecayModeParam -->
 <!-- generated:begin osc /getDecayModeParam -->
-### `/getDecayModeParam` (int)motorID {#getdecaymodeparam .osc-command}
+### `/getDecayModeParam` (int)motorID {#getdecaymodeparam .osc-command data-toc-label="/getDecayModeParam"}
 
 Available on STEP400 only.
 
@@ -596,7 +596,7 @@ Available on STEP400 only.
 
 <!-- osc: /setHoldTval -->
 <!-- generated:begin osc /setHoldTval -->
-### `/setHoldTval` (int)motorID (int)holdTVAL {#setholdtval .osc-command}
+### `/setHoldTval` (int)motorID (int)holdTVAL {#setholdtval .osc-command data-toc-label="/setHoldTval"}
 
 Available on STEP400 only.
 
@@ -630,7 +630,7 @@ In the voltage mode only the stored setting changes; [`/setCurrentMode`](voltage
 
 <!-- osc: /setRunTval -->
 <!-- generated:begin osc /setRunTval -->
-### `/setRunTval` (int)motorID (int)runTVAL {#setruntval .osc-command}
+### `/setRunTval` (int)motorID (int)runTVAL {#setruntval .osc-command data-toc-label="/setRunTval"}
 
 Available on STEP400 only.
 
@@ -664,7 +664,7 @@ In the voltage mode only the stored setting changes; [`/setCurrentMode`](voltage
 
 <!-- osc: /setAccTval -->
 <!-- generated:begin osc /setAccTval -->
-### `/setAccTval` (int)motorID (int)accTVAL {#setacctval .osc-command}
+### `/setAccTval` (int)motorID (int)accTVAL {#setacctval .osc-command data-toc-label="/setAccTval"}
 
 Available on STEP400 only.
 
@@ -698,7 +698,7 @@ In the voltage mode only the stored setting changes; [`/setCurrentMode`](voltage
 
 <!-- osc: /setDecTval -->
 <!-- generated:begin osc /setDecTval -->
-### `/setDecTval` (int)motorID (int)decTVAL {#setdectval .osc-command}
+### `/setDecTval` (int)motorID (int)decTVAL {#setdectval .osc-command data-toc-label="/setDecTval"}
 
 Available on STEP400 only.
 

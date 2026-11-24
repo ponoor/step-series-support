@@ -8,7 +8,7 @@ title: スピードプロファイル
 
 <!-- osc: /setSpeedProfile -->
 <!-- generated:begin osc /setSpeedProfile -->
-### `/setSpeedProfile` (int)motorID (float)acc (float)dec (float)maxSpeed {#setspeedprofile .osc-command}
+### `/setSpeedProfile` (int)motorID (float)acc (float)dec (float)maxSpeed {#setspeedprofile .osc-command data-toc-label="/setSpeedProfile"}
 
 #### 引数
 
@@ -54,7 +54,7 @@ ACCとDECは最も近いレジスタ値に丸められるため、書き込ま�
 
 <!-- osc: /getSpeedProfile -->
 <!-- generated:begin osc /getSpeedProfile -->
-### `/getSpeedProfile` (int)motorID {#getspeedprofile .osc-command}
+### `/getSpeedProfile` (int)motorID {#getspeedprofile .osc-command data-toc-label="/getSpeedProfile"}
 
 #### 引数
 
@@ -90,7 +90,7 @@ ACCとDECは最も近いレジスタ値に丸められるため、書き込ま�
 
 <!-- osc: /setFullstepSpeed -->
 <!-- generated:begin osc /setFullstepSpeed -->
-### `/setFullstepSpeed` (int)motorID (float)fullstepSpeed {#setfullstepspeed .osc-command}
+### `/setFullstepSpeed` (int)motorID (float)fullstepSpeed {#setfullstepspeed .osc-command data-toc-label="/setFullstepSpeed"}
 
 #### 引数
 
@@ -120,7 +120,7 @@ ACCとDECは最も近いレジスタ値に丸められるため、書き込ま�
 
 <!-- osc: /getFullstepSpeed -->
 <!-- generated:begin osc /getFullstepSpeed -->
-### `/getFullstepSpeed` (int)motorID {#getfullstepspeed .osc-command}
+### `/getFullstepSpeed` (int)motorID {#getfullstepspeed .osc-command data-toc-label="/getFullstepSpeed"}
 
 #### 引数
 
@@ -150,7 +150,7 @@ ACCとDECは最も近いレジスタ値に丸められるため、書き込ま�
 
 <!-- osc: /setMaxSpeed -->
 <!-- generated:begin osc /setMaxSpeed -->
-### `/setMaxSpeed` (int)motorID (float)maxSpeed {#setmaxspeed .osc-command}
+### `/setMaxSpeed` (int)motorID (float)maxSpeed {#setmaxspeed .osc-command data-toc-label="/setMaxSpeed"}
 
 #### 引数
 
@@ -184,7 +184,7 @@ ACCとDECは最も近いレジスタ値に丸められるため、書き込ま�
 
 <!-- osc: /setAcc -->
 <!-- generated:begin osc /setAcc -->
-### `/setAcc` (int)motorID (float)acc {#setacc .osc-command}
+### `/setAcc` (int)motorID (float)acc {#setacc .osc-command data-toc-label="/setAcc"}
 
 #### 引数
 
@@ -225,7 +225,7 @@ ACCとDECは最も近いレジスタ値に丸められるため、書き込ま�
 
 <!-- osc: /setDec -->
 <!-- generated:begin osc /setDec -->
-### `/setDec` (int)motorID (float)dec {#setdec .osc-command}
+### `/setDec` (int)motorID (float)dec {#setdec .osc-command data-toc-label="/setDec"}
 
 #### 引数
 
@@ -266,7 +266,7 @@ ACCとDECは最も近いレジスタ値に丸められるため、書き込ま�
 
 <!-- osc: /setMinSpeed -->
 <!-- generated:begin osc /setMinSpeed -->
-### `/setMinSpeed` (int)motorID (float)minSpeed {#setminspeed .osc-command}
+### `/setMinSpeed` (int)motorID (float)minSpeed {#setminspeed .osc-command data-toc-label="/setMinSpeed"}
 
 #### 引数
 
@@ -307,7 +307,7 @@ ACCとDECは最も近いレジスタ値に丸められるため、書き込ま�
 
 <!-- osc: /getMinSpeed -->
 <!-- generated:begin osc /getMinSpeed -->
-### `/getMinSpeed` (int)motorID {#getminspeed .osc-command}
+### `/getMinSpeed` (int)motorID {#getminspeed .osc-command data-toc-label="/getMinSpeed"}
 
 #### 引数
 
@@ -343,7 +343,7 @@ ACCとDECは最も近いレジスタ値に丸められるため、書き込ま�
 
 <!-- osc: /getSpeed -->
 <!-- generated:begin osc /getSpeed -->
-### `/getSpeed` (int)motorID {#getspeed .osc-command}
+### `/getSpeed` (int)motorID {#getspeed .osc-command data-toc-label="/getSpeed"}
 
 #### 引数
 
@@ -377,7 +377,7 @@ ACCとDECは最も近いレジスタ値に丸められるため、書き込ま�
 
 <!-- osc: /setSpeedProfileRaw -->
 <!-- generated:begin osc /setSpeedProfileRaw -->
-### `/setSpeedProfileRaw` (int)motorID (int)acc (int)dec (int)maxSpeed {#setspeedprofileraw .osc-command}
+### `/setSpeedProfileRaw` (int)motorID (int)acc (int)dec (int)maxSpeed {#setspeedprofileraw .osc-command data-toc-label="/setSpeedProfileRaw"}
 
 #### 引数
 
@@ -414,7 +414,7 @@ ACCとDECは最も近いレジスタ値に丸められるため、書き込ま�
 
 <!-- osc: /getSpeedProfileRaw -->
 <!-- generated:begin osc /getSpeedProfileRaw -->
-### `/getSpeedProfileRaw` (int)motorID {#getspeedprofileraw .osc-command}
+### `/getSpeedProfileRaw` (int)motorID {#getspeedprofileraw .osc-command data-toc-label="/getSpeedProfileRaw"}
 
 #### 引数
 
@@ -446,7 +446,7 @@ ACCとDECは最も近いレジスタ値に丸められるため、書き込ま�
 
 <!-- osc: /setMaxSpeedRaw -->
 <!-- generated:begin osc /setMaxSpeedRaw -->
-### `/setMaxSpeedRaw` (int)motorID (int)maxSpeed {#setmaxspeedraw .osc-command}
+### `/setMaxSpeedRaw` (int)motorID (int)maxSpeed {#setmaxspeedraw .osc-command data-toc-label="/setMaxSpeedRaw"}
 
 #### 引数
 
@@ -478,7 +478,7 @@ ACCとDECは最も近いレジスタ値に丸められるため、書き込ま�
 
 <!-- osc: /setMinSpeedRaw -->
 <!-- generated:begin osc /setMinSpeedRaw -->
-### `/setMinSpeedRaw` (int)motorID (int)minSpeed {#setminspeedraw .osc-command}
+### `/setMinSpeedRaw` (int)motorID (int)minSpeed {#setminspeedraw .osc-command data-toc-label="/setMinSpeedRaw"}
 
 #### 引数
 
@@ -514,7 +514,7 @@ ACCとDECは最も近いレジスタ値に丸められるため、書き込ま�
 
 <!-- osc: /setFullstepSpeedRaw -->
 <!-- generated:begin osc /setFullstepSpeedRaw -->
-### `/setFullstepSpeedRaw` (int)motorID (int)fullstepSpeed {#setfullstepspeedraw .osc-command}
+### `/setFullstepSpeedRaw` (int)motorID (int)fullstepSpeed {#setfullstepspeedraw .osc-command data-toc-label="/setFullstepSpeedRaw"}
 
 #### 引数
 
@@ -544,7 +544,7 @@ ACCとDECは最も近いレジスタ値に丸められるため、書き込ま�
 
 <!-- osc: /setAccRaw -->
 <!-- generated:begin osc /setAccRaw -->
-### `/setAccRaw` (int)motorID (int)acc {#setaccraw .osc-command}
+### `/setAccRaw` (int)motorID (int)acc {#setaccraw .osc-command data-toc-label="/setAccRaw"}
 
 #### 引数
 
@@ -579,7 +579,7 @@ ACCとDECは最も近いレジスタ値に丸められるため、書き込ま�
 
 <!-- osc: /setDecRaw -->
 <!-- generated:begin osc /setDecRaw -->
-### `/setDecRaw` (int)motorID (int)dec {#setdecraw .osc-command}
+### `/setDecRaw` (int)motorID (int)dec {#setdecraw .osc-command data-toc-label="/setDecRaw"}
 
 #### 引数
 

@@ -101,7 +101,14 @@ code, kbd, pre { font-family: var(--ponoor-font-code); }
 
 /* OSC reference: the form of a reply, quieter than the command band. */
 .md-typeset .osc-signature code {
+  color: var(--ponoor-black);
   font-size: 0.65rem;   /* Material's rem is 20px: 13px here, body text is 16px */
   line-height: 1.5;
   padding: 0.4em 0.8em;
+}
+
+/* OSC reference pages: the right-hand table of contents lists only the command names (the labels are set by
+   data-toc-label in tools/generate.py); the h4 entries (Argument, Timing, ...) are hidden. */
+.md-main:has(h3.osc-command) .md-sidebar--secondary .md-nav__list .md-nav__list .md-nav__list {
+  display: none;
 }

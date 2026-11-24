@@ -8,7 +8,7 @@ For how the servo mode works, see [Servo mode](../guides/servo-mode.md).
 
 <!-- osc: /enableServoMode -->
 <!-- generated:begin osc /enableServoMode -->
-### `/enableServoMode` (int)motorID (bool)enable {#enableservomode .osc-command}
+### `/enableServoMode` (int)motorID (bool)enable {#enableservomode .osc-command data-toc-label="/enableServoMode"}
 
 #### Argument
 
@@ -76,7 +76,7 @@ When: While homing is in progress
 
 <!-- osc: /setServoParam -->
 <!-- generated:begin osc /setServoParam -->
-### `/setServoParam` (int)motorID (float)kP (float)kI (float)kD {#setservoparam .osc-command}
+### `/setServoParam` (int)motorID (float)kP (float)kI (float)kD {#setservoparam .osc-command data-toc-label="/setServoParam"}
 
 #### Argument
 
@@ -119,7 +119,7 @@ A negative gain replies `CommandIgnored` and nothing is applied. The update peri
 
 <!-- osc: /getServoParam -->
 <!-- generated:begin osc /getServoParam -->
-### `/getServoParam` (int)motorID {#getservoparam .osc-command}
+### `/getServoParam` (int)motorID {#getservoparam .osc-command data-toc-label="/getServoParam"}
 
 #### Argument
 
@@ -151,7 +151,7 @@ Gets the PID gains (kP, kI, kD) of the servo mode.
 
 <!-- osc: /setTargetPosition -->
 <!-- generated:begin osc /setTargetPosition -->
-### `/setTargetPosition` (int)motorID (int)position {#settargetposition .osc-command}
+### `/setTargetPosition` (int)motorID (int)position {#settargetposition .osc-command data-toc-label="/setTargetPosition"}
 
 #### Argument
 
@@ -175,7 +175,7 @@ Sets the target position in servo mode.
 
 <!-- osc: /setTargetPositionList -->
 <!-- generated:begin osc /setTargetPositionList -->
-### `/setTargetPositionList` (int)position1 ... (int)positionN {#settargetpositionlist .osc-command}
+### `/setTargetPositionList` (int)position1 ... (int)positionN {#settargetpositionlist .osc-command data-toc-label="/setTargetPositionList"}
 
 #### Argument
 
