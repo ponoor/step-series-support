@@ -23,6 +23,8 @@ theme:
   - content.code.copy
 extra_css:
 - assets/extra.css
+extra_javascript:
+- assets/toc-commands.js   # right-hand TOC of the OSC reference pages: command names only
 plugins:
 - search
 - i18n:
