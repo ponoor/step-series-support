@@ -1,1 +1,118 @@
-/* Extra styles (the ponoor.com header goes with overrides/partials/header-slot.html). */
+/* ---- ponoor brand (BRAND Manual 2020.Sep). The designer edits only this block. ---- */
+:root {
+  --ponoor-brown:  #9F4527;
+  --ponoor-black:  #000000;
+  --ponoor-orange: #EB6133;
+  --ponoor-gray:   #E6E6E6;
+  --ponoor-yellow: #FCC83E;
+  /* NOT a brand colour: ponoor-brown darkened, for link hover/focus text (the brand orange is 3.3:1 on white, too low
+     for text; the brown itself would show no change on hover). 9.0:1 on white. */
+  --ponoor-brown-dark: #7A3420;
+
+  /* Fonts: placeholders until the designer decides the site-wide stack (no web fonts). */
+  --ponoor-font-text: system-ui, -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic UI", sans-serif;
+  --ponoor-font-code: ui-monospace, "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+}
+/* ---- end of the designer's block ---- */
+
+/* Assign the brand to Material's variables. */
+:root,
+[data-md-color-primary=custom],
+[data-md-color-accent=custom] {
+  --md-primary-fg-color: var(--ponoor-brown);
+  --md-primary-fg-color--light: var(--ponoor-brown);
+  --md-primary-fg-color--dark: var(--ponoor-brown-dark);
+  --md-primary-bg-color: #FFFFFF;
+  --md-primary-bg-color--light: rgba(255, 255, 255, 0.7);
+  --md-accent-fg-color: var(--ponoor-brown-dark);
+  --md-accent-fg-color--transparent: rgba(159, 69, 39, 0.1);
+  --md-accent-bg-color: #FFFFFF;
+  --md-typeset-a-color: var(--ponoor-brown);
+  --md-code-bg-color: #F3F3F3;
+  --md-text-font: var(--ponoor-font-text);
+  --md-code-font: var(--ponoor-font-code);
+}
+
+/* font: false in mkdocs.yml, so set the families directly. */
+body, input { font-family: var(--ponoor-font-text); }
+code, kbd, pre { font-family: var(--ponoor-font-code); }
+
+/* Square corners (the brand: colour blocks have right angles). */
+.md-typeset .admonition,
+.md-typeset details,
+.md-typeset details:not([open]) > summary,
+.md-typeset summary,
+.md-typeset pre > code,
+.md-typeset code,
+.md-typeset kbd,
+.md-typeset table:not([class]),
+.md-typeset .md-button,
+.md-search__form,
+.md-search__overlay,
+.md-top,
+.md-clipboard,
+.md-select__inner,
+.md-tooltip,
+.md-tooltip2__inner,
+.md-dialog {
+  border-radius: 0;
+}
+
+/* Left column: the headings of the sections (navigation.sections). Material makes them small and pale (54%). */
+.md-nav--primary .md-nav__item--section > .md-nav__link {
+  color: var(--ponoor-black);
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+.md-nav--primary .md-nav__item--section {
+  margin-top: 1.6em;
+}
+.md-nav--primary .md-nav__item--section:first-child {
+  margin-top: 1.25em;
+}
+
+/* OSC reference: the name of a command or message (class from tools/generate.py). */
+.md-typeset h3.osc-command {
+  background: var(--ponoor-yellow);
+  color: var(--ponoor-black);
+  font-family: var(--ponoor-font-code);
+  font-size: 1.05em;   /* h3 of Material is 1.25em; the reply form below is 13px */
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.5;
+  margin: 3em -0.8rem 1em;
+  padding: 0.3em 0.8rem;
+  overflow-wrap: anywhere;
+}
+.md-typeset h3.osc-command code {
+  background: none;
+  color: inherit;
+  font-size: 1em;
+  font-weight: 700;
+  padding: 0;
+  word-break: break-word;
+}
+.md-typeset h3.osc-command .headerlink,
+.md-typeset h3.osc-command .headerlink:hover,
+.md-typeset h3.osc-command .headerlink:focus,
+.md-typeset h3.osc-command:target > .headerlink {
+  color: rgba(0, 0, 0, 0.75);
+}
+
+/* OSC reference: the form of a reply, quieter than the command band. */
+.md-typeset .osc-signature code {
+  color: var(--ponoor-black);
+  font-size: 0.65rem;   /* Material's rem is 20px: 13px here, body text is 16px */
+  line-height: 1.5;
+  padding: 0.4em 0.8em;
+}
+
+/* OSC reference pages: the right-hand table of contents lists only the group headings (h2) and the command names (h3;
+   the labels come from data-toc-label in tools/generate.py). assets/toc-commands.js hides the h4/h5 entries and marks the
+   group headings with .toc-group. */
+.md-sidebar--secondary .toc-group:not(:first-child) {
+  margin-top: 1.6em;
+}
+.md-sidebar--secondary li.toc-hidden {
+  display: none;
+}

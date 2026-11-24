@@ -8,7 +8,7 @@ title: ボード全体の設定
 
 <!-- osc: /setDestIp -->
 <!-- generated:begin osc /setDestIp -->
-### `/setDestIp` {#setdestip}
+### `/setDestIp` {#setdestip .osc-command data-toc-label="/setDestIp"}
 
 #### 引数
 
@@ -28,7 +28,7 @@ MACアドレスの解決のために、ブロードキャストアドレスと�
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /destIp (int)destIp[0] (int)destIp[1] (int)destIp[2] (int)destIp[3] (int)isNewDestIp
 ```
 
@@ -54,7 +54,7 @@ MACアドレスの解決のために、ブロードキャストアドレスと�
 
 <!-- osc: /getVersion -->
 <!-- generated:begin osc /getVersion -->
-### `/getVersion` {#getversion}
+### `/getVersion` {#getversion .osc-command data-toc-label="/getVersion"}
 
 #### 引数
 
@@ -70,7 +70,7 @@ MACアドレスの解決のために、ブロードキャストアドレスと�
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /version (string)version
 ```
 
@@ -81,7 +81,7 @@ MACアドレスの解決のために、ブロードキャストアドレスと�
 
 <!-- osc: /getConfigName -->
 <!-- generated:begin osc /getConfigName -->
-### `/getConfigName` {#getconfigname}
+### `/getConfigName` {#getconfigname .osc-command data-toc-label="/getConfigName"}
 
 #### 引数
 
@@ -97,7 +97,7 @@ MACアドレスの解決のために、ブロードキャストアドレスと�
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /configName (string)configName (int)sdInitializeSucceeded (int)configFileOpenSucceeded (int)configFileParseSucceeded (string)configFilename
 ```
 
@@ -129,7 +129,7 @@ MACアドレスの解決のために、ブロードキャストアドレスと�
 
 <!-- osc: /reportError -->
 <!-- generated:begin osc /reportError -->
-### `/reportError` (bool)enable {#reporterror}
+### `/reportError` (bool)enable {#reporterror .osc-command data-toc-label="/reportError"}
 
 #### 引数
 
@@ -156,7 +156,7 @@ MACアドレスの解決のために、ブロードキャストアドレスと�
 
 [`/error/command`](automatically-sent-messages.md#error-command)
 
-```
+``` { .text .osc-signature }
 /error/command (string)errorText (int)motorID
 ```
 
@@ -185,7 +185,7 @@ MACアドレスの解決のために、ブロードキャストアドレスと�
 
 [`/error/osc`](automatically-sent-messages.md#error-osc)
 
-```
+``` { .text .osc-signature }
 /error/osc (string)errorText
 ```
 
@@ -209,7 +209,7 @@ MACアドレスの解決のために、ブロードキャストアドレスと�
 
 <!-- osc: /setConfigName -->
 <!-- generated:begin osc /setConfigName -->
-### `/setConfigName` (string)configName {#setconfigname}
+### `/setConfigName` (string)configName {#setconfigname .osc-command data-toc-label="/setConfigName"}
 
 v2.1.0で追加。
 
@@ -240,7 +240,7 @@ v2.1.0で追加。
 
 <!-- osc: /saveConfig -->
 <!-- generated:begin osc /saveConfig -->
-### `/saveConfig` {#saveconfig}
+### `/saveConfig` {#saveconfig .osc-command data-toc-label="/saveConfig"}
 
 v2.1.0で追加。
 
@@ -266,7 +266,7 @@ v2.1.0で追加。
 
 v2.1.0で追加。
 
-```
+``` { .text .osc-signature }
 /saveConfig (string)message
 ```
 
@@ -278,7 +278,7 @@ v2.1.0で追加。
 
 v2.1.0で追加。
 
-```
+``` { .text .osc-signature }
 /error/saveConfig (string)errorText
 ```
 
@@ -305,7 +305,7 @@ v2.1.0で追加。
 
 <!-- osc: /resetDevice -->
 <!-- generated:begin osc /resetDevice -->
-### `/resetDevice` {#resetdevice}
+### `/resetDevice` {#resetdevice .osc-command data-toc-label="/resetDevice"}
 
 #### 引数
 

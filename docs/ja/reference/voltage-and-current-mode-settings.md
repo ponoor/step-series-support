@@ -10,7 +10,7 @@ KVALとTVALの決め方は、[電圧モードと電流モード](../guides/volta
 
 <!-- osc: /setVoltageMode -->
 <!-- generated:begin osc /setVoltageMode -->
-### `/setVoltageMode` (int)motorID {#setvoltagemode}
+### `/setVoltageMode` (int)motorID {#setvoltagemode .osc-command data-toc-label="/setVoltageMode"}
 
 STEP400のみ。
 
@@ -45,7 +45,7 @@ STEP400のみ。
 
 <!-- osc: /setKval -->
 <!-- generated:begin osc /setKval -->
-### `/setKval` (int)motorID (int)holdKVAL (int)runKVAL (int)accKVAL (int)decKVAL {#setkval}
+### `/setKval` (int)motorID (int)holdKVAL (int)runKVAL (int)accKVAL (int)decKVAL {#setkval .osc-command data-toc-label="/setKval"}
 
 #### 引数
 
@@ -83,7 +83,7 @@ STEP400の電流モードでは、保存される設定だけが変わります�
 
 <!-- osc: /getKval -->
 <!-- generated:begin osc /getKval -->
-### `/getKval` (int)motorID {#getkval}
+### `/getKval` (int)motorID {#getkval .osc-command data-toc-label="/getKval"}
 
 #### 引数
 
@@ -103,7 +103,7 @@ KVAL4種をまとめて取得します。
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /kval (int)motorID (int)holdKVAL (int)runKVAL (int)accKVAL (int)decKVAL
 ```
 
@@ -122,7 +122,7 @@ KVAL4種をまとめて取得します。
 
 <!-- osc: /setBemfParam -->
 <!-- generated:begin osc /setBemfParam -->
-### `/setBemfParam` (int)motorID (int)INT_SPEED (int)ST_SLP (int)FN_SLP_ACC (int)FN_SLP_DEC {#setbemfparam}
+### `/setBemfParam` (int)motorID (int)INT_SPEED (int)ST_SLP (int)FN_SLP_ACC (int)FN_SLP_DEC {#setbemfparam .osc-command data-toc-label="/setBemfParam"}
 
 #### 引数
 
@@ -168,7 +168,7 @@ BEMF補償パラメータのレジスタを設定します。各レジスタの�
 
 <!-- osc: /getBemfParam -->
 <!-- generated:begin osc /getBemfParam -->
-### `/getBemfParam` (int)motorID {#getbemfparam}
+### `/getBemfParam` (int)motorID {#getbemfparam .osc-command data-toc-label="/getBemfParam"}
 
 #### 引数
 
@@ -186,7 +186,7 @@ BEMFパラメータを設定するレジスタ値を取得します。
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /bemfParam (int)motorID (int)INT_SPEED (int)ST_SLP (int)FN_SLP_ACC (int)FN_SLP_DEC
 ```
 
@@ -201,7 +201,7 @@ BEMFパラメータを設定するレジスタ値を取得します。
 
 <!-- osc: /setHoldKval -->
 <!-- generated:begin osc /setHoldKval -->
-### `/setHoldKval` (int)motorID (int)holdKVAL {#setholdkval}
+### `/setHoldKval` (int)motorID (int)holdKVAL {#setholdkval .osc-command data-toc-label="/setHoldKval"}
 
 #### 引数
 
@@ -233,7 +233,7 @@ STEP400の電流モードでは、保存される設定だけが変わります�
 
 <!-- osc: /setRunKval -->
 <!-- generated:begin osc /setRunKval -->
-### `/setRunKval` (int)motorID (int)runKVAL {#setrunkval}
+### `/setRunKval` (int)motorID (int)runKVAL {#setrunkval .osc-command data-toc-label="/setRunKval"}
 
 #### 引数
 
@@ -265,7 +265,7 @@ STEP400の電流モードでは、保存される設定だけが変わります�
 
 <!-- osc: /setAccKval -->
 <!-- generated:begin osc /setAccKval -->
-### `/setAccKval` (int)motorID (int)accKVAL {#setacckval}
+### `/setAccKval` (int)motorID (int)accKVAL {#setacckval .osc-command data-toc-label="/setAccKval"}
 
 #### 引数
 
@@ -297,7 +297,7 @@ STEP400の電流モードでは、保存される設定だけが変わります�
 
 <!-- osc: /setDecKval -->
 <!-- generated:begin osc /setDecKval -->
-### `/setDecKval` (int)motorID (int)decKVAL {#setdeckval}
+### `/setDecKval` (int)motorID (int)decKVAL {#setdeckval .osc-command data-toc-label="/setDecKval"}
 
 #### 引数
 
@@ -331,7 +331,7 @@ STEP400の電流モードでは、保存される設定だけが変わります�
 
 <!-- osc: /setCurrentMode -->
 <!-- generated:begin osc /setCurrentMode -->
-### `/setCurrentMode` (int)motorID {#setcurrentmode}
+### `/setCurrentMode` (int)motorID {#setcurrentmode .osc-command data-toc-label="/setCurrentMode"}
 
 STEP400のみ。
 
@@ -368,7 +368,7 @@ PowerSTEP01の電流モードは1/16マイクロステップまでです。そ�
 
 <!-- osc: /setTval -->
 <!-- generated:begin osc /setTval -->
-### `/setTval` (int)motorID (int)holdTVAL (int)runTVAL (int)accTVAL (int)decTVAL {#settval}
+### `/setTval` (int)motorID (int)holdTVAL (int)runTVAL (int)accTVAL (int)decTVAL {#settval .osc-command data-toc-label="/setTval"}
 
 STEP400のみ。
 
@@ -418,7 +418,7 @@ STEP400では、TVALは以下のようになっています。
 
 <!-- osc: /getTval -->
 <!-- generated:begin osc /getTval -->
-### `/getTval` (int)motorID {#gettval}
+### `/getTval` (int)motorID {#gettval .osc-command data-toc-label="/getTval"}
 
 STEP400のみ。
 
@@ -442,7 +442,7 @@ TVAL4種をまとめて取得します。
 
 STEP400のみ。
 
-```
+``` { .text .osc-signature }
 /tval (int)motorID (int)holdTVAL (int)runTVAL (int)accTVAL (int)decTVAL
 ```
 
@@ -465,7 +465,7 @@ STEP400のみ。
 
 <!-- osc: /getTval_mA -->
 <!-- generated:begin osc /getTval_mA -->
-### `/getTval_mA` (int)motorID {#gettval_ma}
+### `/getTval_mA` (int)motorID {#gettval_ma .osc-command data-toc-label="/getTval_mA"}
 
 STEP400のみ。
 
@@ -487,7 +487,7 @@ TVAL4種をまとめて取得します。レジスタの値ではなく単位[mA
 
 STEP400のみ。
 
-```
+``` { .text .osc-signature }
 /tval_mA (int)motorID (float)holdTVAL_mA (float)runTVAL_mA (float)accTVAL_mA (float)decTVAL_mA
 ```
 
@@ -510,7 +510,7 @@ STEP400のみ。
 
 <!-- osc: /setDecayModeParam -->
 <!-- generated:begin osc /setDecayModeParam -->
-### `/setDecayModeParam` (int)motorID (int)T_FAST (int)TON_MIN (int)TOFF_MIN {#setdecaymodeparam}
+### `/setDecayModeParam` (int)motorID (int)T_FAST (int)TON_MIN (int)TOFF_MIN {#setdecaymodeparam .osc-command data-toc-label="/setDecayModeParam"}
 
 STEP400のみ。
 
@@ -558,7 +558,7 @@ TON_MINとTOFF_MINは7ビット（0〜127）です。範囲外の値には`Comma
 
 <!-- osc: /getDecayModeParam -->
 <!-- generated:begin osc /getDecayModeParam -->
-### `/getDecayModeParam` (int)motorID {#getdecaymodeparam}
+### `/getDecayModeParam` (int)motorID {#getdecaymodeparam .osc-command data-toc-label="/getDecayModeParam"}
 
 STEP400のみ。
 
@@ -580,7 +580,7 @@ STEP400のみ。
 
 STEP400のみ。
 
-```
+``` { .text .osc-signature }
 /decayModeParam (int)motorID (int)T_FAST (int)TON_MIN (int)TOFF_MIN
 ```
 
@@ -594,7 +594,7 @@ STEP400のみ。
 
 <!-- osc: /setHoldTval -->
 <!-- generated:begin osc /setHoldTval -->
-### `/setHoldTval` (int)motorID (int)holdTVAL {#setholdtval}
+### `/setHoldTval` (int)motorID (int)holdTVAL {#setholdtval .osc-command data-toc-label="/setHoldTval"}
 
 STEP400のみ。
 
@@ -628,7 +628,7 @@ STEP400のみ。
 
 <!-- osc: /setRunTval -->
 <!-- generated:begin osc /setRunTval -->
-### `/setRunTval` (int)motorID (int)runTVAL {#setruntval}
+### `/setRunTval` (int)motorID (int)runTVAL {#setruntval .osc-command data-toc-label="/setRunTval"}
 
 STEP400のみ。
 
@@ -662,7 +662,7 @@ STEP400のみ。
 
 <!-- osc: /setAccTval -->
 <!-- generated:begin osc /setAccTval -->
-### `/setAccTval` (int)motorID (int)accTVAL {#setacctval}
+### `/setAccTval` (int)motorID (int)accTVAL {#setacctval .osc-command data-toc-label="/setAccTval"}
 
 STEP400のみ。
 
@@ -696,7 +696,7 @@ STEP400のみ。
 
 <!-- osc: /setDecTval -->
 <!-- generated:begin osc /setDecTval -->
-### `/setDecTval` (int)motorID (int)decTVAL {#setdectval}
+### `/setDecTval` (int)motorID (int)decTVAL {#setdectval .osc-command data-toc-label="/setDecTval"}
 
 STEP400のみ。
 

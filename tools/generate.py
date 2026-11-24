@@ -586,7 +586,7 @@ def render_message_block(ctx: Ctx, addr: str) -> str:
     msg = spec.message(addr)
     ctx.where = f"message {addr}"
     ctx.block_anchor = anchor(addr)
-    parts = [f"### `{addr}` {arg_heading(spec, msg)} {{#{anchor(addr)}}}".replace("  ", " ")]
+    parts = [f"### `{addr}` {arg_heading(spec, msg)} {{#{anchor(addr)} .osc-command data-toc-label=\"{addr}\"}}".replace("  ", " ")]
     parts += _notes(ctx, msg)
     parts.append(f"#### {L['argument']}\n\n" + render_args(ctx, msg, in_message=True))
     if msg.get("description"):
@@ -634,7 +634,7 @@ def render_command_block(ctx: Ctx, addr: str) -> str:
     cmd = spec.command(addr)
     ctx.where = f"command {addr}"
     ctx.block_anchor = anchor(addr)
-    parts = [f"### `{addr}` {arg_heading(spec, cmd)} {{#{anchor(addr)}}}".replace("  ", " ")]
+    parts = [f"### `{addr}` {arg_heading(spec, cmd)} {{#{anchor(addr)} .osc-command data-toc-label=\"{addr}\"}}".replace("  ", " ")]
     parts += _notes(ctx, cmd)
     parts.append(f"#### {L['argument']}\n\n" + render_args(ctx, cmd))
     timings = cmd["timing"] if isinstance(cmd["timing"], list) else [cmd["timing"]]
@@ -683,7 +683,7 @@ def _render_response(ctx: Ctx, maddr: str, when: Any, boards: list[str] | None =
         head = f"{L['when']}: {ctx.tx(when, 'when')}\n\n"
     standalone = maddr in standalone_messages(spec)
     href = ctx.link_to(maddr, prefer="message") if standalone else None
-    code = f"```\n{maddr} {arg_heading(spec, msg)}\n```".replace("  ", " ")
+    code = f"``` {{ .text .osc-signature }}\n{maddr} {arg_heading(spec, msg)}\n```".replace("  ", " ")
     link = f"[`{maddr}`]({href})\n\n" if href else ""
     note = ctx.join(*_notes(ctx, msg))
     out = head + link + (note + "\n\n" if note else "") + code + "\n\n" + render_args(ctx, msg, in_message=True, only_boards=boards)
@@ -1231,6 +1231,11 @@ def page_url(page: str) -> str:
     return page[: -len(".md")] + "/"
 
 
+def llms_url(page: str) -> str:
+    """URL of an English page relative to the top of the site: Japanese is the default language, English is under en/."""
+    return "en/" if page == "index.md" else "en/" + page_url(page)
+
+
 def strip_markdown_links(text: str) -> str:
     """`[text](url)` -> `text`, `![alt](src)` -> `alt` (no URL: a relative path of a page cannot be read here)."""
     return MD_LINK_RE.sub(r"\1", IMAGE_RE.sub(r"\1", text))
@@ -1267,10 +1272,22 @@ def page_title_and_description(text: str) -> tuple[str, str]:
     return title, desc
 
 
+def en_nav_names(mk: dict) -> dict[str, str]:
+    """Japanese is the default language, so the nav is Japanese; the `en` nav_translations give the English names."""
+    for plugin in mk.get("plugins") or []:
+        if isinstance(plugin, dict) and "i18n" in plugin:
+            for lang in plugin["i18n"].get("languages") or []:
+                if lang.get("locale") == "en":
+                    return {str(k): str(v) for k, v in (lang.get("nav_translations") or {}).items()}
+    return {}
+
+
 def read_nav_pages(docs: Path, mk: dict, errors: list[str]) -> list[tuple[str, list[tuple[str, str]]]]:
     """[(section, [(page path, text)])]; a page that does not exist is an error."""
     out = []
+    names = en_nav_names(mk)
     for name, pages in nav_sections(mk.get("nav") or []):
+        name = names.get(name, name)
         items = []
         for page in pages:
             f = docs / "en" / page
@@ -1307,7 +1324,7 @@ def render_llms_txt(spec: Spec, mk: dict, sections: list[tuple[str, list[tuple[s
            f"> {desc}, which you control over Ethernet with OSC (Open Sound Control) messages: the firmware v{fw} "
            f"of the STEP400 and the STEP800 (and of the do-it-yourself STEP100 and STEP200).", "",
            f"This file lists the pages of the English documentation. Every link is a path relative to the top of the site, "
-           f"which is {site_url}; the Japanese pages are under `ja/` and are not listed here. "
+           f"which is {site_url}; the English pages are under `en/`, and the Japanese pages (at the top) are not listed here. "
            f"The full text of the functional guides and the specification of every OSC command, message and "
            f"configuration item are in llms-full.txt.", ""]
     for name, items in sections:
@@ -1316,7 +1333,7 @@ def render_llms_txt(spec: Spec, mk: dict, sections: list[tuple[str, list[tuple[s
             title, d = page_title_and_description(text)
             if page.startswith("reference/"):
                 d = reference_page_description(text) or d
-            out.append(f"- [{title}]({page_url(page)})" + (f": {d}" if d else ""))
+            out.append(f"- [{title}]({llms_url(page)})" + (f": {d}" if d else ""))
         out.append("")
     out += ["## Optional", "",
             f"- [Full text]({LLMS_FULL_FILE}): The OSC commands, the messages of the board and the configuration items "
@@ -1521,7 +1538,7 @@ def render_llms_full(spec: Spec, mk: dict, sections: list[tuple[str, list[tuple[
     out = [f"# {mk.get('site_name', 'STEP Series')}: full text", "",
            f"The specification of the OSC commands, the messages sent by the board and the configuration items of the "
            f"STEP400 / STEP800 firmware v{fw}, followed by the full text of the functional guides. It is generated from "
-           f"spec/osc-commands.yaml and from the English pages of the documentation, which is at {site_url}. "
+           f"spec/osc-commands.yaml and from the English pages of the documentation, which is at {site_url}en/. "
            f"llms.txt is the table of contents of the site.", "",
            "## OSC commands", ""]
     for key, g in spec.groups.items():

@@ -10,7 +10,7 @@ For how the position is managed, see [Homing and position management](../guides/
 
 <!-- osc: /setPosition -->
 <!-- generated:begin osc /setPosition -->
-### `/setPosition` (int)motorID (int)newPosition {#setposition}
+### `/setPosition` (int)motorID (int)newPosition {#setposition .osc-command data-toc-label="/setPosition"}
 
 #### Argument
 
@@ -42,7 +42,7 @@ A value outside the range is not rejected: the driver truncates it to 22 bits.
 
 <!-- osc: /getPosition -->
 <!-- generated:begin osc /getPosition -->
-### `/getPosition` (int)motorID {#getposition}
+### `/getPosition` (int)motorID {#getposition .osc-command data-toc-label="/getPosition"}
 
 #### Argument
 
@@ -63,7 +63,7 @@ Returns the contents of the ABS_POS register (current position).
 
 [`/position`](automatically-sent-messages.md#position)
 
-```
+``` { .text .osc-signature }
 /position (int)motorID (int)ABS_POS
 ```
 
@@ -75,7 +75,7 @@ Returns the contents of the ABS_POS register (current position).
 
 <!-- osc: /getPositionList -->
 <!-- generated:begin osc /getPositionList -->
-### `/getPositionList` {#getpositionlist}
+### `/getPositionList` {#getpositionlist .osc-command data-toc-label="/getPositionList"}
 
 #### Argument
 
@@ -94,7 +94,7 @@ Returns the current position of all motors at once. `/getPosition 255` returns i
 
 [`/positionList`](automatically-sent-messages.md#positionlist)
 
-```
+``` { .text .osc-signature }
 /positionList (int)position1 ... (int)positionN
 ```
 
@@ -109,7 +109,7 @@ Returns the current position of all motors at once. `/getPosition 255` returns i
 
 <!-- osc: /resetPos -->
 <!-- generated:begin osc /resetPos -->
-### `/resetPos` (int)motorID {#resetpos}
+### `/resetPos` (int)motorID {#resetpos .osc-command data-toc-label="/resetPos"}
 
 #### Argument
 
@@ -138,7 +138,7 @@ Do not use it while the motor is running or in the servo mode. There is no guard
 
 <!-- osc: /setElPos -->
 <!-- generated:begin osc /setElPos -->
-### `/setElPos` (int)motorID (int)newFullstep (int)newMicrostep {#setelpos}
+### `/setElPos` (int)motorID (int)newFullstep (int)newMicrostep {#setelpos .osc-command data-toc-label="/setElPos"}
 
 #### Argument
 
@@ -175,7 +175,7 @@ A full step outside 0-3 or a microstep outside 0-127 replies `CommandIgnored` an
 
 <!-- osc: /getElPos -->
 <!-- generated:begin osc /getElPos -->
-### `/getElPos` (int)motorID {#getelpos}
+### `/getElPos` (int)motorID {#getelpos .osc-command data-toc-label="/getElPos"}
 
 #### Argument
 
@@ -193,7 +193,7 @@ Returns the current electrical position of the motor.
 
 #### Response
 
-```
+``` { .text .osc-signature }
 /elPos (int)motorID (int)fullstep (int)microstep
 ```
 
@@ -208,7 +208,7 @@ Returns the current electrical position of the motor.
 
 <!-- osc: /setMark -->
 <!-- generated:begin osc /setMark -->
-### `/setMark` (int)motorID (int)MARK {#setmark}
+### `/setMark` (int)motorID (int)MARK {#setmark .osc-command data-toc-label="/setMark"}
 
 #### Argument
 
@@ -234,7 +234,7 @@ A value outside the range is not rejected: the driver truncates it to 22 bits.
 
 <!-- osc: /getMark -->
 <!-- generated:begin osc /getMark -->
-### `/getMark` (int)motorID {#getmark}
+### `/getMark` (int)motorID {#getmark .osc-command data-toc-label="/getMark"}
 
 #### Argument
 
@@ -252,7 +252,7 @@ Get the MARK position.
 
 #### Response
 
-```
+``` { .text .osc-signature }
 /mark (int)motorID (int)MARK
 ```
 
@@ -264,7 +264,7 @@ Get the MARK position.
 
 <!-- osc: /goHome -->
 <!-- generated:begin osc /goHome -->
-### `/goHome` (int)motorID {#gohome}
+### `/goHome` (int)motorID {#gohome .osc-command data-toc-label="/goHome"}
 
 #### Argument
 
@@ -295,7 +295,7 @@ Move the motor to the HOME position (zero position) according to the speed profi
 
 <!-- osc: /goMark -->
 <!-- generated:begin osc /goMark -->
-### `/goMark` (int)motorID {#gomark}
+### `/goMark` (int)motorID {#gomark .osc-command data-toc-label="/goMark"}
 
 #### Argument
 

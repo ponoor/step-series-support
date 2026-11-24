@@ -8,7 +8,7 @@ title: 電磁ブレーキ
 
 <!-- osc: /enableElectromagnetBrake -->
 <!-- generated:begin osc /enableElectromagnetBrake -->
-### `/enableElectromagnetBrake` (int)motorID (bool)enable {#enableelectromagnetbrake}
+### `/enableElectromagnetBrake` (int)motorID (bool)enable {#enableelectromagnetbrake .osc-command data-toc-label="/enableElectromagnetBrake"}
 
 #### 引数
 
@@ -54,7 +54,7 @@ title: 電磁ブレーキ
 
 <!-- osc: /activate -->
 <!-- generated:begin osc /activate -->
-### `/activate` (int)motorID (bool)state {#activate}
+### `/activate` (int)motorID (bool)state {#activate .osc-command data-toc-label="/activate"}
 
 #### 引数
 
@@ -90,7 +90,7 @@ title: 電磁ブレーキ
 
 [`/homingStatus`](automatically-sent-messages.md#homingstatus)
 
-```
+``` { .text .osc-signature }
 /homingStatus (int)motorID (int)homingStatus
 ```
 
@@ -122,7 +122,7 @@ title: 電磁ブレーキ
 
 <!-- osc: /free -->
 <!-- generated:begin osc /free -->
-### `/free` (int)motorID {#free}
+### `/free` (int)motorID {#free .osc-command data-toc-label="/free"}
 
 #### 引数
 
@@ -150,7 +150,7 @@ title: 電磁ブレーキ
 
 [`/homingStatus`](automatically-sent-messages.md#homingstatus)
 
-```
+``` { .text .osc-signature }
 /homingStatus (int)motorID (int)homingStatus
 ```
 
@@ -177,7 +177,7 @@ title: 電磁ブレーキ
 
 <!-- osc: /setBrakeTransitionDuration -->
 <!-- generated:begin osc /setBrakeTransitionDuration -->
-### `/setBrakeTransitionDuration` (int)motorID (int)duration {#setbraketransitionduration}
+### `/setBrakeTransitionDuration` (int)motorID (int)duration {#setbraketransitionduration .osc-command data-toc-label="/setBrakeTransitionDuration"}
 
 #### 引数
 
@@ -216,7 +216,7 @@ title: 電磁ブレーキ
 
 <!-- osc: /getBrakeTransitionDuration -->
 <!-- generated:begin osc /getBrakeTransitionDuration -->
-### `/getBrakeTransitionDuration` (int)motorID {#getbraketransitionduration}
+### `/getBrakeTransitionDuration` (int)motorID {#getbraketransitionduration .osc-command data-toc-label="/getBrakeTransitionDuration"}
 
 #### 引数
 
@@ -234,7 +234,7 @@ title: 電磁ブレーキ
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /brakeTransitionDuration (int)motorID (int)duration
 ```
 
@@ -246,7 +246,7 @@ title: 電磁ブレーキ
 
 <!-- osc: /getBrakeStatus -->
 <!-- generated:begin osc /getBrakeStatus -->
-### `/getBrakeStatus` (int)motorID {#getbrakestatus}
+### `/getBrakeStatus` (int)motorID {#getbrakestatus .osc-command data-toc-label="/getBrakeStatus"}
 
 v2.2.0で追加。
 
@@ -268,7 +268,7 @@ v2.2.0で追加。
 
 v2.2.0で追加。
 
-```
+``` { .text .osc-signature }
 /brakeStatus (int)motorID (int)state
 ```
 

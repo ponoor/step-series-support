@@ -10,7 +10,7 @@ Commands for the motor driver settings, such as the microstep mode and the low s
 
 <!-- osc: /setMicrostepMode -->
 <!-- generated:begin osc /setMicrostepMode -->
-### `/setMicrostepMode` (int)motorID (int)STEP_SEL {#setmicrostepmode}
+### `/setMicrostepMode` (int)motorID (int)STEP_SEL {#setmicrostepmode .osc-command data-toc-label="/setMicrostepMode"}
 
 #### Argument
 
@@ -66,7 +66,7 @@ A value outside 0-7 is not rejected: it is converted to 8 bits and then limited 
 
 <!-- osc: /getMicrostepMode -->
 <!-- generated:begin osc /getMicrostepMode -->
-### `/getMicrostepMode` (int)motorID {#getmicrostepmode}
+### `/getMicrostepMode` (int)motorID {#getmicrostepmode .osc-command data-toc-label="/getMicrostepMode"}
 
 #### Argument
 
@@ -84,7 +84,7 @@ Gets the mode of microstepping. See [`/setMicrostepMode`](motor-driver-settings.
 
 #### Response
 
-```
+``` { .text .osc-signature }
 /microstepMode (int)motorID (int)STEP_SEL
 ```
 
@@ -109,7 +109,7 @@ Gets the mode of microstepping. See [`/setMicrostepMode`](motor-driver-settings.
 
 <!-- osc: /enableLowSpeedOptimize -->
 <!-- generated:begin osc /enableLowSpeedOptimize -->
-### `/enableLowSpeedOptimize` (int)motorID (bool)enable {#enablelowspeedoptimize}
+### `/enableLowSpeedOptimize` (int)motorID (bool)enable {#enablelowspeedoptimize .osc-command data-toc-label="/enableLowSpeedOptimize"}
 
 #### Argument
 
@@ -152,7 +152,7 @@ Enable/disable low speed optimization feature which compensate phase current dis
 
 <!-- osc: /setLowSpeedOptimizeThreshold -->
 <!-- generated:begin osc /setLowSpeedOptimizeThreshold -->
-### `/setLowSpeedOptimizeThreshold` (int)motorID (float)lowSpeedOptimizationThreshold {#setlowspeedoptimizethreshold}
+### `/setLowSpeedOptimizeThreshold` (int)motorID (float)lowSpeedOptimizationThreshold {#setlowspeedoptimizethreshold .osc-command data-toc-label="/setLowSpeedOptimizeThreshold"}
 
 #### Argument
 
@@ -192,7 +192,7 @@ While the low speed optimization is enabled, the motor must be stopped or HiZ; a
 
 <!-- osc: /getLowSpeedOptimizeThreshold -->
 <!-- generated:begin osc /getLowSpeedOptimizeThreshold -->
-### `/getLowSpeedOptimizeThreshold` (int)motorID {#getlowspeedoptimizethreshold}
+### `/getLowSpeedOptimizeThreshold` (int)motorID {#getlowspeedoptimizethreshold .osc-command data-toc-label="/getLowSpeedOptimizeThreshold"}
 
 #### Argument
 
@@ -210,7 +210,7 @@ Gets the current value of the low speed optimization threshold.
 
 #### Response
 
-```
+``` { .text .osc-signature }
 /lowSpeedOptimizeThreshold (int)motorID (float)lowSpeedOptimizeThreshold (int)optimizationEnabled
 ```
 
@@ -236,7 +236,7 @@ Gets the current value of the low speed optimization threshold.
 
 <!-- osc: /enableBusyReport -->
 <!-- generated:begin osc /enableBusyReport -->
-### `/enableBusyReport` (int)motorID (bool)enable {#enablebusyreport}
+### `/enableBusyReport` (int)motorID (bool)enable {#enablebusyreport .osc-command data-toc-label="/enableBusyReport"}
 
 #### Argument
 
@@ -264,7 +264,7 @@ Automatically sends out notification if the BUSY status of the specified motor h
 
 [`/busy`](automatically-sent-messages.md#busy)
 
-```
+``` { .text .osc-signature }
 /busy (int)motorID (int)state
 ```
 
@@ -287,7 +287,7 @@ Automatically sends out notification if the BUSY status of the specified motor h
 
 <!-- osc: /getBusy -->
 <!-- generated:begin osc /getBusy -->
-### `/getBusy` (int)motorID {#getbusy}
+### `/getBusy` (int)motorID {#getbusy .osc-command data-toc-label="/getBusy"}
 
 #### Argument
 
@@ -307,7 +307,7 @@ Returns the BUSY state of the specified motor.
 
 [`/busy`](automatically-sent-messages.md#busy)
 
-```
+``` { .text .osc-signature }
 /busy (int)motorID (int)state
 ```
 
@@ -326,7 +326,7 @@ Returns the BUSY state of the specified motor.
 
 <!-- osc: /enableHizReport -->
 <!-- generated:begin osc /enableHizReport -->
-### `/enableHizReport` (int)motorID (bool)enable {#enablehizreport}
+### `/enableHizReport` (int)motorID (bool)enable {#enablehizreport .osc-command data-toc-label="/enableHizReport"}
 
 #### Argument
 
@@ -354,7 +354,7 @@ Following message is sent automatically when there is a change in the High Z (hi
 
 [`/HiZ`](automatically-sent-messages.md#hiz)
 
-```
+``` { .text .osc-signature }
 /HiZ (int)motorID (int)state
 ```
 
@@ -370,7 +370,7 @@ Following message is sent automatically when there is a change in the High Z (hi
 
 <!-- osc: /getHiZ -->
 <!-- generated:begin osc /getHiZ -->
-### `/getHiZ` (int)motorID {#gethiz}
+### `/getHiZ` (int)motorID {#gethiz .osc-command data-toc-label="/getHiZ"}
 
 #### Argument
 
@@ -390,7 +390,7 @@ Requests the High Z (high impedance) state of the specified motor.
 
 [`/HiZ`](automatically-sent-messages.md#hiz)
 
-```
+``` { .text .osc-signature }
 /HiZ (int)motorID (int)state
 ```
 
@@ -402,7 +402,7 @@ Requests the High Z (high impedance) state of the specified motor.
 
 <!-- osc: /enableDirReport -->
 <!-- generated:begin osc /enableDirReport -->
-### `/enableDirReport` (int)motorID (bool)enable {#enabledirreport}
+### `/enableDirReport` (int)motorID (bool)enable {#enabledirreport .osc-command data-toc-label="/enableDirReport"}
 
 #### Argument
 
@@ -430,7 +430,7 @@ Following message is sent automatically when there is a change in the direction 
 
 [`/dir`](automatically-sent-messages.md#dir)
 
-```
+``` { .text .osc-signature }
 /dir (int)motorID (int)direction
 ```
 
@@ -453,7 +453,7 @@ Following message is sent automatically when there is a change in the direction 
 
 <!-- osc: /getDir -->
 <!-- generated:begin osc /getDir -->
-### `/getDir` (int)motorID {#getdir}
+### `/getDir` (int)motorID {#getdir .osc-command data-toc-label="/getDir"}
 
 #### Argument
 
@@ -473,7 +473,7 @@ Requests the direction of the specified motor.
 
 [`/dir`](automatically-sent-messages.md#dir)
 
-```
+``` { .text .osc-signature }
 /dir (int)motorID (int)direction
 ```
 
@@ -496,7 +496,7 @@ Requests the direction of the specified motor.
 
 <!-- osc: /enableMotorStatusReport -->
 <!-- generated:begin osc /enableMotorStatusReport -->
-### `/enableMotorStatusReport` (int)motorID (bool)enable {#enablemotorstatusreport}
+### `/enableMotorStatusReport` (int)motorID (bool)enable {#enablemotorstatusreport .osc-command data-toc-label="/enableMotorStatusReport"}
 
 #### Argument
 
@@ -524,7 +524,7 @@ Following message will be sent automatically when there is conditional change in
 
 [`/motorStatus`](automatically-sent-messages.md#motorstatus)
 
-```
+``` { .text .osc-signature }
 /motorStatus (int)motorID (int)MOT_STATUS
 ```
 
@@ -549,7 +549,7 @@ Following message will be sent automatically when there is conditional change in
 
 <!-- osc: /getMotorStatus -->
 <!-- generated:begin osc /getMotorStatus -->
-### `/getMotorStatus` (int)motorID {#getmotorstatus}
+### `/getMotorStatus` (int)motorID {#getmotorstatus .osc-command data-toc-label="/getMotorStatus"}
 
 #### Argument
 
@@ -569,7 +569,7 @@ Gets the operating status (MOT_STATUS) of the specified motor.
 
 [`/motorStatus`](automatically-sent-messages.md#motorstatus)
 
-```
+``` { .text .osc-signature }
 /motorStatus (int)motorID (int)MOT_STATUS
 ```
 
@@ -590,7 +590,7 @@ Gets the operating status (MOT_STATUS) of the specified motor.
 
 <!-- osc: /setPositionReportInterval -->
 <!-- generated:begin osc /setPositionReportInterval -->
-### `/setPositionReportInterval` (int)motorID (int)interval {#setpositionreportinterval}
+### `/setPositionReportInterval` (int)motorID (int)interval {#setpositionreportinterval .osc-command data-toc-label="/setPositionReportInterval"}
 
 #### Argument
 
@@ -615,7 +615,7 @@ An interval above 65535 replies `CommandIgnored` and nothing is applied. A negat
 
 [`/position`](automatically-sent-messages.md#position)
 
-```
+``` { .text .osc-signature }
 /position (int)motorID (int)ABS_POS
 ```
 
@@ -644,7 +644,7 @@ An interval above 65535 replies `CommandIgnored` and nothing is applied. A negat
 
 <!-- osc: /setPositionListReportInterval -->
 <!-- generated:begin osc /setPositionListReportInterval -->
-### `/setPositionListReportInterval` (int)interval {#setpositionlistreportinterval}
+### `/setPositionListReportInterval` (int)interval {#setpositionlistreportinterval .osc-command data-toc-label="/setPositionListReportInterval"}
 
 #### Argument
 
@@ -668,7 +668,7 @@ An interval above 65535 replies `CommandIgnored` with the motor ID 255 and nothi
 
 [`/positionList`](automatically-sent-messages.md#positionlist)
 
-```
+``` { .text .osc-signature }
 /positionList (int)position1 ... (int)positionN
 ```
 
@@ -697,7 +697,7 @@ An interval above 65535 replies `CommandIgnored` with the motor ID 255 and nothi
 
 <!-- osc: /getAdcVal -->
 <!-- generated:begin osc /getAdcVal -->
-### `/getAdcVal` (int)motorID {#getadcval}
+### `/getAdcVal` (int)motorID {#getadcval .osc-command data-toc-label="/getAdcVal"}
 
 Available on STEP400 only.
 
@@ -721,7 +721,7 @@ STEP400 only. The firmware also accepts the command on STEP800, but it is not me
 
 Available on STEP400 only.
 
-```
+``` { .text .osc-signature }
 /adcVal (int)motorID (int)ADC_OUT
 ```
 
@@ -733,7 +733,7 @@ Available on STEP400 only.
 
 <!-- osc: /getStatus -->
 <!-- generated:begin osc /getStatus -->
-### `/getStatus` (int)motorID {#getstatus}
+### `/getStatus` (int)motorID {#getstatus .osc-command data-toc-label="/getStatus"}
 
 #### Argument
 
@@ -755,7 +755,7 @@ This command does not clear the latched flags; only the status poll of the firmw
 
 #### Response
 
-```
+``` { .text .osc-signature }
 /status (int)motorID (int)status
 ```
 
@@ -789,7 +789,7 @@ This command does not clear the latched flags; only the status poll of the firmw
 
 <!-- osc: /getConfigRegister -->
 <!-- generated:begin osc /getConfigRegister -->
-### `/getConfigRegister` (int)motorID {#getconfigregister}
+### `/getConfigRegister` (int)motorID {#getconfigregister .osc-command data-toc-label="/getConfigRegister"}
 
 #### Argument
 
@@ -809,7 +809,7 @@ The CONFIG register stores various settings for the motor driver. Please refer t
 
 #### Response
 
-```
+``` { .text .osc-signature }
 /configRegister (int)motorID (int)CONFIG
 ```
 
@@ -821,7 +821,7 @@ The CONFIG register stores various settings for the motor driver. Please refer t
 
 <!-- osc: /resetMotorDriver -->
 <!-- generated:begin osc /resetMotorDriver -->
-### `/resetMotorDriver` (int)motorID {#resetmotordriver}
+### `/resetMotorDriver` (int)motorID {#resetmotordriver .osc-command data-toc-label="/resetMotorDriver"}
 
 #### Argument
 
@@ -852,7 +852,7 @@ With the electromagnetic brake enabled, the command is accepted only while the b
 
 <!-- osc: /getStatusList -->
 <!-- generated:begin osc /getStatusList -->
-### `/getStatusList` {#getstatuslist}
+### `/getStatusList` {#getstatuslist .osc-command data-toc-label="/getStatusList"}
 
 #### Argument
 
@@ -868,7 +868,7 @@ Gets the STATUS registers of all motors at once. See [`/getStatus`](motor-driver
 
 #### Response
 
-```
+``` { .text .osc-signature }
 /statusList (int)status1 ... (int)statusN
 ```
 

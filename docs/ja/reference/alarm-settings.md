@@ -10,7 +10,7 @@ title: アラームの設定
 
 <!-- osc: /enableUvloReport -->
 <!-- generated:begin osc /enableUvloReport -->
-### `/enableUvloReport` (int)motorID (bool)enable {#enableuvloreport}
+### `/enableUvloReport` (int)motorID (bool)enable {#enableuvloreport .osc-command data-toc-label="/enableUvloReport"}
 
 #### 引数
 
@@ -41,7 +41,7 @@ UVLOはモータドライバへ供給されている電圧がUVLO発生条件電
 
 [`/uvlo`](automatically-sent-messages.md#uvlo)
 
-```
+``` { .text .osc-signature }
 /uvlo (int)motorID (int)state
 ```
 
@@ -68,7 +68,7 @@ UVLOはモータドライバへ供給されている電圧がUVLO発生条件電
 
 <!-- osc: /getUvlo -->
 <!-- generated:begin osc /getUvlo -->
-### `/getUvlo` (int)motorID {#getuvlo}
+### `/getUvlo` (int)motorID {#getuvlo .osc-command data-toc-label="/getUvlo"}
 
 #### 引数
 
@@ -88,7 +88,7 @@ UVLOはモータドライバへ供給されている電圧がUVLO発生条件電
 
 [`/uvlo`](automatically-sent-messages.md#uvlo)
 
-```
+``` { .text .osc-signature }
 /uvlo (int)motorID (int)state
 ```
 
@@ -107,7 +107,7 @@ UVLOはモータドライバへ供給されている電圧がUVLO発生条件電
 
 <!-- osc: /enableThermalStatusReport -->
 <!-- generated:begin osc /enableThermalStatusReport -->
-### `/enableThermalStatusReport` (int)motorID (bool)enable {#enablethermalstatusreport}
+### `/enableThermalStatusReport` (int)motorID (bool)enable {#enablethermalstatusreport .osc-command data-toc-label="/enableThermalStatusReport"}
 
 #### 引数
 
@@ -135,7 +135,7 @@ UVLOはモータドライバへ供給されている電圧がUVLO発生条件電
 
 [`/thermalStatus`](automatically-sent-messages.md#thermalstatus)
 
-```
+``` { .text .osc-signature }
 /thermalStatus (int)motorID (int)thermalStatus
 ```
 
@@ -155,7 +155,7 @@ UVLOはモータドライバへ供給されている電圧がUVLO発生条件電
 
 <!-- osc: /getThermalStatus -->
 <!-- generated:begin osc /getThermalStatus -->
-### `/getThermalStatus` (int)motorID {#getthermalstatus}
+### `/getThermalStatus` (int)motorID {#getthermalstatus .osc-command data-toc-label="/getThermalStatus"}
 
 #### 引数
 
@@ -177,7 +177,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 [`/thermalStatus`](automatically-sent-messages.md#thermalstatus)
 
-```
+``` { .text .osc-signature }
 /thermalStatus (int)motorID (int)thermalStatus
 ```
 
@@ -189,7 +189,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 <!-- osc: /enableOverCurrentReport -->
 <!-- generated:begin osc /enableOverCurrentReport -->
-### `/enableOverCurrentReport` (int)motorID (bool)enable {#enableovercurrentreport}
+### `/enableOverCurrentReport` (int)motorID (bool)enable {#enableovercurrentreport .osc-command data-toc-label="/enableOverCurrentReport"}
 
 #### 引数
 
@@ -218,7 +218,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 [`/overCurrent`](automatically-sent-messages.md#overcurrent)
 
-```
+``` { .text .osc-signature }
 /overCurrent (int)motorID
 ```
 
@@ -233,7 +233,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 <!-- osc: /setOverCurrentThreshold -->
 <!-- generated:begin osc /setOverCurrentThreshold -->
-### `/setOverCurrentThreshold` (int)motorID (int)OCD_TH {#setovercurrentthreshold}
+### `/setOverCurrentThreshold` (int)motorID (int)OCD_TH {#setovercurrentthreshold .osc-command data-toc-label="/setOverCurrentThreshold"}
 
 #### 引数
 
@@ -254,7 +254,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /overCurrentThreshold (int)motorID (float)overCurrentThreshold
 ```
 
@@ -294,7 +294,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 <!-- osc: /getOverCurrentThreshold -->
 <!-- generated:begin osc /getOverCurrentThreshold -->
-### `/getOverCurrentThreshold` (int)motorID {#getovercurrentthreshold}
+### `/getOverCurrentThreshold` (int)motorID {#getovercurrentthreshold .osc-command data-toc-label="/getOverCurrentThreshold"}
 
 #### 引数
 
@@ -312,7 +312,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /overCurrentThreshold (int)motorID (float)overCurrentThreshold
 ```
 
@@ -324,7 +324,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 <!-- osc: /enableStallReport -->
 <!-- generated:begin osc /enableStallReport -->
-### `/enableStallReport` (int)motorID (bool)enable {#enablestallreport}
+### `/enableStallReport` (int)motorID (bool)enable {#enablestallreport .osc-command data-toc-label="/enableStallReport"}
 
 #### 引数
 
@@ -353,7 +353,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 [`/stall`](automatically-sent-messages.md#stall)
 
-```
+``` { .text .osc-signature }
 /stall (int)motorID
 ```
 
@@ -368,7 +368,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 <!-- osc: /setStallThreshold -->
 <!-- generated:begin osc /setStallThreshold -->
-### `/setStallThreshold` (int)motorID (int)STALL_TH {#setstallthreshold}
+### `/setStallThreshold` (int)motorID (int)STALL_TH {#setstallthreshold .osc-command data-toc-label="/setStallThreshold"}
 
 #### 引数
 
@@ -391,7 +391,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /stallThreshold (int)motorID (float)stallThreshold
 ```
 
@@ -435,7 +435,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 <!-- osc: /getStallThreshold -->
 <!-- generated:begin osc /getStallThreshold -->
-### `/getStallThreshold` (int)motorID {#getstallthreshold}
+### `/getStallThreshold` (int)motorID {#getstallthreshold .osc-command data-toc-label="/getStallThreshold"}
 
 #### 引数
 
@@ -453,7 +453,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /stallThreshold (int)motorID (float)stallThreshold
 ```
 
@@ -467,7 +467,7 @@ Bridge shutdown, Device shutdown状態では、通知の有無にかかわらず
 
 <!-- osc: /setProhibitMotionOnHomeSw -->
 <!-- generated:begin osc /setProhibitMotionOnHomeSw -->
-### `/setProhibitMotionOnHomeSw` (int)motorID (bool)enable {#setprohibitmotiononhomesw}
+### `/setProhibitMotionOnHomeSw` (int)motorID (bool)enable {#setprohibitmotiononhomesw .osc-command data-toc-label="/setProhibitMotionOnHomeSw"}
 
 #### 引数
 
@@ -506,7 +506,7 @@ HOMEスイッチがオンの状態で、原点復帰方向へのモーション�
 
 <!-- osc: /getProhibitMotionOnHomeSw -->
 <!-- generated:begin osc /getProhibitMotionOnHomeSw -->
-### `/getProhibitMotionOnHomeSw` (int)motorID {#getprohibitmotiononhomesw}
+### `/getProhibitMotionOnHomeSw` (int)motorID {#getprohibitmotiononhomesw .osc-command data-toc-label="/getProhibitMotionOnHomeSw"}
 
 #### 引数
 
@@ -524,7 +524,7 @@ HOMEスイッチがオンの状態で、原点復帰方向へのモーション�
 
 #### 返信
 
-```
+``` { .text .osc-signature }
 /prohibitMotionOnHomeSw (int)motorID (int)enable
 ```
 
@@ -543,7 +543,7 @@ HOMEスイッチがオンの状態で、原点復帰方向へのモーション�
 
 <!-- osc: /setProhibitMotionOnLimitSw -->
 <!-- generated:begin osc /setProhibitMotionOnLimitSw -->
-### `/setProhibitMotionOnLimitSw` (int)motorID (bool)enable {#setprohibitmotiononlimitsw}
+### `/setProhibitMotionOnLimitSw` (int)motorID (bool)enable {#setprohibitmotiononlimitsw .osc-command data-toc-label="/setProhibitMotionOnLimitSw"}
 
 STEP400のみ。
 
@@ -580,7 +580,7 @@ LIMITスイッチがオンの状態で、原点復帰方向の逆方向へのモ
 
 <!-- osc: /getProhibitMotionOnLimitSw -->
 <!-- generated:begin osc /getProhibitMotionOnLimitSw -->
-### `/getProhibitMotionOnLimitSw` (int)motorID {#getprohibitmotiononlimitsw}
+### `/getProhibitMotionOnLimitSw` (int)motorID {#getprohibitmotiononlimitsw .osc-command data-toc-label="/getProhibitMotionOnLimitSw"}
 
 STEP400のみ。
 
@@ -602,7 +602,7 @@ LIMITスイッチがオンの状態で、原点復帰方向の逆方向へのモ
 
 STEP400のみ。
 
-```
+``` { .text .osc-signature }
 /prohibitMotionOnLimitSw (int)motorID (int)enable
 ```
 

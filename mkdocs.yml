@@ -1,14 +1,21 @@
 # MkDocs configuration (Material). All pages are in docs/en and docs/ja.
 # The old pages are removed (moved to docs/en and docs/ja); docs/_redirects_map.md keeps the old URLs. exclude_docs leaves out the two notes in docs/.
-# site_url is a placeholder: all links are relative. The header design of ponoor.com goes into overrides/.
+# site_url is where the site is published (ponoor.com/docs/step-series/). Japanese is the default language (the top); English is under en/. The header design of ponoor.com goes into overrides/.
 site_name: STEP Series
 site_description: Documentation of the STEP400 / STEP800 stepper motor controllers
-site_url: https://example.invalid/step-series/
+site_url: https://ponoor.com/docs/step-series/
 docs_dir: docs
 use_directory_urls: true
+hooks:
+- tools/mkdocs_hooks.py   # search index per language (see the file)
 theme:
   name: material
   custom_dir: overrides
+  palette:
+    scheme: default
+    primary: custom
+    accent: custom
+  font: false   # no Google Fonts; the font stack is in assets/extra.css (the designer decides the final one)
   features:
   - navigation.sections
   - navigation.top
@@ -16,6 +23,8 @@ theme:
   - content.code.copy
 extra_css:
 - assets/extra.css
+extra_javascript:
+- assets/toc-commands.js   # right-hand TOC of the OSC reference pages: command names only
 plugins:
 - search
 - i18n:
@@ -24,20 +33,20 @@ plugins:
     reconfigure_material: true
     reconfigure_search: true
     languages:
-    - locale: en
-      default: true
-      name: English
-      build: true
     - locale: ja
+      default: true
       name: 日本語
       build: true
+    - locale: en
+      name: English
+      build: true
       nav_translations:
-        Getting started: はじめに
-        Connections and settings: 接続と設定
-        Functional guides: 機能ガイド
-        OSC reference: OSCリファレンス
-        Hardware: ハードウェア
-        Maintenance: 保守
+        はじめに: Getting started
+        接続と設定: Connections and settings
+        機能ガイド: Functional guides
+        OSCリファレンス: OSC reference
+        ハードウェア: Hardware
+        保守: Maintenance
         STEP100 / STEP200: STEP100 / STEP200
 markdown_extensions:
 - attr_list
@@ -56,10 +65,10 @@ exclude_docs: '/README.md
   '
 nav:
 - index.md
-- Getting started:
+- はじめに:
   - getting-started/index.md
   - getting-started/quickstart.md
-- Connections and settings:
+- 接続と設定:
   - connections/power-supply-and-motor.md
   - connections/sensors-and-switches.md
   - connections/network-and-dip-switch.md
@@ -69,7 +78,7 @@ nav:
   - connections/browser-config-tool.md
   - connections/configuration-items.md
   - connections/example-parameters.md
-- Functional guides:
+- 機能ガイド:
   - guides/communication-and-messages.md
   - guides/voltage-and-current-mode.md
   - guides/speed-profile-and-motions.md
@@ -77,7 +86,7 @@ nav:
   - guides/servo-mode.md
   - guides/electromagnetic-brake.md
   - guides/alarms-and-protection.md
-- OSC reference:
+- OSCリファレンス:
   - reference/index.md
   - reference/command-list.md
   - reference/system-settings.md
@@ -93,11 +102,11 @@ nav:
   - reference/servo-mode_reference.md
   - reference/automatically-sent-messages.md
   - reference/differences-step400-step800.md
-- Hardware:
+- ハードウェア:
   - hardware/step400.md
   - hardware/step800.md
   - hardware/emb-step400.md
-- Maintenance:
+- 保守:
   - maintenance/firmware-update.md
   - maintenance/compile-the-arduino-sketch.md
   - maintenance/usb-serial-diagnosis.md

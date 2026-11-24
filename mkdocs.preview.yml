@@ -1,0 +1,7 @@
+# Trial publication: the same site as mkdocs.yml, built for https://ponoor.com/docs-preview/step-series/.
+# Every page gets <meta name="robots" content="noindex"> (overrides/main.html). Build: tools/build_site.sh preview
+INHERIT: mkdocs.yml
+site_url: https://ponoor.com/docs-preview/step-series/
+site_dir: site-preview
+extra:
+  noindex: true

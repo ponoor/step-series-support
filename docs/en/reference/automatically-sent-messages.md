@@ -12,7 +12,7 @@ Most messages the board sends are replies to commands. For example, when you sen
 
 <!-- osc-message: /booted -->
 <!-- generated:begin osc-message /booted -->
-### `/booted` (int)deviceID (int)resetCause {#booted}
+### `/booted` (int)deviceID (int)resetCause {#booted .osc-command data-toc-label="/booted"}
 
 #### Argument
 
@@ -55,7 +55,7 @@ This message can be disabled from the browser configuration tool.
 
 <!-- osc-message: /error/osc -->
 <!-- generated:begin osc-message /error/osc -->
-### `/error/osc` (string)errorText {#error-osc}
+### `/error/osc` (string)errorText {#error-osc .osc-command data-toc-label="/error/osc"}
 
 #### Argument
 
@@ -88,7 +88,7 @@ The arguments of every command are checked before the command is applied. Argume
 
 <!-- osc-message: /error/command -->
 <!-- generated:begin osc-message /error/command -->
-### `/error/command` (string)errorText (int)motorID {#error-command}
+### `/error/command` (string)errorText (int)motorID {#error-command .osc-command data-toc-label="/error/command"}
 
 #### Argument
 
@@ -134,7 +134,7 @@ With 255 (all motors), each motor is judged alone for the errors that depend on 
 
 <!-- osc-message: /busy -->
 <!-- generated:begin osc-message /busy -->
-### `/busy` (int)motorID (int)state {#busy}
+### `/busy` (int)motorID (int)state {#busy .osc-command data-toc-label="/busy"}
 
 #### Argument
 
@@ -153,7 +153,7 @@ With 255 (all motors), each motor is judged alone for the errors that depend on 
 
 <!-- osc-message: /HiZ -->
 <!-- generated:begin osc-message /HiZ -->
-### `/HiZ` (int)motorID (int)state {#hiz}
+### `/HiZ` (int)motorID (int)state {#hiz .osc-command data-toc-label="/HiZ"}
 
 #### Argument
 
@@ -165,7 +165,7 @@ With 255 (all motors), each motor is judged alone for the errors that depend on 
 
 <!-- osc-message: /dir -->
 <!-- generated:begin osc-message /dir -->
-### `/dir` (int)motorID (int)direction {#dir}
+### `/dir` (int)motorID (int)direction {#dir .osc-command data-toc-label="/dir"}
 
 #### Argument
 
@@ -184,7 +184,7 @@ With 255 (all motors), each motor is judged alone for the errors that depend on 
 
 <!-- osc-message: /motorStatus -->
 <!-- generated:begin osc-message /motorStatus -->
-### `/motorStatus` (int)motorID (int)MOT_STATUS {#motorstatus}
+### `/motorStatus` (int)motorID (int)MOT_STATUS {#motorstatus .osc-command data-toc-label="/motorStatus"}
 
 #### Argument
 
@@ -205,7 +205,7 @@ With 255 (all motors), each motor is judged alone for the errors that depend on 
 
 <!-- osc-message: /homingStatus -->
 <!-- generated:begin osc-message /homingStatus -->
-### `/homingStatus` (int)motorID (int)homingStatus {#homingstatus}
+### `/homingStatus` (int)motorID (int)homingStatus {#homingstatus .osc-command data-toc-label="/homingStatus"}
 
 #### Argument
 
@@ -227,7 +227,7 @@ With 255 (all motors), each motor is judged alone for the errors that depend on 
 
 <!-- osc-message: /position -->
 <!-- generated:begin osc-message /position -->
-### `/position` (int)motorID (int)ABS_POS {#position}
+### `/position` (int)motorID (int)ABS_POS {#position .osc-command data-toc-label="/position"}
 
 #### Argument
 
@@ -239,7 +239,7 @@ With 255 (all motors), each motor is judged alone for the errors that depend on 
 
 <!-- osc-message: /positionList -->
 <!-- generated:begin osc-message /positionList -->
-### `/positionList` (int)position1 ... (int)positionN {#positionlist}
+### `/positionList` (int)position1 ... (int)positionN {#positionlist .osc-command data-toc-label="/positionList"}
 
 #### Argument
 
@@ -250,7 +250,7 @@ With 255 (all motors), each motor is judged alone for the errors that depend on 
 
 <!-- osc-message: /homeSw -->
 <!-- generated:begin osc-message /homeSw -->
-### `/homeSw` (int)motorID (int)swState (int)direction {#homesw}
+### `/homeSw` (int)motorID (int)swState (int)direction {#homesw .osc-command data-toc-label="/homeSw"}
 
 #### Argument
 
@@ -277,7 +277,7 @@ With 255 (all motors), each motor is judged alone for the errors that depend on 
 
 <!-- osc-message: /swEvent -->
 <!-- generated:begin osc-message /swEvent -->
-### `/swEvent` (int)motorID {#swevent}
+### `/swEvent` (int)motorID {#swevent .osc-command data-toc-label="/swEvent"}
 
 #### Argument
 
@@ -288,7 +288,7 @@ With 255 (all motors), each motor is judged alone for the errors that depend on 
 
 <!-- osc-message: /limitSw -->
 <!-- generated:begin osc-message /limitSw -->
-### `/limitSw` (int)motorID (int)swState (int)direction {#limitsw}
+### `/limitSw` (int)motorID (int)swState (int)direction {#limitsw .osc-command data-toc-label="/limitSw"}
 
 Available on STEP400 only.
 
@@ -319,7 +319,7 @@ Available on STEP400 only.
 
 <!-- osc-message: /uvlo -->
 <!-- generated:begin osc-message /uvlo -->
-### `/uvlo` (int)motorID (int)state {#uvlo}
+### `/uvlo` (int)motorID (int)state {#uvlo .osc-command data-toc-label="/uvlo"}
 
 #### Argument
 
@@ -342,7 +342,7 @@ Available on STEP400 only.
 
 <!-- osc-message: /thermalStatus -->
 <!-- generated:begin osc-message /thermalStatus -->
-### `/thermalStatus` (int)motorID (int)thermalStatus {#thermalstatus}
+### `/thermalStatus` (int)motorID (int)thermalStatus {#thermalstatus .osc-command data-toc-label="/thermalStatus"}
 
 #### Argument
 
@@ -371,7 +371,7 @@ Available on STEP400 only.
 
 <!-- osc-message: /overCurrent -->
 <!-- generated:begin osc-message /overCurrent -->
-### `/overCurrent` (int)motorID {#overcurrent}
+### `/overCurrent` (int)motorID {#overcurrent .osc-command data-toc-label="/overCurrent"}
 
 #### Argument
 
@@ -390,7 +390,7 @@ Sent at once when the overcurrent condition starts (if no such report of the mot
 
 <!-- osc-message: /stall -->
 <!-- generated:begin osc-message /stall -->
-### `/stall` (int)motorID {#stall}
+### `/stall` (int)motorID {#stall .osc-command data-toc-label="/stall"}
 
 #### Argument
 

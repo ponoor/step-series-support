@@ -7,3 +7,9 @@
   {% include "partials/header-slot.html" %}
   {{ super() }}
 {% endblock %}
+
+{# The trial publication (mkdocs.preview.yml sets extra.noindex) is not for search engines. Not set for the real site. #}
+{% block extrahead %}
+  {% if config.extra.noindex %}<meta name="robots" content="noindex">{% endif %}
+  {{ super() }}
+{% endblock %}

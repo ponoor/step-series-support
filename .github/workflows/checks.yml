@@ -28,7 +28,11 @@ jobs:
         run: python tools/validate_spec.py --ja
       - name: Generated pages are up to date
         run: python tools/generate.py --check --defaults both --coverage
+      - name: The .htaccess redirects are up to date
+        run: python tools/gen_htaccess.py --check
       - name: Tests
         run: pytest -q
       - name: Build the site
         run: mkdocs build --strict
+      - name: Build the trial site
+        run: mkdocs build --strict -f mkdocs.preview.yml

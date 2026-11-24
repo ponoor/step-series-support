@@ -20,7 +20,7 @@ Checks
               (where / term / text / note); it is not listed again while `text` is in the sentence, and
               a record whose `text` is gone gives the warning "reviewed record is stale".
     Checked in every `ja` text of the spec, in docs/ja/**/*.md (not the pages in exclude_docs, and not
-    the pages generated from the spec), in the Japanese nav_translations of mkdocs.yml and in the
+    the pages generated from the spec), in the section names of the nav of mkdocs.yml (Japanese) and in the
     Japanese fixed texts of tools/generate.py. Inline code, code blocks, [[...]] links, URLs, HTML
     comments and generated blocks are left out (code and links count as one ASCII word for spacing);
     the target of a Markdown link `[text](target)` is left out. A signed number (-1, +5) counts as ASCII for
@@ -405,12 +405,11 @@ def japanese_texts() -> list[tuple[str, str]]:
             continue  # made from the spec; the `ja` texts are checked there
         out.append((f"docs/{rel}", text))
 
-    for plugin in mk.get("plugins") or []:
-        if isinstance(plugin, dict) and "i18n" in plugin:
-            for lang in plugin["i18n"].get("languages") or []:
-                if lang.get("locale") == "ja":
-                    for k, v in (lang.get("nav_translations") or {}).items():
-                        out.append((f"mkdocs.yml nav_translations.{k}", str(v)))
+    # Japanese is the default language: the section names of the nav are Japanese (the `en` nav_translations translate them).
+    for item in mk.get("nav") or []:
+        if isinstance(item, dict):
+            for name in item:
+                out.append((f"mkdocs.yml nav.{name}", str(name)))
 
     out.extend(generate_py_texts())
     return out

@@ -8,7 +8,7 @@ For how the speed profile and the motions work, see [Speed profile and types of 
 
 <!-- osc: /setSpeedProfile -->
 <!-- generated:begin osc /setSpeedProfile -->
-### `/setSpeedProfile` (int)motorID (float)acc (float)dec (float)maxSpeed {#setspeedprofile}
+### `/setSpeedProfile` (int)motorID (float)acc (float)dec (float)maxSpeed {#setspeedprofile .osc-command data-toc-label="/setSpeedProfile"}
 
 #### Argument
 
@@ -54,7 +54,7 @@ ACC and DEC are rounded to the nearest register value, so the written value can 
 
 <!-- osc: /getSpeedProfile -->
 <!-- generated:begin osc /getSpeedProfile -->
-### `/getSpeedProfile` (int)motorID {#getspeedprofile}
+### `/getSpeedProfile` (int)motorID {#getspeedprofile .osc-command data-toc-label="/getSpeedProfile"}
 
 #### Argument
 
@@ -72,7 +72,7 @@ Gets the acc, dec, and maxSpeed of the speed profile together.
 
 #### Response
 
-```
+``` { .text .osc-signature }
 /speedProfile (int)motorID (float)acc (float)dec (float)maxSpeed
 ```
 
@@ -90,7 +90,7 @@ Gets the acc, dec, and maxSpeed of the speed profile together.
 
 <!-- osc: /setFullstepSpeed -->
 <!-- generated:begin osc /setFullstepSpeed -->
-### `/setFullstepSpeed` (int)motorID (float)fullstepSpeed {#setfullstepspeed}
+### `/setFullstepSpeed` (int)motorID (float)fullstepSpeed {#setfullstepspeed .osc-command data-toc-label="/setFullstepSpeed"}
 
 #### Argument
 
@@ -120,7 +120,7 @@ A value above the range is limited to 15625 step/s by the driver library. A valu
 
 <!-- osc: /getFullstepSpeed -->
 <!-- generated:begin osc /getFullstepSpeed -->
-### `/getFullstepSpeed` (int)motorID {#getfullstepspeed}
+### `/getFullstepSpeed` (int)motorID {#getfullstepspeed .osc-command data-toc-label="/getFullstepSpeed"}
 
 #### Argument
 
@@ -138,7 +138,7 @@ Gets the threshold at which the microstepping mode automatically switches to ful
 
 #### Response
 
-```
+``` { .text .osc-signature }
 /fullstepSpeed (int)motorID (float)fullstepSpeed
 ```
 
@@ -150,7 +150,7 @@ Gets the threshold at which the microstepping mode automatically switches to ful
 
 <!-- osc: /setMaxSpeed -->
 <!-- generated:begin osc /setMaxSpeed -->
-### `/setMaxSpeed` (int)motorID (float)maxSpeed {#setmaxspeed}
+### `/setMaxSpeed` (int)motorID (float)maxSpeed {#setmaxspeed .osc-command data-toc-label="/setMaxSpeed"}
 
 #### Argument
 
@@ -184,7 +184,7 @@ A value outside the range is limited by the driver library. On STEP400, a maximu
 
 <!-- osc: /setAcc -->
 <!-- generated:begin osc /setAcc -->
-### `/setAcc` (int)motorID (float)acc {#setacc}
+### `/setAcc` (int)motorID (float)acc {#setacc .osc-command data-toc-label="/setAcc"}
 
 #### Argument
 
@@ -225,7 +225,7 @@ The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and 
 
 <!-- osc: /setDec -->
 <!-- generated:begin osc /setDec -->
-### `/setDec` (int)motorID (float)dec {#setdec}
+### `/setDec` (int)motorID (float)dec {#setdec .osc-command data-toc-label="/setDec"}
 
 #### Argument
 
@@ -266,7 +266,7 @@ The motor must be stopped or HiZ; a turning motor replies `MotorNotStopped` and 
 
 <!-- osc: /setMinSpeed -->
 <!-- generated:begin osc /setMinSpeed -->
-### `/setMinSpeed` (int)motorID (float)minSpeed {#setminspeed}
+### `/setMinSpeed` (int)motorID (float)minSpeed {#setminspeed .osc-command data-toc-label="/setMinSpeed"}
 
 #### Argument
 
@@ -307,7 +307,7 @@ A value above the range is limited to 976.3 step/s by the driver library. A nega
 
 <!-- osc: /getMinSpeed -->
 <!-- generated:begin osc /getMinSpeed -->
-### `/getMinSpeed` (int)motorID {#getminspeed}
+### `/getMinSpeed` (int)motorID {#getminspeed .osc-command data-toc-label="/getMinSpeed"}
 
 #### Argument
 
@@ -327,7 +327,7 @@ Returns 0.0 for a motor with the low speed optimization enabled: the MIN_SPEED r
 
 #### Response
 
-```
+``` { .text .osc-signature }
 /minSpeed (int)motorID (float)minSpeed
 ```
 
@@ -343,7 +343,7 @@ Returns 0.0 for a motor with the low speed optimization enabled: the MIN_SPEED r
 
 <!-- osc: /getSpeed -->
 <!-- generated:begin osc /getSpeed -->
-### `/getSpeed` (int)motorID {#getspeed}
+### `/getSpeed` (int)motorID {#getspeed .osc-command data-toc-label="/getSpeed"}
 
 #### Argument
 
@@ -361,7 +361,7 @@ Returns the current motor speed.
 
 #### Response
 
-```
+``` { .text .osc-signature }
 /speed (int)motorID (float)speed
 ```
 
@@ -377,7 +377,7 @@ The following commands set or get the parameters of the speed profile with the r
 
 <!-- osc: /setSpeedProfileRaw -->
 <!-- generated:begin osc /setSpeedProfileRaw -->
-### `/setSpeedProfileRaw` (int)motorID (int)acc (int)dec (int)maxSpeed {#setspeedprofileraw}
+### `/setSpeedProfileRaw` (int)motorID (int)acc (int)dec (int)maxSpeed {#setspeedprofileraw .osc-command data-toc-label="/setSpeedProfileRaw"}
 
 #### Argument
 
@@ -414,7 +414,7 @@ A value outside the range is not rejected: it is converted to 16 bits (70000 bec
 
 <!-- osc: /getSpeedProfileRaw -->
 <!-- generated:begin osc /getSpeedProfileRaw -->
-### `/getSpeedProfileRaw` (int)motorID {#getspeedprofileraw}
+### `/getSpeedProfileRaw` (int)motorID {#getspeedprofileraw .osc-command data-toc-label="/getSpeedProfileRaw"}
 
 #### Argument
 
@@ -432,7 +432,7 @@ Gets the acc, dec, and maxSpeed of the speed profile as raw driver IC register v
 
 #### Response
 
-```
+``` { .text .osc-signature }
 /speedProfileRaw (int)motorID (int)acc (int)dec (int)maxSpeed
 ```
 
@@ -446,7 +446,7 @@ Gets the acc, dec, and maxSpeed of the speed profile as raw driver IC register v
 
 <!-- osc: /setMaxSpeedRaw -->
 <!-- generated:begin osc /setMaxSpeedRaw -->
-### `/setMaxSpeedRaw` (int)motorID (int)maxSpeed {#setmaxspeedraw}
+### `/setMaxSpeedRaw` (int)motorID (int)maxSpeed {#setmaxspeedraw .osc-command data-toc-label="/setMaxSpeedRaw"}
 
 #### Argument
 
@@ -478,7 +478,7 @@ A value outside the range is not rejected: it is converted to 16 bits (70000 bec
 
 <!-- osc: /setMinSpeedRaw -->
 <!-- generated:begin osc /setMinSpeedRaw -->
-### `/setMinSpeedRaw` (int)motorID (int)minSpeed {#setminspeedraw}
+### `/setMinSpeedRaw` (int)motorID (int)minSpeed {#setminspeedraw .osc-command data-toc-label="/setMinSpeedRaw"}
 
 #### Argument
 
@@ -514,7 +514,7 @@ A value outside the range is not rejected: it is converted to 16 bits (70000 bec
 
 <!-- osc: /setFullstepSpeedRaw -->
 <!-- generated:begin osc /setFullstepSpeedRaw -->
-### `/setFullstepSpeedRaw` (int)motorID (int)fullstepSpeed {#setfullstepspeedraw}
+### `/setFullstepSpeedRaw` (int)motorID (int)fullstepSpeed {#setfullstepspeedraw .osc-command data-toc-label="/setFullstepSpeedRaw"}
 
 #### Argument
 
@@ -544,7 +544,7 @@ A value outside the range is not rejected: it is converted to 16 bits (70000 bec
 
 <!-- osc: /setAccRaw -->
 <!-- generated:begin osc /setAccRaw -->
-### `/setAccRaw` (int)motorID (int)acc {#setaccraw}
+### `/setAccRaw` (int)motorID (int)acc {#setaccraw .osc-command data-toc-label="/setAccRaw"}
 
 #### Argument
 
@@ -579,7 +579,7 @@ A value outside the range is not rejected: it is converted to 16 bits (70000 bec
 
 <!-- osc: /setDecRaw -->
 <!-- generated:begin osc /setDecRaw -->
-### `/setDecRaw` (int)motorID (int)dec {#setdecraw}
+### `/setDecRaw` (int)motorID (int)dec {#setdecraw .osc-command data-toc-label="/setDecRaw"}
 
 #### Argument
 
