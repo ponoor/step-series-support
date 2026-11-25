@@ -23,7 +23,7 @@ from mkdocs.plugins import event_priority
 # "電磁" and "ブレーキ", and nothing is found. The separator is applied to both sides, so it also cuts where the kind of
 # character changes between katakana, kanji and ASCII letters/digits: "電磁|ブレーキ", "設定|ファイル", "microSD|カード".
 # Hiragana is not a boundary (a particle would become a word of its own). Zero-width cuts need a lookbehind (Chrome,
-# Firefox, Safari 16.4+). The patterns are also valid in Python's re (tests/test_search_index.py uses that).
+# Firefox, Safari 16.4+; in older Safari the Japanese search does not start at all, the English one is not affected). The patterns are also valid in Python's re (tests/test_search_index.py uses that).
 _KATAKANA = r"\u30A0-\u30FF"
 _KANJI = r"\u3400-\u4DBF\u4E00-\u9FFF\u3005"
 _ASCII = r"A-Za-z0-9"
@@ -81,6 +81,7 @@ def on_post_build(config):
             default_docs.append(doc)
         else:
             by_locale[loc].append({**doc, "location": doc["location"][len(loc) + 1:]})
+    # The default language (no prefix) is Japanese here; the separator is for that index.
     # config.lang stays ['en', 'ja'] in both: with ['en'] or ['ja'] alone, "setSpeedProfile" is not found any more.
     default_config = {**index["config"], "separator": JA_SEPARATOR}
     outputs = [(src, default_docs, default_config)]

@@ -15,10 +15,11 @@ try:
     import mkdocs  # noqa: F401
     import material  # noqa: F401
     HAVE_MKDOCS = True
-    sys.path.insert(0, str(ROOT / "tools"))
-    import mkdocs_hooks as hooks
 except ImportError:
     HAVE_MKDOCS = False
+if HAVE_MKDOCS:
+    sys.path.insert(0, str(ROOT / "tools"))
+    import mkdocs_hooks as hooks
 
 
 @unittest.skipUnless(HAVE_MKDOCS, "mkdocs / mkdocs-material is not installed")

@@ -73,9 +73,13 @@ def probe(page, start_url, word):
             break
         except Exception:
             pass
+    else:
+        return {"word": word, "meta": "NOT READY (the search gave no answer)", "rendered": 0, "top": []}
     # the worker answers every keystroke; wait until the answer stops changing
     last, same = None, 0
-    while same < 4:
+    for _ in range(80):  # at most about 20 s
+        if same >= 4:
+            break
         page.wait_for_timeout(250)
         now = page.evaluate("document.querySelector('.md-search-result__list').innerText + document.querySelector('.md-search-result__meta').innerText")
         same = same + 1 if now == last else 0
@@ -91,7 +95,7 @@ def probe(page, start_url, word):
         "els => els.slice(0, 5).map(e => (e.querySelector('h1,h2') || {}).textContent || '')",
     )
     total = page.eval_on_selector_all("li.md-search-result__item > a.md-search-result__link:first-child", "els => els.length")
-    return {"word": word, "meta": meta, "pages": total, "top": [{"url": u, "title": t.strip()} for u, t in zip(urls, titles)]}
+    return {"word": word, "meta": meta, "rendered": total, "top": [{"url": u, "title": t.strip()} for u, t in zip(urls, titles)]}
 
 
 def main():
