@@ -74,7 +74,7 @@ class SearchIndexTest(unittest.TestCase):
         # lang stays ['en', 'ja'] in both: with ['en'] or ['ja'] alone "setSpeedProfile" is not found (tools/search_probe.py)
         self.assertEqual(ja["lang"], ["en", "ja"])
         self.assertEqual(en["lang"], ["en", "ja"])
-        self.assertEqual(en["separator"], hooks.EN_SEPARATOR)   # English: the plugin's separator plus "/"
+        self.assertEqual(en["separator"], r"[\s\-/]+")   # English: the plugin's separator plus "/"
         self.assertEqual(ja["separator"], hooks.JA_SEPARATOR)
         self.assertNotEqual(ja["separator"], en["separator"])
 
@@ -91,7 +91,9 @@ class SearchIndexTest(unittest.TestCase):
         en = re.compile(self.config("en/search/search_index.json")["separator"])
         for dot in ("\u30FB", "\uFF65"):
             self.assertEqual([w for w in ja.split(f"オン{dot}オフ") if w], ["オン", "オフ"])
-        self.assertEqual([w for w in en.split("オン\u30FBオフ") if w], ["オン\u30FBオフ"])
+        for dot in ("\u30FB", "\uFF65"):
+            self.assertEqual([w for w in en.split(f"オン{dot}オフ") if w], [f"オン{dot}オフ"])
+        self.assertEqual([w for w in ja.split("HOME\u30FBLIMITスイッチ") if w], ["HOME", "LIMIT", "スイッチ"])
 
     def test_japanese_separator_cuts_between_scripts(self):
         # The separator is a JavaScript regular expression; these patterns mean the same in Python's re.
