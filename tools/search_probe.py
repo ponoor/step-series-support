@@ -32,14 +32,14 @@ JA_WORDS = [
     # kanji compounds
     "原点復帰", "過電流", "電源電圧", "電圧モード", "電流モード", "位置管理", "移行ガイド", "変更履歴",
     # mixed with alphanumerics
-    "microSDカード", "HOMEスイッチ", "LIMITスイッチ", "DIPスイッチ", "STEP400", "/setSpeedProfile", "setSpeedProfile",
+    "microSDカード", "HOMEスイッチ", "LIMITスイッチ", "DIPスイッチ", "STEP400", "/setSpeedProfile", "setSpeedProfile", "/getStatus", "/setDestIp", "オン・オフ", "オン", "オフ", "1/16",
     # more words a reader may type (guards against regressions)
     "ファームウェア更新", "OSCメッセージ", "IPアドレス", "サーボモード", "ブレーキ解除", "アラーム", "5V電源",
     # katakana-only compounds that occur in the pages
     "スピードプロファイル", "モータドライバ", "ドライバライブラリ", "モーションコマンド", "マイクロステップモード", "シリアルポート",
     "ファームウェア", "トラブルシューティング", "ブロードキャスト", "データシート",
 ]
-EN_WORDS = ["electromagnetic brake", "configuration file", "homing", "microSD", "setSpeedProfile"]
+EN_WORDS = ["electromagnetic brake", "configuration file", "homing", "microSD", "setSpeedProfile", "/setSpeedProfile", "/getStatus", "/setDestIp", "1/16"]
 
 
 class _Quiet(http.server.SimpleHTTPRequestHandler):

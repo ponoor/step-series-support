@@ -7,7 +7,7 @@ mkdocs-static-i18n builds one search/search_index.json with every language in it
   site root to that language's root (en/). Only that value changes (the assets are read through base_url, not base).
 * on_post_build: the index is split. site/search/search_index.json keeps the default language (no prefix);
   site/en/search/search_index.json gets the English entries, with `location` relative to en/.
-  The Japanese index also gets its own `config.separator` (JA_SEPARATOR below); the English one keeps the plugin's.
+  Both indexes get a `config.separator` set here: EN_SEPARATOR (the plugin's, plus "/") for English, JA_SEPARATOR for Japanese.
 
 Runs for both mkdocs.yml and mkdocs.preview.yml (it inherits `hooks`).
 """
@@ -24,11 +24,15 @@ from mkdocs.plugins import event_priority
 # character changes between katakana, kanji and ASCII letters/digits: "電磁|ブレーキ", "設定|ファイル", "microSD|カード".
 # Hiragana is not a boundary (a particle would become a word of its own). Zero-width cuts need a lookbehind (Chrome,
 # Firefox, Safari 16.4+; in older Safari the Japanese search does not start at all, the English one is not affected). The patterns are also valid in Python's re (tests/test_search_index.py uses that).
+# "/" is a separator in both languages, so that "/setSpeedProfile" (an OSC address, as written in the pages) finds the same
+# as "setSpeedProfile". The Japanese index also cuts at the middle dot "・" (U+30FB) and its half-width form "･" (U+FF65):
+# "オン・オフ" -> "オン", "オフ".
+EN_SEPARATOR = r"[\s\-/]+"
 _KATAKANA = r"\u30A0-\u30FF"
 _KANJI = r"\u3400-\u4DBF\u4E00-\u9FFF\u3005"
 _ASCII = r"A-Za-z0-9"
 JA_SEPARATOR = "|".join([
-    r"[\s\-]+",  # the plugin's own separator
+    r"[\s\-/\u30FB\uFF65]+",  # the plugin's own separator, "/", and the middle dots
     rf"(?<=[{_KATAKANA}])(?=[{_KANJI}{_ASCII}])",
     rf"(?<=[{_KANJI}])(?=[{_KATAKANA}{_ASCII}])",
     rf"(?<=[{_ASCII}])(?=[{_KATAKANA}{_KANJI}])",
@@ -81,12 +85,13 @@ def on_post_build(config):
             default_docs.append(doc)
         else:
             by_locale[loc].append({**doc, "location": doc["location"][len(loc) + 1:]})
-    # The default language (no prefix) is Japanese here; the separator is for that index.
+    # The default language (no prefix) is Japanese here; JA_SEPARATOR is for that index, EN_SEPARATOR for the English ones.
     # config.lang stays ['en', 'ja'] in both: with ['en'] or ['ja'] alone, "setSpeedProfile" is not found any more.
     default_config = {**index["config"], "separator": JA_SEPARATOR}
+    en_config = {**index["config"], "separator": EN_SEPARATOR}
     outputs = [(src, default_docs, default_config)]
     for loc, docs in by_locale.items():
-        outputs.append((site / loc / "search" / "search_index.json", docs, index["config"]))
+        outputs.append((site / loc / "search" / "search_index.json", docs, en_config))
     for path, docs, cfg in outputs:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps({**index, "config": cfg, "docs": docs}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")

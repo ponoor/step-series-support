@@ -74,9 +74,24 @@ class SearchIndexTest(unittest.TestCase):
         # lang stays ['en', 'ja'] in both: with ['en'] or ['ja'] alone "setSpeedProfile" is not found (tools/search_probe.py)
         self.assertEqual(ja["lang"], ["en", "ja"])
         self.assertEqual(en["lang"], ["en", "ja"])
-        self.assertEqual(en["separator"], r"[\s\-]+")   # English: the plugin's own separator, unchanged
+        self.assertEqual(en["separator"], hooks.EN_SEPARATOR)   # English: the plugin's separator plus "/"
         self.assertEqual(ja["separator"], hooks.JA_SEPARATOR)
         self.assertNotEqual(ja["separator"], en["separator"])
+
+    def test_slash_is_a_separator_in_both_languages(self):
+        for rel in ("search/search_index.json", "en/search/search_index.json"):
+            sep = re.compile(self.config(rel)["separator"])
+            cut = lambda text: [w for w in sep.split(text) if w]
+            self.assertEqual(cut("/setSpeedProfile"), ["setSpeedProfile"], rel)
+            self.assertEqual(cut("/getStatus"), ["getStatus"], rel)
+            self.assertEqual(cut("1/16"), ["1", "16"], rel)
+
+    def test_middle_dot_is_a_separator_in_japanese_only(self):
+        ja = re.compile(self.config("search/search_index.json")["separator"])
+        en = re.compile(self.config("en/search/search_index.json")["separator"])
+        for dot in ("\u30FB", "\uFF65"):
+            self.assertEqual([w for w in ja.split(f"オン{dot}オフ") if w], ["オン", "オフ"])
+        self.assertEqual([w for w in en.split("オン\u30FBオフ") if w], ["オン\u30FBオフ"])
 
     def test_japanese_separator_cuts_between_scripts(self):
         # The separator is a JavaScript regular expression; these patterns mean the same in Python's re.
