@@ -15,6 +15,8 @@ try:
     import mkdocs  # noqa: F401
     import material  # noqa: F401
     HAVE_MKDOCS = True
+    sys.path.insert(0, str(ROOT / "tools"))
+    import mkdocs_hooks as hooks
 except ImportError:
     HAVE_MKDOCS = False
 
@@ -62,6 +64,37 @@ class SearchIndexTest(unittest.TestCase):
         self.assertEqual(base("guides/homing-and-position/index.html"), "../..")
         self.assertEqual(base("en/index.html"), ".")          # the en/ root, where search/ is
         self.assertEqual(base("en/guides/homing-and-position/index.html"), "../..")  # -> en/ (not the site root)
+
+    def config(self, rel):
+        return json.loads((self.site / rel).read_text(encoding="utf-8"))["config"]
+
+    def test_config_lang_and_separator_per_language(self):
+        ja, en = self.config("search/search_index.json"), self.config("en/search/search_index.json")
+        # lang stays ['en', 'ja'] in both: with ['en'] or ['ja'] alone "setSpeedProfile" is not found (tools/search_probe.py)
+        self.assertEqual(ja["lang"], ["en", "ja"])
+        self.assertEqual(en["lang"], ["en", "ja"])
+        self.assertEqual(en["separator"], r"[\s\-]+")   # English: the plugin's own separator, unchanged
+        self.assertEqual(ja["separator"], hooks.JA_SEPARATOR)
+        self.assertNotEqual(ja["separator"], en["separator"])
+
+    def test_japanese_separator_cuts_between_scripts(self):
+        # The separator is a JavaScript regular expression; these patterns mean the same in Python's re.
+        sep = re.compile(self.config("search/search_index.json")["separator"])
+        cut = lambda text: [w for w in sep.split(text) if w]
+        for text, words in {
+            "電磁ブレーキ": ["電磁", "ブレーキ"],
+            "設定ファイル": ["設定", "ファイル"],
+            "ブラウザ設定ツール": ["ブラウザ", "設定", "ツール"],
+            "電圧モード": ["電圧", "モード"],
+            "microSDカード": ["microSD", "カード"],
+            "HOMEスイッチ": ["HOME", "スイッチ"],
+            "5V電源": ["5V", "電源"],
+            "move to-home": ["move", "to", "home"],           # whitespace and hyphen as before
+        }.items():
+            self.assertEqual(cut(text), words, text)
+        # whole words that must not be cut
+        for text in ("原点復帰", "ファームウェア", "ステッピングモータ", "STEP400", "setSpeedProfile", "切り替え"):
+            self.assertEqual(cut(text), [text], text)
 
 
 if __name__ == "__main__":

@@ -7,6 +7,7 @@ mkdocs-static-i18n builds one search/search_index.json with every language in it
   site root to that language's root (en/). Only that value changes (the assets are read through base_url, not base).
 * on_post_build: the index is split. site/search/search_index.json keeps the default language (no prefix);
   site/en/search/search_index.json gets the English entries, with `location` relative to en/.
+  The Japanese index also gets its own `config.separator` (JA_SEPARATOR below); the English one keeps the plugin's.
 
 Runs for both mkdocs.yml and mkdocs.preview.yml (it inherits `hooks`).
 """
@@ -15,6 +16,23 @@ import re
 from pathlib import Path
 
 from mkdocs.plugins import event_priority
+
+# Search separator of the Japanese index. Material splits the text of the index into words with the separator, then cuts
+# Japanese words with TinySegmenter. A search query, however, is cut only with the separator (and, for runs of kanji, by
+# the words of the index), never with TinySegmenter. So "電磁ブレーキ" in a query stays one word while the index has
+# "電磁" and "ブレーキ", and nothing is found. The separator is applied to both sides, so it also cuts where the kind of
+# character changes between katakana, kanji and ASCII letters/digits: "電磁|ブレーキ", "設定|ファイル", "microSD|カード".
+# Hiragana is not a boundary (a particle would become a word of its own). Zero-width cuts need a lookbehind (Chrome,
+# Firefox, Safari 16.4+). The patterns are also valid in Python's re (tests/test_search_index.py uses that).
+_KATAKANA = r"\u30A0-\u30FF"
+_KANJI = r"\u3400-\u4DBF\u4E00-\u9FFF\u3005"
+_ASCII = r"A-Za-z0-9"
+JA_SEPARATOR = "|".join([
+    r"[\s\-]+",  # the plugin's own separator
+    rf"(?<=[{_KATAKANA}])(?=[{_KANJI}{_ASCII}])",
+    rf"(?<=[{_KANJI}])(?=[{_KATAKANA}{_ASCII}])",
+    rf"(?<=[{_ASCII}])(?=[{_KATAKANA}{_KANJI}])",
+])
 
 _CONFIG_BASE = re.compile(r'(<script id="__config" type="application/json">\{[^<]*?"base": ")([^"]*)(")')
 
@@ -63,9 +81,11 @@ def on_post_build(config):
             default_docs.append(doc)
         else:
             by_locale[loc].append({**doc, "location": doc["location"][len(loc) + 1:]})
-    outputs = [(src, default_docs)]
+    # config.lang stays ['en', 'ja'] in both: with ['en'] or ['ja'] alone, "setSpeedProfile" is not found any more.
+    default_config = {**index["config"], "separator": JA_SEPARATOR}
+    outputs = [(src, default_docs, default_config)]
     for loc, docs in by_locale.items():
-        outputs.append((site / loc / "search" / "search_index.json", docs))
-    for path, docs in outputs:
+        outputs.append((site / loc / "search" / "search_index.json", docs, index["config"]))
+    for path, docs, cfg in outputs:
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps({**index, "docs": docs}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+        path.write_text(json.dumps({**index, "config": cfg, "docs": docs}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
